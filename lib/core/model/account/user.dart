@@ -16,6 +16,7 @@ class User with _$User {
     required String address,
     required bool sex,
     required int age,
+    DateTime? dateOfBirth,
     @Default(false) bool? verified,
     @Default(false) bool? isOnline,
     @Default(0) double? rating,

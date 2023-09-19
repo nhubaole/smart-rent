@@ -15,6 +15,9 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       address: json['address'] as String,
       sex: json['sex'] as bool,
       age: json['age'] as int,
+      dateOfBirth: json['dateOfBirth'] == null
+          ? null
+          : DateTime.parse(json['dateOfBirth'] as String),
       verified: json['verified'] as bool? ?? false,
       isOnline: json['isOnline'] as bool? ?? false,
       rating: (json['rating'] as num?)?.toDouble() ?? 0,
@@ -53,6 +56,7 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'address': instance.address,
       'sex': instance.sex,
       'age': instance.age,
+      'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
       'verified': instance.verified,
       'isOnline': instance.isOnline,
       'rating': instance.rating,

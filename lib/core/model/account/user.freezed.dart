@@ -28,6 +28,7 @@ mixin _$User {
   String get address => throw _privateConstructorUsedError;
   bool get sex => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
+  DateTime? get dateOfBirth => throw _privateConstructorUsedError;
   bool? get verified => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
@@ -57,6 +58,7 @@ abstract class $UserCopyWith<$Res> {
       String address,
       bool sex,
       int age,
+      DateTime? dateOfBirth,
       bool? verified,
       bool? isOnline,
       double? rating,
@@ -89,6 +91,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? address = null,
     Object? sex = null,
     Object? age = null,
+    Object? dateOfBirth = freezed,
     Object? verified = freezed,
     Object? isOnline = freezed,
     Object? rating = freezed,
@@ -132,6 +135,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
+      dateOfBirth: freezed == dateOfBirth
+          ? _value.dateOfBirth
+          : dateOfBirth // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       verified: freezed == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -187,6 +194,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String address,
       bool sex,
       int age,
+      DateTime? dateOfBirth,
       bool? verified,
       bool? isOnline,
       double? rating,
@@ -215,6 +223,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? address = null,
     Object? sex = null,
     Object? age = null,
+    Object? dateOfBirth = freezed,
     Object? verified = freezed,
     Object? isOnline = freezed,
     Object? rating = freezed,
@@ -258,6 +267,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
+      dateOfBirth: freezed == dateOfBirth
+          ? _value.dateOfBirth
+          : dateOfBirth // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       verified: freezed == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -310,6 +323,7 @@ class _$_User extends _User {
       required this.address,
       required this.sex,
       required this.age,
+      this.dateOfBirth,
       this.verified = false,
       this.isOnline = false,
       this.rating = 0,
@@ -345,6 +359,8 @@ class _$_User extends _User {
   final bool sex;
   @override
   final int age;
+  @override
+  final DateTime? dateOfBirth;
   @override
   @JsonKey()
   final bool? verified;
@@ -410,7 +426,7 @@ class _$_User extends _User {
 
   @override
   String toString() {
-    return 'User(phoneNumber: $phoneNumber, email: $email, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
+    return 'User(phoneNumber: $phoneNumber, email: $email, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, dateOfBirth: $dateOfBirth, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
   }
 
   @override
@@ -429,6 +445,8 @@ class _$_User extends _User {
             (identical(other.address, address) || other.address == address) &&
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.age, age) || other.age == age) &&
+            (identical(other.dateOfBirth, dateOfBirth) ||
+                other.dateOfBirth == dateOfBirth) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
             (identical(other.isOnline, isOnline) ||
@@ -460,6 +478,7 @@ class _$_User extends _User {
       address,
       sex,
       age,
+      dateOfBirth,
       verified,
       isOnline,
       rating,
@@ -494,6 +513,7 @@ abstract class _User extends User {
       required final String address,
       required final bool sex,
       required final int age,
+      final DateTime? dateOfBirth,
       final bool? verified,
       final bool? isOnline,
       final double? rating,
@@ -523,6 +543,8 @@ abstract class _User extends User {
   bool get sex;
   @override
   int get age;
+  @override
+  DateTime? get dateOfBirth;
   @override
   bool? get verified;
   @override

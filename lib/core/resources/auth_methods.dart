@@ -13,9 +13,15 @@ class AuthMethods {
     return model.User.fromJson(documentSnapshot.data() as Map<String, dynamic>);
   }
 
-  // Future<String> signUpUserWithPhoneNumber(String phoneNumber) async {
-  //   try {
-  //     UserCredential user = await _auth.signInWithPhoneNumber(phoneNumber);
-  //   } catch (error) {}
-  // }
+  Future<String> signUpUserWithPhoneNumber(String phoneNumber) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: '+44 7123 123 456',
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {},
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } catch (error) {}
+  }
 }
