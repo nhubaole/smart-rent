@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/splash/controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {

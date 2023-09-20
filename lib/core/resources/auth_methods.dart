@@ -14,14 +14,43 @@ class AuthMethods {
   }
 
   Future<String> signUpUserWithPhoneNumber(String phoneNumber) async {
+    String res = 'Some error occurred';
     try {
       await _auth.verifyPhoneNumber(
-        phoneNumber: '+44 7123 123 456',
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {},
-        codeSent: (String verificationId, int? resendToken) {},
-        codeAutoRetrievalTimeout: (String verificationId) {},
+        phoneNumber: '+84${phoneNumber.substring(1)}',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          res = 'Verification completed';
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          res = e.message.toString();
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          String smsCode = '000000';
+          print(smsCode);
+
+          try {
+            PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                verificationId: verificationId, smsCode: smsCode);
+
+            await _auth.signInWithCredential(credential);
+            res = 'Sign-in successful';
+          } catch (error) {
+            res = 'Sign-in failed: ${error.toString()}';
+          }
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          res = verificationId;
+        },
       );
-    } catch (error) {}
+    } catch (error) {
+      res = error.toString();
+    }
+    return res;
+  }
+
+  Future<bool> verifyOTP(String otp) async {
+    var credentials = await _auth.signInWithCredential(
+        PhoneAuthProvider.credential(verificationId: otp, smsCode: otp));
+    return credentials.user != null ? true : false;
   }
 }

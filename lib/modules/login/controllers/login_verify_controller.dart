@@ -1,7 +1,7 @@
-//splash controller
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:smart_rent/modules/login/views/login_screen.dart';
+import 'package:smart_rent/modules/home/views/home_screen.dart';
 
 Future<void> navigatorHomeScreen(BuildContext context) async {
   Future.delayed(
@@ -11,7 +11,7 @@ Future<void> navigatorHomeScreen(BuildContext context) async {
     () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (ctx) => const LoginScreen(),
+          builder: (ctx) => const HomeScreen(),
         ),
       );
     },

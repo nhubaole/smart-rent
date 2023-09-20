@@ -39,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: TextFormFieldInput(
+                  maxLength: 10,
+                  autoCorrect: false,
+                  textCapitalization: TextCapitalization.none,
                   onSaved: (value) {},
                   onValidate: (p0) {},
                   icon: Icon(Icons.email),

@@ -9,13 +9,12 @@ class User with _$User {
   const User._();
   const factory User({
     required String phoneNumber,
-    required String email,
+    required String email, // remove
     required String uid,
     required String photoUrl,
     required String username,
     required String address,
     required bool sex,
-    required int age,
     DateTime? dateOfBirth,
     @Default(false) bool? verified,
     @Default(false) bool? isOnline,
