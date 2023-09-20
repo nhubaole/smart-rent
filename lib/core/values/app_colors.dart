@@ -14,3 +14,8 @@ const secondary40 = Color(0xFF878787);
 const secondary60 = Color(0xFFA4A2A7);
 const secondary80 = Color(0xFFDADADB);
 const secondary90 = Color(0xFFF2F2F2);
+
+const red40 = Color(0xFFB3261E);
+const red50 = Color(0xFFFF424F);
+const red60 = Color(0xFFFF4567);
+const red90 = Color(0xFFFFF0F1);
