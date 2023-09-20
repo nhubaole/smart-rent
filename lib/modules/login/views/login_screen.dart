@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/values/utils.dart';
-import 'package:smart_rent/core/widget/button_fill.dart';
-import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 import 'package:smart_rent/modules/login/controllers/login_controller.dart';
 
