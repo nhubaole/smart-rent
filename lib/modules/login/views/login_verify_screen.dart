@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/values/utils.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/login/controllers/login_verify_controller.dart';
 
 class LoginVerifyScreen extends StatefulWidget {
   final String phoneNumber;
@@ -17,6 +19,7 @@ class LoginVerifyScreen extends StatefulWidget {
 }
 
 class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
+  final controller = Get.put(LoginVerifyController());
   final String otp = '123456';
   bool endTimer = false;
   Timer? countdownTimer;
@@ -57,6 +60,7 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var otp;
     String strDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = strDigits(myDuration.inMinutes.remainder(60));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
@@ -144,15 +148,16 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
                 submittedPinTheme: submittedPinTheme,
-                validator: (value) {
-                  if (value != otp || value!.isEmpty) {
-                    return 'Sai mã xác minh';
-                  }
-                  return null;
+                validator: (code) {
+                  otp = code;
+                  LoginVerifyController.instance.verifyOTP(otp);
                 },
                 pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                 showCursor: true,
-                onCompleted: (pin) => print(pin),
+                onCompleted: (pin) {
+                  otp = pin;
+                  LoginVerifyController.instance.verifyOTP(otp);
+                },
               ),
             ),
             const SizedBox(

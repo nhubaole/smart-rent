@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/values/utils.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 import 'package:smart_rent/modules/login/controllers/login_controller.dart';
+import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -14,32 +16,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _form = GlobalKey<FormState>();
-  final TextEditingController _textEditingController = TextEditingController();
-  var _enteredPhoneNumber = '';
-  bool isReceivingOTP = false;
-  bool isReceiving = false;
-  String OTP = '';
-
-  void _submit() async {
-    FocusScope.of(context).unfocus();
-    final isValid = _form.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-
-    _form.currentState!.save();
-
-    try {
-      // OTP = await fetchOTP(_enteredPhoneNumber);
-      navigatorLoginVerify(context, _enteredPhoneNumber);
-    } catch (error) {
-      showSnackBar(error.toString(), context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+    final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Center(
         child: Column(
@@ -75,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8,
             ),
             Form(
-              key: _form,
+              key: formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -85,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextFormFieldInput(
                       maxLength: 10,
-                      textEditingController: _textEditingController,
+                      textEditingController: controller.phoneNo,
                       labelText: 'Số điện thoại',
                       hintText: 'Nhập số điện thoại',
                       textInputType: TextInputType.phone,
@@ -93,9 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderWidth: 2,
                       borderColor: primary60,
                       icon: const Icon(Icons.phone_android),
-                      onSaved: (newValue) {
-                        _enteredPhoneNumber = newValue!;
-                      },
+                      onSaved: (newValue) {},
                       onValidate: (value) {
                         if (value!.isEmpty || value.length < 10) {
                           return 'Vui lòng nhập số điện thoại';
@@ -108,24 +86,48 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 8,
                     ),
-                    GestureDetector(
-                      onTap: _submit,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: primary60),
-                        child: const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            'Đăng nhập',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     if (formKey.currentState!.validate()) {
+                    //       // LoginController.instance
+                    //       //     .phoneAuthentication('0908069947');
+                    //       // Get.to(() => const LoginVerifyScreen());
+                    //     }
+                    //   },
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     width: double.infinity,
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(100),
+                    //         color: primary60),
+                    //     child: const Padding(
+                    //       padding: EdgeInsets.all(16.0),
+                    //       child: Text(
+                    //         'Đăng nhập',
+                    //         style: TextStyle(
+                    //             color: Colors.white,
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.w400),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          try {
+                            if (formKey.currentState!.validate()) {
+                              print(controller.phoneNo.text.trim());
+                              LoginController.instance.phoneAuthentication(
+                                  controller.phoneNo.text.trim());
+                              Get.to(() => const LoginVerifyScreen());
+                            }
+                          } catch (e) {
+                            print('Lỗi: $e');
+                          }
+                        },
+                        child: const Text('Đăng nhập'),
                       ),
                     ),
                     const SizedBox(

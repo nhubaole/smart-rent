@@ -1,56 +1,94 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_rent/core/model/account/user.dart' as model;
+import 'package:get/get.dart';
+import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 
-class AuthMethods {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthMethods extends GetxController {
+  static AuthMethods get instance => Get.find();
 
-  Future<model.User> getUserDetails() async {
-    User currentUser = _auth.currentUser!;
-    DocumentSnapshot documentSnapshot =
-        await _firestore.collection("users").doc(currentUser.uid).get();
-    return model.User.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+  //Variables
+  final _auth = FirebaseAuth.instance;
+  late final Rx<User?> firebaseUser;
+  var vertificationId = ''.obs;
+
+  //Will be load when app launches this func will be called and set the firebaseUser state
+  @override
+  void onReady() {
+    firebaseUser = Rx<User?>(_auth.currentUser);
+    firebaseUser.bindStream(_auth.userChanges());
+    ever(firebaseUser, _setInitialScreen);
   }
 
-  Future<String> signUpUserWithPhoneNumber(String phoneNumber) async {
-    String res = 'Some error occurred';
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: '+84${phoneNumber.substring(1)}',
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          res = 'Verification completed';
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          res = e.message.toString();
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          String smsCode = '000000';
-          print(smsCode);
+  /// If we are setting initial screen from here
+  /// then in the main.dart => App() add CircularProgressIndicator()
+  _setInitialScreen(User? user) {
+    user == null
+        ? Get.offAll(() => const LoginScreen())
+        : Get.offAll(() => const HomeScreen());
+  }
 
-          try {
-            PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                verificationId: verificationId, smsCode: smsCode);
+  //FUNC
 
-            await _auth.signInWithCredential(credential);
-            res = 'Sign-in successful';
-          } catch (error) {
-            res = 'Sign-in failed: ${error.toString()}';
-          }
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          res = verificationId;
-        },
-      );
-    } catch (error) {
-      res = error.toString();
-    }
-    return res;
+  Future<void> phoneAuthentication(String phoneNo) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: '+84 ${phoneNo.substring(1)}',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          Get.snackbar('Error', 'The provided phone number is not valid.');
+        } else {
+          Get.snackbar('Error', 'Something went wrong');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        this.vertificationId.value = verificationId;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        this.vertificationId.value = verificationId;
+      },
+    );
   }
 
   Future<bool> verifyOTP(String otp) async {
     var credentials = await _auth.signInWithCredential(
-        PhoneAuthProvider.credential(verificationId: otp, smsCode: otp));
+        PhoneAuthProvider.credential(
+            verificationId: vertificationId.value, smsCode: otp));
     return credentials.user != null ? true : false;
   }
+
+  Future<String?> createUserWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      firebaseUser.value != null
+          ? Get.offAll(() => const HomeScreen())
+          : Get.to(() => const LoginScreen());
+    } on FirebaseAuthException catch (e) {
+      final ex = e.message;
+      return ex;
+    } catch (_) {
+      const ex = 'SignUpWithEmailAndPasswordFailure();';
+      return ex;
+    }
+    return null;
+  }
+
+  Future<String?> loginWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      final ex = e.message;
+      return ex;
+    } catch (_) {
+      const ex = 'LogInWithEmailAndPasswordFailure();';
+      return ex;
+    }
+    return null;
+  }
+
+  Future<void> logout() async => await _auth.signOut();
 }

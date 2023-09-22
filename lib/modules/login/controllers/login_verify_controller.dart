@@ -1,19 +1,12 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 
-Future<void> navigatorHomeScreen(BuildContext context) async {
-  Future.delayed(
-    const Duration(
-      seconds: 3,
-    ),
-    () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) => const HomeScreen(),
-        ),
-      );
-    },
-  );
+class LoginVerifyController extends GetxController {
+  static LoginVerifyController get instance => Get.find();
+
+  void verifyOTP(String otp) async {
+    var isVerified = await AuthMethods.instance.verifyOTP(otp);
+    isVerified ? Get.offAll(() => const HomeScreen()) : Get.back();
+  }
 }

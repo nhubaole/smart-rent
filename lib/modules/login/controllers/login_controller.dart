@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
 
-Future<void> navigatorLoginVerify(
-    BuildContext context, String phoneNumber) async {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (ctx) => LoginVerifyScreen(
-        phoneNumber: phoneNumber,
-      ),
-    ),
-  );
-}
+class LoginController extends GetxController {
+  static LoginController get instance => Get.find();
 
-Future<String> fetchOTP(String phoneNumber) async {
-  String res = 'Some erro occured';
+  //TextField Controllers to get data from TextFields
+  final phoneNo = TextEditingController();
 
-  try {
-    res = await AuthMethods().signUpUserWithPhoneNumber(phoneNumber);
-  } catch (error) {
-    res = error.toString();
+  /// This func will be used to register user with [EMAIL] & [Password]
+  void registerUser(String email, String password) {
+    String? error = AuthMethods.instance
+        .createUserWithEmailAndPassword(email, password) as String?;
+    if (error != null) {
+      Get.showSnackbar(GetSnackBar(message: error.toString()));
+    }
   }
 
-  return res;
+  //Get phoneNo from user (Screen) and pass it to Auth Repository for Firebase Authentication
+  void phoneAuthentication(String phoneNo) {
+    AuthMethods.instance.phoneAuthentication(phoneNo);
+  }
 }
