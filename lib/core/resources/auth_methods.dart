@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/signup/views/sign_up.dart';
 
@@ -34,6 +35,9 @@ class AuthMethods extends GetxController {
       phoneNumber: '+84 ${phoneNo.substring(1)}',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
+        if (_auth.currentUser!.uid == null) {
+          print('user  hien tai  ');
+        }
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
@@ -51,7 +55,7 @@ class AuthMethods extends GetxController {
     );
   }
 
-  Future<bool> verifyOTP(String otp) async {
+  Future<bool> verifyOTP(String otp, Account account) async {
     var credentials = await _auth.signInWithCredential(
         PhoneAuthProvider.credential(
             verificationId: vertificationId.value, smsCode: otp));

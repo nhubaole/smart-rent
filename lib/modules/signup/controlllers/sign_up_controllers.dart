@@ -6,7 +6,10 @@ class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
 
   //TextField Controllers to get data from TextFields
-  final phoneNo = TextEditingController();
+  final name = TextEditingController();
+  final phoneNumber = TextEditingController();
+  final dateOfBirth = TextEditingController();
+  final address = TextEditingController();
 
   /// This func will be used to register user with [EMAIL] & [Password]
   void registerUser(String email, String password) {
@@ -18,7 +21,7 @@ class SignUpController extends GetxController {
   }
 
   //Get phoneNo from user (Screen) and pass it to Auth Repository for Firebase Authentication
-  void phoneAuthentication(String phoneNo) {
-    AuthMethods.instance.phoneAuthentication(phoneNo);
+  void phoneAuthentication(String phoneNumber) {
+    AuthMethods.instance.phoneAuthentication(phoneNumber);
   }
 }

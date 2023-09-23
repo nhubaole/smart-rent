@@ -12,9 +12,13 @@ class TextFormFieldInput extends StatefulWidget {
   final Icon icon;
   final void Function(String?) onSaved;
   final String? Function(String?) onValidate;
+  final bool autoCorrect;
+  final TextCapitalization textCapitalization;
+  final int maxLength;
 
   const TextFormFieldInput({
     super.key,
+    required this.maxLength,
     required this.textEditingController,
     this.isPassword = false,
     required this.labelText,
@@ -26,6 +30,8 @@ class TextFormFieldInput extends StatefulWidget {
     required this.icon,
     required this.onSaved,
     required this.onValidate,
+    required this.autoCorrect,
+    required this.textCapitalization,
   });
 
   @override
@@ -33,17 +39,37 @@ class TextFormFieldInput extends StatefulWidget {
 }
 
 class _TextFormFieldInputState extends State<TextFormFieldInput> {
-  bool _obscureText = true;
+  bool _obscureText = false;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLength: widget.maxLength,
       onSaved: widget.onSaved,
       validator: widget.onValidate,
       controller: widget.textEditingController,
       decoration: InputDecoration(
+        focusColor: widget.borderColor,
+        fillColor: widget.borderColor,
+        hoverColor: widget.borderColor,
+        iconColor: widget.borderColor,
+        prefixIconColor: widget.borderColor,
         labelText: widget.labelText,
         hintText: widget.hintText,
         border: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: BorderSide(
+            color: widget.borderColor,
+            width: widget.borderWidth,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: BorderSide(
+            color: widget.borderColor,
+            width: widget.borderWidth,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
           borderRadius: widget.borderRadius,
           borderSide: BorderSide(
             color: widget.borderColor,
@@ -65,7 +91,9 @@ class _TextFormFieldInputState extends State<TextFormFieldInput> {
             : null,
       ),
       keyboardType: widget.textInputType,
-      obscureText: _obscureText,
+      obscureText: widget.isPassword,
+      autocorrect: widget.autoCorrect,
+      textCapitalization: widget.textCapitalization,
     );
   }
 }

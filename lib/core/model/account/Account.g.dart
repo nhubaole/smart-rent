@@ -1,14 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'Account.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
+_$_Account _$$_AccountFromJson(Map<String, dynamic> json) => _$_Account(
       phoneNumber: json['phoneNumber'] as String,
-      email: json['email'] as String,
       uid: json['uid'] as String,
       photoUrl: json['photoUrl'] as String,
       username: json['username'] as String,
@@ -18,6 +17,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       dateOfBirth: json['dateOfBirth'] == null
           ? null
           : DateTime.parse(json['dateOfBirth'] as String),
+      email: json['email'] as String? ?? 'user@one.com',
       verified: json['verified'] as bool? ?? false,
       isOnline: json['isOnline'] as bool? ?? false,
       rating: (json['rating'] as num?)?.toDouble() ?? 0,
@@ -47,9 +47,9 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
           const [],
     );
 
-Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
+Map<String, dynamic> _$$_AccountToJson(_$_Account instance) =>
+    <String, dynamic>{
       'phoneNumber': instance.phoneNumber,
-      'email': instance.email,
       'uid': instance.uid,
       'photoUrl': instance.photoUrl,
       'username': instance.username,
@@ -57,6 +57,7 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'sex': instance.sex,
       'age': instance.age,
       'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
+      'email': instance.email,
       'verified': instance.verified,
       'isOnline': instance.isOnline,
       'rating': instance.rating,
