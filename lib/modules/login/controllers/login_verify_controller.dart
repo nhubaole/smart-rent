@@ -5,8 +5,17 @@ import 'package:smart_rent/modules/home/views/home_screen.dart';
 class LoginVerifyController extends GetxController {
   static LoginVerifyController get instance => Get.find();
 
-  void verifyOTP(String otp) async {
-    var isVerified = await AuthMethods.instance.verifyOTP(otp);
-    isVerified ? Get.offAll(() => const HomeScreen()) : Get.back();
+  Future<String> verifyOTP(String otp) async {
+    String res = 'Some error occured';
+    try {
+      var isVerified = await AuthMethods.instance.verifyOTP(otp);
+
+      isVerified ? Get.offAll(() => const HomeScreen()) : Get.back();
+      res = 'success';
+    } catch (error) {
+      //Get.snackbar('error', error.toString());
+      res = error.toString();
+    }
+    return res;
   }
 }

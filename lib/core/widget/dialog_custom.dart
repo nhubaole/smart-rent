@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/signup/controlllers/sign_up_controllers.dart';
 
 class DialogCustom extends StatelessWidget {
   final String iconPath;
@@ -23,6 +25,7 @@ class DialogCustom extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           CardDialog(
               backgroundColor: backgroundColor,
@@ -37,13 +40,21 @@ class DialogCustom extends StatelessWidget {
             right: 0,
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.all(8),
-                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(2),
+                shape: const CircleBorder(
+                  side: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+                backgroundColor: const Color(0xFFec5858),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Icon(Icons.close),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -70,22 +81,37 @@ class CardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignUpController());
     return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 32,
+        vertical: 16,
+      ),
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SvgPicture.asset(iconPath),
+          const SizedBox(
+            height: 24,
+          ),
+          Image.asset(
+            iconPath,
+            fit: BoxFit.cover,
+          ),
           const SizedBox(
             height: 24,
           ),
           Text(
             title,
+            textAlign: TextAlign.center,
             style: GoogleFonts.ubuntuCondensed(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -95,6 +121,7 @@ class CardDialog extends StatelessWidget {
           ),
           Text(
             subTitle,
+            textAlign: TextAlign.center,
             style: GoogleFonts.ubuntuCondensed(
               color: secondary20,
               fontSize: 16,
@@ -121,7 +148,10 @@ class CardDialog extends StatelessWidget {
                 child: const Text('Đồng ý'),
               ),
             ],
-          )
+          ),
+          const SizedBox(
+            height: 24,
+          ),
         ],
       ),
     );

@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/values/utils.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/login/controllers/login_controller.dart';
 import 'package:smart_rent/modules/login/controllers/login_verify_controller.dart';
 
 class LoginVerifyScreen extends StatefulWidget {
   final String phoneNumber;
   const LoginVerifyScreen({
     super.key,
-    this.phoneNumber = '0915355488',
+    required this.phoneNumber,
   });
 
   @override
@@ -20,8 +20,10 @@ class LoginVerifyScreen extends StatefulWidget {
 
 class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
   final controller = Get.put(LoginVerifyController());
-  final String otp = '123456';
+  var otp;
   bool endTimer = false;
+  bool isWrongOTP = false;
+  bool isCorrectOTP = false;
   Timer? countdownTimer;
   Duration myDuration = const Duration(minutes: 5);
   void startTimer() {
@@ -44,12 +46,22 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
     });
   }
 
-  void _submit() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      ),
-    );
+  void _submit() async {
+    String res = await LoginVerifyController.instance.verifyOTP(otp);
+    if (res != 'success') {
+      setState(
+        () {
+          isWrongOTP = true;
+        },
+      );
+    } else if (res == 'success') {
+      setState(
+        () {
+          isCorrectOTP = true;
+        },
+      );
+      Get.offAllNamed('/home');
+    }
   }
 
   @override
@@ -60,7 +72,6 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var otp;
     String strDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = strDigits(myDuration.inMinutes.remainder(60));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
@@ -150,13 +161,13 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
                 submittedPinTheme: submittedPinTheme,
                 validator: (code) {
                   otp = code;
-                  LoginVerifyController.instance.verifyOTP(otp);
+                  //LoginVerifyController.instance.verifyOTP(otp);
                 },
                 pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                 showCursor: true,
                 onCompleted: (pin) {
                   otp = pin;
-                  LoginVerifyController.instance.verifyOTP(otp);
+                  //LoginVerifyController.instance.verifyOTP(otp);
                 },
               ),
             ),
@@ -174,7 +185,15 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          LoginController.instance
+                              .phoneAuthentication(widget.phoneNumber);
+                          // Get.to(
+                          //   () => LoginVerifyScreen(
+                          //     phoneNumber: widget.phoneNumber,
+                          //   ),
+                          // );
+                        },
                         child: const Text(
                           'Gửi lại OTP',
                           style: TextStyle(color: primary60),
@@ -186,29 +205,42 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
             const SizedBox(
               height: 8,
             ),
-            GestureDetector(
-              onTap: _submit,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: primary60),
-                  child: const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Đăng nhập',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
+            isWrongOTP
+                ? const Text(
+                    'Mã OTP không đúng',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(
+              height: 8,
+            ),
+            isCorrectOTP
+                ? const CircularProgressIndicator()
+                : GestureDetector(
+                    onTap: _submit,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: primary60),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            'Đăng nhập',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

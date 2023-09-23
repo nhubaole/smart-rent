@@ -6,7 +6,7 @@ import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
-import 'package:smart_rent/modules/signup/views/sign_up.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
 void main() async {
@@ -19,7 +19,7 @@ void main() async {
 
   runApp(GetMaterialApp(
     key: UniqueKey(),
-    home: MyApp(),
+    home: const MyApp(),
   ));
 }
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomeScreen();
           }
-          return const SignUpScreen();
+          return const LoginScreen();
         },
       ),
     );

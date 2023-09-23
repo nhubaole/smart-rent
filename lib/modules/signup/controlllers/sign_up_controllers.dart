@@ -36,19 +36,37 @@ class SignUpController extends GetxController {
     }
   }
 
-  Future<bool> checkExistPhoneNumber(String phoneNumber) async {
-    await FirebaseFirestore.instance
-        .collection('accounts')
-        .where('phoneNumber', isEqualTo: phoneNumber)
-        .get()
-        .then(
-      (value) {
-        //is not empty -> co tai khoan
-        if (value.docs.isEmpty) {
-          return false;
-        }
-      },
-    );
-    return true;
+  Future<String> checkExistPhoneNumber(String phoneNumber) async {
+    String res = 'Something went wrong';
+    try {
+      await FirebaseFirestore.instance
+          .collection('accounts')
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get()
+          .then(
+        (value) {
+          //is not empty -> co tai khoan
+          if (value.docs.isEmpty) {
+            res = 'success';
+          } else {
+            res = 'Số điện thoại đã được sử dụng';
+          }
+        },
+      );
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  bool is18OrOlder(DateTime selectedDate) {
+    final currentDate = DateTime.now();
+    var age = currentDate.year - selectedDate.year;
+    if (currentDate.month < selectedDate.month ||
+        (currentDate.month == selectedDate.month &&
+            currentDate.day < selectedDate.day)) {
+      age--;
+    }
+    return age >= 18;
   }
 }

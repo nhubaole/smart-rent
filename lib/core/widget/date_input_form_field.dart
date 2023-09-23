@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class DateInputField extends StatefulWidget {
   final TextEditingController textEditingController;
   final String labelText;
@@ -9,6 +10,8 @@ class DateInputField extends StatefulWidget {
   final double borderWidth;
   final Color borderColor;
   final BorderRadius borderRadius;
+  final int firstDate;
+  final int lastDate;
   String? Function(String?) onValidate;
 
   DateInputField({
@@ -21,6 +24,8 @@ class DateInputField extends StatefulWidget {
     required this.borderWidth,
     required this.borderRadius,
     required this.onValidate,
+    required this.firstDate,
+    required this.lastDate,
   });
 
   @override
@@ -32,8 +37,8 @@ class _DateInputFieldState extends State<DateInputField> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(3000),
+      firstDate: DateTime(widget.firstDate),
+      lastDate: DateTime(widget.lastDate),
     );
 
     if (picked != null && picked != widget.textEditingController.text) {
@@ -80,7 +85,10 @@ class _DateInputFieldState extends State<DateInputField> {
         ),
         prefixIcon: Icon(widget.icon),
         suffixIcon: IconButton(
-          icon: Icon(Icons.calendar_today),
+          icon: Icon(
+            Icons.calendar_today,
+            color: widget.borderColor,
+          ),
           onPressed: () => _selectDate(context),
         ),
       ),

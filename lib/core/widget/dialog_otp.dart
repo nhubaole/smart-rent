@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
@@ -66,8 +65,6 @@ class CardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpVerifyController());
-    bool buttonPressed = false;
     var otp;
     return Container(
       decoration: BoxDecoration(
@@ -123,15 +120,16 @@ class CardDialog extends StatelessWidget {
               defaultPinTheme: defaultPinTheme,
               focusedPinTheme: focusedPinTheme,
               submittedPinTheme: submittedPinTheme,
-              validator: (code) {
-                otp = code;
-                SignUpVerifyController.instance.verifyOTP(otp, user);
+              validator: (value) {
+                otp = value;
+                return null;
+                //SignUpVerifyController.instance.verifyOTP(otp, user, false);
               },
               pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
               showCursor: true,
               onCompleted: (pin) {
                 otp = pin;
-                SignUpVerifyController.instance.verifyOTP(otp, user);
+                //SignUpVerifyController.instance.verifyOTP(otp, user, false);
               },
             ),
           ),
@@ -140,7 +138,7 @@ class CardDialog extends StatelessWidget {
             children: [
               OutlinedButton(
                 onPressed: () {
-                  buttonPressed = true;
+                  SignUpVerifyController.instance.verifyOTP(otp, user);
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

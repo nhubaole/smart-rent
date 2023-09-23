@@ -8,14 +8,18 @@ import 'package:smart_rent/modules/home/views/home_screen.dart';
 class SignUpVerifyController extends GetxController {
   static SignUpVerifyController get instance => Get.find();
 
-  void verifyOTP(String otp, Account account) async {
-    var isVerified = await AuthMethods.instance.verifyOTP(otp, account);
+  Future<bool> verifyOTP(String otp, Account account) async {
+    var isVerified = await AuthMethods.instance.verifyOTP(otp);
+
     if (isVerified) {
       try {
         if (FirebaseAuth.instance.currentUser == null) {
           Get.snackbar('Lỗi', 'Không thể đăng ký');
-          return;
+          return false;
         }
+
+        // neu la dang thi them data vao firestore
+
         Account currentAccount = Account(
           phoneNumber: account.phoneNumber,
           uid: FirebaseAuth.instance.currentUser!.uid,
@@ -27,20 +31,24 @@ class SignUpVerifyController extends GetxController {
           dateOfBirth: account.dateOfBirth,
           dateOfCreate: DateTime.now(),
         );
-        print(currentAccount.toJson());
 
         String result =
             await FireStoreMethods().signUpUserFireStore(currentAccount);
-        print(result);
+
         if (result != 'success') {
           Get.snackbar('Lỗi', result);
-          return;
+          return false;
         }
+
+        // neu la dang nhap thi khong lam gi
+        Get.offAll(() => const HomeScreen());
       } catch (e) {
         Get.snackbar('Lỗi', e.toString());
       }
+      return true;
     } else {
       Get.back();
+      return false;
     }
   }
 }

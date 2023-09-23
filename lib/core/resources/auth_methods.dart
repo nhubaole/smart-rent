@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/signup/views/sign_up.dart';
 
 class AuthMethods extends GetxController {
@@ -24,7 +24,7 @@ class AuthMethods extends GetxController {
   /// then in the main.dart => App() add CircularProgressIndicator()
   _setInitialScreen(User? user) {
     user == null
-        ? Get.offAll(() => const SignUpScreen())
+        ? Get.offAll(() => const LoginScreen())
         : Get.offAll(() => const HomeScreen());
   }
 
@@ -52,7 +52,7 @@ class AuthMethods extends GetxController {
     );
   }
 
-  Future<bool> verifyOTP(String otp, Account account) async {
+  Future<bool> verifyOTP(String otp) async {
     var credentials = await _auth.signInWithCredential(
         PhoneAuthProvider.credential(
             verificationId: vertificationId.value, smsCode: otp));
@@ -66,7 +66,7 @@ class AuthMethods extends GetxController {
           email: email, password: password);
       firebaseUser.value != null
           ? Get.offAll(() => const HomeScreen())
-          : Get.to(() => const SignUpScreen());
+          : Get.to(() => const LoginScreen());
     } on FirebaseAuthException catch (e) {
       final ex = e.message;
       return ex;
