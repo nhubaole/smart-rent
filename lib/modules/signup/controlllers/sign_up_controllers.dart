@@ -41,11 +41,14 @@ class SignUpController extends GetxController {
         .collection('accounts')
         .where('phoneNumber', isEqualTo: phoneNumber)
         .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        return true;
-      }
-    });
-    return false;
+        .then(
+      (value) {
+        //is not empty -> co tai khoan
+        if (value.docs.isEmpty) {
+          return false;
+        }
+      },
+    );
+    return true;
   }
 }

@@ -35,9 +35,6 @@ class AuthMethods extends GetxController {
       phoneNumber: '+84 ${phoneNo.substring(1)}',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
-        if (_auth.currentUser!.uid == null) {
-          print('user  hien tai  ');
-        }
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {

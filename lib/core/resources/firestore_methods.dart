@@ -12,6 +12,10 @@ class FireStoreMethods {
       if (_auth.currentUser == null) {
         return 'Không thể đăng ký';
       }
+      await _firestore
+          .collection('accounts')
+          .doc(_auth.currentUser!.uid)
+          .set(account.toJson());
 
       await _firestore
           .collection('accounts')

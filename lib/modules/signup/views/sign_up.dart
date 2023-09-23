@@ -26,6 +26,8 @@ class _SignScreenState extends State<SignUpScreen> {
     try {
       bool resQuery = await SignUpController.instance
           .checkExistPhoneNumber(account.phoneNumber);
+      // true => ton tai tai khoan
+      print(resQuery);
       if (resQuery) {
         Get.dialog(
           DialogCustom(
@@ -164,8 +166,6 @@ class _SignScreenState extends State<SignUpScreen> {
                             .format(selectedDate)
                             .toString();
                         dateOfBirth = selectedDate;
-                        print('dateOfBirth ${dateOfBirth}');
-                        print('controller ${controller.dateOfBirth}');
                       },
                       onValidate: (value) {
                         if (!SignUpController.instance.isDate(value!)) {
@@ -190,7 +190,7 @@ class _SignScreenState extends State<SignUpScreen> {
                       onValidate: (value) {
                         if (value == null ||
                             value.isEmpty ||
-                            !provinces.contains(value)) {
+                            !provinces.contains(value.trim())) {
                           return 'Vui lòng nhập địa chỉ';
                         }
 
