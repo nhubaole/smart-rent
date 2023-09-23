@@ -1,54 +1,60 @@
 import 'package:flutter/material.dart';
 
-class TextFormFieldInput extends StatefulWidget {
+// ignore: must_be_immutable
+class DateInputField extends StatefulWidget {
   final TextEditingController textEditingController;
-  final bool isPassword;
   final String labelText;
   final String hintText;
-  final TextInputType textInputType;
-  final BorderRadius borderRadius;
+  final IconData icon;
+  final ValueChanged<DateTime> onDateSelected;
   final double borderWidth;
   final Color borderColor;
-  final Icon icon;
-  final void Function(String?) onSaved;
-  final String? Function(String?) onValidate;
-  final bool autoCorrect;
-  final TextCapitalization textCapitalization;
-  final int? maxLength;
+  final BorderRadius borderRadius;
+  final int firstDate;
+  final int lastDate;
+  String? Function(String?) onValidate;
 
-  const TextFormFieldInput({
-    super.key,
-    this.maxLength,
+  DateInputField({
     required this.textEditingController,
-    this.isPassword = false,
     required this.labelText,
     required this.hintText,
-    required this.textInputType,
-    required this.borderRadius,
-    required this.borderWidth,
-    required this.borderColor,
     required this.icon,
-    required this.onSaved,
+    required this.onDateSelected,
+    required this.borderColor,
+    required this.borderWidth,
+    required this.borderRadius,
     required this.onValidate,
-    required this.autoCorrect,
-    required this.textCapitalization,
+    required this.firstDate,
+    required this.lastDate,
   });
 
   @override
-  State<TextFormFieldInput> createState() => _TextFormFieldInputState();
+  _DateInputFieldState createState() => _DateInputFieldState();
 }
 
-class _TextFormFieldInputState extends State<TextFormFieldInput> {
-  bool _obscureText = false;
+class _DateInputFieldState extends State<DateInputField> {
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(widget.firstDate),
+      lastDate: DateTime(widget.lastDate),
+    );
+
+    if (picked != null && picked != widget.textEditingController.text) {
+      widget.textEditingController.text =
+          "${picked.day}/${picked.month}/${picked.year}";
+      widget.onDateSelected(picked);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLength: widget.maxLength,
-      onSaved: widget.onSaved,
       validator: widget.onValidate,
+      readOnly: true,
       controller: widget.textEditingController,
       decoration: InputDecoration(
-        counterText: '',
         focusColor: widget.borderColor,
         fillColor: widget.borderColor,
         hoverColor: widget.borderColor,
@@ -77,24 +83,15 @@ class _TextFormFieldInputState extends State<TextFormFieldInput> {
             width: widget.borderWidth,
           ),
         ),
-        prefixIcon: widget.icon,
-        suffixIcon: widget.isPassword
-            ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              )
-            : null,
+        prefixIcon: Icon(widget.icon),
+        suffixIcon: IconButton(
+          icon: Icon(
+            Icons.calendar_today,
+            color: widget.borderColor,
+          ),
+          onPressed: () => _selectDate(context),
+        ),
       ),
-      keyboardType: widget.textInputType,
-      obscureText: widget.isPassword,
-      autocorrect: widget.autoCorrect,
-      textCapitalization: widget.textCapitalization,
     );
   }
 }

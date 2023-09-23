@@ -1,10 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/widget/text_field_input.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then(
+    (value) => Get.put(AuthMethods()),
+  );
+
+  runApp(GetMaterialApp(
+    key: UniqueKey(),
+    home: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,10 +33,21 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: primary98),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          }
+          return const LoginScreen();
+        },
+      ),
     );
   }
 }

@@ -1,22 +1,23 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user.freezed.dart';
-part 'user.g.dart';
+part 'Account.freezed.dart';
+part 'Account.g.dart';
 
 @freezed
-class User with _$User {
-  const User._();
-  const factory User({
+class Account with _$Account {
+  const Account._();
+  const factory Account({
     required String phoneNumber,
-    required String email,
     required String uid,
     required String photoUrl,
     required String username,
     required String address,
     required bool sex,
     required int age,
-    DateTime? dateOfBirth,
+    required DateTime? dateOfBirth,
+    required DateTime? dateOfCreate,
+    @Default('user@one.com') String email,
     @Default(false) bool? verified,
     @Default(false) bool? isOnline,
     @Default(0) double? rating,
@@ -26,7 +27,8 @@ class User with _$User {
     @Default([]) List<String> listFollowers,
     @Default([]) List<String> listFollowing,
     @Default([]) List<String> listComments,
-  }) = _User;
+  }) = _Account;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory Account.fromJson(Map<String, dynamic> json) =>
+      _$AccountFromJson(json);
 }
