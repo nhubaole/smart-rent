@@ -28,6 +28,7 @@ mixin _$Account {
   bool get sex => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   DateTime? get dateOfBirth => throw _privateConstructorUsedError;
+  DateTime? get dateOfCreate => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   bool? get verified => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
@@ -58,6 +59,7 @@ abstract class $AccountCopyWith<$Res> {
       bool sex,
       int age,
       DateTime? dateOfBirth,
+      DateTime? dateOfCreate,
       String email,
       bool? verified,
       bool? isOnline,
@@ -91,6 +93,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     Object? sex = null,
     Object? age = null,
     Object? dateOfBirth = freezed,
+    Object? dateOfCreate = freezed,
     Object? email = null,
     Object? verified = freezed,
     Object? isOnline = freezed,
@@ -134,6 +137,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
       dateOfBirth: freezed == dateOfBirth
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      dateOfCreate: freezed == dateOfCreate
+          ? _value.dateOfCreate
+          : dateOfCreate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       email: null == email
           ? _value.email
@@ -195,6 +202,7 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
       bool sex,
       int age,
       DateTime? dateOfBirth,
+      DateTime? dateOfCreate,
       String email,
       bool? verified,
       bool? isOnline,
@@ -225,6 +233,7 @@ class __$$_AccountCopyWithImpl<$Res>
     Object? sex = null,
     Object? age = null,
     Object? dateOfBirth = freezed,
+    Object? dateOfCreate = freezed,
     Object? email = null,
     Object? verified = freezed,
     Object? isOnline = freezed,
@@ -268,6 +277,10 @@ class __$$_AccountCopyWithImpl<$Res>
       dateOfBirth: freezed == dateOfBirth
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      dateOfCreate: freezed == dateOfCreate
+          ? _value.dateOfCreate
+          : dateOfCreate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       email: null == email
           ? _value.email
@@ -325,6 +338,7 @@ class _$_Account extends _Account {
       required this.sex,
       required this.age,
       required this.dateOfBirth,
+      required this.dateOfCreate,
       this.email = 'user@one.com',
       this.verified = false,
       this.isOnline = false,
@@ -362,6 +376,8 @@ class _$_Account extends _Account {
   final int age;
   @override
   final DateTime? dateOfBirth;
+  @override
+  final DateTime? dateOfCreate;
   @override
   @JsonKey()
   final String email;
@@ -430,7 +446,7 @@ class _$_Account extends _Account {
 
   @override
   String toString() {
-    return 'Account(phoneNumber: $phoneNumber, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, dateOfBirth: $dateOfBirth, email: $email, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
+    return 'Account(phoneNumber: $phoneNumber, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, dateOfBirth: $dateOfBirth, dateOfCreate: $dateOfCreate, email: $email, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
   }
 
   @override
@@ -450,6 +466,8 @@ class _$_Account extends _Account {
             (identical(other.age, age) || other.age == age) &&
             (identical(other.dateOfBirth, dateOfBirth) ||
                 other.dateOfBirth == dateOfBirth) &&
+            (identical(other.dateOfCreate, dateOfCreate) ||
+                other.dateOfCreate == dateOfCreate) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
@@ -472,26 +490,28 @@ class _$_Account extends _Account {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      phoneNumber,
-      uid,
-      photoUrl,
-      username,
-      address,
-      sex,
-      age,
-      dateOfBirth,
-      email,
-      verified,
-      isOnline,
-      rating,
-      const DeepCollectionEquality().hash(_listRoomForRent),
-      const DeepCollectionEquality().hash(_listSaved),
-      const DeepCollectionEquality().hash(_listRoomRent),
-      const DeepCollectionEquality().hash(_listFollowers),
-      const DeepCollectionEquality().hash(_listFollowing),
-      const DeepCollectionEquality().hash(_listComments));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        phoneNumber,
+        uid,
+        photoUrl,
+        username,
+        address,
+        sex,
+        age,
+        dateOfBirth,
+        dateOfCreate,
+        email,
+        verified,
+        isOnline,
+        rating,
+        const DeepCollectionEquality().hash(_listRoomForRent),
+        const DeepCollectionEquality().hash(_listSaved),
+        const DeepCollectionEquality().hash(_listRoomRent),
+        const DeepCollectionEquality().hash(_listFollowers),
+        const DeepCollectionEquality().hash(_listFollowing),
+        const DeepCollectionEquality().hash(_listComments)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -517,6 +537,7 @@ abstract class _Account extends Account {
       required final bool sex,
       required final int age,
       required final DateTime? dateOfBirth,
+      required final DateTime? dateOfCreate,
       final String email,
       final bool? verified,
       final bool? isOnline,
@@ -547,6 +568,8 @@ abstract class _Account extends Account {
   int get age;
   @override
   DateTime? get dateOfBirth;
+  @override
+  DateTime? get dateOfCreate;
   @override
   String get email;
   @override

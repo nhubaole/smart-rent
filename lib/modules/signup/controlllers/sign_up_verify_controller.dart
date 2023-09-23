@@ -25,11 +25,17 @@ class SignUpVerifyController extends GetxController {
           sex: account.sex,
           age: account.age,
           dateOfBirth: account.dateOfBirth,
+          dateOfCreate: DateTime.now(),
         );
         print(currentAccount.toJson());
 
         String result =
             await FireStoreMethods().signUpUserFireStore(currentAccount);
+        print(result);
+        if (result != 'success') {
+          Get.snackbar('Lỗi', result);
+          return;
+        }
       } catch (e) {
         Get.snackbar('Lỗi', e.toString());
       }

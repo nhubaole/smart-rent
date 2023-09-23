@@ -16,6 +16,7 @@ class Account with _$Account {
     required bool sex,
     required int age,
     required DateTime? dateOfBirth,
+    required DateTime? dateOfCreate,
     @Default('user@one.com') String email,
     @Default(false) bool? verified,
     @Default(false) bool? isOnline,

@@ -14,11 +14,11 @@ class TextFormFieldInput extends StatefulWidget {
   final String? Function(String?) onValidate;
   final bool autoCorrect;
   final TextCapitalization textCapitalization;
-  final int maxLength;
+  final int? maxLength;
 
   const TextFormFieldInput({
     super.key,
-    required this.maxLength,
+    this.maxLength,
     required this.textEditingController,
     this.isPassword = false,
     required this.labelText,
@@ -42,58 +42,112 @@ class _TextFormFieldInputState extends State<TextFormFieldInput> {
   bool _obscureText = false;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      maxLength: widget.maxLength,
-      onSaved: widget.onSaved,
-      validator: widget.onValidate,
-      controller: widget.textEditingController,
-      decoration: InputDecoration(
-        focusColor: widget.borderColor,
-        fillColor: widget.borderColor,
-        hoverColor: widget.borderColor,
-        iconColor: widget.borderColor,
-        prefixIconColor: widget.borderColor,
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        border: OutlineInputBorder(
-          borderRadius: widget.borderRadius,
-          borderSide: BorderSide(
-            color: widget.borderColor,
-            width: widget.borderWidth,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius,
-          borderSide: BorderSide(
-            color: widget.borderColor,
-            width: widget.borderWidth,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius,
-          borderSide: BorderSide(
-            color: widget.borderColor,
-            width: widget.borderWidth,
-          ),
-        ),
-        prefixIcon: widget.icon,
-        suffixIcon: widget.isPassword
-            ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility : Icons.visibility_off,
+    return widget.maxLength != null
+        ? TextFormField(
+            maxLength: widget.maxLength,
+            onSaved: widget.onSaved,
+            validator: widget.onValidate,
+            controller: widget.textEditingController,
+            decoration: InputDecoration(
+              focusColor: widget.borderColor,
+              fillColor: widget.borderColor,
+              hoverColor: widget.borderColor,
+              iconColor: widget.borderColor,
+              prefixIconColor: widget.borderColor,
+              labelText: widget.labelText,
+              hintText: widget.hintText,
+              border: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              )
-            : null,
-      ),
-      keyboardType: widget.textInputType,
-      obscureText: widget.isPassword,
-      autocorrect: widget.autoCorrect,
-      textCapitalization: widget.textCapitalization,
-    );
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              prefixIcon: widget.icon,
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
+                  : null,
+            ),
+            keyboardType: widget.textInputType,
+            obscureText: widget.isPassword,
+            autocorrect: widget.autoCorrect,
+            textCapitalization: widget.textCapitalization,
+          )
+        : TextFormField(
+            maxLength: widget.maxLength,
+            onSaved: widget.onSaved,
+            validator: widget.onValidate,
+            controller: widget.textEditingController,
+            decoration: InputDecoration(
+              focusColor: widget.borderColor,
+              fillColor: widget.borderColor,
+              hoverColor: widget.borderColor,
+              iconColor: widget.borderColor,
+              prefixIconColor: widget.borderColor,
+              labelText: widget.labelText,
+              hintText: widget.hintText,
+              border: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              prefixIcon: widget.icon,
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
+                  : null,
+            ),
+            keyboardType: widget.textInputType,
+            obscureText: widget.isPassword,
+            autocorrect: widget.autoCorrect,
+            textCapitalization: widget.textCapitalization,
+          );
   }
 }

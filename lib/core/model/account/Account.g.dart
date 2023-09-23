@@ -17,6 +17,9 @@ _$_Account _$$_AccountFromJson(Map<String, dynamic> json) => _$_Account(
       dateOfBirth: json['dateOfBirth'] == null
           ? null
           : DateTime.parse(json['dateOfBirth'] as String),
+      dateOfCreate: json['dateOfCreate'] == null
+          ? null
+          : DateTime.parse(json['dateOfCreate'] as String),
       email: json['email'] as String? ?? 'user@one.com',
       verified: json['verified'] as bool? ?? false,
       isOnline: json['isOnline'] as bool? ?? false,
@@ -57,6 +60,7 @@ Map<String, dynamic> _$$_AccountToJson(_$_Account instance) =>
       'sex': instance.sex,
       'age': instance.age,
       'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
+      'dateOfCreate': instance.dateOfCreate?.toIso8601String(),
       'email': instance.email,
       'verified': instance.verified,
       'isOnline': instance.isOnline,
