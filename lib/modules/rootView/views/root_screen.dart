@@ -52,34 +52,34 @@ class _RootScreenState extends State<RootScreen> {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 2,
           ),
           child: GNav(
-            tabActiveBorder: Border.all(color: primary80, width: 1),
+            tabActiveBorder: Border.all(color: primary60, width: 1),
             haptic: true,
             //curve: Curves.easeOut,
             //duration: const Duration(milliseconds: 200),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             gap: 15,
-            color: Colors.white,
+            color: Colors.black,
             padding: const EdgeInsets.symmetric(
               vertical: 10,
               horizontal: 5,
             ),
-            activeColor: Colors.white,
+            activeColor: primary60,
             rippleColor: Colors.red,
             hoverColor: Colors.yellow,
-            tabBackgroundColor: Colors.grey.shade800,
+            tabBackgroundColor: primary98,
             onTabChange: (index) {
               changeScreen(index);
             },
             tabs: const [
               GButton(icon: Icons.home, text: 'Trang Chủ'),
-              GButton(icon: Icons.manage_search, text: 'Quản Lí Nhà'),
+              GButton(icon: Icons.manage_search, text: 'Phòng của bạn'),
               GButton(icon: Icons.chat_bubble_outline, text: 'Tin Nhắn'),
               GButton(icon: Icons.manage_accounts, text: 'Tài Khoản'),
             ],
