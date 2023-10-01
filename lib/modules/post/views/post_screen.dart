@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
+import 'package:smart_rent/modules/post/views/location_page.dart';
 
 import '../../../core/enums/gender.dart';
 
@@ -18,7 +20,6 @@ class _PostScreenState extends State<PostScreen> {
   int activeStep = 0; // Initial step set to 5.
 
   int upperBound = 5;
-
 
   List<Icon> icons = [
     Icon(Icons.info_outline, color: Colors.white),
@@ -97,6 +98,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
                 header(),
                 contentPage(),
+                //nextButton()
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //   children: [
@@ -114,17 +116,18 @@ class _PostScreenState extends State<PostScreen> {
 
   /// Returns the next button.
   Widget nextButton() {
-    return ElevatedButton(
-      onPressed: () {
-        // Increment activeStep, when the next button is tapped. However, check for upper bound.
-        if (activeStep < upperBound) {
-          setState(() {
-            activeStep++;
-          });
-        }
-      },
-      child: Text('Next'),
-    );
+    return ButtonOutline(
+        onPressed: () {
+          if (activeStep < upperBound) {
+            setState(() {
+              activeStep++;
+            });
+          }
+        },
+        icon: Icon(Icons.arrow_forward),
+        text: Text('data'),
+        borderColor: primary60,
+        borderRadius: BorderRadius.circular(100));
   }
 
   /// Returns the previous button.
@@ -184,7 +187,7 @@ class _PostScreenState extends State<PostScreen> {
   Widget contentPage() {
     switch (activeStep) {
       case 1:
-        return locationPage();
+        return LocationPage();
 
       case 2:
         return utilsPage();
