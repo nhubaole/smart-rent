@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/dialog_custom.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
@@ -28,16 +27,17 @@ class _LoginScreenState extends State<LoginScreen> {
       // check log in co ton tai tai khoan => tien hanh dang nhap
 
       if (resQuery == 'exist') {
-        final authController = Get.lazyPut(
-          () => AuthMethods(),
-        );
+        // final authController = Get.lazyPut(
+        //   () => AuthMethods(),
+        // );
+
         LoginController.instance
             .phoneAuthentication(controller.phoneNo.text.trim());
-        // Get.to(
-        //   () => LoginVerifyScreen(
-        //     phoneNumber: controller.phoneNo.text.trim(),
-        //   ),
-        // );
+        Get.to(
+          () => LoginVerifyScreen(
+            phoneNumber: controller.phoneNo.text.trim(),
+          ),
+        );
       } else {
         Get.dialog(
           DialogCustom(

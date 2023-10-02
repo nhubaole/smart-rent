@@ -51,7 +51,7 @@ class DialogOTP extends StatelessWidget {
   }
 }
 
-class CardDialog extends StatelessWidget {
+class CardDialog extends StatefulWidget {
   const CardDialog({
     super.key,
     required this.phoneNumber,
@@ -62,6 +62,27 @@ class CardDialog extends StatelessWidget {
   final String phoneNumber;
   final void Function() onPressed;
   final Account user;
+
+  @override
+  State<CardDialog> createState() => _CardDialogState();
+}
+
+class _CardDialogState extends State<CardDialog> {
+  bool isWrongOTP = false;
+  void submit(String otp, Account user) async {
+    String res =
+        await SignUpVerifyController.instance.verifyOTP(otp, widget.user);
+
+    if (res != 'success') {
+      setState(() {
+        isWrongOTP = true;
+      });
+    } else {
+      setState(() {
+        isWrongOTP = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +118,7 @@ class CardDialog extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: phoneNumber,
+                  text: widget.phoneNumber,
                   style: const TextStyle(
                     color: secondary20,
                     fontSize: 14,
@@ -133,12 +154,31 @@ class CardDialog extends StatelessWidget {
               },
             ),
           ),
+          const SizedBox(
+            height: 8,
+          ),
+          isWrongOTP
+              ? const Text(
+                  'Mã OTP không đúng',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              : const Text(
+                  'Đăng kí thành công',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+          const SizedBox(
+            height: 8,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               OutlinedButton(
                 onPressed: () {
-                  SignUpVerifyController.instance.verifyOTP(otp, user);
+                  submit(otp, widget.user);
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

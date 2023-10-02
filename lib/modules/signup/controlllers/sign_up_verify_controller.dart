@@ -8,47 +8,51 @@ import 'package:smart_rent/modules/home/views/home_screen.dart';
 class SignUpVerifyController extends GetxController {
   static SignUpVerifyController get instance => Get.find();
 
-  Future<bool> verifyOTP(String otp, Account account) async {
-    var isVerified = await AuthMethods.instance.verifyOTP(otp);
+  Future<String> verifyOTP(String otp, Account account) async {
+    String res = 'Some error occured';
+    try {
+      var isVerified = await AuthMethods.instance.verifyOTP(otp);
+      if (isVerified) {
+        try {
+          if (FirebaseAuth.instance.currentUser == null) {
+            Get.snackbar('Lỗi', 'Không thể đăng ký');
+            return 'not-success';
+          }
 
-    if (isVerified) {
-      try {
-        if (FirebaseAuth.instance.currentUser == null) {
-          Get.snackbar('Lỗi', 'Không thể đăng ký');
-          return false;
+          // neu la dang thi them data vao firestore
+
+          Account currentAccount = Account(
+            phoneNumber: account.phoneNumber,
+            uid: FirebaseAuth.instance.currentUser!.uid,
+            photoUrl: account.photoUrl,
+            username: account.username,
+            address: account.address,
+            sex: account.sex,
+            age: account.age,
+            dateOfBirth: account.dateOfBirth,
+            dateOfCreate: DateTime.now(),
+          );
+
+          String result =
+              await FireStoreMethods().signUpUserFireStore(currentAccount);
+
+          if (result != 'success') {
+            Get.snackbar('Lỗi', result);
+            return 'not-success';
+          }
+
+          // neu la dang nhap thi khong lam gi
+          Get.offAll(() => const HomeScreen());
+        } catch (e) {
+          Get.snackbar('Lỗi', e.toString());
         }
-
-        // neu la dang thi them data vao firestore
-
-        Account currentAccount = Account(
-          phoneNumber: account.phoneNumber,
-          uid: FirebaseAuth.instance.currentUser!.uid,
-          photoUrl: account.photoUrl,
-          username: account.username,
-          address: account.address,
-          sex: account.sex,
-          age: account.age,
-          dateOfBirth: account.dateOfBirth,
-          dateOfCreate: DateTime.now(),
-        );
-
-        String result =
-            await FireStoreMethods().signUpUserFireStore(currentAccount);
-
-        if (result != 'success') {
-          Get.snackbar('Lỗi', result);
-          return false;
-        }
-
-        // neu la dang nhap thi khong lam gi
-        Get.offAll(() => const HomeScreen());
-      } catch (e) {
-        Get.snackbar('Lỗi', e.toString());
+        res = 'success';
+      } else {
+        Get.back();
       }
-      return true;
-    } else {
-      Get.back();
-      return false;
+    } catch (error) {
+      res = error.toString();
     }
+    return res;
   }
 }

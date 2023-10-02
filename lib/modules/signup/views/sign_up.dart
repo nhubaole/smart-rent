@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
 import 'package:smart_rent/core/widget/dialog_custom.dart';
@@ -47,7 +46,7 @@ class _SignScreenState extends State<SignUpScreen> {
                   'Đã tồn tại tài khoản với số điện thoại này, đăng nhập ngay'),
         );
       } else {
-        final AuthenController = Get.lazyPut(() => AuthMethods());
+        //Get.lazyPut(() => AuthMethods());
         SignUpController.instance.phoneAuthentication(account.phoneNumber);
 
         Get.dialog(

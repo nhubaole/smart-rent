@@ -19,7 +19,7 @@ class LoginController extends GetxController {
   }
 
   //Get phoneNo from user (Screen) and pass it to Auth Repository for Firebase Authentication
-  void phoneAuthentication(String phoneNo) {
+  void phoneAuthentication(String phoneNo) async {
     AuthMethods.instance.phoneAuthentication(phoneNo);
   }
 
