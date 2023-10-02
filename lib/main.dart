@@ -7,20 +7,22 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
+import 'package:smart_rent/modules/onboarding/views/onboarding_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
 void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // ).then(
+  //   (value) => Get.put(AuthMethods()),
+  // );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ).then(
-    (value) => Get.put(AuthMethods()),
   );
 
-  runApp(GetMaterialApp(
-    key: UniqueKey(),
-    home: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -29,8 +31,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Smart Rent House',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primary98),
@@ -45,9 +47,10 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomeScreen();
           }
-          return const LoginScreen();
+          return const SplashScreen();
         },
       ),
+      //home: const OnBoardingScreen(),
     );
   }
 }

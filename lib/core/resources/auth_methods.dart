@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
-import 'package:smart_rent/modules/signup/views/sign_up.dart';
 
 class AuthMethods extends GetxController {
   static AuthMethods get instance => Get.find();
