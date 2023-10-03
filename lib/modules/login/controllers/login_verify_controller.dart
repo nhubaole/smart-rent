@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/rootView/views/root_screen.dart';
 
 class LoginVerifyController extends GetxController {

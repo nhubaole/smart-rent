@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/home_screen.dart';
+import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_home/views/manage_home_screen.dart';
+import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -14,23 +17,18 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
-  int selectedPage = 0;
-  void changeScreen(int index) {
-    setState(() {
-      selectedPage = index;
-    });
-  }
+  final controller = Get.put(RootScreenController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
     Widget activePage = const HomeScreen();
-    if (selectedPage == 0) {
+    if (controller.selectedPage == 0) {
       activePage = const HomeScreen();
-    } else if (selectedPage == 1) {
+    } else if (controller.selectedPage == 1) {
       activePage = const ManageHomeScreen();
-    } else if (selectedPage == 2) {
+    } else if (controller.selectedPage == 2) {
       activePage = const ChatScreen();
-    } else if (selectedPage == 3) {
+    } else if (controller.selectedPage == 3) {
       activePage = const ManageAccountScreen();
     }
     return Scaffold(
@@ -75,7 +73,7 @@ class _RootScreenState extends State<RootScreen> {
             hoverColor: Colors.yellow,
             tabBackgroundColor: primary98,
             onTabChange: (index) {
-              changeScreen(index);
+              controller.changeScreen(index);
             },
             tabs: const [
               GButton(icon: Icons.home, text: 'Trang Chủ'),

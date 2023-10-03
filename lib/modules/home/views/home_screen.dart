@@ -1,4 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
+import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
+import 'package:smart_rent/modules/home/views/home_list_room.dart';
+import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
+import 'package:smart_rent/modules/home/views/home_top_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,11 +16,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final HomeScreenController controller = Get.put(HomeScreenController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
-        child: Text('HomeScreen'),
+    return const Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // top widget
+            HomeTopWidget(),
+            // pho bien
+            HomePopularWidget(),
+
+            HomeListRoomWidget(),
+          ],
+        ),
+
+        // text Phong noi bat
       ),
     );
   }

@@ -1,0 +1,167 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/home/controllers/homt_top__controller.dart';
+import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
+
+class HomeTopWidget extends StatelessWidget {
+  const HomeTopWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final HomeTopWidgetController controller =
+        Get.put(HomeTopWidgetController());
+    controller.getName();
+    controller.getCurrentLocation();
+
+    return Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * 0.45,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                primary40,
+                primary80,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 80,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => RichText(
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Xin chào ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: controller.currentName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              'Ho Chi Minh',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const Spacer(),
+                    // chuong thong bao
+                    Container(
+                      decoration: BoxDecoration(
+                        color: primary95,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.notification_add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // search bar
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      color: secondary40,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'Tìm theo quận, tên đường, địa điểm',
+                      style: TextStyle(
+                        color: secondary40,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ),
+        const Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: HomeFeatureNavWidget(),
+        ),
+      ],
+    );
+  }
+}
