@@ -6,6 +6,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
 import 'package:smart_rent/modules/post/views/location_page.dart';
+import 'package:smart_rent/modules/post/views/utilities_page.dart';
 
 import '../../../core/enums/gender.dart';
 
@@ -24,7 +25,7 @@ class _PostScreenState extends State<PostScreen> {
   List<Icon> icons = [
     Icon(Icons.info_outline, color: Colors.white),
     Icon(Icons.location_on_outlined, color: Colors.white),
-    Icon(Icons.storefront_outlined, color: Colors.white),
+    Icon(Icons.extension_outlined, color: Colors.white),
     Icon(Icons.verified_outlined, color: Colors.white),
   ]; // upperBound MUST BE total number of icons minus 1.
 
@@ -190,7 +191,7 @@ class _PostScreenState extends State<PostScreen> {
         return LocationPage();
 
       case 2:
-        return utilsPage();
+        return UtilitiesPage();
 
       case 3:
         return confirmPage();
