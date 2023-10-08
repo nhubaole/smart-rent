@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/button_fill.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
+import 'package:smart_rent/modules/post/controllers/post_controller.dart';
 import 'package:smart_rent/modules/post/views/confirm_page.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
 import 'package:smart_rent/modules/post/views/location_page.dart';
@@ -20,6 +22,8 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  final PostController controller = Get.put(PostController());
+
   int activeStep = 0; // Initial step set to 5.
 
   int upperBound = 5;
@@ -147,7 +151,15 @@ class _PostScreenState extends State<PostScreen> {
           : ButtonOutline(
               borderWidth: 2,
               onPressed: () {
-                if (activeStep < upperBound - 2) {
+                bool allowNext = true;
+                if (activeStep == 0) {
+                  if (!controller.formInfoKey.currentState!.validate()) {
+                    allowNext = false;
+                  } else {
+                    controller.updateInfoRoom();
+                  }
+                }
+                if (activeStep < upperBound - 2 && allowNext) {
                   print("upperbound: ${upperBound}");
                   print("Active step: ${activeStep}");
                   setState(() {
