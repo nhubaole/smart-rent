@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/widget/button_fill.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
+import 'package:smart_rent/modules/post/views/confirm_page.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
 import 'package:smart_rent/modules/post/views/location_page.dart';
 import 'package:smart_rent/modules/post/views/utilities_page.dart';
@@ -22,6 +24,11 @@ class _PostScreenState extends State<PostScreen> {
 
   int upperBound = 5;
 
+  LocationPage locationPage = LocationPage();
+  UtilitiesPage utilitiesPage = UtilitiesPage();
+  ConfirmPage confirmPage = ConfirmPage();
+  InfoPage infoPage = InfoPage();
+
   List<Icon> icons = [
     Icon(Icons.info_outline, color: Colors.white),
     Icon(Icons.location_on_outlined, color: Colors.white),
@@ -35,6 +42,10 @@ class _PostScreenState extends State<PostScreen> {
       theme: ThemeData(useMaterial3: true),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+          child: nextButton(),
+        ),
         appBar: AppBar(
           toolbarHeight: 64.0,
           title: Text(
@@ -71,44 +82,41 @@ class _PostScreenState extends State<PostScreen> {
         ),
         body: Container(
           color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                IconStepper(
-                  activeStepBorderWidth: 1,
-                  stepRadius: 20.0,
-                  activeStepBorderPadding: 8.0,
-                  stepColor: secondary80,
-                  activeStepColor: primary60,
-                  activeStepBorderColor: primary60,
-                  enableNextPreviousButtons: false,
-                  lineLength: 60.0,
-                  lineColor: primary60,
-                  icons: icons,
+          child: Column(
+            children: [
+              IconStepper(
+                activeStepBorderWidth: 1,
+                stepRadius: 16.0,
+                activeStepBorderPadding: 8.0,
+                stepColor: secondary80,
+                activeStepColor: primary60,
+                activeStepBorderColor: primary60,
+                enableNextPreviousButtons: false,
+                lineLength: 50.0,
+                lineColor: primary60,
+                icons: icons,
 
-                  // activeStep property set to activeStep variable defined above.
-                  activeStep: activeStep,
+                // activeStep property set to activeStep variable defined above.
+                activeStep: activeStep,
 
-                  // This ensures step-tapping updates the activeStep.
-                  onStepReached: (index) {
-                    setState(() {
-                      activeStep = index;
-                    });
-                  },
-                ),
-                header(),
-                contentPage(),
-                //nextButton()
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     previousButton(),
-                //     nextButton(),
-                //   ],
-                // ),
-              ],
-            ),
+                // This ensures step-tapping updates the activeStep.
+                onStepReached: (index) {
+                  setState(() {
+                    activeStep = index;
+                  });
+                },
+              ),
+              header(),
+              contentPage(),
+              //nextButton()
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     previousButton(),
+              //     nextButton(),
+              //   ],
+              // ),
+            ],
           ),
         ),
       ),
@@ -117,32 +125,50 @@ class _PostScreenState extends State<PostScreen> {
 
   /// Returns the next button.
   Widget nextButton() {
-    return ButtonOutline(
-        onPressed: () {
-          if (activeStep < upperBound) {
-            setState(() {
-              activeStep++;
-            });
-          }
-        },
-        icon: Icon(Icons.arrow_forward),
-        text: Text('data'),
-        borderColor: primary60,
-        borderRadius: BorderRadius.circular(100));
-  }
-
-  /// Returns the previous button.
-  Widget previousButton() {
-    return ElevatedButton(
-      onPressed: () {
-        // Decrement activeStep, when the previous button is tapped. However, check for lower bound i.e., must be greater than 0.
-        if (activeStep > 0) {
-          setState(() {
-            activeStep--;
-          });
-        }
-      },
-      child: Text('Prev'),
+    return Container(
+      height: 50,
+      child: activeStep == 3
+          ? ButtonFill(
+              onPressed: () {},
+              icon: Icon(
+                Icons.add_box_rounded,
+                size: 20,
+                color: Colors.white,
+              ),
+              text: Text(
+                'Đăng bài',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              backgroundColor: primary60,
+              borderRadius: BorderRadius.circular(100))
+          : ButtonOutline(
+              borderWidth: 2,
+              onPressed: () {
+                if (activeStep < upperBound - 2) {
+                  print("upperbound: ${upperBound}");
+                  print("Active step: ${activeStep}");
+                  setState(() {
+                    activeStep++;
+                  });
+                }
+              },
+              icon: Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 20,
+                color: primary60,
+              ),
+              text: Text(
+                'Tiếp theo',
+                style: TextStyle(
+                    color: primary60,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              borderColor: primary60,
+              borderRadius: BorderRadius.circular(100)),
     );
   }
 
@@ -188,46 +214,16 @@ class _PostScreenState extends State<PostScreen> {
   Widget contentPage() {
     switch (activeStep) {
       case 1:
-        return LocationPage();
+        return locationPage;
 
       case 2:
-        return UtilitiesPage();
+        return utilitiesPage;
 
       case 3:
-        return confirmPage();
+        return confirmPage;
 
       default:
-        return InfoPage();
+        return infoPage;
     }
-  }
-
-  Expanded locationPage() {
-    return Expanded(
-      child: FittedBox(
-        child: Center(
-          child: Text('$activeStep'),
-        ),
-      ),
-    );
-  }
-
-  Expanded utilsPage() {
-    return Expanded(
-      child: FittedBox(
-        child: Center(
-          child: Text('$activeStep'),
-        ),
-      ),
-    );
-  }
-
-  Expanded confirmPage() {
-    return Expanded(
-      child: FittedBox(
-        child: Center(
-          child: Text('$activeStep'),
-        ),
-      ),
-    );
   }
 }
