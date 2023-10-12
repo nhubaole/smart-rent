@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/KEY_VALUE.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
+
+  final box = GetStorage();
 
   //TextField Controllers to get data from TextFields
   final phoneNo = TextEditingController();
@@ -28,7 +31,7 @@ class LoginController extends GetxController {
     String res = 'Something went wrong';
     try {
       await FirebaseFirestore.instance
-          .collection(KEY_COLLECTION_ACCOUNT)
+          .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
           .where('phoneNumber', isEqualTo: phoneNumber)
           .get()
           .then(

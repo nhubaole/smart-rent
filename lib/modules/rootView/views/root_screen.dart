@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/home_screen.dart';
-import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
-import 'package:smart_rent/modules/manage_home/views/manage_home_screen.dart';
+import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
@@ -17,22 +16,30 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
-  final controller = Get.put(RootScreenController(), permanent: true);
+  final rootController = Get.put(RootScreenController(), permanent: true);
+  @override
+  void initState() {
+    super.initState();
+    rootController.getName();
+    rootController.initStorage();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = const HomeScreen();
-    if (controller.selectedPage == 0) {
-      activePage = const HomeScreen();
-    } else if (controller.selectedPage == 1) {
-      activePage = const ManageHomeScreen();
-    } else if (controller.selectedPage == 2) {
-      activePage = const ChatScreen();
-    } else if (controller.selectedPage == 3) {
-      activePage = const ManageAccountScreen();
-    }
+    final screens = [
+      const HomeScreen(),
+      const ManageRoomScreen(),
+      const ChatScreen(),
+      const ManageAccountScreen(),
+    ];
+
     return Scaffold(
-      body: activePage,
+      body: PageView(
+        onPageChanged: rootController.animateToTab,
+        controller: rootController.pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: screens,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: primary95,
@@ -50,6 +57,9 @@ class _RootScreenState extends State<RootScreen> {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 5,
+        ),
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -68,18 +78,19 @@ class _RootScreenState extends State<RootScreen> {
               vertical: 10,
               horizontal: 5,
             ),
-            activeColor: primary60,
-            rippleColor: Colors.red,
+            activeColor: primary40,
+            rippleColor: primary95,
             hoverColor: Colors.yellow,
             tabBackgroundColor: primary98,
             onTabChange: (index) {
-              controller.changeScreen(index);
+              rootController.changeScreen(index);
             },
             tabs: const [
-              GButton(icon: Icons.home, text: 'Trang Chủ'),
-              GButton(icon: Icons.manage_search, text: 'Phòng của bạn'),
+              GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),
+              GButton(
+                  icon: Icons.manage_search_outlined, text: 'Phòng của bạn'),
               GButton(icon: Icons.chat_bubble_outline, text: 'Tin Nhắn'),
-              GButton(icon: Icons.manage_accounts, text: 'Tài Khoản'),
+              GButton(icon: Icons.manage_accounts_outlined, text: 'Tài Khoản'),
             ],
           ),
         ),

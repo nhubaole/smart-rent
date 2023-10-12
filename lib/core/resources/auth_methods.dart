@@ -100,7 +100,7 @@ class AuthMethods extends GetxController {
     User currentUser = _auth.currentUser!;
 
     DocumentSnapshot documentSnapshot = await _firestore
-        .collection(KEY_COLLECTION_ACCOUNT)
+        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
         .doc(currentUser.uid)
         .get();
     return Account.fromJson(documentSnapshot.data() as Map<String, dynamic>);

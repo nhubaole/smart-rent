@@ -1,9 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
-import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
 import 'package:smart_rent/modules/home/views/home_list_room.dart';
 import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
 import 'package:smart_rent/modules/home/views/home_top_widget.dart';

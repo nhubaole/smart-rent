@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/home/controllers/homt_top__controller.dart';
+import 'package:smart_rent/modules/home/controllers/home_top_controller.dart';
 import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
 
 class HomeTopWidget extends StatelessWidget {
@@ -17,7 +17,7 @@ class HomeTopWidget extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.45,
+          height: MediaQuery.of(context).size.height * 0.4,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -32,6 +32,8 @@ class HomeTopWidget extends StatelessWidget {
               bottomRight: Radius.circular(30),
             ),
           ),
+        ),
+        Positioned(
           child: Column(
             children: [
               const SizedBox(
@@ -89,7 +91,7 @@ class HomeTopWidget extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              'Ho Chi Minh',
+                              'controller.currentLocation',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -150,17 +152,18 @@ class HomeTopWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 24,
               ),
+              const HomeFeatureNavWidget(),
             ],
           ),
-        ),
-        const Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: HomeFeatureNavWidget(),
-        ),
+        )
+        // const Positioned(
+        //   bottom: 0,
+        //   left: 0,
+        //   right: 0,
+        //   child: HomeFeatureNavWidget(),
+        // ),
       ],
     );
   }

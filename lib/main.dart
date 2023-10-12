@@ -2,20 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_options.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/rootView/views/root_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
 void main() async {
+  await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then(
     (value) => Get.put(AuthMethods()),
   );
+
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -42,7 +44,6 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasData) {
-              print('RootScreen');
               return const RootScreen();
             } else if (snapshot.hasError) {
               return Center(
@@ -66,12 +67,10 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
-
-          print('SplashScreen');
           return const SplashScreen();
         },
       ),
-      //home: const OnBoardingScreen(),
+      //home: const RootScreen(),
     );
   }
 }

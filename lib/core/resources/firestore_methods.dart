@@ -14,7 +14,7 @@ class FireStoreMethods {
         return 'Không thể đăng ký';
       }
       await _firestore
-          .collection(KEY_COLLECTION_ACCOUNT)
+          .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
           .doc(_auth.currentUser!.uid)
           .set(account.toJson());
 

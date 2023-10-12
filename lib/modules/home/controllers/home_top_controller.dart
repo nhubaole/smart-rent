@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:location/location.dart';
@@ -7,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/values/KEY_VALUE.dart';
 
 class HomeTopWidgetController extends GetxController {
+  final box = GetStorage();
   Account? currentAccount;
   final _currentName = ''.obs;
   final _currenLocation = ''.obs;
@@ -14,20 +16,21 @@ class HomeTopWidgetController extends GetxController {
   String get currentName => _currentName.value;
   String get currentLocation => _currenLocation.value;
 
-  Future<String> getName() async {
-    String res = 'Something wrong';
-    try {
-      currentAccount = await AuthMethods.instance.getUserDetails();
-      if (currentAccount != null) {
-        _currentName.value = currentAccount!.username;
-        res = currentName;
-      } else {
-        res = 'error';
-      }
-    } catch (error) {
-      res = error.toString();
-    }
-    return res;
+  Future<void> getName() async {
+    // String res = 'Something wrong';
+    // try {
+    //   currentAccount = await AuthMethods.instance.getUserDetails();
+    //   if (currentAccount != null) {
+    //     _currentName.value = currentAccount!.username;
+    //     res = currentName;
+    //   } else {
+    //     res = 'error';
+    //   }
+    // } catch (error) {
+    //   res = error.toString();
+    // }
+    // return res;
+    _currentName.value = box.read(KeyValue.KEY_ACCOUNT_USERNAME);
   }
 
   void getCurrentLocation() async {
@@ -55,10 +58,9 @@ class HomeTopWidgetController extends GetxController {
 
     locationData = await location.getLocation();
     final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${API_GOOGLE_MAP}');
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
     final response = await http.get(url);
     final resData = json.decode(response.body);
-    print(resData);
     _currenLocation.value = resData['results'][0]['formatted_address'];
   }
 }
