@@ -25,9 +25,13 @@ class AuthMethods extends GetxController {
     ever(firebaseUser, _setInitialScreen);
   }
 
-  /// If we are setting initial screen from here
-  /// then in the main.dart => App() add CircularProgressIndicator()
-  _setInitialScreen(User? user) {
+  // If we are setting initial screen from here
+  // then in the main.dart => App() add CircularProgressIndicator()
+
+  _setInitialScreen(User? user) async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+    );
     user == null
         ? Get.offAll(() => const LoginScreen())
         : Get.offAll(() => const RootScreen());
