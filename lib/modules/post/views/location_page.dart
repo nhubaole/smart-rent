@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/model/location/city.dart';
+import 'package:smart_rent/modules/post/controllers/post_controller.dart';
 
 import '../../../core/values/app_colors.dart';
 
@@ -13,9 +16,12 @@ class LocationPage extends StatefulWidget {
 
 class _LocationPageState extends State<LocationPage> {
   String dropdownValue = list.first;
+  final PostController controller = Get.find<PostController>();
 
   @override
   Widget build(BuildContext context) {
+    controller.selectedCity.value = controller.cities.first;
+
     return Expanded(
         child: Container(
       width: double.infinity,
@@ -51,18 +57,16 @@ class _LocationPageState extends State<LocationPage> {
             hint: Text('Bấm để chọn Thành Phố'),
             isExpanded: true,
             isDense: true,
-            value: dropdownValue,
-            items: list.map((item) {
+            value: controller.selectedCity.value.name,
+            items: controller.cities.map((item) {
               return DropdownMenuItem(
                 value: item,
-                child: Text(item),
+                child: Text(item.name),
               );
             }).toList(),
-            validator: (value) =>
-                value?.isEmpty ?? true ? 'Cannot Empty' : null,
             onChanged: (selectedItem) => setState(
               () {
-                dropdownValue = selectedItem!;
+                controller.selectedCity.value = selectedItem! as City;
               },
             ),
           ),

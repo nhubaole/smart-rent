@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 
+import '../../../core/model/location/city.dart';
 import '../../../core/model/room/room.dart';
 
 class PostController extends GetxController {
@@ -14,6 +19,15 @@ class PostController extends GetxController {
   var isInternetFree = false.obs;
   var hasParking = false.obs;
   var isParkingFree = false.obs;
+
+  late List<City> cities;
+  var selectedCity = City(
+          name: 'name',
+          slug: 'slug',
+          type: 'type',
+          name_with_type: 'name_with_type',
+          code: 'code')
+      .obs;
 
   final GlobalKey<FormState> formInfoKey = GlobalKey<FormState>();
 
@@ -48,5 +62,11 @@ class PostController extends GetxController {
         waterCost: int.parse(waterCostTextController.text),
         internetCost: int.parse(internetCostTextController.text),
         parkingFee: int.parse(parkingFeeTextController.text));
+  }
+
+  Future<List<City>> loadCities() async {
+    var jsonString = await rootBundle.loadString('assets/data/cities.json');
+    List<dynamic> jsonList = json.decode(jsonString);
+    return jsonList.map((json) => City.fromJson(json)).toList();
   }
 }

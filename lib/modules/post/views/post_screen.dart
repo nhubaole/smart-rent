@@ -24,9 +24,9 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   final PostController controller = Get.put(PostController());
 
-  int activeStep = 0; // Initial step set to 5.
+  int activeStep = 0;
 
-  int upperBound = 5;
+  int upperBound = 5; // upperBound MUST BE total number of icons minus 1.
 
   LocationPage locationPage = LocationPage();
   UtilitiesPage utilitiesPage = UtilitiesPage();
@@ -38,7 +38,18 @@ class _PostScreenState extends State<PostScreen> {
     Icon(Icons.location_on_outlined, color: Colors.white),
     Icon(Icons.extension_outlined, color: Colors.white),
     Icon(Icons.verified_outlined, color: Colors.white),
-  ]; // upperBound MUST BE total number of icons minus 1.
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initializeData();
+  }
+
+  void _initializeData() async {
+    controller.cities = await controller.loadCities();
+  }
 
   @override
   Widget build(BuildContext context) {

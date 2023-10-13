@@ -79,6 +79,7 @@ flutter:
   assets:
       - assets/images/ic_splash.svg
       - assets/images/sample_room.jpg
+      - assets/data/cities.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
