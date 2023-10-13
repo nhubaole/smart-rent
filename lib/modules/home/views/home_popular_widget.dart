@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_popular_controller.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomePopularWidget extends StatefulWidget {
   const HomePopularWidget({super.key});
@@ -15,7 +15,7 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
   final HomePopularController controller = Get.put(HomePopularController());
   @override
   Widget build(BuildContext context) {
-    // controller.fetchDataAndConvertToList();
+    controller.fetchDataAndConvertToList();
     return Column(
       children: [
         const SizedBox(
@@ -47,7 +47,7 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
             height: 200,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
+              itemCount: controller.dataList.length,
               itemBuilder: (context, index) => Card(
                   margin: const EdgeInsets.symmetric(
                     vertical: 16,
@@ -59,28 +59,21 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                   elevation: 2,
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.closeAllSnackbars();
+                      Get.snackbar('Notify', 'message');
+                    },
                     child: Stack(
                       children: [
                         Hero(
-                          tag: 'meal.id',
-                          // child: FadeInImage(
-                          //   placeholder: MemoryImage(kTransparentImage),
-                          //   image: const NetworkImage(
-                          //       'https://images.unsplash.com/photo-1695425173758-37e9c23b962a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80'),
-                          //   fit: BoxFit.cover,
-                          //   height: 145,
-                          //   width: 112,
-                          // ),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "https://images.unsplash.com/photo-1695425173758-37e9c23b962a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80",
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                          tag: index,
+                          child: FadeInImage(
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: NetworkImage(controller.dataList[index]
+                                ['photoUrl'] as String),
+                            fit: BoxFit.cover,
+                            height: 145,
+                            width: 112,
                           ),
                         ),
                         Positioned(
@@ -89,22 +82,30 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                           right: 0,
                           child: Container(
                             color: Colors.transparent,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal: 44,
+                            padding: const EdgeInsets.only(
+                              top: 12,
+                              bottom: 6,
+                              right: 20,
+                              left: 20,
                             ),
-                            child: Column(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text(
-                                  index.toString(),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: secondary20,
+                                Expanded(
+                                  child: Text(
+                                    controller.dataList[index]['address']
+                                        as String,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    //softWrap: true,
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: secondary20,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(

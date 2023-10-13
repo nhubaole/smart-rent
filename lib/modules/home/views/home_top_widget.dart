@@ -12,7 +12,7 @@ class HomeTopWidget extends StatelessWidget {
     final HomeTopWidgetController controller =
         Get.put(HomeTopWidgetController());
     controller.getName();
-    controller.getCurrentLocation();
+    //controller.getCurrentLocation();
 
     return Stack(
       children: [
@@ -157,13 +157,7 @@ class HomeTopWidget extends StatelessWidget {
               const HomeFeatureNavWidget(),
             ],
           ),
-        )
-        // const Positioned(
-        //   bottom: 0,
-        //   left: 0,
-        //   right: 0,
-        //   child: HomeFeatureNavWidget(),
-        // ),
+        ),
       ],
     );
   }

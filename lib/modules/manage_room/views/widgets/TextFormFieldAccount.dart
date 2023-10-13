@@ -39,6 +39,7 @@ class AccountButtonNav extends StatelessWidget {
       ),
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.transparent,
         backgroundColor: Colors.white,
         shadowColor: secondary80,
         //foregroundColor: Colors.black,

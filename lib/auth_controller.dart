@@ -19,7 +19,7 @@ class AuthController extends GetxController {
 
   _serInitialScreen(User? user) async {
     await Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 1),
     );
     if (user != null) {
       // user is logged in

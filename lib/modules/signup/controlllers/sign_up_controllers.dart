@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/KEY_VALUE.dart';
 
 class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
-  final box = GetStorage();
 
   //TextField Controllers to get data from TextFields
   final name = TextEditingController();

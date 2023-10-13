@@ -16,7 +16,6 @@ class LoginVerifyController extends GetxController {
       //Get.snackbar('error', error.toString());
       res = error.toString();
     }
-    print(res);
     return res;
   }
 }

@@ -56,7 +56,6 @@ class _TextFieldInputState extends State<TextFieldInput> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //Text(widget.hintText),
           TextFormField(
             enabled: widget.isEnable,
             style: const TextStyle(

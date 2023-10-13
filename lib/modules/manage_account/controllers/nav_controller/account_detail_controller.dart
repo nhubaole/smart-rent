@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
@@ -11,7 +11,6 @@ import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
 class AccountDetailController extends GetxController {
-  final box = GetStorage();
   Account? currentAccount;
   final _currentName = ''.obs;
   final _photoUrl = ''.obs;
@@ -52,11 +51,7 @@ class AccountDetailController extends GetxController {
     dateOfBirthTextInputController.dispose();
   }
 
-  void getInfo() {
-    _currentName.value = box.read(KeyValue.KEY_ACCOUNT_USERNAME);
-    _photoUrl.value = box.read(KeyValue.KEY_ACCOUNT_PHOTOURL);
-    _email.value = box.read(KeyValue.KEY_ACCOUNT_EMAIL);
-  }
+  void getInfo() {}
 
   Future<void> changeImage(BuildContext context) async {
     showModalBottomSheet(
@@ -76,10 +71,10 @@ class AccountDetailController extends GetxController {
                     String photoUrl = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
-                    box.write(KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrl);
+
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(box.read(KeyValue.KEY_ACCOUNT_UID))
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
                         .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
                     getInfo();
                   } else {
@@ -117,13 +112,10 @@ class AccountDetailController extends GetxController {
                     String photoUrl = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
-                    print(photoUrl);
-
-                    box.write(KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrl);
 
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(box.read(KeyValue.KEY_ACCOUNT_UID))
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
                         .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
                     getInfo();
                   } else {

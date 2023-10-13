@@ -30,7 +30,7 @@ class AuthMethods extends GetxController {
 
   _setInitialScreen(User? user) async {
     await Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 1),
     );
     user == null
         ? Get.offAll(() => const LoginScreen())

@@ -27,10 +27,9 @@ class _RoomItemState extends State<RoomItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.zero,
       elevation: 0,
       color: Colors.transparent,
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width / 2 - 30,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,9 +43,11 @@ class _RoomItemState extends State<RoomItem> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fitWidth,
-                      image: AssetImage(widget.room.images[0]),
+                      image: NetworkImage(widget.room.images[0]),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(12.0),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -61,21 +62,24 @@ class _RoomItemState extends State<RoomItem> {
                       });
                     },
                     icon: isLiked
-                        ? Icon(Icons.favorite)
-                        : Icon(Icons.favorite_outline),
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_outline),
                   ),
                 )
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(
+              height: 8,
+            ),
             Row(
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: primary40,
-                      borderRadius: BorderRadius.circular(6.0)),
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
+                    color: primary40,
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  padding: const EdgeInsets.all(5.0),
+                  child: const Row(
                     children: [
                       Text(
                         '4.2',
@@ -95,17 +99,17 @@ class _RoomItemState extends State<RoomItem> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5.0,
                 ),
-                Text(
+                const Text(
                   'Tốt',
                   style: TextStyle(
                       fontSize: 12,
                       color: secondary20,
                       fontWeight: FontWeight.w600),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5.0,
                 ),
                 Container(
@@ -115,10 +119,10 @@ class _RoomItemState extends State<RoomItem> {
                       color: secondary40,
                       borderRadius: BorderRadius.circular(2)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5.0,
                 ),
-                Text(
+                const Text(
                   '24 đánh giá',
                   style: TextStyle(
                       fontSize: 12,
@@ -127,13 +131,13 @@ class _RoomItemState extends State<RoomItem> {
                 ),
               ],
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               widget.room.title,
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: secondary20),
@@ -145,15 +149,15 @@ class _RoomItemState extends State<RoomItem> {
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 14, fontWeight: FontWeight.bold, color: primary40),
             ),
             Text(
-              '${widget.room.location.district.path_with_type}',
+              widget.room.location.district.path_with_type,
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   color: secondary40),

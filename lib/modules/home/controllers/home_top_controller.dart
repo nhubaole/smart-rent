@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/values/KEY_VALUE.dart';
 
 class HomeTopWidgetController extends GetxController {
-  final box = GetStorage();
   Account? currentAccount;
   final _currentName = ''.obs;
   final _currenLocation = ''.obs;
@@ -30,7 +27,6 @@ class HomeTopWidgetController extends GetxController {
     //   res = error.toString();
     // }
     // return res;
-    _currentName.value = box.read(KeyValue.KEY_ACCOUNT_USERNAME);
   }
 
   void getCurrentLocation() async {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_account/controllers/nav_controller/notity_setting_controller.dart';
 
@@ -15,7 +13,6 @@ class NotifySettingScreen extends StatefulWidget {
 class _NotifySettingScreenState extends State<NotifySettingScreen> {
   final NotifySettingController notifyController =
       Get.put(NotifySettingController());
-  final box = GetStorage();
   @override
   void dispose() {
     super.dispose();
@@ -23,10 +20,6 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
 
   @override
   void initState() {
-    box.writeIfNull(KeyValue.KEY_NOTIFY_NEWROOM, true);
-    box.writeIfNull(KeyValue.KEY_NOTIFY_NEWMESSAGE, true);
-    box.writeIfNull(KeyValue.KEY_NOTIFY_NEWLIKE, true);
-    box.writeIfNull(KeyValue.KEY_NOTIFY_NEWSCHEDULE, true);
     notifyController.onInit();
     super.initState();
   }

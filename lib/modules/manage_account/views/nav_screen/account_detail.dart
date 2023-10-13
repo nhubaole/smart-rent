@@ -92,21 +92,60 @@ class FormAccountDetail extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            TextFieldInput(
-              isEnable: false,
-              textEditingController:
-                  detailController.phoneNumberTextInputController,
-              labelText: 'Số điện thoại',
-              hintText: 'Nhập số điện thoại',
-              textInputType: TextInputType.text,
-              borderRadius: BorderRadius.circular(10),
-              borderWidth: 2,
-              borderColor: Colors.transparent,
-              onSaved: (p0) {},
-              onValidate: (p0) {},
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
-            ),
+
+            Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  right: 20,
+                  left: 32,
+                  bottom: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xfff2f2f2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Số điện thoại',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: secondary40,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '0987654321',
+                      style: TextStyle(
+                        color: primary40,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                )),
+            // TextFieldInput(
+            //   isEnable: false,
+            //   textEditingController:
+            //       detailController.phoneNumberTextInputController,
+            //   labelText: 'Số điện thoại',
+            //   hintText: 'Nhập số điện thoại',
+            //   textInputType: TextInputType.text,
+            //   borderRadius: BorderRadius.circular(10),
+            //   borderWidth: 2,
+            //   borderColor: Colors.transparent,
+            //   onSaved: (p0) {},
+            //   onValidate: (p0) {},
+            //   autoCorrect: false,
+            //   textCapitalization: TextCapitalization.none,
+            // ),
             const SizedBox(
               height: 10,
             ),

@@ -27,10 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
       // check log in co ton tai tai khoan => tien hanh dang nhap
 
       if (resQuery == 'exist') {
-        // final authController = Get.lazyPut(
-        //   () => AuthMethods(),
-        // );
-
         LoginController.instance
             .phoneAuthentication(controller.phoneNo.text.trim());
         Get.to(
