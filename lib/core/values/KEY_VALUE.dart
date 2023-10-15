@@ -14,7 +14,7 @@ class KeyValue {
   static const KEY_COLLECTION_ROOM_USER = 'ROOM_USER_COLLECTION';
   static const KEY_ACCOUNT_USERNAME = 'username';
   static const KEY_ACCOUNT_UID = 'uid';
-  static const KEY_PHONENUMBER = 'phoneNumber';
+  static const KEY_ACCOUNT_PHONENUMBER = 'phoneNumber';
   static const KEY_ACCOUNT_EMAIL = 'email';
   static const KEY_ACCOUNT_PHOTOURL = 'photoUrl';
   static const KEY_ACCOUNT_SEX = 'sex';

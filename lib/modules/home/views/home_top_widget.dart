@@ -11,7 +11,7 @@ class HomeTopWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeTopWidgetController controller =
         Get.put(HomeTopWidgetController());
-    controller.getName();
+    controller.getSharedPreferences();
     //controller.getCurrentLocation();
 
     return Stack(

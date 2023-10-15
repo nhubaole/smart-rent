@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/manage_account/controllers/account_show_infomation_controller.dart';
+import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
 import 'package:smart_rent/modules/manage_account/views/account_nav_button.dart';
 import 'package:smart_rent/modules/manage_account/views/account_show_information.dart';
 
@@ -8,6 +11,9 @@ class ManageAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final informationController =
+        Get.lazyPut(() => AccountShowInformationController());
+    final detailControler = Get.lazyPut(() => AccountDetailController());
     return Scaffold(
       body: Stack(
         children: [

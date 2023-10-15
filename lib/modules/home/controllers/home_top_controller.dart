@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 
 class HomeTopWidgetController extends GetxController {
   Account? currentAccount;
@@ -13,20 +14,10 @@ class HomeTopWidgetController extends GetxController {
   String get currentName => _currentName.value;
   String get currentLocation => _currenLocation.value;
 
-  Future<void> getName() async {
-    // String res = 'Something wrong';
-    // try {
-    //   currentAccount = await AuthMethods.instance.getUserDetails();
-    //   if (currentAccount != null) {
-    //     _currentName.value = currentAccount!.username;
-    //     res = currentName;
-    //   } else {
-    //     res = 'error';
-    //   }
-    // } catch (error) {
-    //   res = error.toString();
-    // }
-    // return res;
+  Future<void> getSharedPreferences() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _currentName.value =
+        prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
   }
 
   void getCurrentLocation() async {

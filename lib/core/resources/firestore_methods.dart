@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 
 class FireStoreMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_account/controllers/nav_controller/notity_setting_controller.dart';
 
@@ -20,8 +21,8 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
 
   @override
   void initState() {
-    notifyController.onInit();
     super.initState();
+    notifyController.initSharedPreferences();
   }
 
   @override
@@ -45,7 +46,8 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 value: notifyController.notifyNewRoom.value,
                 onChanged: (isChecked) {
                   notifyController.notifyNewRoom.value = isChecked;
-                  notifyController.savedStorage();
+                  notifyController.savedShraredPreferences(
+                      KeyValue.KEY_NOTIFY_NEWROOM, isChecked);
                 },
                 title: Text(
                   'Phòng trọ mới',
@@ -70,7 +72,8 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 value: notifyController.notifyNewMessage.value,
                 onChanged: (isChecked) {
                   notifyController.notifyNewMessage.value = isChecked;
-                  notifyController.savedStorage();
+                  notifyController.savedShraredPreferences(
+                      KeyValue.KEY_NOTIFY_NEWMESSAGE, isChecked);
                 },
                 title: Text(
                   'Tin nhắn mới',
@@ -95,7 +98,8 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 value: notifyController.notifyNewLike.value,
                 onChanged: (isChecked) {
                   notifyController.notifyNewLike.value = isChecked;
-                  notifyController.savedStorage();
+                  notifyController.savedShraredPreferences(
+                      KeyValue.KEY_NOTIFY_NEWLIKE, isChecked);
                 },
                 title: Text(
                   'Lượt thích mới',
@@ -120,7 +124,8 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 value: notifyController.notifyNewSchedule.value,
                 onChanged: (isChecked) {
                   notifyController.notifyNewSchedule.value = isChecked;
-                  notifyController.savedStorage();
+                  notifyController.savedShraredPreferences(
+                      KeyValue.KEY_NOTIFY_NEWSCHEDULE, isChecked);
                 },
                 title: Text(
                   'Lịch hẹn mới',

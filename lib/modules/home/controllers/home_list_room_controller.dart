@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 
 class HomeListRoomController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

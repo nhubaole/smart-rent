@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -32,8 +30,8 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 30,
+          padding: const EdgeInsets.only(
+            bottom: 30,
           ),
           child: Center(
             child: Column(
@@ -41,6 +39,18 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+                Obx(
+                  () => detailController.isLoading.value
+                      ? const LinearProgressIndicator(
+                          color: primary95,
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.only(top: 0),
+                        ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
                 PhotoAccount(detailController: detailController),
                 const SizedBox(
                   height: 30,
@@ -76,18 +86,24 @@ class FormAccountDetail extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextFieldInput(
-              textEditingController: detailController.nameTextInputController,
-              labelText: 'Họ tên',
-              hintText: 'Nhập họ tên',
-              textInputType: TextInputType.text,
-              borderRadius: BorderRadius.circular(10),
-              borderWidth: 2,
-              borderColor: Colors.transparent,
-              onSaved: (p0) {},
-              onValidate: (p0) {},
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
+            Obx(
+              () => TextFieldInput(
+                textEditingController:
+                    detailController.nameTextInputController.text == ''
+                        ? TextEditingController(
+                            text: detailController.currentName.value)
+                        : detailController.nameTextInputController,
+                labelText: 'Họ tên',
+                hintText: 'Nhập họ tên',
+                textInputType: TextInputType.text,
+                borderRadius: BorderRadius.circular(10),
+                borderWidth: 2,
+                borderColor: Colors.transparent,
+                onSaved: (p0) {},
+                onValidate: (p0) {},
+                autoCorrect: false,
+                textCapitalization: TextCapitalization.none,
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -105,12 +121,12 @@ class FormAccountDetail extends StatelessWidget {
                   color: const Color(0xfff2f2f2),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Số điện thoại',
                       style: TextStyle(
                         fontSize: 12,
@@ -118,15 +134,19 @@ class FormAccountDetail extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      '0987654321',
-                      style: TextStyle(
-                        color: primary40,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                    Obx(
+                      () => Text(
+                        detailController.phoneNumber.value == ''
+                            ? 'Chưa có số điện thoại'
+                            : detailController.phoneNumber.value,
+                        style: const TextStyle(
+                          color: primary40,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -149,19 +169,24 @@ class FormAccountDetail extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            TextFieldInput(
-              textEditingController:
-                  detailController.addressTextInputController,
-              labelText: 'Địa chỉ',
-              hintText: 'Nhập địa chỉ',
-              textInputType: TextInputType.text,
-              borderRadius: BorderRadius.circular(10),
-              borderWidth: 2,
-              borderColor: Colors.transparent,
-              onSaved: (p0) {},
-              onValidate: (p0) {},
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
+            Obx(
+              () => TextFieldInput(
+                textEditingController:
+                    detailController.addressTextInputController.text == ''
+                        ? TextEditingController(
+                            text: detailController.address.value)
+                        : detailController.addressTextInputController,
+                labelText: 'Địa chỉ',
+                hintText: 'Nhập địa chỉ',
+                textInputType: TextInputType.text,
+                borderRadius: BorderRadius.circular(10),
+                borderWidth: 2,
+                borderColor: Colors.transparent,
+                onSaved: (p0) {},
+                onValidate: (p0) {},
+                autoCorrect: false,
+                textCapitalization: TextCapitalization.none,
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -169,38 +194,52 @@ class FormAccountDetail extends StatelessWidget {
             Row(
               children: <Widget>[
                 Flexible(
-                  child: TextFieldInput(
-                    textEditingController:
-                        detailController.sexTextInputController,
-                    labelText: 'Giới tính',
-                    hintText: 'Nhập giới tính',
-                    textInputType: TextInputType.text,
-                    borderRadius: BorderRadius.circular(10),
-                    borderWidth: 2,
-                    borderColor: Colors.transparent,
-                    onSaved: (p0) {},
-                    onValidate: (p0) {},
-                    autoCorrect: false,
-                    textCapitalization: TextCapitalization.none,
+                  child: Obx(
+                    () => TextFieldInput(
+                      isEnable: false,
+                      textEditingController:
+                          detailController.sexTextInputController.text == ''
+                              ? TextEditingController(
+                                  text: detailController.sex.value)
+                              : detailController.sexTextInputController,
+                      labelText: 'Giới tính',
+                      hintText: 'Nhập giới tính',
+                      textInputType: TextInputType.text,
+                      borderRadius: BorderRadius.circular(10),
+                      borderWidth: 2,
+                      borderColor: Colors.transparent,
+                      onSaved: (p0) {},
+                      onValidate: (p0) {},
+                      autoCorrect: false,
+                      textCapitalization: TextCapitalization.none,
+                    ),
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Flexible(
-                  child: TextFieldInput(
-                    textEditingController:
-                        detailController.dateOfBirthTextInputController,
-                    labelText: 'Năm sinh',
-                    hintText: 'Nhập năm sinh',
-                    textInputType: TextInputType.text,
-                    borderRadius: BorderRadius.circular(10),
-                    borderWidth: 2,
-                    borderColor: Colors.transparent,
-                    onSaved: (p0) {},
-                    onValidate: (p0) {},
-                    autoCorrect: false,
-                    textCapitalization: TextCapitalization.none,
+                  child: Obx(
+                    () => TextFieldInput(
+                      isEnable: false,
+                      textEditingController: detailController
+                                  .dateOfBirthTextInputController.text ==
+                              ''
+                          ? TextEditingController(
+                              text:
+                                  detailController.dateOfBirth.value.toString())
+                          : detailController.dateOfBirthTextInputController,
+                      labelText: 'Năm sinh',
+                      hintText: 'Nhập năm sinh',
+                      textInputType: TextInputType.text,
+                      borderRadius: BorderRadius.circular(10),
+                      borderWidth: 2,
+                      borderColor: Colors.transparent,
+                      onSaved: (p0) {},
+                      onValidate: (p0) {},
+                      autoCorrect: false,
+                      textCapitalization: TextCapitalization.none,
+                    ),
                   ),
                 ),
               ],
@@ -255,7 +294,7 @@ class PhotoAccount extends StatelessWidget {
             () => CircleAvatar(
               radius: 64,
               backgroundImage: NetworkImage(
-                detailController.photoUrl,
+                detailController.photoUrl.value,
               ),
             ),
           ),

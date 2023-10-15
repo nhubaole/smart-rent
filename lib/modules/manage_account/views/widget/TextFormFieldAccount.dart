@@ -40,8 +40,6 @@ class TextFieldInput extends StatefulWidget {
 class _TextFieldInputState extends State<TextFieldInput> {
   @override
   Widget build(BuildContext context) {
-    final inputBorder =
-        OutlineInputBorder(borderSide: Divider.createBorderSide(context));
     return Container(
       padding: const EdgeInsets.only(
         top: 20,

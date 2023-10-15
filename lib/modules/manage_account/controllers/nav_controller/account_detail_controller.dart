@@ -4,22 +4,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
 import 'package:smart_rent/core/resources/storage_methobs.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
 class AccountDetailController extends GetxController {
-  Account? currentAccount;
-  final _currentName = ''.obs;
-  final _photoUrl = ''.obs;
-  final _email = ''.obs;
-  Uint8List? _image;
+  late SharedPreferences prefs;
 
-  String get currentName => _currentName.value;
-  String get photoUrl => _photoUrl.value;
-  String get email => _email.value;
+  var photoUrl = ''.obs;
+  var currentName = ''.obs;
+  var phoneNumber = ''.obs;
+  var address = ''.obs;
+  var sex = ''.obs;
+  var dateOfBirth = ''.obs;
+  var email = ''.obs;
+  var isLoading = false.obs;
+  Uint8List? _image;
 
   final TextEditingController nameTextInputController = TextEditingController();
   final TextEditingController phoneNumberTextInputController =
@@ -34,11 +36,30 @@ class AccountDetailController extends GetxController {
   void onInit() {
     super.onInit();
     //getInfo();
-    nameTextInputController.text = 'Lê Bảo Như';
-    phoneNumberTextInputController.text = '0987654321';
-    addressTextInputController.text = 'Thủ Đức, TPHCM';
-    sexTextInputController.text = 'Nữ';
-    dateOfBirthTextInputController.text = '2003';
+
+    initSharedPreferences();
+  }
+
+  Future<void> initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+
+    photoUrl.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHOTOURL) ?? '';
+    currentName.value = prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? '';
+    phoneNumber.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
+    address.value = prefs.getString(KeyValue.KEY_ACCOUNT_ADDRESS) ?? '';
+
+    if (prefs.getBool(KeyValue.KEY_ACCOUNT_SEX)!) {
+      sex.value = 'Nam';
+    } else {
+      sex.value = 'Nữ';
+    }
+    //sex.value = prefs.getBool(KeyValue.KEY_ACCOUNT_SEX) ?? '';
+    dateOfBirth.value = prefs.getString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH) ?? '';
+    nameTextInputController.text = currentName.value;
+    phoneNumberTextInputController.text = phoneNumber.value;
+    addressTextInputController.text = address.value;
+    sexTextInputController.text = sex.value;
+    dateOfBirthTextInputController.text = dateOfBirth.value;
   }
 
   @override
@@ -68,19 +89,28 @@ class AccountDetailController extends GetxController {
                 onTap: () async {
                   _image = await pickImage(ImageSource.camera);
                   if (_image != null) {
-                    String photoUrl = await StorageMethods()
+                    isLoading.value = true;
+                    Get.back();
+                    String photoUrlDevice = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+
+                    photoUrl.value = photoUrlDevice;
+                    await prefs.setString(
+                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
+                        .update(
+                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
+
                     getInfo();
                   } else {
+                    Get.back();
                     Get.snackbar('Notify', 'No photo selected');
                   }
-                  Get.back();
+                  isLoading.value = false;
                 },
                 child: const Row(
                   children: [
@@ -109,19 +139,28 @@ class AccountDetailController extends GetxController {
                 onTap: () async {
                   _image = await pickImage(ImageSource.gallery);
                   if (_image != null) {
-                    String photoUrl = await StorageMethods()
+                    Get.back();
+                    isLoading.value = true;
+                    String photoUrlDevice = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+
+                    photoUrl.value = photoUrlDevice;
+                    await prefs.setString(
+                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
+                        .update(
+                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
+
                     getInfo();
                   } else {
+                    Get.back();
                     Get.snackbar('Notify', 'No photo selected');
                   }
-                  Get.back();
+                  isLoading.value = false;
                 },
                 child: const Row(
                   children: [
@@ -151,4 +190,8 @@ class AccountDetailController extends GetxController {
   }
 
   void updateInfo() {}
+
+  void changeSex() {}
+
+  void changeDateOfBirth(BuildContext context) {}
 }

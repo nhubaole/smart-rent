@@ -4,24 +4,40 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
 import 'package:smart_rent/core/resources/storage_methobs.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
 class AccountShowInformationController extends GetxController {
+  late SharedPreferences prefs;
+
   Account? currentAccount;
   final _currentName = ''.obs;
   final _photoUrl = ''.obs;
   final _email = ''.obs;
+  var isLoading = false.obs;
   Uint8List? _image;
 
   String get currentName => _currentName.value;
   String get photoUrl => _photoUrl.value;
   String get email => _email.value;
 
-  void getInfo() {}
+  @override
+  onInit() {
+    super.onInit();
+    getInfo();
+  }
+
+  Future<void> getInfo() async {
+    prefs = await SharedPreferences.getInstance();
+    _currentName.value =
+        prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
+    _photoUrl.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHOTOURL) ?? '';
+    _email.value = prefs.getString(KeyValue.KEY_ACCOUNT_EMAIL) ?? '';
+  }
 
   Future<void> changeImage(BuildContext context) async {
     showModalBottomSheet(
@@ -38,19 +54,28 @@ class AccountShowInformationController extends GetxController {
                 onTap: () async {
                   _image = await pickImage(ImageSource.camera);
                   if (_image != null) {
-                    String photoUrl = await StorageMethods()
+                    Get.back();
+                    isLoading.value = true;
+                    String photoUrlDevice = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+
+                    _photoUrl.value = photoUrlDevice;
+                    await prefs.setString(
+                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
+                        .update(
+                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
+
                     getInfo();
                   } else {
+                    Get.back();
                     Get.snackbar('Notify', 'No photo selected');
                   }
-                  Get.back();
+                  isLoading.value = false;
                 },
                 child: const Row(
                   children: [
@@ -79,14 +104,20 @@ class AccountShowInformationController extends GetxController {
                 onTap: () async {
                   _image = await pickImage(ImageSource.gallery);
                   if (_image != null) {
-                    String photoUrl = await StorageMethods()
+                    String photoUrlDevice = await StorageMethods()
                         .uploadImageToStorage(
                             KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+
+                    _photoUrl.value = photoUrlDevice;
+                    await prefs.setString(
+                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
                     FirebaseFirestore.instance
                         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrl});
+                        .update(
+                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
+
                     getInfo();
                   } else {
                     Get.snackbar('Notify', 'No photo selected');

@@ -3,20 +3,43 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_account/controllers/account_show_infomation_controller.dart';
 
-class AccountShowInformation extends StatelessWidget {
+class AccountShowInformation extends StatefulWidget {
   const AccountShowInformation({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final AccountShowInformationController mainController =
-        Get.put(AccountShowInformationController());
+  State<AccountShowInformation> createState() => _AccountShowInformationState();
+}
 
+class _AccountShowInformationState extends State<AccountShowInformation> {
+  final AccountShowInformationController mainController = Get.find();
+
+  //mainController.getInfo();
+
+  @override
+  void initState() {
     mainController.getInfo();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Obx(
+            () => mainController.isLoading.value
+                ? const LinearProgressIndicator(
+                    color: primary95,
+                  )
+                : const Padding(
+                    padding: EdgeInsets.only(top: 0),
+                  ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
           Stack(
             children: [
               Obx(
@@ -54,23 +77,27 @@ class AccountShowInformation extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          Text(
-            mainController.currentName,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: primary40,
+          Obx(
+            () => Text(
+              mainController.currentName,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: primary40,
+              ),
             ),
           ),
           const SizedBox(
             height: 4,
           ),
-          Text(
-            mainController.email,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: secondary40,
+          Obx(
+            () => Text(
+              mainController.email,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: secondary40,
+              ),
             ),
           ),
         ],

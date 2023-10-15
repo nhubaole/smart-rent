@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 
 class RootScreenController extends GetxController {
   late PageController pageController;
@@ -39,6 +41,7 @@ class RootScreenController extends GetxController {
     try {
       currentAccount = await AuthMethods.instance.getUserDetails();
       if (currentAccount != null) {
+        initSharedPreferences();
       } else {
         res = 'error';
       }
@@ -48,5 +51,27 @@ class RootScreenController extends GetxController {
     return res;
   }
 
-  void initStorage() async {}
+  void initSharedPreferences() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_PHONENUMBER, currentAccount!.phoneNumber);
+    await prefs.setString(KeyValue.KEY_ACCOUNT_UID, currentAccount!.uid);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_PHOTOURL, currentAccount!.photoUrl);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_USERNAME, currentAccount!.username);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_ADDRESS, currentAccount!.address);
+    await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount!.sex);
+    await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount!.age);
+
+    String formattedDate =
+        DateFormat('dd-MM-yyyy').format(currentAccount!.dateOfBirth!);
+
+    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
+
+    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
+        currentAccount!.dateOfCreate.toString());
+    await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount!.email);
+  }
 }
