@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -13,7 +14,7 @@ pickImage(ImageSource source) async {
     return await pickedImage.readAsBytes();
   }
 
-  print('No image selected');
+  Get.snackbar('Notify', 'No image selected');
 }
 
 showSnackBar(String content, BuildContext context) {

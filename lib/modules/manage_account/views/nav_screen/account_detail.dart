@@ -78,6 +78,7 @@ class FormAccountDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: detailController.formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
@@ -99,7 +100,9 @@ class FormAccountDetail extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 borderWidth: 2,
                 borderColor: Colors.transparent,
-                onSaved: (p0) {},
+                onSaved: (p0) {
+                  detailController.nameTextInputController.text = p0!;
+                },
                 onValidate: (p0) {},
                 autoCorrect: false,
                 textCapitalization: TextCapitalization.none,
@@ -108,8 +111,57 @@ class FormAccountDetail extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-
             Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(
+                top: 20,
+                right: 20,
+                left: 32,
+                bottom: 20,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xfff2f2f2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Số điện thoại',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: secondary40,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Obx(
+                    () => Text(
+                      detailController.phoneNumber.value == ''
+                          ? 'Chưa có số điện thoại'
+                          : detailController.phoneNumber.value,
+                      style: const TextStyle(
+                        color: primary40,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            GestureDetector(
+              onTap: () {
+                detailController.showProvinceSelectionDialog(context);
+              },
+              child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.only(
                   top: 20,
@@ -127,7 +179,7 @@ class FormAccountDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Số điện thoại',
+                      'Địa chỉ',
                       style: TextStyle(
                         fontSize: 12,
                         color: secondary40,
@@ -139,9 +191,9 @@ class FormAccountDetail extends StatelessWidget {
                     ),
                     Obx(
                       () => Text(
-                        detailController.phoneNumber.value == ''
-                            ? 'Chưa có số điện thoại'
-                            : detailController.phoneNumber.value,
+                        detailController.address.value == ''
+                            ? 'Chưa có địa chỉ'
+                            : detailController.address.value,
                         style: const TextStyle(
                           color: primary40,
                           fontSize: 14,
@@ -150,42 +202,7 @@ class FormAccountDetail extends StatelessWidget {
                       ),
                     ),
                   ],
-                )),
-            // TextFieldInput(
-            //   isEnable: false,
-            //   textEditingController:
-            //       detailController.phoneNumberTextInputController,
-            //   labelText: 'Số điện thoại',
-            //   hintText: 'Nhập số điện thoại',
-            //   textInputType: TextInputType.text,
-            //   borderRadius: BorderRadius.circular(10),
-            //   borderWidth: 2,
-            //   borderColor: Colors.transparent,
-            //   onSaved: (p0) {},
-            //   onValidate: (p0) {},
-            //   autoCorrect: false,
-            //   textCapitalization: TextCapitalization.none,
-            // ),
-            const SizedBox(
-              height: 10,
-            ),
-            Obx(
-              () => TextFieldInput(
-                textEditingController:
-                    detailController.addressTextInputController.text == ''
-                        ? TextEditingController(
-                            text: detailController.address.value)
-                        : detailController.addressTextInputController,
-                labelText: 'Địa chỉ',
-                hintText: 'Nhập địa chỉ',
-                textInputType: TextInputType.text,
-                borderRadius: BorderRadius.circular(10),
-                borderWidth: 2,
-                borderColor: Colors.transparent,
-                onSaved: (p0) {},
-                onValidate: (p0) {},
-                autoCorrect: false,
-                textCapitalization: TextCapitalization.none,
+                ),
               ),
             ),
             const SizedBox(
@@ -194,24 +211,52 @@ class FormAccountDetail extends StatelessWidget {
             Row(
               children: <Widget>[
                 Flexible(
-                  child: Obx(
-                    () => TextFieldInput(
-                      isEnable: false,
-                      textEditingController:
-                          detailController.sexTextInputController.text == ''
-                              ? TextEditingController(
-                                  text: detailController.sex.value)
-                              : detailController.sexTextInputController,
-                      labelText: 'Giới tính',
-                      hintText: 'Nhập giới tính',
-                      textInputType: TextInputType.text,
-                      borderRadius: BorderRadius.circular(10),
-                      borderWidth: 2,
-                      borderColor: Colors.transparent,
-                      onSaved: (p0) {},
-                      onValidate: (p0) {},
-                      autoCorrect: false,
-                      textCapitalization: TextCapitalization.none,
+                  child: GestureDetector(
+                    onTap: () {
+                      detailController.showGenderDialog(context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(
+                        top: 20,
+                        right: 20,
+                        left: 32,
+                        bottom: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xfff2f2f2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Giới tính',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: secondary40,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Obx(
+                            () => Text(
+                              detailController.sex.value == ''
+                                  ? 'Chưa có giới tính'
+                                  : detailController.sex.value,
+                              style: const TextStyle(
+                                color: primary40,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -219,26 +264,52 @@ class FormAccountDetail extends StatelessWidget {
                   width: 10,
                 ),
                 Flexible(
-                  child: Obx(
-                    () => TextFieldInput(
-                      isEnable: false,
-                      textEditingController: detailController
-                                  .dateOfBirthTextInputController.text ==
-                              ''
-                          ? TextEditingController(
-                              text:
-                                  detailController.dateOfBirth.value.toString())
-                          : detailController.dateOfBirthTextInputController,
-                      labelText: 'Năm sinh',
-                      hintText: 'Nhập năm sinh',
-                      textInputType: TextInputType.text,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      right: 20,
+                      left: 32,
+                      bottom: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xfff2f2f2),
                       borderRadius: BorderRadius.circular(10),
-                      borderWidth: 2,
-                      borderColor: Colors.transparent,
-                      onSaved: (p0) {},
-                      onValidate: (p0) {},
-                      autoCorrect: false,
-                      textCapitalization: TextCapitalization.none,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        detailController.selectDate(context);
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Năm sinh',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: secondary40,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Obx(
+                            () => Text(
+                              detailController.dateOfBirth.value == ''
+                                  ? 'Chưa có năm sinh'
+                                  : detailController.dateOfBirth.value,
+                              style: const TextStyle(
+                                color: primary40,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -248,8 +319,9 @@ class FormAccountDetail extends StatelessWidget {
               height: 30,
             ),
             GestureDetector(
-              onTap: () {
-                detailController.updateInfo();
+              onTap: () async {
+                String res = await detailController.updateInfo();
+                Get.snackbar('Notify', res);
               },
               child: Container(
                 alignment: Alignment.center,

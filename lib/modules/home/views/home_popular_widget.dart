@@ -49,75 +49,83 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
               scrollDirection: Axis.horizontal,
               itemCount: controller.dataList.length,
               itemBuilder: (context, index) => Card(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 6,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: 2,
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    onTap: () {
-                      Get.closeAllSnackbars();
-                      Get.snackbar('Notify', 'message');
-                    },
-                    child: Stack(
-                      children: [
-                        Hero(
-                          tag: index,
-                          child: FadeInImage(
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: NetworkImage(controller.dataList[index]
-                                ['photoUrl'] as String),
-                            fit: BoxFit.cover,
-                            height: 145,
-                            width: 112,
-                          ),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 6,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 2,
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  onTap: () {
+                    Get.closeAllSnackbars();
+                    Get.snackbar('Notify', 'message');
+                  },
+                  child: Stack(
+                    children: [
+                      Hero(
+                        tag: index,
+                        child: FadeInImage(
+                          placeholder: MemoryImage(kTransparentImage),
+                          image: NetworkImage(
+                              controller.dataList[index]['photoUrl'] as String),
+                          fit: BoxFit.cover,
+                          height: 200,
+                          width: 112,
                         ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.only(
-                              top: 12,
-                              bottom: 6,
-                              right: 20,
-                              left: 20,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    controller.dataList[index]['address']
-                                        as String,
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    //softWrap: true,
-                                    // overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: secondary20,
-                                    ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            bottom: 6,
+                            right: 20,
+                            left: 20,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  controller.dataList[index]['address']
+                                      as String,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  //softWrap: true,
+                                  // overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2, 2),
+                                        blurRadius: 3.0,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(
+                                height: 6,
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ),

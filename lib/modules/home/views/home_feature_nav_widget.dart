@@ -12,9 +12,9 @@ class HomeFeatureNavWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
-            color: Colors.grey, // Màu của bóng mờ
-            blurRadius: 5.0, // Độ mờ của bóng
-            spreadRadius: 2.0, // Độ lan rộng của bóng
+            color: Color.fromARGB(255, 205, 203, 203), // Màu của bóng mờ
+            blurRadius: 9.0, // Độ mờ của bóng
+            spreadRadius: 3.0, // Độ lan rộng của bóng
             offset: Offset(0, 2), // Vị trí độ lệch của bóng
           ),
         ],
