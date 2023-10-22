@@ -80,6 +80,8 @@ flutter:
       - assets/images/ic_splash.svg
       - assets/images/sample_room.jpg
       - assets/data/cities.json
+      - assets/data/districts.json
+      - assets/data/wards.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

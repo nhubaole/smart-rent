@@ -41,17 +41,6 @@ class _PostScreenState extends State<PostScreen> {
   ];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _initializeData();
-  }
-
-  void _initializeData() async {
-    controller.cities = await controller.loadCities();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
@@ -163,14 +152,17 @@ class _PostScreenState extends State<PostScreen> {
               borderWidth: 2,
               onPressed: () {
                 bool allowNext = true;
-                if (activeStep == 0) {
-                  if (!controller.formInfoKey.currentState!.validate()) {
-                    allowNext = false;
-                  } else {
+                if (!controller.formInfoKey.currentState!.validate()) {
+                  allowNext = false;
+                } else {
+                  if (activeStep == 0) {
                     controller.updateInfoRoom();
+                  } else if (activeStep == 1) {
+                    controller.updateLocationRoom();
                   }
                 }
                 if (activeStep < upperBound - 2 && allowNext) {
+                  print("CITIES: ${controller.cities.length}");
                   print("upperbound: ${upperBound}");
                   print("Active step: ${activeStep}");
                   setState(() {
