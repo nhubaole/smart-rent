@@ -136,7 +136,12 @@ class _PostScreenState extends State<PostScreen> {
       height: 50,
       child: activeStep == 3
           ? ButtonFill(
-              onPressed: () {},
+              onPressed: () {
+                if (controller.formInfoKey.currentState!.validate()) {
+                  // post
+                  print("POST");
+                }
+              },
               icon: Icon(
                 Icons.add_box_rounded,
                 size: 20,

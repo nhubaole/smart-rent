@@ -51,6 +51,9 @@ class PostController extends GetxController
   var streetTextController = TextEditingController();
   var addressTextController = TextEditingController();
 
+  var titleTextController = TextEditingController();
+  var descriptionTextController = TextEditingController();
+
   late ImagePicker picker;
   var pickedImages = Rxn<List<XFile>>([]);
   RxBool validImageTotal = true.obs;
