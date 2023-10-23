@@ -17,7 +17,6 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
-  String dropdownValue = list.first;
   final PostController controller = Get.find<PostController>();
 
   @override

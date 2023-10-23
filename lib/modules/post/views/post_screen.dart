@@ -42,85 +42,88 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(useMaterial3: true),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
-          child: nextButton(),
-        ),
-        appBar: AppBar(
-          toolbarHeight: 64.0,
-          title: Text(
-            'Đăng phòng',
-            style: TextStyle(
-                color: primary40, fontSize: 24, fontWeight: FontWeight.bold),
+        key: controller.scaffoldKey,
+        body: Scaffold(
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+            child: nextButton(),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: primary40),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: primary80,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  primary95,
-                  Colors.white,
-                ],
+          appBar: AppBar(
+            toolbarHeight: 64.0,
+            title: Text(
+              'Đăng phòng',
+              style: TextStyle(
+                  color: primary40, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.dark,
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: primary40),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            backgroundColor: primary80,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    primary95,
+                    Colors.white,
+                  ],
+                ),
               ),
             ),
+            elevation: 0,
+            automaticallyImplyLeading: true,
+            titleSpacing: 0,
+            iconTheme: const IconThemeData(color: primary40),
           ),
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          titleSpacing: 0,
-          iconTheme: const IconThemeData(color: primary40),
-        ),
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              IconStepper(
-                activeStepBorderWidth: 1,
-                stepRadius: 16.0,
-                activeStepBorderPadding: 8.0,
-                stepColor: secondary80,
-                activeStepColor: primary60,
-                activeStepBorderColor: primary60,
-                enableNextPreviousButtons: false,
-                lineLength: 50.0,
-                lineColor: primary60,
-                icons: icons,
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                IconStepper(
+                  activeStepBorderWidth: 1,
+                  stepRadius: 16.0,
+                  activeStepBorderPadding: 8.0,
+                  stepColor: secondary80,
+                  activeStepColor: primary60,
+                  activeStepBorderColor: primary60,
+                  enableNextPreviousButtons: false,
+                  lineLength: 50.0,
+                  lineColor: primary60,
+                  icons: icons,
 
-                // activeStep property set to activeStep variable defined above.
-                activeStep: activeStep,
+                  // activeStep property set to activeStep variable defined above.
+                  activeStep: activeStep,
 
-                // This ensures step-tapping updates the activeStep.
-                onStepReached: (index) {
-                  setState(() {
-                    activeStep = index;
-                  });
-                },
-              ),
-              header(),
-              contentPage(),
-              //nextButton()
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     previousButton(),
-              //     nextButton(),
-              //   ],
-              // ),
-            ],
+                  // This ensures step-tapping updates the activeStep.
+                  onStepReached: (index) {
+                    setState(() {
+                      activeStep = index;
+                    });
+                  },
+                ),
+                header(),
+                contentPage(),
+                //nextButton()
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     previousButton(),
+                //     nextButton(),
+                //   ],
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -152,19 +155,33 @@ class _PostScreenState extends State<PostScreen> {
               borderWidth: 2,
               onPressed: () {
                 bool allowNext = true;
-                if (!controller.formInfoKey.currentState!.validate()) {
+                if (activeStep == 2) {
+                  if (controller.pickedImages.value!.length >= 4 &&
+                      controller.pickedImages.value!.length <= 20) {
+                    controller.validImageTotal.value = true;
+                  } else {
+                    controller.validImageTotal.value = false;
+                    allowNext = false;
+                  }
+                } else if (!controller.formInfoKey.currentState!.validate()) {
                   allowNext = false;
-                } else {
+                }
+
+                if (allowNext) {
                   if (activeStep == 0) {
                     controller.updateInfoRoom();
                   } else if (activeStep == 1) {
                     controller.updateLocationRoom();
+                  } else if (activeStep == 2) {
+                    // TODO: retrieve and update images
                   }
                 }
+
                 if (activeStep < upperBound - 2 && allowNext) {
                   print("CITIES: ${controller.cities.length}");
                   print("upperbound: ${upperBound}");
                   print("Active step: ${activeStep}");
+                  print("allowNext: ${allowNext}");
                   setState(() {
                     activeStep++;
                   });
