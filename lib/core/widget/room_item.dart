@@ -149,7 +149,7 @@ class _RoomItemState extends State<RoomItem> {
                   fontSize: 14, fontWeight: FontWeight.bold, color: primary40),
             ),
             Text(
-              '${widget.room.location.district.path_with_type}',
+              '${widget.room.location}',
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,

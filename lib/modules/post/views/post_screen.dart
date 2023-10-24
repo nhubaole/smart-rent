@@ -140,6 +140,7 @@ class _PostScreenState extends State<PostScreen> {
                 if (controller.formInfoKey.currentState!.validate()) {
                   // post
                   print("POST");
+                  controller.postRoom();
                 }
               },
               icon: Icon(
@@ -177,9 +178,7 @@ class _PostScreenState extends State<PostScreen> {
                     controller.updateInfoRoom();
                   } else if (activeStep == 1) {
                     controller.updateLocationRoom();
-                  } else if (activeStep == 2) {
-                    // TODO: retrieve and update images
-                  }
+                  } 
                 }
 
                 if (activeStep < upperBound - 2 && allowNext) {

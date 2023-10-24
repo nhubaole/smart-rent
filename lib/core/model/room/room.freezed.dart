@@ -20,7 +20,6 @@ Room _$RoomFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Room {
-  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   RoomType get roomType => throw _privateConstructorUsedError;
@@ -34,12 +33,12 @@ mixin _$Room {
   int get internetCost => throw _privateConstructorUsedError;
   bool get hasParking => throw _privateConstructorUsedError;
   int get parkingFee => throw _privateConstructorUsedError;
-  Location get location => throw _privateConstructorUsedError;
+  String get location => throw _privateConstructorUsedError;
   List<Utilities> get utilities => throw _privateConstructorUsedError;
   String get createdByUid => throw _privateConstructorUsedError;
   String get dateTime => throw _privateConstructorUsedError;
   bool get isRented => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
+  RoomStatus get status => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,8 +52,7 @@ abstract class $RoomCopyWith<$Res> {
       _$RoomCopyWithImpl<$Res, Room>;
   @useResult
   $Res call(
-      {String id,
-      String title,
+      {String title,
       String description,
       RoomType roomType,
       int capacity,
@@ -67,15 +65,13 @@ abstract class $RoomCopyWith<$Res> {
       int internetCost,
       bool hasParking,
       int parkingFee,
-      Location location,
+      String location,
       List<Utilities> utilities,
       String createdByUid,
       String dateTime,
       bool isRented,
-      String status,
+      RoomStatus status,
       List<String> images});
-
-  $LocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -91,7 +87,6 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
     Object? title = null,
     Object? description = null,
     Object? roomType = null,
@@ -114,10 +109,6 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
     Object? images = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -173,7 +164,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as Location,
+              as String,
       utilities: null == utilities
           ? _value.utilities
           : utilities // ignore: cast_nullable_to_non_nullable
@@ -193,20 +184,12 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RoomStatus,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $LocationCopyWith<$Res> get location {
-    return $LocationCopyWith<$Res>(_value.location, (value) {
-      return _then(_value.copyWith(location: value) as $Val);
-    });
   }
 }
 
@@ -217,8 +200,7 @@ abstract class _$$_RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
-      String title,
+      {String title,
       String description,
       RoomType roomType,
       int capacity,
@@ -231,16 +213,13 @@ abstract class _$$_RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
       int internetCost,
       bool hasParking,
       int parkingFee,
-      Location location,
+      String location,
       List<Utilities> utilities,
       String createdByUid,
       String dateTime,
       bool isRented,
-      String status,
+      RoomStatus status,
       List<String> images});
-
-  @override
-  $LocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -252,7 +231,6 @@ class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
     Object? title = null,
     Object? description = null,
     Object? roomType = null,
@@ -275,10 +253,6 @@ class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
     Object? images = null,
   }) {
     return _then(_$_Room(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -334,7 +308,7 @@ class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as Location,
+              as String,
       utilities: null == utilities
           ? _value._utilities
           : utilities // ignore: cast_nullable_to_non_nullable
@@ -354,7 +328,7 @@ class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RoomStatus,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -367,8 +341,7 @@ class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
 @JsonSerializable()
 class _$_Room extends _Room {
   const _$_Room(
-      {this.id = '0',
-      this.title = '',
+      {this.title = '',
       this.description = '',
       this.roomType = RoomType.ROOM,
       this.capacity = 0,
@@ -381,38 +354,12 @@ class _$_Room extends _Room {
       this.internetCost = 0,
       this.hasParking = true,
       this.parkingFee = 0,
-      this.location = const Location(
-          street: '1',
-          address: '1',
-          city: City(
-              name: 'name',
-              slug: 'slug',
-              type: 'type',
-              name_with_type: 'name_with_type',
-              code: 'code'),
-          district: District(
-              name: 'name',
-              type: 'type',
-              slug: 'slug',
-              name_with_type: 'name_with_type',
-              path: 'path',
-              path_with_type: 'Quận 1, Thành phố Hồ Chí Minh',
-              code: 'code',
-              parent_code: 'parent_code'),
-          ward: Ward(
-              name: 'name',
-              type: 'type',
-              slug: 'slug',
-              name_with_type: 'name_with_type',
-              path: 'path',
-              path_with_type: 'phường Tân Định, quận 1, thành phố Hồ Chí Minh',
-              code: 'code',
-              parent_code: 'parent_code')),
+      this.location = '',
       final List<Utilities> utilities = const [],
       this.createdByUid = '',
       this.dateTime = '',
       this.isRented = true,
-      this.status = '',
+      this.status = RoomStatus.PENDING,
       final List<String> images = const []})
       : _utilities = utilities,
         _images = images,
@@ -420,9 +367,6 @@ class _$_Room extends _Room {
 
   factory _$_Room.fromJson(Map<String, dynamic> json) => _$$_RoomFromJson(json);
 
-  @override
-  @JsonKey()
-  final String id;
   @override
   @JsonKey()
   final String title;
@@ -464,7 +408,7 @@ class _$_Room extends _Room {
   final int parkingFee;
   @override
   @JsonKey()
-  final Location location;
+  final String location;
   final List<Utilities> _utilities;
   @override
   @JsonKey()
@@ -485,7 +429,7 @@ class _$_Room extends _Room {
   final bool isRented;
   @override
   @JsonKey()
-  final String status;
+  final RoomStatus status;
   final List<String> _images;
   @override
   @JsonKey()
@@ -497,7 +441,7 @@ class _$_Room extends _Room {
 
   @override
   String toString() {
-    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images)';
+    return 'Room(title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images)';
   }
 
   @override
@@ -505,7 +449,6 @@ class _$_Room extends _Room {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Room &&
-            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -545,7 +488,6 @@ class _$_Room extends _Room {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        id,
         title,
         description,
         roomType,
@@ -584,8 +526,7 @@ class _$_Room extends _Room {
 
 abstract class _Room extends Room {
   const factory _Room(
-      {final String id,
-      final String title,
+      {final String title,
       final String description,
       final RoomType roomType,
       final int capacity,
@@ -598,19 +539,17 @@ abstract class _Room extends Room {
       final int internetCost,
       final bool hasParking,
       final int parkingFee,
-      final Location location,
+      final String location,
       final List<Utilities> utilities,
       final String createdByUid,
       final String dateTime,
       final bool isRented,
-      final String status,
+      final RoomStatus status,
       final List<String> images}) = _$_Room;
   const _Room._() : super._();
 
   factory _Room.fromJson(Map<String, dynamic> json) = _$_Room.fromJson;
 
-  @override
-  String get id;
   @override
   String get title;
   @override
@@ -638,7 +577,7 @@ abstract class _Room extends Room {
   @override
   int get parkingFee;
   @override
-  Location get location;
+  String get location;
   @override
   List<Utilities> get utilities;
   @override
@@ -648,7 +587,7 @@ abstract class _Room extends Room {
   @override
   bool get isRented;
   @override
-  String get status;
+  RoomStatus get status;
   @override
   List<String> get images;
   @override

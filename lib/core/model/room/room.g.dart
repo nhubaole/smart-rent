@@ -7,7 +7,6 @@ part of 'room.dart';
 // **************************************************************************
 
 _$_Room _$$_RoomFromJson(Map<String, dynamic> json) => _$_Room(
-      id: json['id'] as String? ?? '0',
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       roomType: $enumDecodeNullable(_$RoomTypeEnumMap, json['roomType']) ??
@@ -23,36 +22,7 @@ _$_Room _$$_RoomFromJson(Map<String, dynamic> json) => _$_Room(
       internetCost: json['internetCost'] as int? ?? 0,
       hasParking: json['hasParking'] as bool? ?? true,
       parkingFee: json['parkingFee'] as int? ?? 0,
-      location: json['location'] == null
-          ? const Location(
-              street: '1',
-              address: '1',
-              city: City(
-                  name: 'name',
-                  slug: 'slug',
-                  type: 'type',
-                  name_with_type: 'name_with_type',
-                  code: 'code'),
-              district: District(
-                  name: 'name',
-                  type: 'type',
-                  slug: 'slug',
-                  name_with_type: 'name_with_type',
-                  path: 'path',
-                  path_with_type: 'Quận 1, Thành phố Hồ Chí Minh',
-                  code: 'code',
-                  parent_code: 'parent_code'),
-              ward: Ward(
-                  name: 'name',
-                  type: 'type',
-                  slug: 'slug',
-                  name_with_type: 'name_with_type',
-                  path: 'path',
-                  path_with_type:
-                      'phường Tân Định, quận 1, thành phố Hồ Chí Minh',
-                  code: 'code',
-                  parent_code: 'parent_code'))
-          : Location.fromJson(json['location'] as Map<String, dynamic>),
+      location: json['location'] as String? ?? '',
       utilities: (json['utilities'] as List<dynamic>?)
               ?.map((e) => $enumDecode(_$UtilitiesEnumMap, e))
               .toList() ??
@@ -60,7 +30,8 @@ _$_Room _$$_RoomFromJson(Map<String, dynamic> json) => _$_Room(
       createdByUid: json['createdByUid'] as String? ?? '',
       dateTime: json['dateTime'] as String? ?? '',
       isRented: json['isRented'] as bool? ?? true,
-      status: json['status'] as String? ?? '',
+      status: $enumDecodeNullable(_$RoomStatusEnumMap, json['status']) ??
+          RoomStatus.PENDING,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -68,7 +39,6 @@ _$_Room _$$_RoomFromJson(Map<String, dynamic> json) => _$_Room(
     );
 
 Map<String, dynamic> _$$_RoomToJson(_$_Room instance) => <String, dynamic>{
-      'id': instance.id,
       'title': instance.title,
       'description': instance.description,
       'roomType': _$RoomTypeEnumMap[instance.roomType]!,
@@ -88,7 +58,7 @@ Map<String, dynamic> _$$_RoomToJson(_$_Room instance) => <String, dynamic>{
       'createdByUid': instance.createdByUid,
       'dateTime': instance.dateTime,
       'isRented': instance.isRented,
-      'status': instance.status,
+      'status': _$RoomStatusEnumMap[instance.status]!,
       'images': instance.images,
     };
 
@@ -121,4 +91,11 @@ const _$UtilitiesEnumMap = {
   Utilities.BED: 'BED',
   Utilities.WARDROBE: 'WARDROBE',
   Utilities.AIR_CONDITIONER: 'AIR_CONDITIONER',
+};
+
+const _$RoomStatusEnumMap = {
+  RoomStatus.PENDING: 'PENDING',
+  RoomStatus.APPROVED: 'APPROVED',
+  RoomStatus.EXPIRED: 'EXPIRED',
+  RoomStatus.DELETED: 'DELETED',
 };

@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/enums/room_status.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/location/district.dart';
@@ -17,6 +20,7 @@ import '../../../core/model/location/city.dart';
 import '../../../core/model/location/location.dart';
 import '../../../core/model/location/ward.dart';
 import '../../../core/model/room/room.dart';
+import 'package:image/image.dart' as img;
 
 class PostController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -38,6 +42,7 @@ class PostController extends GetxController
 
   final GlobalKey<FormState> formInfoKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
   var capacityTextController = TextEditingController();
   var areaTextController = TextEditingController();
@@ -57,6 +62,7 @@ class PostController extends GetxController
   late ImagePicker picker;
   var pickedImages = Rxn<List<XFile>>([]);
   RxBool validImageTotal = true.obs;
+  List<String> urlImages = [];
 
   RxList<UtilItem> utilList = [
     UtilItem(utility: Utilities.WC, isChecked: false),
@@ -75,6 +81,8 @@ class PostController extends GetxController
     UtilItem(utility: Utilities.WARDROBE, isChecked: false),
     UtilItem(utility: Utilities.AIR_CONDITIONER, isChecked: false)
   ].obs;
+
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() async {
@@ -113,12 +121,59 @@ class PostController extends GetxController
   void updateLocationRoom() {
     room.value = room.value.copyWith(
         location: Location(
-            city: selectedCity.value!,
-            district: selectedDistrict.value!,
-            ward: selectedWard.value!,
-            street: streetTextController.text,
-            address: addressTextController.text));
+                city: selectedCity.value!,
+                district: selectedDistrict.value!,
+                ward: selectedWard.value!,
+                street: streetTextController.text,
+                address: addressTextController.text)
+            .toString());
     print(room.value.toString());
+  }
+
+  Future<void> updateUtilitiesRoom() async {
+    List<String> uploadedImages = await uploadImages(pickedImages.value!);
+    room.value = room.value.copyWith(
+      images: uploadedImages,
+      utilities: utilList
+          .where((util) => util.isChecked)
+          .map((util) => util.utility)
+          .toList(),
+    );
+    print(room.value.toString());
+  }
+
+  void updateConfirmRoom() {
+    room.value = room.value.copyWith(
+        title: titleTextController.text,
+        description: descriptionTextController.text);
+    print(room.value.toString());
+  }
+
+  Future<void> postRoom() async {
+    isLoading.value = true;
+    try {
+      await updateUtilitiesRoom();
+    } finally {
+      updateConfirmRoom();
+
+      //TODO: update UID
+      room.value = room.value.copyWith(
+          createdByUid: '1',
+          dateTime: DateTime.now().toString(),
+          isRented: false,
+          status: RoomStatus.PENDING);
+
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      try {
+        firestore.collection('rooms').add(room.toJson());
+        print('Room added');
+      } catch (e) {
+        print('Error adding room : $e');
+      }
+
+      isLoading.value = false;
+    }
   }
 
   Future<List<City>> loadCities() async {
@@ -176,5 +231,31 @@ class PostController extends GetxController
                 "Vui lòng cho phép Smart Rent truy cập tệp hình ảnh của bạn để tải lên ảnh.",
           );
         });
+  }
+
+  Future<List<int>> compressImage(File imageFile, int quality) async {
+    img.Image image = img.decodeImage(imageFile.readAsBytesSync())!;
+    return img.encodeJpg(image, quality: quality);
+  }
+
+  Future<List<String>> uploadImages(List<XFile> images) async {
+    List<String> urlImages = [];
+
+    await Future.forEach(images, (XFile image) async {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference storageReference =
+          storage.ref().child('room_images/$fileName.jpg');
+
+      List<int> compressedImage = await compressImage(File(image.path), 30);
+
+      UploadTask uploadTask =
+          storageReference.putData(Uint8List.fromList(compressedImage));
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      urlImages.add(downloadURL);
+      print('Image uploaded to Firebase Storage. Download URL: $downloadURL');
+    });
+
+    return urlImages;
   }
 }
