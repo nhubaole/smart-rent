@@ -12,6 +12,7 @@ void main() async {
     Get.put(AuthController());
     Get.put(AuthMethods());
   });
+
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // ).then(

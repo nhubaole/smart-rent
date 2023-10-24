@@ -12,7 +12,7 @@ class HomeTopWidget extends StatelessWidget {
     final HomeTopWidgetController controller =
         Get.put(HomeTopWidgetController());
     controller.getSharedPreferences();
-    //controller.getCurrentLocation();
+    controller.getCurrentLocation();
 
     return Stack(
       children: [
@@ -66,7 +66,7 @@ class HomeTopWidget extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: controller.currentName,
+                                  text: controller.currentName.value,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -80,22 +80,24 @@ class HomeTopWidget extends StatelessWidget {
                         const SizedBox(
                           height: 4,
                         ),
-                        const Row(
+                        Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.location_on,
                               color: Colors.white,
                               size: 16,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4,
                             ),
-                            Text(
-                              'controller.currentLocation',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                            Obx(
+                              () => Text(
+                                controller.currenLocation.value,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],

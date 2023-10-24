@@ -7,6 +7,7 @@ import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
+import 'package:smart_rent/modules/payment/views/review_room.dart';
 import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {

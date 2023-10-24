@@ -8,15 +8,13 @@ import 'package:smart_rent/core/values/key_value.dart';
 
 class HomeTopWidgetController extends GetxController {
   Account? currentAccount;
-  final _currentName = ''.obs;
-  final _currenLocation = ''.obs;
+  final currentName = ''.obs;
+  final currenLocation = ''.obs;
   Location? crLocation;
-  String get currentName => _currentName.value;
-  String get currentLocation => _currenLocation.value;
 
   Future<void> getSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _currentName.value =
+    currentName.value =
         prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
   }
 
@@ -44,10 +42,32 @@ class HomeTopWidgetController extends GetxController {
     }
 
     locationData = await location.getLocation();
+    final lat = locationData.latitude;
+    final lon = locationData.longitude;
+
+    // final url = Uri.parse(
+    //     'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
+    // final response = await http.get(url);
+    // final resData = json.decode(response.body);
+    // currenLocation.value = resData['results'][0]['formatted_address'];
+
     final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
+        'https://api.geoapify.com/v1/geocode/reverse?lat=$lat&lon=$lon&apiKey=b10306886b84409faf35c32127d37095');
+
     final response = await http.get(url);
-    final resData = json.decode(response.body);
-    _currenLocation.value = resData['results'][0]['formatted_address'];
+
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+
+      if (result["features"] != null && result["features"].isNotEmpty) {
+        // Access the formatted value from the first feature
+        final formattedValue = result['features'][0]['properties']['city'];
+        currenLocation.value = formattedValue;
+      } else {
+        Get.snackbar("Error", 'Can' 't get location');
+      }
+    } else {
+      Get.snackbar("Error", 'Can' 't get location');
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/payment/controllers/detail_transaction_controller.dart';
+import 'package:smart_rent/modules/payment/views/review_room.dart';
 import 'package:smart_rent/modules/payment/views/widgets/status_widget.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
@@ -8,6 +10,7 @@ class DetailTransactionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final transactionController = Get.put(DetailTransactionController());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -93,7 +96,10 @@ class DetailTransactionScreen extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              transactionController
+                                  .copyToClipboard('P3259118000011362');
+                            },
                             icon: const Icon(Icons.copy),
                           ),
                         ],
@@ -199,7 +205,7 @@ class DetailTransactionScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(const DetailTransactionScreen());
+                  Get.to(const ReviewRoom());
                 },
                 child: Container(
                   alignment: Alignment.center,
