@@ -5,6 +5,7 @@ import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:crypto/crypto.dart';
 
 class HomeTopWidgetController extends GetxController {
   Account? currentAccount;
@@ -16,6 +17,8 @@ class HomeTopWidgetController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     currentName.value =
         prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
+    currenLocation.value = prefs.getString(KeyValue.KEY_CURRENT_LOCATION) ??
+        'Thành Phố Hồ Chí Minh';
   }
 
   void getCurrentLocation() async {
@@ -69,5 +72,54 @@ class HomeTopWidgetController extends GetxController {
     } else {
       Get.snackbar("Error", 'Can' 't get location');
     }
+  }
+
+  void getSign() {
+    final orderCode = 123;
+    final amount = 56000000;
+    final description = "VQRIO123";
+    final cancelUrl = "https://your-cancel-url.com";
+    final returnUrl = "https://your-success-url.com";
+
+    final data = {
+      "orderCode": 123,
+      "amount": 2000,
+      "description": "VQRIO123",
+      "buyerName": "Nguyen Van A",
+      "buyerEmail": "buyer-email@gmail.com",
+      "buyerPhone": "03733855259",
+      "buyerAddress": "số nhà, đường, phường, tỉnh hoặc thành phố",
+      "items": [
+        {"name": "Iphone", "quantity": 2, "price": 28000000}
+      ],
+      "cancelUrl": "https://your-cancel-url.com",
+      "returnUrl": "https://your-success-url.com",
+      "expiredAt": 1696559798,
+      "signature": "string"
+    };
+
+    final dulieu =
+        'amount=$amount&cancelUrl=$cancelUrl&description=$description&orderCode=$orderCode&returnUrl=$returnUrl';
+
+    var timestamp = DateTime(2023, 10, 28).millisecondsSinceEpoch ~/ 1000;
+    data["expiredAt"] = timestamp;
+    print(timestamp);
+
+    // Tạo checksum key từ Kênh thanh toán
+    final checksumKey =
+        "f81731d89a73349606209191ba8e8fa20dd1bd5f2f96ea5ef3cd73e569dce6ef";
+
+    // Tạo chuỗi dữ liệu cuối cùng để tạo chữ ký
+    final finalDataString =
+        "amount=$amount&cancelUrl=$cancelUrl&description=$description&orderCode=$orderCode&returnUrl=$returnUrl";
+
+    // Tạo chữ ký bằng HMAC_SHA256
+    final hmac = Hmac(sha256, utf8.encode(checksumKey));
+    final signatureBytes = hmac.convert(utf8.encode(dulieu)).bytes;
+    final signature = signatureBytes
+        .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+        .join();
+
+    print("Chữ ký: $signature");
   }
 }

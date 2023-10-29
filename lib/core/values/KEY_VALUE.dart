@@ -29,4 +29,6 @@ class KeyValue {
   static const KEY_NOTIFY_NEWMESSAGE = 'nofityNewMessage';
   static const KEY_NOTIFY_NEWLIKE = 'nofityNewLike';
   static const KEY_NOTIFY_NEWSCHEDULE = 'nofityNewSchedule';
+
+  static const KEY_CURRENT_LOCATION = 'currentLocation';
 }

@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:http/http.dart' as http;
 
 class RootScreenController extends GetxController {
   late PageController pageController;
   final RxInt selectedPage = 0.obs;
   Account? currentAccount;
+  late SharedPreferences prefs;
 
   @override
   void onInit() {
@@ -52,7 +57,7 @@ class RootScreenController extends GetxController {
   }
 
   void initSharedPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     await prefs.setString(
         KeyValue.KEY_ACCOUNT_PHONENUMBER, currentAccount!.phoneNumber);
     await prefs.setString(KeyValue.KEY_ACCOUNT_UID, currentAccount!.uid);

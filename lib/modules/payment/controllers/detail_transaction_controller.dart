@@ -4,6 +4,12 @@ import 'package:flutter/services.dart';
 
 class DetailTransactionController extends GetxController {
   RxString statusTransaction = 'success'.obs;
+  var _momoPay;
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   void copyToClipboard(String textToCopy) {
     Clipboard.setData(ClipboardData(text: textToCopy));
@@ -13,4 +19,6 @@ class DetailTransactionController extends GetxController {
         backgroundColor: Colors.white,
         colorText: Colors.black);
   }
+
+  void payment() {}
 }

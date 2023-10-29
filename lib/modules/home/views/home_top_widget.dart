@@ -13,6 +13,7 @@ class HomeTopWidget extends StatelessWidget {
         Get.put(HomeTopWidgetController());
     controller.getSharedPreferences();
     controller.getCurrentLocation();
+    controller.getSign();
 
     return Stack(
       children: [
