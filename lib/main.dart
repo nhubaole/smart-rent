@@ -6,7 +6,7 @@ import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
-import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+import 'package:smart_rent/modules/post/views/post_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
 void main() async {
@@ -37,19 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primary98),
         useMaterial3: true,
       ),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
-          if (snapshot.hasData) {
-            return const RootScreen();
-          }
-          return const SplashScreen();
-        },
-      ),
-      //home: const OnBoardingScreen(),
+      home: const PostScreen(),
     );
   }
 }

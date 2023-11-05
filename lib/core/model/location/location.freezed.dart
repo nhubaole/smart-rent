@@ -199,11 +199,6 @@ class _$_Location extends _Location {
   final Ward ward;
 
   @override
-  String toString() {
-    return 'Location(street: $street, address: $address, city: $city, district: $district, ward: $ward)';
-  }
-
-  @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
