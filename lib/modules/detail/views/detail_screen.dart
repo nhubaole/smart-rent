@@ -1,433 +1,430 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/enums/room_type.dart';
+import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+
+import '../../../core/widget/button_fill.dart';
 
 class DetailScreen extends StatelessWidget {
-  const DetailScreen({super.key});
+  DetailScreen({super.key});
+
+  final DetailController controller = Get.find<DetailController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        toolbarHeight: 70,
-        backgroundColor: primary40,
-        foregroundColor: Colors.white,
-        leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
-        actions: [
-          IconButton(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: primary40,
+          foregroundColor: Colors.white,
+          leading: IconButton(
               onPressed: () {},
               icon: Icon(
-                Icons.favorite_outline,
+                Icons.arrow_back,
                 color: Colors.white,
-              ))
-        ],
-        title: Text(
-          "Chi tiết phòng",
-          style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.favorite_outline,
+                  color: Colors.white,
+                ))
+          ],
+          title: Text(
+            "Chi tiết phòng",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+        body: Stack(
           children: [
-            imageCollection(context),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
+            SingleChildScrollView(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          "Căn hộ",
-                          style: TextStyle(color: secondary40),
-                        )),
-                        Text('3 Nam/Nữ', style: TextStyle(color: secondary40))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: primary98),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      child: const Row(
+                children: [
+                  imageCollection(context),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 90),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                              child: Column(
+                          Row(
                             children: [
-                              Text(
-                                'CÒN PHÒNG',
-                                style: TextStyle(color: secondary20),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                'Còn',
-                                style: TextStyle(
-                                    color: primary40,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              Expanded(
+                                  child: Text(
+                                controller.room.roomType.getNameRoomType(),
+                                style: TextStyle(color: secondary40),
+                              )),
+                              Text(controller.getCapacity(),
+                                  style: TextStyle(color: secondary40))
                             ],
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: [
-                              Text(
-                                'DIỆN TÍCH',
-                                style: TextStyle(color: secondary20),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '35m2',
-                                style: TextStyle(
-                                    color: primary40,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: [
-                              Text(
-                                'ĐẶT CỌC',
-                                style: TextStyle(color: secondary20),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '11tr',
-                                style: TextStyle(
-                                    color: primary40,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'CHDV Cao cấp chuyên nghiệp Nguyễn Văn Linh Quận 7',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          color: secondary40,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Flexible(
-                            child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text:
-                                  "520 Nguyễn Văn Linh, Phường Bình Thuận, Quận 7, Hồ Chí Minh ",
-                              style: TextStyle(color: secondary40),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: primary98),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Text(
+                                      'CÒN PHÒNG',
+                                      style: TextStyle(color: secondary20),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.getStatus(),
+                                      style: TextStyle(
+                                          color: primary40,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Text(
+                                      'DIỆN TÍCH',
+                                      style: TextStyle(color: secondary20),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      '${controller.room.area} m2',
+                                      style: TextStyle(
+                                          color: primary40,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Text(
+                                      'ĐẶT CỌC',
+                                      style: TextStyle(color: secondary20),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.priceFormatter(
+                                          controller.room.deposit),
+                                      style: TextStyle(
+                                          color: primary40,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ))
+                              ],
                             ),
-                            TextSpan(
-                                text: " Chỉ đường",
-                                style: TextStyle(
-                                    color: primary40,
-                                    fontWeight: FontWeight.bold),
-                                recognizer: TapGestureRecognizer()),
-                          ]),
-                        ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.phone_outlined,
-                          color: secondary40,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          "Số điện thoại: 0987654321",
-                          style: TextStyle(color: secondary40),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: primary60, width: 1)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: const Row(
-                        children: [
-                          Expanded(
-                              child: Column(
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            controller.room.title,
+                            style: TextStyle(
+                                color: secondary20,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: secondary40,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Flexible(
+                                  child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: controller.room.location,
+                                    style: TextStyle(color: secondary40),
+                                  ),
+                                  TextSpan(
+                                      text: " Chỉ đường",
+                                      style: TextStyle(
+                                          color: primary40,
+                                          fontWeight: FontWeight.bold),
+                                      recognizer: TapGestureRecognizer()),
+                                ]),
+                              ))
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          const Row(
                             children: [
                               Icon(
-                                Icons.emoji_objects_outlined,
-                                size: 24,
-                                color: primary60,
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '3.8k',
-                                style: TextStyle(
-                                  color: primary60,
-                                ),
-                              ),
-                            ],
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: [
-                              Icon(
-                                Icons.water_drop_outlined,
-                                size: 24,
-                                color: primary60,
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '25k',
-                                style: TextStyle(
-                                  color: primary60,
-                                ),
-                              ),
-                            ],
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: [
-                              Icon(
-                                Icons.two_wheeler_outlined,
-                                size: 24,
-                                color: primary60,
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                '120k',
-                                style: TextStyle(
-                                  color: primary60,
-                                ),
-                              ),
-                            ],
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: [
-                              Icon(
-                                Icons.wifi,
-                                size: 24,
-                                color: primary60,
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                'Miễn phí',
-                                style: TextStyle(
-                                  color: primary60,
-                                ),
-                              ),
-                            ],
-                          )),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Mô tả',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    ExpandableText(
-                      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-                      expandText: 'Xem thêm',
-                      collapseText: 'Rút gọn',
-                      maxLines: 2,
-                      linkColor: primary40,
-                      linkStyle: TextStyle(fontWeight: FontWeight.bold),
-                      style: TextStyle(color: secondary40),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Ngày đăng',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: secondary40,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          "25/03/2023",
-                          style: TextStyle(color: secondary40),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Tiện ích',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Đánh giá',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: primary40,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Row(
-                            children: [
-                              Text(
-                                '4.2',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
+                                Icons.phone_outlined,
+                                color: secondary40,
                               ),
                               SizedBox(
                                 width: 4,
                               ),
-                              Icon(
-                                Icons.star,
-                                color: Color(0xFFFFD21D),
+                              Text(
+                                "Số điện thoại: 0987654321",
+                                style: TextStyle(color: secondary40),
                               )
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: primary60, width: 1)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.emoji_objects_outlined,
+                                      size: 24,
+                                      color: primary60,
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.priceFormatter(
+                                          controller.room.electricityCost),
+                                      style: TextStyle(
+                                        color: primary60,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.water_drop_outlined,
+                                      size: 24,
+                                      color: primary60,
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.priceFormatter(
+                                          controller.room.waterCost),
+                                      style: TextStyle(
+                                        color: primary60,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.two_wheeler_outlined,
+                                      size: 24,
+                                      color: primary60,
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.priceFormatter(
+                                          controller.room.parkingFee),
+                                      style: TextStyle(
+                                        color: primary60,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.wifi,
+                                      size: 24,
+                                      color: primary60,
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      controller.priceFormatter(
+                                          controller.room.internetCost),
+                                      style: TextStyle(
+                                        color: primary60,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Mô tả',
+                            style: TextStyle(
+                                color: secondary20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          ExpandableText(
+                            controller.room.description,
+                            expandText: 'Xem thêm',
+                            collapseText: 'Rút gọn',
+                            maxLines: 2,
+                            linkColor: primary40,
+                            linkStyle: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(color: secondary40),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Ngày đăng',
+                            style: TextStyle(
+                                color: secondary20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Row(
                             children: [
-                              Text(
-                                'Tốt',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: primary40,
-                                    fontWeight: FontWeight.w600),
+                              Icon(
+                                Icons.calendar_month_outlined,
+                                color: secondary40,
                               ),
                               SizedBox(
-                                height: 4,
+                                width: 4,
                               ),
                               Text(
-                                '14 đánh giá',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: secondary40,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                                controller.room.dateTime,
+                                style: TextStyle(color: secondary40),
+                              )
                             ],
                           ),
-                        ),
-                        Ink(
-                          child: Text(
-                            'Xem mọi bài đánh giá',
-                            style: TextStyle(
-                                color: primary40,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
+                          SizedBox(
+                            height: 16,
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InkWell(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: primary98),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
+                          Text(
+                            'Tiện ích',
+                            style: TextStyle(
+                                color: secondary20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          GridView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 3,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0,
+                            ),
+                            itemCount: controller.room.utilities.length,
+                            itemBuilder: (context, index) {
+                              return FilledButton.icon(
+                                style: FilledButton.styleFrom(
+                                  padding: EdgeInsets.all(0),
+                                  backgroundColor: secondary90,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                                onPressed: () {},
+                                icon: Icon(
+                                  controller.room.utilities[index]
+                                      .getIconUtil(),
+                                  size: 20,
+                                  color: secondary40,
+                                ),
+                                label: Text(
+                                  controller.room.utilities[index]
+                                      .getNameUtil(),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: secondary40,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Đánh giá',
+                            style: TextStyle(
+                                color: secondary20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                radius: 24,
-                                backgroundImage: NetworkImage(
-                                    "https://media.pinatafarm.com/protected/13C23573-190B-4CD5-8692-28D5AEE4DC73/5dd78ce7-d484-4c34-9f73-527d561d1d44-1665444004997-pfarm.webp"),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: primary40,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '4.2',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      color: Color(0xFFFFD21D),
+                                    )
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 width: 16,
@@ -437,48 +434,198 @@ class DetailScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Lê Văn A',
+                                      'Tốt',
                                       style: TextStyle(
                                           fontSize: 16,
-                                          color: secondary20,
+                                          color: primary40,
                                           fontWeight: FontWeight.w600),
                                     ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
                                     Text(
-                                      '9 phòng',
+                                      '14 đánh giá',
                                       style: TextStyle(
-                                        color: primary60,
-                                      ),
+                                          fontSize: 14,
+                                          color: secondary40,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
                               ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 18,
-                                color: secondary20,
+                              Ink(
+                                child: Text(
+                                  'Xem mọi bài đánh giá',
+                                  style: TextStyle(
+                                      color: primary40,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline),
+                                ),
                               )
                             ],
-                          )),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Đề xuất',
-                      style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                  ]),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          InkWell(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: primary98),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 16),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 24,
+                                      backgroundImage: NetworkImage(
+                                          "https://media.pinatafarm.com/protected/13C23573-190B-4CD5-8692-28D5AEE4DC73/5dd78ce7-d484-4c34-9f73-527d561d1d44-1665444004997-pfarm.webp"),
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Lê Văn A',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: secondary20,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Text(
+                                            '9 phòng',
+                                            style: TextStyle(
+                                              color: primary60,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 18,
+                                      color: secondary20,
+                                    )
+                                  ],
+                                )),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Đề xuất',
+                            style: TextStyle(
+                                color: secondary20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                        ]),
+                  ),
+                ],
+              ),
             ),
+            Positioned(
+                bottom: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  height: 72,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: primary40,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30.0),
+                      topLeft: Radius.circular(30.0),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        controller.priceFormatterFull(),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      Text(
+                        '/phòng',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(primary98),
+                              foregroundColor:
+                                  MaterialStateProperty.all(primary40),
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)))),
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Chat'),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.sms_outlined,
+                                size: 24.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(secondary90),
+                              foregroundColor:
+                                  MaterialStateProperty.all(secondary40),
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)))),
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Gọi'),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.phone_outlined,
+                                size: 24.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ))
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   Widget imageCollection(BuildContext context) {
@@ -486,61 +633,127 @@ class DetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         child: Stack(
           children: [
-            Image.network(
-              "https://www.thespruce.com/thmb/iMt63n8NGCojUETr6-T8oj-5-ns=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/PAinteriors-7-cafe9c2bd6be4823b9345e591e4f367f.jpg",
-              height: MediaQuery.sizeOf(context).width + 50,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Obx(
+              () => Image.network(
+                controller.room.images[controller.activeImageIdx.value],
+                height: MediaQuery.sizeOf(context).width + 50,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              child: MaterialButton(
+                onPressed: () {
+                  if (controller.activeImageIdx > 0) {
+                    controller.activeImageIdx.value -= 1;
+                  }
+                },
+                color: Colors.white,
+                textColor: secondary20,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 20,
+                ),
+                padding: EdgeInsets.all(8),
+                shape: CircleBorder(),
+              ),
+              left: -10,
+              top: MediaQuery.sizeOf(context).width / 2,
+            ),
+            Positioned(
+              child: MaterialButton(
+                onPressed: () {
+                  if (controller.activeImageIdx <
+                      controller.room.images.length - 1) {
+                    controller.activeImageIdx.value += 1;
+                  }
+                },
+                color: Colors.white,
+                textColor: secondary20,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                ),
+                padding: EdgeInsets.all(8),
+                shape: CircleBorder(),
+              ),
+              right: -10,
+              top: MediaQuery.sizeOf(context).width / 2,
             ),
             Positioned(
               child: Container(
-                padding: EdgeInsets.only(top: 2),
-                color: Colors.white,
-                height: 90,
-                width: MediaQuery.sizeOf(context).width,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Image.network(
-                          "https://www.thespruce.com/thmb/iMt63n8NGCojUETr6-T8oj-5-ns=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/PAinteriors-7-cafe9c2bd6be4823b9345e591e4f367f.jpg",
-                          fit: BoxFit.cover,
-                          height: 90,
-                          color: Color.fromRGBO(0, 0, 0, 0.5),
-                          colorBlendMode: BlendMode.multiply),
+                  padding: EdgeInsets.only(top: 2),
+                  color: Colors.white,
+                  height: 90,
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Obx(
+                    () => Row(
+                      children: [
+                        Expanded(
+                          child: Image.network(controller.room.images[0],
+                              fit: BoxFit.cover,
+                              height: 90,
+                              color: controller.activeImageIdx == 0
+                                  ? null
+                                  : Color.fromRGBO(0, 0, 0, 0.7),
+                              colorBlendMode: BlendMode.multiply),
+                        ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Expanded(
+                          child: Image.network(controller.room.images[1],
+                              fit: BoxFit.cover,
+                              height: 90,
+                              color: controller.activeImageIdx == 1
+                                  ? null
+                                  : Color.fromRGBO(0, 0, 0, 0.7),
+                              colorBlendMode: BlendMode.multiply),
+                        ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Expanded(
+                          child: Image.network(controller.room.images[2],
+                              fit: BoxFit.cover,
+                              height: 90,
+                              color: controller.activeImageIdx == 2
+                                  ? null
+                                  : Color.fromRGBO(0, 0, 0, 0.7),
+                              colorBlendMode: BlendMode.multiply),
+                        ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Expanded(
+                            child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.network(controller.room.images[3],
+                                fit: BoxFit.cover,
+                                height: 90,
+                                color: controller.activeImageIdx >= 3
+                                    ? null
+                                    : Color.fromRGBO(0, 0, 0, 0.7),
+                                colorBlendMode: BlendMode.multiply),
+                            controller.room.images.length > 4
+                                ? Positioned.fill(
+                                    child: Center(
+                                      child: Text(
+                                        "+${controller.room.images.length - 4}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox()
+                          ],
+                        )),
+                      ],
                     ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: Image.network(
-                        "https://www.thespruce.com/thmb/iMt63n8NGCojUETr6-T8oj-5-ns=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/PAinteriors-7-cafe9c2bd6be4823b9345e591e4f367f.jpg",
-                        fit: BoxFit.cover,
-                        height: 90,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: Image.network(
-                        "https://www.thespruce.com/thmb/iMt63n8NGCojUETr6-T8oj-5-ns=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/PAinteriors-7-cafe9c2bd6be4823b9345e591e4f367f.jpg",
-                        fit: BoxFit.cover,
-                        height: 90,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: Image.network(
-                        "https://www.thespruce.com/thmb/iMt63n8NGCojUETr6-T8oj-5-ns=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/PAinteriors-7-cafe9c2bd6be4823b9345e591e4f367f.jpg",
-                        fit: BoxFit.cover,
-                        height: 90,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  )),
               bottom: 0,
             )
           ],
