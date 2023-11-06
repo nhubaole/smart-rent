@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
+import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_home/views/manage_home_screen.dart';
@@ -29,10 +30,11 @@ class _RootScreenState extends State<RootScreen> {
     } else if (selectedPage == 1) {
       activePage = const ManageHomeScreen();
     } else if (selectedPage == 2) {
-      activePage = ChatScreen(
-        conversationID: '0336942376',
-        conversationName: "Nguyễn Văn A",
-      );
+      // activePage = ChatScreen(
+      //   conversationID: '0336942376',
+      //   conversationName: "Nguyễn Văn A",
+      // );
+      activePage = ConversationScreen();
     } else if (selectedPage == 3) {
       activePage = const ManageAccountScreen();
     }

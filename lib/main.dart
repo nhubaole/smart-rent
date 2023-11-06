@@ -14,6 +14,7 @@ import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/post/views/post_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 
 import 'core/enums/utilities.dart';
 import 'package:zego_zim/zego_zim.dart';
@@ -37,6 +38,12 @@ void main() async {
   appConfig.appSign =
       "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
 
+  ZIMKit().init(
+    appID: 2063303228, // your appid
+    appSign:
+        "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
+  );
+
   ZIM.create(appConfig);
 
   ZIMUserInfo userInfo = ZIMUserInfo();
@@ -55,6 +62,9 @@ void main() async {
       default:
     }
   });
+  ZIMKit()
+      .connectUser(id: userInfo.userID, name: userInfo.userName)
+      .then((value) => null);
 
   runApp(MyApp());
 }
