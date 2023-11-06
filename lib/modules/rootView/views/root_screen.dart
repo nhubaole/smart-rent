@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/home_screen.dart';
+import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_home/views/manage_home_screen.dart';
@@ -29,28 +29,33 @@ class _RootScreenState extends State<RootScreen> {
     } else if (selectedPage == 1) {
       activePage = const ManageHomeScreen();
     } else if (selectedPage == 2) {
-      activePage = const ChatScreen();
+      activePage = ChatScreen(
+        conversationID: '0336942376',
+        conversationName: "Nguyễn Văn A",
+      );
     } else if (selectedPage == 3) {
       activePage = const ManageAccountScreen();
     }
     return Scaffold(
       body: activePage,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: primary95,
-        foregroundColor: Colors.black,
-        elevation: 24,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: const BorderSide(
-            color: Colors.blue,
-            width: 1.0,
-            style: BorderStyle.none,
-          ),
-        ),
-        mini: true,
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: selectedPage == 2
+          ? null
+          : FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: primary95,
+              foregroundColor: Colors.black,
+              elevation: 24,
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: const BorderSide(
+                  color: Colors.blue,
+                  width: 1.0,
+                  style: BorderStyle.none,
+                ),
+              ),
+              mini: true,
+              child: const Icon(Icons.add),
+            ),
       bottomNavigationBar: Container(
         color: Colors.white,
         child: Padding(
