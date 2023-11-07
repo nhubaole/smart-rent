@@ -13,6 +13,7 @@ import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/post/views/post_screen.dart';
+import 'package:smart_rent/modules/search/views/search_screen.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
@@ -112,7 +113,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primary98),
         useMaterial3: true,
       ),
-      home: RootScreen(),
+      home: SearchScreen(),
     );
   }
 }
