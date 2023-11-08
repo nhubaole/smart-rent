@@ -7,6 +7,7 @@ import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_contants.dart';
 import 'package:smart_rent/firebase_options.dart';
+import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
@@ -26,45 +27,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.lazyPut(() => DetailController());
 
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // ).then(
   //   (value) => Get.put(AuthMethods()),
   // );
-
-  ZIMAppConfig appConfig = ZIMAppConfig();
-  appConfig.appID = 2063303228;
-  appConfig.appSign =
-      "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
-
-  ZIMKit().init(
-    appID: 2063303228, // your appid
-    appSign:
-        "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
-  );
-
-  ZIM.create(appConfig);
-
-  ZIMUserInfo userInfo = ZIMUserInfo();
-  userInfo.userID = "0823306992"; //Fill in a String type value.
-  userInfo.userName = "Lê Bảo Như"; //Fill in a String type value.
-
-  ZIM.getInstance()?.login(userInfo).then((value) {
-    print("Login successful");
-  }).catchError((onError) {
-    switch (onError.runtimeType) {
-      //This will be triggered when login failed.
-      case PlatformException:
-        print(onError.code); //Return the error code when login failed.
-        print(onError.message!); // Return the error indo when login failed.
-        break;
-      default:
-    }
-  });
-  ZIMKit()
-      .connectUser(id: userInfo.userID, name: userInfo.userName)
-      .then((value) => null);
 
   runApp(MyApp());
 }

@@ -29,7 +29,7 @@ class _RootScreenState extends State<RootScreen> {
     final screens = [
       const HomeScreen(),
       const ManageRoomScreen(),
-      const PaymentInforScreen(),
+      const ConversationScreen(),
       const ManageAccountScreen(),
     ];
 

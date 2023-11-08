@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 
 import '../../../core/model/room/room.dart';
@@ -583,7 +584,13 @@ class DetailScreen extends StatelessWidget {
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(10.0)))),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(ChatScreen(
+                                conversationID:
+                                    controller.owner.value!.phoneNumber,
+                                conversationName:
+                                    controller.owner.value!.username));
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [

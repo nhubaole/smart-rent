@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
@@ -7,28 +8,68 @@ import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:crypto/crypto.dart';
+import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 
 class HomeTopWidgetController extends GetxController {
   late Account? currentAccount;
   final currentName = ''.obs;
   final currenLocation = ''.obs;
+  final currenPhone = ''.obs;
   Location? crLocation;
 
   Future<void> getSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     currentName.value =
         prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
+    currenPhone.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
     currenLocation.value = prefs.getString(KeyValue.KEY_CURRENT_LOCATION) ??
         'Thành Phố Hồ Chí Minh';
     getName();
+    ZIMLogin();
   }
 
   void getName() async {
-    currentAccount = await AuthMethods.instance.getUserDetails();
+    currentAccount = await AuthMethods.getUserDetails();
     if (currentAccount != null) {
       currentName.value = currentAccount!.username;
       print(currentAccount!.username);
     }
+  }
+
+  void ZIMLogin() {
+    ZIMAppConfig appConfig = ZIMAppConfig();
+    appConfig.appID = 2063303228;
+    appConfig.appSign =
+        "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
+
+    ZIMKit().init(
+      appID: 2063303228, // your appid
+      appSign:
+          "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
+    );
+
+    ZIM.create(appConfig);
+
+    ZIMUserInfo userInfo = ZIMUserInfo();
+    userInfo.userID = currenPhone.value; //Fill in a String type value.
+    userInfo.userName = currentName.value; //Fill in a String type value.
+
+    ZIM.getInstance()?.login(userInfo).then((value) {
+      print("Login successful");
+    }).catchError((onError) {
+      switch (onError.runtimeType) {
+        //This will be triggered when login failed.
+        case PlatformException:
+          print(onError.code); //Return the error code when login failed.
+          print(onError.message!); // Return the error indo when login failed.
+          break;
+        default:
+      }
+    });
+    ZIMKit()
+        .connectUser(id: userInfo.userID, name: userInfo.userName)
+        .then((value) => null);
   }
 
   void getCurrentLocation() async {
