@@ -14,6 +14,7 @@ import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/location/district.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
+import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
 
 import '../../../core/model/location/city.dart';
@@ -21,6 +22,8 @@ import '../../../core/model/location/location.dart';
 import '../../../core/model/location/ward.dart';
 import '../../../core/model/room/room.dart';
 import 'package:image/image.dart' as img;
+
+import '../../detail/controllers/detail_controller.dart';
 
 class PostController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -168,6 +171,10 @@ class PostController extends GetxController
       try {
         firestore.collection('rooms').add(room.toJson());
         print('Room added');
+
+        Get.to(DetailScreen(
+          room: room.value,
+        ));
       } catch (e) {
         print('Error adding room : $e');
       }

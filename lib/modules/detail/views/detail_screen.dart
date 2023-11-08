@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,22 +8,28 @@ import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 
+import '../../../core/model/room/room.dart';
 import '../../../core/widget/button_fill.dart';
 
 class DetailScreen extends StatelessWidget {
-  DetailScreen({super.key});
+  DetailScreen({super.key, required this.room});
+  final Room room;
 
   final DetailController controller = Get.find<DetailController>();
 
   @override
   Widget build(BuildContext context) {
+    controller.room = room;
+    controller.getOwner();
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: primary40,
           foregroundColor: Colors.white,
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.back();
+              },
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.white,
@@ -55,7 +62,7 @@ class DetailScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                   child: Text(
-                                controller.room.roomType.getNameRoomType(),
+                                controller.room!.roomType.getNameRoomType(),
                                 style: TextStyle(color: secondary40),
                               )),
                               Text(controller.getCapacity(),
@@ -103,7 +110,7 @@ class DetailScreen extends StatelessWidget {
                                       height: 4,
                                     ),
                                     Text(
-                                      '${controller.room.area} m2',
+                                      '${controller.room!.area} m2',
                                       style: TextStyle(
                                           color: primary40,
                                           fontSize: 16,
@@ -123,7 +130,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       controller.priceFormatter(
-                                          controller.room.deposit),
+                                          controller.room!.deposit),
                                       style: TextStyle(
                                           color: primary40,
                                           fontSize: 16,
@@ -138,7 +145,7 @@ class DetailScreen extends StatelessWidget {
                             height: 16,
                           ),
                           Text(
-                            controller.room.title,
+                            controller.room!.title,
                             style: TextStyle(
                                 color: secondary20,
                                 fontSize: 20,
@@ -160,7 +167,7 @@ class DetailScreen extends StatelessWidget {
                                   child: RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text: controller.room.location,
+                                    text: controller.room!.location,
                                     style: TextStyle(color: secondary40),
                                   ),
                                   TextSpan(
@@ -176,7 +183,7 @@ class DetailScreen extends StatelessWidget {
                           SizedBox(
                             height: 16,
                           ),
-                          const Row(
+                          Row(
                             children: [
                               Icon(
                                 Icons.phone_outlined,
@@ -185,10 +192,10 @@ class DetailScreen extends StatelessWidget {
                               SizedBox(
                                 width: 4,
                               ),
-                              Text(
-                                "Số điện thoại: 0987654321",
-                                style: TextStyle(color: secondary40),
-                              )
+                              Obx(() => Text(
+                                    "Số điện thoại: ${controller.owner.value!.phoneNumber}",
+                                    style: TextStyle(color: secondary40),
+                                  )),
                             ],
                           ),
                           SizedBox(
@@ -215,7 +222,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       controller.priceFormatter(
-                                          controller.room.electricityCost),
+                                          controller.room!.electricityCost),
                                       style: TextStyle(
                                         color: primary60,
                                       ),
@@ -235,7 +242,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       controller.priceFormatter(
-                                          controller.room.waterCost),
+                                          controller.room!.waterCost),
                                       style: TextStyle(
                                         color: primary60,
                                       ),
@@ -255,7 +262,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       controller.priceFormatter(
-                                          controller.room.parkingFee),
+                                          controller.room!.parkingFee),
                                       style: TextStyle(
                                         color: primary60,
                                       ),
@@ -275,7 +282,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       controller.priceFormatter(
-                                          controller.room.internetCost),
+                                          controller.room!.internetCost),
                                       style: TextStyle(
                                         color: primary60,
                                       ),
@@ -299,7 +306,7 @@ class DetailScreen extends StatelessWidget {
                             height: 4,
                           ),
                           ExpandableText(
-                            controller.room.description,
+                            controller.room!.description,
                             expandText: 'Xem thêm',
                             collapseText: 'Rút gọn',
                             maxLines: 2,
@@ -330,7 +337,7 @@ class DetailScreen extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                controller.room.dateTime,
+                                controller.room!.dateTime.substring(0, 10),
                                 style: TextStyle(color: secondary40),
                               )
                             ],
@@ -358,7 +365,7 @@ class DetailScreen extends StatelessWidget {
                               mainAxisSpacing: 8.0,
                               crossAxisSpacing: 8.0,
                             ),
-                            itemCount: controller.room.utilities.length,
+                            itemCount: controller.room!.utilities.length,
                             itemBuilder: (context, index) {
                               return FilledButton.icon(
                                 style: FilledButton.styleFrom(
@@ -370,13 +377,13 @@ class DetailScreen extends StatelessWidget {
                                 ),
                                 onPressed: () {},
                                 icon: Icon(
-                                  controller.room.utilities[index]
+                                  controller.room!.utilities[index]
                                       .getIconUtil(),
                                   size: 20,
                                   color: secondary40,
                                 ),
                                 label: Text(
-                                  controller.room.utilities[index]
+                                  controller.room!.utilities[index]
                                       .getNameUtil(),
                                   style: TextStyle(
                                       fontSize: 12,
@@ -467,51 +474,55 @@ class DetailScreen extends StatelessWidget {
                           SizedBox(
                             height: 16,
                           ),
-                          InkWell(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: primary98),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 16),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 24,
-                                      backgroundImage: NetworkImage(
-                                          "https://media.pinatafarm.com/protected/13C23573-190B-4CD5-8692-28D5AEE4DC73/5dd78ce7-d484-4c34-9f73-527d561d1d44-1665444004997-pfarm.webp"),
-                                    ),
-                                    SizedBox(
-                                      width: 16,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Lê Văn A',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: secondary20,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            '9 phòng',
-                                            style: TextStyle(
-                                              color: primary60,
-                                            ),
-                                          ),
-                                        ],
+                          Obx(
+                            () => InkWell(
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: primary98),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 16),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 24,
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                controller
+                                                    .owner.value!.photoUrl),
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 18,
-                                      color: secondary20,
-                                    )
-                                  ],
-                                )),
+                                      SizedBox(
+                                        width: 16,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              controller.owner.value!.username,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: secondary20,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              '9 phòng',
+                                              style: TextStyle(
+                                                color: primary60,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 18,
+                                        color: secondary20,
+                                      )
+                                    ],
+                                  )),
+                            ),
                           ),
                           SizedBox(
                             height: 16,
@@ -634,8 +645,9 @@ class DetailScreen extends StatelessWidget {
         child: Stack(
           children: [
             Obx(
-              () => Image.network(
-                controller.room.images[controller.activeImageIdx.value],
+              () => CachedNetworkImage(
+                imageUrl:
+                    controller.room!.images[controller.activeImageIdx.value],
                 height: MediaQuery.sizeOf(context).width + 50,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -664,7 +676,7 @@ class DetailScreen extends StatelessWidget {
               child: MaterialButton(
                 onPressed: () {
                   if (controller.activeImageIdx <
-                      controller.room.images.length - 1) {
+                      controller.room!.images.length - 1) {
                     controller.activeImageIdx.value += 1;
                   }
                 },
@@ -690,7 +702,8 @@ class DetailScreen extends StatelessWidget {
                     () => Row(
                       children: [
                         Expanded(
-                          child: Image.network(controller.room.images[0],
+                          child: CachedNetworkImage(
+                              imageUrl: controller.room!.images[0],
                               fit: BoxFit.cover,
                               height: 90,
                               color: controller.activeImageIdx == 0
@@ -702,7 +715,8 @@ class DetailScreen extends StatelessWidget {
                           width: 2,
                         ),
                         Expanded(
-                          child: Image.network(controller.room.images[1],
+                          child: CachedNetworkImage(
+                              imageUrl: controller.room!.images[1],
                               fit: BoxFit.cover,
                               height: 90,
                               color: controller.activeImageIdx == 1
@@ -714,7 +728,8 @@ class DetailScreen extends StatelessWidget {
                           width: 2,
                         ),
                         Expanded(
-                          child: Image.network(controller.room.images[2],
+                          child: CachedNetworkImage(
+                              imageUrl: controller.room!.images[2],
                               fit: BoxFit.cover,
                               height: 90,
                               color: controller.activeImageIdx == 2
@@ -729,18 +744,19 @@ class DetailScreen extends StatelessWidget {
                             child: Stack(
                           fit: StackFit.expand,
                           children: [
-                            Image.network(controller.room.images[3],
+                            CachedNetworkImage(
+                                imageUrl: controller.room!.images[3],
                                 fit: BoxFit.cover,
                                 height: 90,
                                 color: controller.activeImageIdx >= 3
                                     ? null
                                     : Color.fromRGBO(0, 0, 0, 0.7),
                                 colorBlendMode: BlendMode.multiply),
-                            controller.room.images.length > 4
+                            controller.room!.images.length > 4
                                 ? Positioned.fill(
                                     child: Center(
                                       child: Text(
-                                        "+${controller.room.images.length - 4}",
+                                        "+${controller.room!.images.length - 4}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,

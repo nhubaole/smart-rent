@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/post/views/post_screen.dart';
 
 class HomeFeatureNavWidget extends StatelessWidget {
   const HomeFeatureNavWidget({super.key});
@@ -51,7 +53,9 @@ class HomeFeatureNavWidget extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Get.to(PostScreen());
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: primary98,
