@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/model/location/city.dart';
-import 'package:smart_rent/core/model/location/district.dart';
-import 'package:smart_rent/core/model/location/location.dart';
-import 'package:smart_rent/core/model/location/ward.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/button_fill.dart';
-import 'package:smart_rent/core/widget/button_outline.dart';
-import 'package:smart_rent/core/widget/like_button.dart';
-import 'package:smart_rent/core/widget/room_item.dart';
-import 'package:smart_rent/core/widget/text_field_input.dart';
-import 'package:smart_rent/core/widget/text_form_field_input.dart';
-import 'package:smart_rent/core/widget/toggle_button_custom.dart';
+import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
+import 'package:smart_rent/modules/home/views/home_list_room.dart';
+import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
+import 'package:smart_rent/modules/home/views/home_top_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,196 +14,71 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final HomeScreenController controller = Get.put(HomeScreenController());
+  // final HomeListRoomController listRoomController =
+  //     Get.put(HomeListRoomController());
+
+  @override
+  void initState() {
+    super.initState();
+    //listRoomController.getListRoom();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isLiked = true;
-    final TextEditingController textEditingController = TextEditingController();
-    final bool isPass = false;
-    final String labelText = 'Label';
-    final String hintText = 'Hint';
-    final TextInputType textInputType = TextInputType.emailAddress;
-    final BorderRadius borderRadius = BorderRadius.circular(8);
-    final double borderWidth = 2;
-    final Color borderColor = Colors.blue;
-    BorderSide(color: Colors.deepPurple, width: 2);
+    bool _showFab = true;
+
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
+      floatingActionButton: AnimatedSlide(
+        duration: const Duration(milliseconds: 300),
+        offset: _showFab ? Offset.zero : Offset(0, 2),
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: _showFab ? 1 : 0,
+          child: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {},
           ),
+        ),
+      ),
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: (scrollNotification) {
+          scrollNotification.direction == ScrollDirection.reverse
+              ? _showFab = false
+              : _showFab = true;
+          setState(() {});
+          print(
+              scrollNotification); // prints all scroll Notification states for each frame
+          return false; // result is the same regardless of whether this is true, false or null
+        },
+        child: const SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                child: TextFormFieldInput(
-                  onSaved: (value) {},
-                  onValidate: (p0) {},
-                  icon: Icon(Icons.email),
-                  textEditingController: textEditingController,
-                  labelText: labelText,
-                  hintText: hintText,
-                  isPassword: true,
-                  textInputType: textInputType,
-                  borderRadius: borderRadius,
-                  borderWidth: borderWidth,
-                  borderColor: borderColor,
-                ),
-              ),
-              // Expanded(
-              //   child: ButtonFill(
-              //     onPressed: () {},
-              //     icon: Icon(
-              //       Icons.email,
-              //       color: Colors.white,
-              //     ),
-              //     text: Text(
-              //       'Button',
-              //       style: TextStyle(color: Colors.white),
-              //     ),
-              //     backgroundColor: primary60,
-              //     borderRadius: BorderRadius.circular(20),
-              //   ),
-              // ),
-              // Expanded(
-              //   child: ButtonOutline(
-              //     onPressed: () {},
-              //     icon: Icon(
-              //       Icons.email,
-              //       color: Colors.red,
-              //     ),
-              //     text: Text(
-              //       'Button',
-              //       style: TextStyle(color: Colors.red),
-              //     ),
-              //     borderWidth: 3,
-              //     borderColor: Colors.red,
-              //     borderRadius: BorderRadius.circular(20),
-              //   ),
-              // ),
-              // const Expanded(
-              //   child: Row(
-              //     children: [
-              //       RoomItem(
-              //         isLiked: true,
-              //         room: Room(
-              //           id: '1',
-              //           title: 'Nhà trọ giá rẻ quá trời',
-              //           description: 'Thuê điiiii',
-              //           roomType: 'Phòng trọ',
-              //           capacity: 2,
-              //           gender: 'Nữ',
-              //           area: 25,
-              //           price: 100000,
-              //           deposit: 1000000,
-              //           electricityCost: 0,
-              //           waterCost: 0,
-              //           internetCost: 0,
-              //           hasParking: false,
-              //           parkingFee: 0,
-              //           location: Location(
-              //               street: '1',
-              //               address: '1',
-              //               city: City(
-              //                   name: 'Thành phố Hồ Chí Minh',
-              //                   slug: 'slug',
-              //                   type: 'type',
-              //                   name_with_type: 'Thành phố Hồ Chí Minh',
-              //                   code: 'code'),
-              //               district: District(
-              //                   name: '3',
-              //                   type: 'type',
-              //                   slug: 'slug',
-              //                   name_with_type: 'Quận 3',
-              //                   path: 'path',
-              //                   path_with_type: 'Quận Thủ Đức, thành phố Hồ Chí Minh',
-              //                   code: 'code',
-              //                   parent_code: 'parent_code'),
-              //               ward: Ward(
-              //                   name: 'name',
-              //                   type: 'type',
-              //                   slug: 'slug',
-              //                   name_with_type: 'name_with_type',
-              //                   path: 'path',
-              //                   path_with_type: 'phường Linh Trung, quận Thủ Đức, thành phố Hồ Chí Minh',
-              //                   code: 'code',
-              //                   parent_code: 'parent_code')),
-              //           utilities: [],
-              //           createdByUid: '2',
-              //           dateTime: '',
-              //           isRented: true,
-              //           status: '',
-              //           images: ['assets/images/sample_room.jpg']
-              //         ),
-              //       ),
-              //       SizedBox(width: 15,),
-              //       RoomItem(
-              //         isLiked: false,
-              //         room: Room(
-              //           id: '1',
-              //           title: 'HOMESTAY DOOM MẶT TIỀN HÀNG XANHHHHHHH',
-              //           description: 'Thuê đi',
-              //           roomType: 'Phòng trọ',
-              //           capacity: 2,
-              //           gender: 'Nữ',
-              //           area: 25,
-              //           price: 1000000,
-              //           deposit: 1000000,
-              //           electricityCost: 0,
-              //           waterCost: 0,
-              //           internetCost: 0,
-              //           hasParking: false,
-              //           parkingFee: 0,
-              //           location: Location(
-              //               street: '1',
-              //               address: '1',
-              //               city: City(
-              //                   name: 'name',
-              //                   slug: 'slug',
-              //                   type: 'type',
-              //                   name_with_type: 'name_with_type',
-              //                   code: 'code'),
-              //               district: District(
-              //                   name: 'name',
-              //                   type: 'type',
-              //                   slug: 'slug',
-              //                   name_with_type: 'name_with_type',
-              //                   path: 'path',
-              //                   path_with_type: 'Quận 1, Thành phố Hồ Chí Minh',
-              //                   code: 'code',
-              //                   parent_code: 'parent_code'),
-              //               ward: Ward(
-              //                   name: 'name',
-              //                   type: 'type',
-              //                   slug: 'slug',
-              //                   name_with_type: 'name_with_type',
-              //                   path: 'path',
-              //                   path_with_type: 'phường Tân Định, quận 1, thành phố Hồ Chí Minh',
-              //                   code: 'code',
-              //                   parent_code: 'parent_code')),
-              //           utilities: [],
-              //           createdByUid: '2',
-              //           dateTime: '',
-              //           isRented: true,
-              //           status: '',
-              //           images: ['assets/images/sample_room.jpg']
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const Flexible(
-                child: ToggleButtonsCustom(dataLength: 3, data: {
-                  'Home': Icon(Icons.home),
-                  'Work': Icon(Icons.work),
-                  'School': Icon(Icons.school),
-                }),
-              ),
+              // top widget
+              HomeTopWidget(),
+              // pho bien
+              HomePopularWidget(),
+              //list room
+              HomeListRoomWidget(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _onStartScroll(ScrollMetrics metrics) {
+    print("Scroll Start");
+  }
+
+  _onUpdateScroll(ScrollMetrics metrics) {
+    print("Scroll Update");
+  }
+
+  _onEndScroll(ScrollMetrics metrics) {
+    print("Scroll End");
   }
 }

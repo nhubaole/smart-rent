@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/splash/controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,24 +18,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final SplashController controller = Get.put(SplashController());
+
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
-    // Future.delayed(
-    //   const Duration(
-    //     seconds: 3,
-    //   ),
-    //   () {
-    //     Navigator.of(context).push(
-    //       MaterialPageRoute(
-    //         builder: (ctx) => const HomeScreen(),
-    //       ),
-    //     );
-    //   },
-    // );
-    navigatorHomeScreen(context);
+    //controller.navigatorHomeScreen(context);
   }
 
   @override

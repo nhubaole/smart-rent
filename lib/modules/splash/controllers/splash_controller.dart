@@ -1,19 +1,18 @@
 //splash controller
 
 import 'package:flutter/material.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 
-Future<void> navigatorHomeScreen(BuildContext context) async {
-  Future.delayed(
-    const Duration(
-      seconds: 3,
-    ),
-    () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) => const HomeScreen(),
-        ),
-      );
-    },
-  );
+class SplashController extends GetxController {
+  Future<void> navigatorHomeScreen(BuildContext context) async {
+    Future.delayed(
+      const Duration(
+        seconds: 3,
+      ),
+      () {
+        Get.offAll(() => const LoginScreen(), transition: Transition.zoom);
+      },
+    );
+  }
 }

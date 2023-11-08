@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '306823952848',
     projectId: 'flutter-rent-house-3f415',
     storageBucket: 'flutter-rent-house-3f415.appspot.com',
+    androidClientId: '306823952848-nra1ioid5j78qispn86t72vfe77i6nq9.apps.googleusercontent.com',
     iosBundleId: 'com.example.smartrent.smartRent',
   );
 }

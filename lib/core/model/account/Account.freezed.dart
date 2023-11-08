@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user.dart';
+part of 'Account.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,14 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-User _$UserFromJson(Map<String, dynamic> json) {
-  return _User.fromJson(json);
+Account _$AccountFromJson(Map<String, dynamic> json) {
+  return _Account.fromJson(json);
 }
 
 /// @nodoc
-mixin _$User {
+mixin _$Account {
   String get phoneNumber => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
   String get photoUrl => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
@@ -29,6 +28,8 @@ mixin _$User {
   bool get sex => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   DateTime? get dateOfBirth => throw _privateConstructorUsedError;
+  DateTime? get dateOfCreate => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   bool? get verified => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
@@ -41,17 +42,16 @@ mixin _$User {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $AccountCopyWith<Account> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res, User>;
+abstract class $AccountCopyWith<$Res> {
+  factory $AccountCopyWith(Account value, $Res Function(Account) then) =
+      _$AccountCopyWithImpl<$Res, Account>;
   @useResult
   $Res call(
       {String phoneNumber,
-      String email,
       String uid,
       String photoUrl,
       String username,
@@ -59,6 +59,8 @@ abstract class $UserCopyWith<$Res> {
       bool sex,
       int age,
       DateTime? dateOfBirth,
+      DateTime? dateOfCreate,
+      String email,
       bool? verified,
       bool? isOnline,
       double? rating,
@@ -71,9 +73,9 @@ abstract class $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User>
-    implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$AccountCopyWithImpl<$Res, $Val extends Account>
+    implements $AccountCopyWith<$Res> {
+  _$AccountCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -84,7 +86,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? phoneNumber = null,
-    Object? email = null,
     Object? uid = null,
     Object? photoUrl = null,
     Object? username = null,
@@ -92,6 +93,8 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? sex = null,
     Object? age = null,
     Object? dateOfBirth = freezed,
+    Object? dateOfCreate = freezed,
+    Object? email = null,
     Object? verified = freezed,
     Object? isOnline = freezed,
     Object? rating = freezed,
@@ -106,10 +109,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
               as String,
       uid: null == uid
           ? _value.uid
@@ -139,6 +138,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      dateOfCreate: freezed == dateOfCreate
+          ? _value.dateOfCreate
+          : dateOfCreate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       verified: freezed == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -180,14 +187,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
 }
 
 /// @nodoc
-abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
-      __$$_UserCopyWithImpl<$Res>;
+abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
+  factory _$$_AccountCopyWith(
+          _$_Account value, $Res Function(_$_Account) then) =
+      __$$_AccountCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String phoneNumber,
-      String email,
       String uid,
       String photoUrl,
       String username,
@@ -195,6 +202,8 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       bool sex,
       int age,
       DateTime? dateOfBirth,
+      DateTime? dateOfCreate,
+      String email,
       bool? verified,
       bool? isOnline,
       double? rating,
@@ -207,16 +216,16 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
-    implements _$$_UserCopyWith<$Res> {
-  __$$_UserCopyWithImpl(_$_User _value, $Res Function(_$_User) _then)
+class __$$_AccountCopyWithImpl<$Res>
+    extends _$AccountCopyWithImpl<$Res, _$_Account>
+    implements _$$_AccountCopyWith<$Res> {
+  __$$_AccountCopyWithImpl(_$_Account _value, $Res Function(_$_Account) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? phoneNumber = null,
-    Object? email = null,
     Object? uid = null,
     Object? photoUrl = null,
     Object? username = null,
@@ -224,6 +233,8 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? sex = null,
     Object? age = null,
     Object? dateOfBirth = freezed,
+    Object? dateOfCreate = freezed,
+    Object? email = null,
     Object? verified = freezed,
     Object? isOnline = freezed,
     Object? rating = freezed,
@@ -234,14 +245,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     Object? listFollowing = null,
     Object? listComments = null,
   }) {
-    return _then(_$_User(
+    return _then(_$_Account(
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
               as String,
       uid: null == uid
           ? _value.uid
@@ -271,6 +278,14 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      dateOfCreate: freezed == dateOfCreate
+          ? _value.dateOfCreate
+          : dateOfCreate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
       verified: freezed == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -313,17 +328,18 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 
 /// @nodoc
 @JsonSerializable()
-class _$_User extends _User {
-  const _$_User(
+class _$_Account extends _Account {
+  const _$_Account(
       {required this.phoneNumber,
-      required this.email,
       required this.uid,
       required this.photoUrl,
       required this.username,
       required this.address,
       required this.sex,
       required this.age,
-      this.dateOfBirth,
+      required this.dateOfBirth,
+      required this.dateOfCreate,
+      this.email = 'user@one.com',
       this.verified = false,
       this.isOnline = false,
       this.rating = 0,
@@ -341,12 +357,11 @@ class _$_User extends _User {
         _listComments = listComments,
         super._();
 
-  factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
+  factory _$_Account.fromJson(Map<String, dynamic> json) =>
+      _$$_AccountFromJson(json);
 
   @override
   final String phoneNumber;
-  @override
-  final String email;
   @override
   final String uid;
   @override
@@ -361,6 +376,11 @@ class _$_User extends _User {
   final int age;
   @override
   final DateTime? dateOfBirth;
+  @override
+  final DateTime? dateOfCreate;
+  @override
+  @JsonKey()
+  final String email;
   @override
   @JsonKey()
   final bool? verified;
@@ -426,17 +446,16 @@ class _$_User extends _User {
 
   @override
   String toString() {
-    return 'User(phoneNumber: $phoneNumber, email: $email, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, dateOfBirth: $dateOfBirth, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
+    return 'Account(phoneNumber: $phoneNumber, uid: $uid, photoUrl: $photoUrl, username: $username, address: $address, sex: $sex, age: $age, dateOfBirth: $dateOfBirth, dateOfCreate: $dateOfCreate, email: $email, verified: $verified, isOnline: $isOnline, rating: $rating, listRoomForRent: $listRoomForRent, listSaved: $listSaved, listRoomRent: $listRoomRent, listFollowers: $listFollowers, listFollowing: $listFollowing, listComments: $listComments)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_User &&
+            other is _$_Account &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.email, email) || other.email == email) &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
@@ -447,6 +466,9 @@ class _$_User extends _User {
             (identical(other.age, age) || other.age == age) &&
             (identical(other.dateOfBirth, dateOfBirth) ||
                 other.dateOfBirth == dateOfBirth) &&
+            (identical(other.dateOfCreate, dateOfCreate) ||
+                other.dateOfCreate == dateOfCreate) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
             (identical(other.isOnline, isOnline) ||
@@ -468,52 +490,55 @@ class _$_User extends _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      phoneNumber,
-      email,
-      uid,
-      photoUrl,
-      username,
-      address,
-      sex,
-      age,
-      dateOfBirth,
-      verified,
-      isOnline,
-      rating,
-      const DeepCollectionEquality().hash(_listRoomForRent),
-      const DeepCollectionEquality().hash(_listSaved),
-      const DeepCollectionEquality().hash(_listRoomRent),
-      const DeepCollectionEquality().hash(_listFollowers),
-      const DeepCollectionEquality().hash(_listFollowing),
-      const DeepCollectionEquality().hash(_listComments));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        phoneNumber,
+        uid,
+        photoUrl,
+        username,
+        address,
+        sex,
+        age,
+        dateOfBirth,
+        dateOfCreate,
+        email,
+        verified,
+        isOnline,
+        rating,
+        const DeepCollectionEquality().hash(_listRoomForRent),
+        const DeepCollectionEquality().hash(_listSaved),
+        const DeepCollectionEquality().hash(_listRoomRent),
+        const DeepCollectionEquality().hash(_listFollowers),
+        const DeepCollectionEquality().hash(_listFollowing),
+        const DeepCollectionEquality().hash(_listComments)
+      ]);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserCopyWith<_$_User> get copyWith =>
-      __$$_UserCopyWithImpl<_$_User>(this, _$identity);
+  _$$_AccountCopyWith<_$_Account> get copyWith =>
+      __$$_AccountCopyWithImpl<_$_Account>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserToJson(
+    return _$$_AccountToJson(
       this,
     );
   }
 }
 
-abstract class _User extends User {
-  const factory _User(
+abstract class _Account extends Account {
+  const factory _Account(
       {required final String phoneNumber,
-      required final String email,
       required final String uid,
       required final String photoUrl,
       required final String username,
       required final String address,
       required final bool sex,
       required final int age,
-      final DateTime? dateOfBirth,
+      required final DateTime? dateOfBirth,
+      required final DateTime? dateOfCreate,
+      final String email,
       final bool? verified,
       final bool? isOnline,
       final double? rating,
@@ -522,15 +547,13 @@ abstract class _User extends User {
       final List<String> listRoomRent,
       final List<String> listFollowers,
       final List<String> listFollowing,
-      final List<String> listComments}) = _$_User;
-  const _User._() : super._();
+      final List<String> listComments}) = _$_Account;
+  const _Account._() : super._();
 
-  factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
+  factory _Account.fromJson(Map<String, dynamic> json) = _$_Account.fromJson;
 
   @override
   String get phoneNumber;
-  @override
-  String get email;
   @override
   String get uid;
   @override
@@ -545,6 +568,10 @@ abstract class _User extends User {
   int get age;
   @override
   DateTime? get dateOfBirth;
+  @override
+  DateTime? get dateOfCreate;
+  @override
+  String get email;
   @override
   bool? get verified;
   @override
@@ -565,5 +592,6 @@ abstract class _User extends User {
   List<String> get listComments;
   @override
   @JsonKey(ignore: true)
-  _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
+  _$$_AccountCopyWith<_$_Account> get copyWith =>
+      throw _privateConstructorUsedError;
 }

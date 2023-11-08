@@ -1,15 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/widget/text_field_input.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
-import 'package:smart_rent/modules/post/views/post_screen.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/auth_controller.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/firebase_contants.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAuth.instance.signInAnonymously();
+  firebaseInitialization.then((value) {
+    Get.put(AuthController());
+    Get.put(AuthMethods());
+  });
+
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // ).then(
+  //   (value) => Get.put(AuthMethods()),
+  // );
+
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
 
   runApp(const MyApp());
 }
@@ -20,14 +33,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Smart Rent House',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: primary98),
         useMaterial3: true,
       ),
-      home: const PostScreen(),
+      home: const SplashScreen(),
     );
   }
 }
