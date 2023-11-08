@@ -8,7 +8,19 @@ class LoginVerifyController extends GetxController {
   Future<String> verifyOTP(String otp) async {
     String res = 'Some error occured';
     try {
-      var isVerified = await AuthMethods.instance.verifyOTP(otp);
+      var isVerified = await AuthMethods.loginWithOtp(
+        otp: otp,
+      ).then(
+        (value) {
+          if (value == "Success") {
+            Get.offAll(
+              () => const RootScreen(),
+            );
+          } else {
+            Get.snackbar('Thông Báo', 'Sai Mã OTP');
+          }
+        },
+      );
 
       isVerified ? Get.offAll(() => const RootScreen()) : Get.back();
       res = 'success';

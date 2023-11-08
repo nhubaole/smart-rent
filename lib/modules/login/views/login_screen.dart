@@ -24,11 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       String resQuery = await LoginController.instance
           .checkExistPhoneNumber(controller.phoneNo.text.trim());
-      // check log in co ton tai tai khoan => tien hanh dang nhap
+      // Kiểm tra tồn tại số điện thoại trong FireStore hay không
 
       if (resQuery == 'exist') {
-        LoginController.instance
-            .phoneAuthentication(controller.phoneNo.text.trim());
+        controller.phoneAuthentication(controller.phoneNo.text.trim());
         Get.to(
           () => LoginVerifyScreen(
             phoneNumber: controller.phoneNo.text.trim(),

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/home_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
-import 'package:smart_rent/modules/payment/views/review_room.dart';
 import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
@@ -22,7 +20,6 @@ class _RootScreenState extends State<RootScreen> {
   @override
   void initState() {
     super.initState();
-    rootController.getName();
   }
 
   @override
@@ -41,22 +38,6 @@ class _RootScreenState extends State<RootScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: screens,
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   backgroundColor: primary95,
-      //   foregroundColor: Colors.black,
-      //   elevation: 24,
-      //   shape: BeveledRectangleBorder(
-      //     borderRadius: BorderRadius.circular(10.0),
-      //     side: const BorderSide(
-      //       color: Colors.blue,
-      //       width: 1.0,
-      //       style: BorderStyle.none,
-      //     ),
-      //   ),
-      //   mini: true,
-      //   child: const Icon(Icons.add),
-      // ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 5,

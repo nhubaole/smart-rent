@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
+import 'package:smart_rent/modules/rootView/views/root_screen.dart';
 import 'package:smart_rent/modules/splash/controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,6 +28,24 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     //controller.navigatorHomeScreen(context);
+    checkStatusLogin();
+  }
+
+  void checkStatusLogin() async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+    );
+    AuthMethods.isLoggedIn().then((value) {
+      if (value) {
+        Get.offAll(
+          const RootScreen(),
+        );
+      } else {
+        Get.offAll(
+          const LoginScreen(),
+        );
+      }
+    });
   }
 
   @override
