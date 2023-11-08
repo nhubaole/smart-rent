@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -69,7 +70,7 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                         tag: index,
                         child: FadeInImage(
                           placeholder: MemoryImage(kTransparentImage),
-                          image: NetworkImage(
+                          image: CachedNetworkImageProvider(
                               controller.dataList[index]['photoUrl'] as String),
                           fit: BoxFit.cover,
                           height: 200,

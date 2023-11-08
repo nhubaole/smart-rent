@@ -6,7 +6,7 @@ class KeyValue {
 
   // ACCOUNT
   static const KEY_COLLECTION_ACCOUNT = 'ACCOUNT_COLLECTION';
-  static const KEY_COLLECTION_ROOM = 'ROOM_COLLECTION';
+  static const KEY_COLLECTION_ROOM = 'rooms';
   static const KEY_STORAGE_ACCOUNT_IMG = 'ACCOUNT_IMG';
   static const API_GOOGLE_MAP = 'AIzaSyBC5XsEcx90TU2pWq2iTPCBN58dTKUmKSM';
   static const KEY_COLLECTION_MESSAGE = 'MESSAGE_COLLECTION';
