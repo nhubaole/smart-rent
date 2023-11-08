@@ -19,11 +19,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final SplashController controller = Get.put(SplashController());
+
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    controller.navigatorHomeScreen(context);
+    //controller.navigatorHomeScreen(context);
   }
 
   @override
