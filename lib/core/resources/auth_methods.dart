@@ -1,13 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
+import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+
+import '../model/account/Account.dart';
 
 class AuthMethods extends GetxController {
   static AuthMethods get instance => Get.find();
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   //Variables
-  final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
   var vertificationId = ''.obs;
 
@@ -19,12 +25,16 @@ class AuthMethods extends GetxController {
     ever(firebaseUser, _setInitialScreen);
   }
 
-  /// If we are setting initial screen from here
-  /// then in the main.dart => App() add CircularProgressIndicator()
-  _setInitialScreen(User? user) {
+  // If we are setting initial screen from here
+  // then in the main.dart => App() add CircularProgressIndicator()
+
+  _setInitialScreen(User? user) async {
+    await Future.delayed(
+      const Duration(seconds: 1),
+    );
     user == null
         ? Get.offAll(() => const LoginScreen())
-        : Get.offAll(() => const HomeScreen());
+        : Get.offAll(() => const RootScreen());
   }
 
   //FUNC
@@ -64,7 +74,7 @@ class AuthMethods extends GetxController {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       firebaseUser.value != null
-          ? Get.offAll(() => const HomeScreen())
+          ? Get.offAll(() => const RootScreen())
           : Get.to(() => const LoginScreen());
     } on FirebaseAuthException catch (e) {
       final ex = e.message;
@@ -88,6 +98,16 @@ class AuthMethods extends GetxController {
       return ex;
     }
     return null;
+  }
+
+  Future<Account> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot documentSnapshot = await _firestore
+        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+        .doc(currentUser.uid)
+        .get();
+    return Account.fromJson(documentSnapshot.data() as Map<String, dynamic>);
   }
 
   Future<void> logout() async => await _auth.signOut();

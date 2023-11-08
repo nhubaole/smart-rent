@@ -60,7 +60,6 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> {
           isCorrectOTP = true;
         },
       );
-      Get.offAllNamed('/home');
     }
   }
 

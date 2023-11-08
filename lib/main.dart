@@ -1,21 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/auth_controller.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/firebase_options.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
-import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+import 'package:smart_rent/firebase_contants.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).then(
-    (value) => Get.put(AuthMethods()),
-  );
+  firebaseInitialization.then((value) {
+    Get.put(AuthController());
+    Get.put(AuthMethods());
+  });
+
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // ).then(
+  //   (value) => Get.put(AuthMethods()),
+  // );
+
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -37,19 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primary98),
         useMaterial3: true,
       ),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
-          if (snapshot.hasData) {
-            return const RootScreen();
-          }
-          return const SplashScreen();
-        },
-      ),
-      //home: const OnBoardingScreen(),
+      home: const SplashScreen(),
     );
   }
 }
