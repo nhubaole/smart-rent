@@ -11,45 +11,66 @@ class SignUpVerifyController extends GetxController {
   Future<String> verifyOTP(String otp, Account account) async {
     String res = 'Some error occured';
     try {
-      var isVerified = await AuthMethods.instance.verifyOTP(otp);
-      if (isVerified) {
-        try {
-          if (FirebaseAuth.instance.currentUser == null) {
-            Get.snackbar('Lỗi', 'Không thể đăng ký');
-            return 'not-success';
+      var isVerified = await AuthMethods.loginWithOtp(
+        otp: otp,
+      ).then(
+        (value) {
+          if (value == "Success") {
+            account.copyWith(
+              uid: FirebaseAuth.instance.currentUser!.uid,
+              dateOfCreate: DateTime.now(),
+            );
+
+            FireStoreMethods().signUpUserFireStore(account);
+
+            Get.offAll(
+              () => const RootScreen(),
+            );
+            res = 'success';
+          } else {
+            Get.snackbar('Thông Báo', 'Sai Mã OTP');
           }
+        },
+      );
 
-          // Đăng ký => Thêm thông tin tài khoản vào FireStore
+      // if (isVerified) {
+      //   try {
+      //     if (FirebaseAuth.instance.currentUser == null) {
+      //       Get.snackbar('Lỗi', 'Không thể đăng ký');
+      //       return 'not-success';
+      //     }
 
-          Account currentAccount = Account(
-            phoneNumber: account.phoneNumber,
-            uid: FirebaseAuth.instance.currentUser!.uid,
-            photoUrl: account.photoUrl,
-            username: account.username,
-            address: account.address,
-            sex: account.sex,
-            age: account.age,
-            dateOfBirth: account.dateOfBirth,
-            dateOfCreate: DateTime.now(),
-          );
+      //     // Đăng ký => Thêm thông tin tài khoản vào FireStore
 
-          String result =
-              await FireStoreMethods().signUpUserFireStore(currentAccount);
+      //     Account currentAccount = Account(
+      //       phoneNumber: account.phoneNumber,
+      //       uid: FirebaseAuth.instance.currentUser!.uid,
+      //       photoUrl: account.photoUrl,
+      //       username: account.username,
+      //       address: account.address,
+      //       sex: account.sex,
+      //       age: account.age,
+      //       dateOfBirth: account.dateOfBirth,
+      //       dateOfCreate: DateTime.now(),
+      //     );
 
-          if (result != 'success') {
-            Get.snackbar('Lỗi', result);
-            return 'not-success';
-          }
+      //     String result =
+      //         await FireStoreMethods().signUpUserFireStore(currentAccount);
 
-          // Đăng nhập => RootScreen
-          Get.offAll(() => const RootScreen());
-        } catch (e) {
-          Get.snackbar('Lỗi', e.toString());
-        }
-        res = 'success';
-      } else {
-        Get.back();
-      }
+      //     if (result != 'success') {
+      //       Get.snackbar('Lỗi', result);
+      //       return 'not-success';
+      //     }
+
+      //     // Đăng nhập => RootScreen
+      //     Get.offAll(() => const RootScreen());
+      //   } catch (e) {
+      //     Get.snackbar('Lỗi', e.toString());
+      //   }
+      //   res = 'success';
+      // } else {
+      //   Get.back();
+      // }
     } catch (error) {
       res = error.toString();
     }

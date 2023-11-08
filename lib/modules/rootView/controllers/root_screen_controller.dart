@@ -39,10 +39,10 @@ class RootScreenController extends GetxController {
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
-  Future<void> getInfoAccount() async {
+  Future<String> getInfoAccount() async {
     String res = 'Something wrong';
     try {
-      currentAccount = await AuthMethods.instance.getUserDetails();
+      currentAccount = await AuthMethods.getUserDetails();
       if (currentAccount != null) {
         Get.snackbar('info', currentAccount!.address);
         initSharedPreferences();
@@ -52,6 +52,8 @@ class RootScreenController extends GetxController {
     } catch (error) {
       res = error.toString();
     }
+
+    return res;
   }
 
   void initSharedPreferences() async {

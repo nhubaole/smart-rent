@@ -48,16 +48,8 @@ class _SignScreenState extends State<SignUpScreen> {
           ),
         );
       } else {
-        controller.phoneAuthentication(account.phoneNumber);
-
-        Get.dialog(
-          DialogOTP(
-            onPressed: () {},
-            backgroundColor: primary60,
-            phoneNumber: account.phoneNumber,
-            user: account,
-          ),
-        );
+        // Tiến hành đăng kí tài khoản
+        controller.phoneAuthentication(account.phoneNumber, account);
       }
     } catch (e) {
       Get.snackbar('Lỗi', e.toString());
