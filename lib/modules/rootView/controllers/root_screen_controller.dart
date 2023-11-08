@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
-import 'package:http/http.dart' as http;
 
 class RootScreenController extends GetxController {
   late PageController pageController;
@@ -19,7 +17,7 @@ class RootScreenController extends GetxController {
   @override
   void onInit() {
     pageController = PageController(initialPage: 0);
-    // getName();
+    getInfoAccount();
     // initStorage();
     super.onInit();
   }
@@ -41,11 +39,12 @@ class RootScreenController extends GetxController {
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
-  Future<String> getName() async {
+  Future<void> getInfoAccount() async {
     String res = 'Something wrong';
     try {
       currentAccount = await AuthMethods.instance.getUserDetails();
       if (currentAccount != null) {
+        Get.snackbar('info', currentAccount!.address);
         initSharedPreferences();
       } else {
         res = 'error';
@@ -53,7 +52,6 @@ class RootScreenController extends GetxController {
     } catch (error) {
       res = error.toString();
     }
-    return res;
   }
 
   void initSharedPreferences() async {
@@ -78,5 +76,6 @@ class RootScreenController extends GetxController {
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount!.dateOfCreate.toString());
     await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount!.email);
+    Get.snackbar('Notify', 'message');
   }
 }

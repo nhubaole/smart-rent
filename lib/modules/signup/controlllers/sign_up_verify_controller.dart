@@ -19,7 +19,7 @@ class SignUpVerifyController extends GetxController {
             return 'not-success';
           }
 
-          // neu la dang thi them data vao firestore
+          // Đăng ký => Thêm thông tin tài khoản vào FireStore
 
           Account currentAccount = Account(
             phoneNumber: account.phoneNumber,
@@ -41,7 +41,7 @@ class SignUpVerifyController extends GetxController {
             return 'not-success';
           }
 
-          // neu la dang nhap thi khong lam gi
+          // Đăng nhập => RootScreen
           Get.offAll(() => const RootScreen());
         } catch (e) {
           Get.snackbar('Lỗi', e.toString());

@@ -22,7 +22,6 @@ class _RootScreenState extends State<RootScreen> {
   @override
   void initState() {
     super.initState();
-    rootController.getName();
   }
 
   @override
@@ -41,22 +40,6 @@ class _RootScreenState extends State<RootScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: screens,
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   backgroundColor: primary95,
-      //   foregroundColor: Colors.black,
-      //   elevation: 24,
-      //   shape: BeveledRectangleBorder(
-      //     borderRadius: BorderRadius.circular(10.0),
-      //     side: const BorderSide(
-      //       color: Colors.blue,
-      //       width: 1.0,
-      //       style: BorderStyle.none,
-      //     ),
-      //   ),
-      //   mini: true,
-      //   child: const Icon(Icons.add),
-      // ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 5,
