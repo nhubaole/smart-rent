@@ -42,88 +42,84 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        key: controller.scaffoldKey,
-        body: Scaffold(
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
-            child: nextButton(),
+    return Scaffold(
+      key: controller.scaffoldKey,
+      body: Scaffold(
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+          child: nextButton(),
+        ),
+        appBar: AppBar(
+          toolbarHeight: 64.0,
+          title: Text(
+            'Đăng phòng',
+            style: TextStyle(
+                color: primary40, fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          appBar: AppBar(
-            toolbarHeight: 64.0,
-            title: Text(
-              'Đăng phòng',
-              style: TextStyle(
-                  color: primary40, fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.dark,
-            ),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: primary40),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: primary80,
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    primary95,
-                    Colors.white,
-                  ],
-                ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: primary40),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: primary80,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  primary95,
+                  Colors.white,
+                ],
               ),
             ),
-            elevation: 0,
-            automaticallyImplyLeading: true,
-            titleSpacing: 0,
-            iconTheme: const IconThemeData(color: primary40),
           ),
-          body: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                IconStepper(
-                  activeStepBorderWidth: 1,
-                  stepRadius: 16.0,
-                  activeStepBorderPadding: 8.0,
-                  stepColor: secondary80,
-                  activeStepColor: primary60,
-                  activeStepBorderColor: primary60,
-                  enableNextPreviousButtons: false,
-                  lineLength: 50.0,
-                  lineColor: primary60,
-                  icons: icons,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          titleSpacing: 0,
+          iconTheme: const IconThemeData(color: primary40),
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              IconStepper(
+                activeStepBorderWidth: 1,
+                stepRadius: 16.0,
+                activeStepBorderPadding: 8.0,
+                stepColor: secondary80,
+                activeStepColor: primary60,
+                activeStepBorderColor: primary60,
+                enableNextPreviousButtons: false,
+                lineLength: 50.0,
+                lineColor: primary60,
+                icons: icons,
 
-                  // activeStep property set to activeStep variable defined above.
-                  activeStep: activeStep,
+                // activeStep property set to activeStep variable defined above.
+                activeStep: activeStep,
 
-                  // This ensures step-tapping updates the activeStep.
-                  onStepReached: (index) {
-                    setState(() {
-                      activeStep = index;
-                    });
-                  },
-                ),
-                header(),
-                contentPage(),
-                //nextButton()
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     previousButton(),
-                //     nextButton(),
-                //   ],
-                // ),
-              ],
-            ),
+                // This ensures step-tapping updates the activeStep.
+                onStepReached: (index) {
+                  setState(() {
+                    activeStep = index;
+                  });
+                },
+              ),
+              header(),
+              contentPage(),
+              //nextButton()
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     previousButton(),
+              //     nextButton(),
+              //   ],
+              // ),
+            ],
           ),
         ),
       ),
@@ -178,7 +174,7 @@ class _PostScreenState extends State<PostScreen> {
                     controller.updateInfoRoom();
                   } else if (activeStep == 1) {
                     controller.updateLocationRoom();
-                  } 
+                  }
                 }
 
                 if (activeStep < upperBound - 2 && allowNext) {

@@ -43,7 +43,9 @@ dependencies:
   flutter_svg: ^2.0.7
   freezed_annotation: ^2.4.1
   geocoding: ^2.1.1
+  dotted_border: ^2.1.0
   get: ^4.6.6
+  image: ^4.1.3
   google_fonts: ^6.0.0
   google_nav_bar: ^5.0.6
   http: ^1.1.0
@@ -56,6 +58,7 @@ dependencies:
   pinput: ^3.0.1
   shared_preferences: ^2.2.1
   smooth_page_indicator: ^1.1.0
+  expandable_text: ^2.3.0
   transparent_image: ^2.0.1
   uuid: ^4.0.0
 
@@ -92,6 +95,10 @@ flutter:
     - assets/images/ic_onboarding2.png
     - assets/images/ic_onboarding3.png
     - assets/images/ic_payment.png
+    - assets/images/sample_room.jpg
+    - assets/data/cities.json
+    - assets/data/districts.json
+    - assets/data/wards.json
     - assets/images/sample_room.jpg
     - assets/data/cities.json
     - assets/data/districts.json
