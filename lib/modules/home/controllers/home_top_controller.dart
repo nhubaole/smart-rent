@@ -24,7 +24,7 @@ class HomeTopWidgetController extends GetxController {
   }
 
   void getName() async {
-    currentAccount = await AuthMethods.instance.getUserDetails();
+    currentAccount = await AuthMethods.getUserDetails();
     if (currentAccount != null) {
       currentName.value = currentAccount!.username;
       print(currentAccount!.username);

@@ -59,6 +59,7 @@ dependencies:
   expandable_text: ^2.3.0
   transparent_image: ^2.0.1
   uuid: ^4.0.0
+  webview_flutter: ^4.4.2
 
 dev_dependencies:
   build_runner: ^2.4.6

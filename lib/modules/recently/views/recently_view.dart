@@ -15,7 +15,7 @@ class RecentlyViewScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: primary98,
         title: const Text(
-          'Chi tiết giao dịch',
+          'Đã xem gần đây',
           style: TextStyle(
             color: primary40,
             fontWeight: FontWeight.w700,
@@ -29,24 +29,29 @@ class RecentlyViewScreen extends StatelessWidget {
           child: Column(
             children: [
               Obx(
-                () => GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.71,
-                    crossAxisSpacing: 5,
-                    // mainAxisSpacing: 20,
-                  ),
-                  itemCount: recentlyViewController.listRoom.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RoomItem(
-                      room: recentlyViewController.listRoom[index],
-                      isLiked: false,
-                    );
-                  },
-                ),
+                () => recentlyViewController.isLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.71,
+                          crossAxisSpacing: 5,
+                          // mainAxisSpacing: 20,
+                        ),
+                        itemCount: recentlyViewController.listRoom.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RoomItem(
+                            room: recentlyViewController.listRoom[index],
+                            isLiked: false,
+                          );
+                        },
+                      ),
               ),
             ],
           ),

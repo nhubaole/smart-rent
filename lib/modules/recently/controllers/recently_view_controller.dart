@@ -6,11 +6,17 @@ import 'package:smart_rent/core/values/KEY_VALUE.dart';
 class RecentlyViewController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  var isLoading = false;
+  var isLoading = false.obs;
   RxList<Room> listRoom = <Room>[].obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    getListRoom();
+  }
+
   Future<void> getListRoom() async {
-    isLoading = true;
+    isLoading.value = true;
     update();
     try {
       final querySnapshot =
@@ -23,6 +29,7 @@ class RecentlyViewController extends GetxController {
           )
           .toList();
       update();
+      isLoading.value = false;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
