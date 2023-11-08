@@ -19,7 +19,7 @@ class RootScreenController extends GetxController {
   @override
   void onInit() {
     pageController = PageController(initialPage: 0);
-    // getName();
+    getName();
     // initStorage();
     super.onInit();
   }

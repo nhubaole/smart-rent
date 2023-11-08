@@ -18,5 +18,18 @@ class Location with _$Location {
     required Ward ward,
   }) = _Location;
 
-  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+
+  String toString() {
+    return address +
+        ", " +
+        street +
+        ", " +
+        ward.name_with_type.toString() +
+        ", " +
+        district.name_with_type.toString() +
+        ", " +
+        city.name_with_type.toString();
+  }
 }

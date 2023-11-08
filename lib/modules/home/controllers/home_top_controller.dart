@@ -4,11 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:crypto/crypto.dart';
 
 class HomeTopWidgetController extends GetxController {
-  Account? currentAccount;
+  late Account? currentAccount;
   final currentName = ''.obs;
   final currenLocation = ''.obs;
   Location? crLocation;
@@ -19,6 +20,15 @@ class HomeTopWidgetController extends GetxController {
         prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
     currenLocation.value = prefs.getString(KeyValue.KEY_CURRENT_LOCATION) ??
         'Thành Phố Hồ Chí Minh';
+    getName();
+  }
+
+  void getName() async {
+    currentAccount = await AuthMethods.instance.getUserDetails();
+    if (currentAccount != null) {
+      currentName.value = currentAccount!.username;
+      print(currentAccount!.username);
+    }
   }
 
   void getCurrentLocation() async {
