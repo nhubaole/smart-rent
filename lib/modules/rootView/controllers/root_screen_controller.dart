@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,14 +9,13 @@ import 'package:smart_rent/core/values/key_value.dart';
 class RootScreenController extends GetxController {
   late PageController pageController;
   final RxInt selectedPage = 0.obs;
-  Account? currentAccount;
+  late Account currentAccount;
   late SharedPreferences prefs;
 
   @override
   void onInit() {
     pageController = PageController(initialPage: 0);
     getInfoAccount();
-    // initStorage();
     super.onInit();
   }
 
@@ -39,45 +36,31 @@ class RootScreenController extends GetxController {
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
-  Future<String> getInfoAccount() async {
-    String res = 'Something wrong';
-    try {
-      currentAccount = await AuthMethods.getUserDetails();
-      if (currentAccount != null) {
-        Get.snackbar('info', currentAccount!.address);
-        initSharedPreferences();
-      } else {
-        res = 'error';
-      }
-    } catch (error) {
-      res = error.toString();
-    }
-
-    return res;
+  Future<void> getInfoAccount() async {
+    currentAccount = await AuthMethods.getUserDetails();
   }
 
-  void initSharedPreferences() async {
+  Future<void> initSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-        KeyValue.KEY_ACCOUNT_PHONENUMBER, currentAccount!.phoneNumber);
-    await prefs.setString(KeyValue.KEY_ACCOUNT_UID, currentAccount!.uid);
+        KeyValue.KEY_ACCOUNT_PHONENUMBER, currentAccount.phoneNumber);
+    await prefs.setString(KeyValue.KEY_ACCOUNT_UID, currentAccount.uid);
     await prefs.setString(
-        KeyValue.KEY_ACCOUNT_PHOTOURL, currentAccount!.photoUrl);
+        KeyValue.KEY_ACCOUNT_PHOTOURL, currentAccount.photoUrl);
     await prefs.setString(
-        KeyValue.KEY_ACCOUNT_USERNAME, currentAccount!.username);
-    await prefs.setString(
-        KeyValue.KEY_ACCOUNT_ADDRESS, currentAccount!.address);
-    await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount!.sex);
-    await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount!.age);
+        KeyValue.KEY_ACCOUNT_USERNAME, currentAccount.username);
+    await prefs.setString(KeyValue.KEY_ACCOUNT_ADDRESS, currentAccount.address);
+    await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
+    await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
     String formattedDate =
-        DateFormat('dd-MM-yyyy').format(currentAccount!.dateOfBirth!);
+        DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
-        currentAccount!.dateOfCreate.toString());
-    await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount!.email);
+        currentAccount.dateOfCreate.toString());
+    await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount.email);
     Get.snackbar('Notify', 'message');
   }
 }

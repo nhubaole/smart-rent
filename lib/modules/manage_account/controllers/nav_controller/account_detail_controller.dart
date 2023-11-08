@@ -335,6 +335,11 @@ class AccountDetailController extends GetxController {
         KeyValue.KEY_ACCOUNT_SEX: sex.value == 'Nam' ? true : false,
         KeyValue.KEY_ACCOUNT_DATEOFBIRTH: dateOfBirth.value,
       });
+
+      await prefs.setString(KeyValue.KEY_ACCOUNT_USERNAME, currentName);
+      await prefs.setString(
+          KeyValue.KEY_ACCOUNT_DATEOFBIRTH, dateOfBirth.value);
+
       res = 'Update successfully';
     } catch (error) {
       res = error.toString();
