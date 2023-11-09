@@ -125,6 +125,12 @@ class _ChatScreenState extends State<ChatScreen> {
             showUserAvatars: true,
             showUserNames: true,
             user: _user,
+            theme: const DefaultChatTheme(
+              inputBackgroundColor: primary40,
+              inputTextColor: Colors.white,
+              primaryColor: primary60,
+              secondaryColor: secondary90,
+            ),
           ),
         ),
       ));
