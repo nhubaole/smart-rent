@@ -6,12 +6,13 @@ part of 'util_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UtilItem _$$_UtilItemFromJson(Map<String, dynamic> json) => _$_UtilItem(
+_$UtilItemImpl _$$UtilItemImplFromJson(Map<String, dynamic> json) =>
+    _$UtilItemImpl(
       utility: $enumDecode(_$UtilitiesEnumMap, json['utility']),
       isChecked: json['isChecked'] as bool,
     );
 
-Map<String, dynamic> _$$_UtilItemToJson(_$_UtilItem instance) =>
+Map<String, dynamic> _$$UtilItemImplToJson(_$UtilItemImpl instance) =>
     <String, dynamic>{
       'utility': _$UtilitiesEnumMap[instance.utility]!,
       'isChecked': instance.isChecked,

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
-import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 import 'package:smart_rent/modules/splash/controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {

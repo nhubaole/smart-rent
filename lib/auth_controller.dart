@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/firebase_contants.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
-import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();

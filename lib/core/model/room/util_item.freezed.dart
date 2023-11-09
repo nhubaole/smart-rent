@@ -67,21 +67,22 @@ class _$UtilItemCopyWithImpl<$Res, $Val extends UtilItem>
 }
 
 /// @nodoc
-abstract class _$$_UtilItemCopyWith<$Res> implements $UtilItemCopyWith<$Res> {
-  factory _$$_UtilItemCopyWith(
-          _$_UtilItem value, $Res Function(_$_UtilItem) then) =
-      __$$_UtilItemCopyWithImpl<$Res>;
+abstract class _$$UtilItemImplCopyWith<$Res>
+    implements $UtilItemCopyWith<$Res> {
+  factory _$$UtilItemImplCopyWith(
+          _$UtilItemImpl value, $Res Function(_$UtilItemImpl) then) =
+      __$$UtilItemImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Utilities utility, bool isChecked});
 }
 
 /// @nodoc
-class __$$_UtilItemCopyWithImpl<$Res>
-    extends _$UtilItemCopyWithImpl<$Res, _$_UtilItem>
-    implements _$$_UtilItemCopyWith<$Res> {
-  __$$_UtilItemCopyWithImpl(
-      _$_UtilItem _value, $Res Function(_$_UtilItem) _then)
+class __$$UtilItemImplCopyWithImpl<$Res>
+    extends _$UtilItemCopyWithImpl<$Res, _$UtilItemImpl>
+    implements _$$UtilItemImplCopyWith<$Res> {
+  __$$UtilItemImplCopyWithImpl(
+      _$UtilItemImpl _value, $Res Function(_$UtilItemImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -90,7 +91,7 @@ class __$$_UtilItemCopyWithImpl<$Res>
     Object? utility = null,
     Object? isChecked = null,
   }) {
-    return _then(_$_UtilItem(
+    return _then(_$UtilItemImpl(
       utility: null == utility
           ? _value.utility
           : utility // ignore: cast_nullable_to_non_nullable
@@ -105,12 +106,12 @@ class __$$_UtilItemCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_UtilItem extends _UtilItem {
-  const _$_UtilItem({required this.utility, required this.isChecked})
+class _$UtilItemImpl extends _UtilItem {
+  const _$UtilItemImpl({required this.utility, required this.isChecked})
       : super._();
 
-  factory _$_UtilItem.fromJson(Map<String, dynamic> json) =>
-      _$$_UtilItemFromJson(json);
+  factory _$UtilItemImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UtilItemImplFromJson(json);
 
   @override
   final Utilities utility;
@@ -126,7 +127,7 @@ class _$_UtilItem extends _UtilItem {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UtilItem &&
+            other is _$UtilItemImpl &&
             (identical(other.utility, utility) || other.utility == utility) &&
             (identical(other.isChecked, isChecked) ||
                 other.isChecked == isChecked));
@@ -139,12 +140,12 @@ class _$_UtilItem extends _UtilItem {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UtilItemCopyWith<_$_UtilItem> get copyWith =>
-      __$$_UtilItemCopyWithImpl<_$_UtilItem>(this, _$identity);
+  _$$UtilItemImplCopyWith<_$UtilItemImpl> get copyWith =>
+      __$$UtilItemImplCopyWithImpl<_$UtilItemImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UtilItemToJson(
+    return _$$UtilItemImplToJson(
       this,
     );
   }
@@ -153,10 +154,11 @@ class _$_UtilItem extends _UtilItem {
 abstract class _UtilItem extends UtilItem {
   const factory _UtilItem(
       {required final Utilities utility,
-      required final bool isChecked}) = _$_UtilItem;
+      required final bool isChecked}) = _$UtilItemImpl;
   const _UtilItem._() : super._();
 
-  factory _UtilItem.fromJson(Map<String, dynamic> json) = _$_UtilItem.fromJson;
+  factory _UtilItem.fromJson(Map<String, dynamic> json) =
+      _$UtilItemImpl.fromJson;
 
   @override
   Utilities get utility;
@@ -164,6 +166,6 @@ abstract class _UtilItem extends UtilItem {
   bool get isChecked;
   @override
   @JsonKey(ignore: true)
-  _$$_UtilItemCopyWith<_$_UtilItem> get copyWith =>
+  _$$UtilItemImplCopyWith<_$UtilItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

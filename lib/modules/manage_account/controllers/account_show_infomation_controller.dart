@@ -27,8 +27,8 @@ class AccountShowInformationController extends GetxController {
 
   @override
   onInit() {
-    super.onInit();
     getInfo();
+    super.onInit();
   }
 
   Future<void> getInfo() async {

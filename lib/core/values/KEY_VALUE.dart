@@ -31,4 +31,11 @@ class KeyValue {
   static const KEY_NOTIFY_NEWSCHEDULE = 'nofityNewSchedule';
 
   static const KEY_CURRENT_LOCATION = 'currentLocation';
+
+  // status room
+  static const KEY_ROOM_REQUEST_RENT = 'request_rent';
+  static const KEY_ROOM_REQUEST_RETURN = 'request_return';
+  static const KEY_ROOM_RENTED = 'rented';
+  static const KEY_ROOM_POSTED = 'posted';
+  static const KEY_ROOM_PENDING_APPROVED = 'pending_approved';
 }

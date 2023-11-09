@@ -110,9 +110,10 @@ class _$WardCopyWithImpl<$Res, $Val extends Ward>
 }
 
 /// @nodoc
-abstract class _$$_WardCopyWith<$Res> implements $WardCopyWith<$Res> {
-  factory _$$_WardCopyWith(_$_Ward value, $Res Function(_$_Ward) then) =
-      __$$_WardCopyWithImpl<$Res>;
+abstract class _$$WardImplCopyWith<$Res> implements $WardCopyWith<$Res> {
+  factory _$$WardImplCopyWith(
+          _$WardImpl value, $Res Function(_$WardImpl) then) =
+      __$$WardImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -127,9 +128,10 @@ abstract class _$$_WardCopyWith<$Res> implements $WardCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_WardCopyWithImpl<$Res> extends _$WardCopyWithImpl<$Res, _$_Ward>
-    implements _$$_WardCopyWith<$Res> {
-  __$$_WardCopyWithImpl(_$_Ward _value, $Res Function(_$_Ward) _then)
+class __$$WardImplCopyWithImpl<$Res>
+    extends _$WardCopyWithImpl<$Res, _$WardImpl>
+    implements _$$WardImplCopyWith<$Res> {
+  __$$WardImplCopyWithImpl(_$WardImpl _value, $Res Function(_$WardImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -144,7 +146,7 @@ class __$$_WardCopyWithImpl<$Res> extends _$WardCopyWithImpl<$Res, _$_Ward>
     Object? code = null,
     Object? parent_code = null,
   }) {
-    return _then(_$_Ward(
+    return _then(_$WardImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -183,8 +185,8 @@ class __$$_WardCopyWithImpl<$Res> extends _$WardCopyWithImpl<$Res, _$_Ward>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Ward extends _Ward {
-  const _$_Ward(
+class _$WardImpl extends _Ward {
+  const _$WardImpl(
       {required this.name,
       required this.type,
       required this.slug,
@@ -195,7 +197,8 @@ class _$_Ward extends _Ward {
       required this.parent_code})
       : super._();
 
-  factory _$_Ward.fromJson(Map<String, dynamic> json) => _$$_WardFromJson(json);
+  factory _$WardImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WardImplFromJson(json);
 
   @override
   final String name;
@@ -223,7 +226,7 @@ class _$_Ward extends _Ward {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Ward &&
+            other is _$WardImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.slug, slug) || other.slug == slug) &&
@@ -245,12 +248,12 @@ class _$_Ward extends _Ward {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WardCopyWith<_$_Ward> get copyWith =>
-      __$$_WardCopyWithImpl<_$_Ward>(this, _$identity);
+  _$$WardImplCopyWith<_$WardImpl> get copyWith =>
+      __$$WardImplCopyWithImpl<_$WardImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WardToJson(
+    return _$$WardImplToJson(
       this,
     );
   }
@@ -265,10 +268,10 @@ abstract class _Ward extends Ward {
       required final String path,
       required final String path_with_type,
       required final String code,
-      required final String parent_code}) = _$_Ward;
+      required final String parent_code}) = _$WardImpl;
   const _Ward._() : super._();
 
-  factory _Ward.fromJson(Map<String, dynamic> json) = _$_Ward.fromJson;
+  factory _Ward.fromJson(Map<String, dynamic> json) = _$WardImpl.fromJson;
 
   @override
   String get name;
@@ -288,5 +291,6 @@ abstract class _Ward extends Ward {
   String get parent_code;
   @override
   @JsonKey(ignore: true)
-  _$$_WardCopyWith<_$_Ward> get copyWith => throw _privateConstructorUsedError;
+  _$$WardImplCopyWith<_$WardImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

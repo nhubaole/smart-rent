@@ -17,6 +17,7 @@ import 'package:smart_rent/core/model/location/district.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/model/location/city.dart';
 import '../../../core/model/location/location.dart';
@@ -29,8 +30,11 @@ import '../../detail/controllers/detail_controller.dart';
 
 class PostController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  var room =
-      Room(roomType: RoomType.DORMITORY_HOMESTAY, gender: Gender.ALL).obs;
+  var room = Room(
+      roomType: RoomType.DORMITORY_HOMESTAY,
+      gender: Gender.ALL,
+      listComments: [],
+      listLikes: []).obs;
 
   var isElectricityFree = false.obs;
   var isWaterFree = false.obs;
@@ -164,16 +168,19 @@ class PostController extends GetxController
     } finally {
       updateConfirmRoom();
       //TODO: update UID
+      String postId = const Uuid().v1();
       room.value = room.value.copyWith(
-          createdByUid: uid,
-          dateTime: DateTime.now().toString(),
-          isRented: false,
-          status: RoomStatus.PENDING);
+        id: postId,
+        createdByUid: uid,
+        dateTime: DateTime.now().toString(),
+        isRented: false,
+        status: RoomStatus.PENDING,
+      );
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       try {
-        firestore.collection('rooms').add(room.toJson());
+        firestore.collection('rooms').doc(postId).set(room.toJson());
         print('Room added');
 
         Get.to(DetailScreen(

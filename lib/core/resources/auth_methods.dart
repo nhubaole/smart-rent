@@ -68,12 +68,10 @@ class AuthMethods extends GetxController {
     return user != null;
   }
 
-  static Future<Account> getUserDetails() async {
-    User currentUser = _firebaseAuth.currentUser!;
-
+  static Future<Account> getUserDetails(String uid) async {
     DocumentSnapshot documentSnapshot = await _firestore
         .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-        .doc(currentUser.uid)
+        .doc(uid)
         .get();
     return Account.fromJson(documentSnapshot.data() as Map<String, dynamic>);
   }
