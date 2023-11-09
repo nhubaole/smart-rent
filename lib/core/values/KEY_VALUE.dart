@@ -37,5 +37,5 @@ class KeyValue {
   static const KEY_ROOM_REQUEST_RETURN = 'request_return';
   static const KEY_ROOM_RENTED = 'rented';
   static const KEY_ROOM_POSTED = 'posted';
-  static const KEY_ROOM_PENDING_APPROVED = 'pending_approved';
+  static const KEY_ROOM_PENDING_APPROVED = 'pending';
 }

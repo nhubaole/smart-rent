@@ -8,7 +8,7 @@ import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-
+import 'package:smart_rent/core/model/account/Account.dart';
 import '../../../core/model/room/room.dart';
 
 class DetailScreen extends StatelessWidget {
