@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -60,7 +61,9 @@ class HomeFeatureNavWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Get.to(ProfileOwnerScreen());
+              Get.to(ProfileOwnerScreen(
+                uidOwner: 'P7ZZGJrLBpd2aMBWYBCa3YkFPFf2',
+              ));
             },
             child: Container(
               decoration: BoxDecoration(

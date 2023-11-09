@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,8 @@ class HomeTopWidgetController extends GetxController {
   }
 
   void getName() async {
-    currentAccount = await AuthMethods.getUserDetails();
+    currentAccount = await AuthMethods.getUserDetails(
+        FirebaseAuth.instance.currentUser!.uid);
     if (currentAccount != null) {
       currentName.value = currentAccount!.username;
       print(currentAccount!.username);

@@ -48,7 +48,9 @@ class RootScreenController extends GetxController {
   }
 
   Future<void> getInfoAccount() async {
-    currentAccount = await AuthMethods.getUserDetails();
+    currentAccount = await AuthMethods.getUserDetails(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
     initSharedPreferences();
   }
 
