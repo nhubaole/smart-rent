@@ -27,8 +27,8 @@ mixin _$Account {
   String get address => throw _privateConstructorUsedError;
   bool get sex => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
-  DateTime? get dateOfBirth => throw _privateConstructorUsedError;
-  DateTime? get dateOfCreate => throw _privateConstructorUsedError;
+  String? get dateOfBirth => throw _privateConstructorUsedError;
+  String? get dateOfCreate => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   bool? get verified => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
@@ -58,8 +58,8 @@ abstract class $AccountCopyWith<$Res> {
       String address,
       bool sex,
       int age,
-      DateTime? dateOfBirth,
-      DateTime? dateOfCreate,
+      String? dateOfBirth,
+      String? dateOfCreate,
       String email,
       bool? verified,
       bool? isOnline,
@@ -137,11 +137,11 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
       dateOfBirth: freezed == dateOfBirth
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       dateOfCreate: freezed == dateOfCreate
           ? _value.dateOfCreate
           : dateOfCreate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -187,10 +187,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
 }
 
 /// @nodoc
-abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
-  factory _$$_AccountCopyWith(
-          _$_Account value, $Res Function(_$_Account) then) =
-      __$$_AccountCopyWithImpl<$Res>;
+abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
+  factory _$$AccountImplCopyWith(
+          _$AccountImpl value, $Res Function(_$AccountImpl) then) =
+      __$$AccountImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -201,8 +201,8 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
       String address,
       bool sex,
       int age,
-      DateTime? dateOfBirth,
-      DateTime? dateOfCreate,
+      String? dateOfBirth,
+      String? dateOfCreate,
       String email,
       bool? verified,
       bool? isOnline,
@@ -216,10 +216,11 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AccountCopyWithImpl<$Res>
-    extends _$AccountCopyWithImpl<$Res, _$_Account>
-    implements _$$_AccountCopyWith<$Res> {
-  __$$_AccountCopyWithImpl(_$_Account _value, $Res Function(_$_Account) _then)
+class __$$AccountImplCopyWithImpl<$Res>
+    extends _$AccountCopyWithImpl<$Res, _$AccountImpl>
+    implements _$$AccountImplCopyWith<$Res> {
+  __$$AccountImplCopyWithImpl(
+      _$AccountImpl _value, $Res Function(_$AccountImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -245,7 +246,7 @@ class __$$_AccountCopyWithImpl<$Res>
     Object? listFollowing = null,
     Object? listComments = null,
   }) {
-    return _then(_$_Account(
+    return _then(_$AccountImpl(
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -277,11 +278,11 @@ class __$$_AccountCopyWithImpl<$Res>
       dateOfBirth: freezed == dateOfBirth
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       dateOfCreate: freezed == dateOfCreate
           ? _value.dateOfCreate
           : dateOfCreate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String?,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -328,8 +329,8 @@ class __$$_AccountCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Account extends _Account {
-  const _$_Account(
+class _$AccountImpl extends _Account {
+  const _$AccountImpl(
       {required this.phoneNumber,
       required this.uid,
       required this.photoUrl,
@@ -357,8 +358,8 @@ class _$_Account extends _Account {
         _listComments = listComments,
         super._();
 
-  factory _$_Account.fromJson(Map<String, dynamic> json) =>
-      _$$_AccountFromJson(json);
+  factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AccountImplFromJson(json);
 
   @override
   final String phoneNumber;
@@ -375,9 +376,9 @@ class _$_Account extends _Account {
   @override
   final int age;
   @override
-  final DateTime? dateOfBirth;
+  final String? dateOfBirth;
   @override
-  final DateTime? dateOfCreate;
+  final String? dateOfCreate;
   @override
   @JsonKey()
   final String email;
@@ -453,7 +454,7 @@ class _$_Account extends _Account {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Account &&
+            other is _$AccountImpl &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.uid, uid) || other.uid == uid) &&
@@ -516,12 +517,12 @@ class _$_Account extends _Account {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AccountCopyWith<_$_Account> get copyWith =>
-      __$$_AccountCopyWithImpl<_$_Account>(this, _$identity);
+  _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>
+      __$$AccountImplCopyWithImpl<_$AccountImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AccountToJson(
+    return _$$AccountImplToJson(
       this,
     );
   }
@@ -536,8 +537,8 @@ abstract class _Account extends Account {
       required final String address,
       required final bool sex,
       required final int age,
-      required final DateTime? dateOfBirth,
-      required final DateTime? dateOfCreate,
+      required final String? dateOfBirth,
+      required final String? dateOfCreate,
       final String email,
       final bool? verified,
       final bool? isOnline,
@@ -547,10 +548,10 @@ abstract class _Account extends Account {
       final List<String> listRoomRent,
       final List<String> listFollowers,
       final List<String> listFollowing,
-      final List<String> listComments}) = _$_Account;
+      final List<String> listComments}) = _$AccountImpl;
   const _Account._() : super._();
 
-  factory _Account.fromJson(Map<String, dynamic> json) = _$_Account.fromJson;
+  factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
 
   @override
   String get phoneNumber;
@@ -567,9 +568,9 @@ abstract class _Account extends Account {
   @override
   int get age;
   @override
-  DateTime? get dateOfBirth;
+  String? get dateOfBirth;
   @override
-  DateTime? get dateOfCreate;
+  String? get dateOfCreate;
   @override
   String get email;
   @override
@@ -592,6 +593,6 @@ abstract class _Account extends Account {
   List<String> get listComments;
   @override
   @JsonKey(ignore: true)
-  _$$_AccountCopyWith<_$_Account> get copyWith =>
+  _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

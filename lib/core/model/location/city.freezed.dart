@@ -89,9 +89,10 @@ class _$CityCopyWithImpl<$Res, $Val extends City>
 }
 
 /// @nodoc
-abstract class _$$_CityCopyWith<$Res> implements $CityCopyWith<$Res> {
-  factory _$$_CityCopyWith(_$_City value, $Res Function(_$_City) then) =
-      __$$_CityCopyWithImpl<$Res>;
+abstract class _$$CityImplCopyWith<$Res> implements $CityCopyWith<$Res> {
+  factory _$$CityImplCopyWith(
+          _$CityImpl value, $Res Function(_$CityImpl) then) =
+      __$$CityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -103,9 +104,10 @@ abstract class _$$_CityCopyWith<$Res> implements $CityCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_CityCopyWithImpl<$Res> extends _$CityCopyWithImpl<$Res, _$_City>
-    implements _$$_CityCopyWith<$Res> {
-  __$$_CityCopyWithImpl(_$_City _value, $Res Function(_$_City) _then)
+class __$$CityImplCopyWithImpl<$Res>
+    extends _$CityCopyWithImpl<$Res, _$CityImpl>
+    implements _$$CityImplCopyWith<$Res> {
+  __$$CityImplCopyWithImpl(_$CityImpl _value, $Res Function(_$CityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -117,7 +119,7 @@ class __$$_CityCopyWithImpl<$Res> extends _$CityCopyWithImpl<$Res, _$_City>
     Object? name_with_type = null,
     Object? code = null,
   }) {
-    return _then(_$_City(
+    return _then(_$CityImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -144,8 +146,8 @@ class __$$_CityCopyWithImpl<$Res> extends _$CityCopyWithImpl<$Res, _$_City>
 
 /// @nodoc
 @JsonSerializable()
-class _$_City extends _City {
-  const _$_City(
+class _$CityImpl extends _City {
+  const _$CityImpl(
       {required this.name,
       required this.slug,
       required this.type,
@@ -153,7 +155,8 @@ class _$_City extends _City {
       required this.code})
       : super._();
 
-  factory _$_City.fromJson(Map<String, dynamic> json) => _$$_CityFromJson(json);
+  factory _$CityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CityImplFromJson(json);
 
   @override
   final String name;
@@ -175,7 +178,7 @@ class _$_City extends _City {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_City &&
+            other is _$CityImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.slug, slug) || other.slug == slug) &&
             (identical(other.type, type) || other.type == type) &&
@@ -192,12 +195,12 @@ class _$_City extends _City {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CityCopyWith<_$_City> get copyWith =>
-      __$$_CityCopyWithImpl<_$_City>(this, _$identity);
+  _$$CityImplCopyWith<_$CityImpl> get copyWith =>
+      __$$CityImplCopyWithImpl<_$CityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CityToJson(
+    return _$$CityImplToJson(
       this,
     );
   }
@@ -209,10 +212,10 @@ abstract class _City extends City {
       required final String slug,
       required final String type,
       required final String name_with_type,
-      required final String code}) = _$_City;
+      required final String code}) = _$CityImpl;
   const _City._() : super._();
 
-  factory _City.fromJson(Map<String, dynamic> json) = _$_City.fromJson;
+  factory _City.fromJson(Map<String, dynamic> json) = _$CityImpl.fromJson;
 
   @override
   String get name;
@@ -226,5 +229,6 @@ abstract class _City extends City {
   String get code;
   @override
   @JsonKey(ignore: true)
-  _$$_CityCopyWith<_$_City> get copyWith => throw _privateConstructorUsedError;
+  _$$CityImplCopyWith<_$CityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -321,7 +321,6 @@ class AccountDetailController extends GetxController {
     formKey.currentState!.save();
     String res = 'Some error occurred';
     String currentName = nameTextInputController.text.trim();
-    print(currentName);
     if (currentName == null || currentName.isEmpty || currentName.length < 6) {
       return 'Vui lòng nhập đúng định dạng họ tên';
     }

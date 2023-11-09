@@ -66,6 +66,9 @@ dependencies:
   flutter_slidable: ^3.0.0
   transparent_image: ^2.0.1
   uuid: ^3.0.4
+  webview_flutter: ^4.4.2
+  swipe_refresh: ^1.0.2
+  lottie: ^2.7.0
   tiengviet: ^1.0.0
 
 dev_dependencies:
@@ -101,7 +104,6 @@ flutter:
     - assets/images/ic_onboarding2.png
     - assets/images/ic_onboarding3.png
     - assets/images/ic_payment.png
-    - assets/images/sample_room.jpg
     - assets/data/cities.json
     - assets/data/districts.json
     - assets/data/wards.json
@@ -109,6 +111,7 @@ flutter:
     - assets/data/cities.json
     - assets/data/districts.json
     - assets/data/wards.json
+    - assets/lottie/empty.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
