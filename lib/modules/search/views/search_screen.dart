@@ -28,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   loadData() async {
-    _userDetails = await loadAddress();
+    _address = await loadAddress();
     setState(() {});
   }
 
@@ -113,11 +113,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Text(
-                                  _searchResult[index],
-                                  style: TextStyle(
-                                      color: secondary20, fontSize: 18),
-                                  softWrap: true,
+                                Flexible(
+                                  child: Text(
+                                    _searchResult[index],
+                                    style: TextStyle(
+                                        color: secondary20, fontSize: 16),
+                                    softWrap: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -138,11 +140,11 @@ class _SearchScreenState extends State<SearchScreen> {
       return;
     }
 
-    _userDetails.forEach((userDetail) {
-      if (TiengViet.parse(userDetail)
+    _address.forEach((address) {
+      if (TiengViet.parse(address)
           .toLowerCase()
           .contains(TiengViet.parse(text.toLowerCase())))
-        _searchResult.add(userDetail);
+        _searchResult.add(address);
     });
 
     setState(() {});
@@ -150,11 +152,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
   List<String> _searchResult = [];
 
-  List<String> _userDetails = [];
+  List<String> _address = [];
 
   Future<List<String>> loadAddress() async {
     var jsonString = await rootBundle.loadString('assets/data/wards.json');
     List<dynamic> jsonList = json.decode(jsonString);
-    return jsonList.map((json) => Ward.fromJson(json).path).toList();
+    return jsonList.map((json) => Ward.fromJson(json).path_with_type).toList();
   }
 }

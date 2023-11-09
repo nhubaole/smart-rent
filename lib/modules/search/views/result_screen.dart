@@ -1,16 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/modules/search/controllers/result_controller.dart';
 import 'package:smart_rent/modules/search/views/result_item.dart';
 
 import '../../../core/values/app_colors.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key, required this.location});
+  ResultScreen({super.key, required this.location});
   final String location;
+  ResultController controller = Get.put(ResultController());
 
   @override
   Widget build(BuildContext context) {
+    controller.setLocation(location);
     return Scaffold(
         body: Column(
       children: [
@@ -60,33 +63,36 @@ class ResultScreen extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Text(
-                "20 Kết quả",
-                style: TextStyle(
-                    color: secondary20,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20),
-              ),
+              Obx(
+                () => Text(
+                  controller.isLoaded.value
+                      ? "${controller.results.value.length} Kết quả"
+                      : "",
+                  style: TextStyle(
+                      color: secondary20,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20),
+                ),
+              )
             ],
           ),
         ),
         Expanded(
             child: Container(
-          width: double.infinity,
-          color: primary95,
-          padding: const EdgeInsets.all(20),
-          child: const SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                ResultItem(),
-                SizedBox(height: 16,),
-                ResultItem(),
-              ],
-            ),
-          ),
-        ))
+                width: double.infinity,
+                color: primary95,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Obx(() => ListView.builder(
+                      itemCount: controller.results.value.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: ResultItem(
+                            room: controller.results.value[index],
+                          ),
+                        );
+                      },
+                    ))))
       ],
     ));
   }

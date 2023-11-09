@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -75,7 +76,10 @@ class RootScreenController extends GetxController {
   }
 
   Future<void> getInfoAccount() async {
-    currentAccount = await AuthMethods.getUserDetails();
+    currentAccount = await AuthMethods.getUserDetails(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+    initSharedPreferences();
     ZIMLogin();
   }
 
@@ -92,10 +96,8 @@ class RootScreenController extends GetxController {
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
-    String formattedDate =
-        DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
-
-    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());
