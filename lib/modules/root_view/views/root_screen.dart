@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/chat/views/chat_screen.dart';
+import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
@@ -33,7 +35,7 @@ class _RootScreenState extends State<RootScreen> {
     final screens = [
       const HomeScreen(),
       const ManageRoomScreen(),
-      const PaymentInforScreen(),
+      const ConversationScreen(),
       const ManageAccountScreen(),
     ];
 

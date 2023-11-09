@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_status.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
@@ -23,6 +24,7 @@ import '../../../core/model/location/ward.dart';
 import '../../../core/model/room/room.dart';
 import 'package:image/image.dart' as img;
 
+import '../../../core/values/KEY_VALUE.dart';
 import '../../detail/controllers/detail_controller.dart';
 
 class PostController extends GetxController
@@ -154,14 +156,16 @@ class PostController extends GetxController
 
   Future<void> postRoom() async {
     isLoading.value = true;
+    String uid = '';
     try {
       await updateUtilitiesRoom();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      uid = prefs.getString(KeyValue.KEY_ACCOUNT_UID) ?? '';
     } finally {
       updateConfirmRoom();
-
       //TODO: update UID
       room.value = room.value.copyWith(
-          createdByUid: '1',
+          createdByUid: uid,
           dateTime: DateTime.now().toString(),
           isRented: false,
           status: RoomStatus.PENDING);

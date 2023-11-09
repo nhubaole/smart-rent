@@ -57,8 +57,15 @@ dependencies:
   shared_preferences: ^2.2.1
   smooth_page_indicator: ^1.1.0
   expandable_text: ^2.3.0
+  zego_zim: ^2.6.0
+  flutter_chat_types: ^3.6.2
+  flutter_chat_ui: ^1.6.9
+  open_filex: ^4.3.4
+  file_picker: ^6.1.1
+  zego_zimkit: ^1.11.1
+  flutter_slidable: ^3.0.0
   transparent_image: ^2.0.1
-  uuid: ^4.0.0
+  uuid: ^3.0.4
   webview_flutter: ^4.4.2
 
 dev_dependencies:
