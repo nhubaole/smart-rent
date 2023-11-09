@@ -4,10 +4,6 @@ import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_status.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/model/location/city.dart';
-import 'package:smart_rent/core/model/location/district.dart';
-import 'package:smart_rent/core/model/location/location.dart';
-import 'package:smart_rent/core/model/location/ward.dart';
 
 part 'room.freezed.dart';
 part 'room.g.dart';
@@ -16,6 +12,7 @@ part 'room.g.dart';
 class Room with _$Room {
   const Room._();
   const factory Room({
+    @Default('') String id,
     @Default('') String title,
     @Default('') String description,
     @Default(RoomType.ROOM) RoomType roomType,
@@ -36,6 +33,8 @@ class Room with _$Room {
     @Default(true) bool isRented,
     @Default(RoomStatus.PENDING) RoomStatus status,
     @Default([]) List<String> images,
+    @Default([]) List<String> listComments,
+    @Default([]) List<String> listLikes,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

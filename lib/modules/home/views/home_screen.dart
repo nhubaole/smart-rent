@@ -41,44 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: NotificationListener<UserScrollNotification>(
-        onNotification: (scrollNotification) {
-          scrollNotification.direction == ScrollDirection.reverse
-              ? _showFab = false
-              : _showFab = true;
-          setState(() {});
-          print(
-              scrollNotification); // prints all scroll Notification states for each frame
-          return false; // result is the same regardless of whether this is true, false or null
-        },
-        child: const SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              // top widget
-              HomeTopWidget(),
-              // pho bien
-              HomePopularWidget(),
-              //list room
-              HomeListRoomWidget(),
-            ],
-          ),
+      body: const SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // top widget
+            HomeTopWidget(),
+            // pho bien
+            HomePopularWidget(),
+            //list room
+            HomeListRoomWidget(),
+          ],
         ),
       ),
     );
-  }
-
-  _onStartScroll(ScrollMetrics metrics) {
-    print("Scroll Start");
-  }
-
-  _onUpdateScroll(ScrollMetrics metrics) {
-    print("Scroll Update");
-  }
-
-  _onEndScroll(ScrollMetrics metrics) {
-    print("Scroll End");
   }
 }

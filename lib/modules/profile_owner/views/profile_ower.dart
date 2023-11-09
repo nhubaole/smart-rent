@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/profile_owner/controllers/profile_owner_controller.dart';
@@ -135,14 +136,28 @@ class ProfileOwnerScreen extends StatelessWidget {
                           } else if (profileOwnerController
                               .listRoom.value.isEmpty) {
                             return Center(
-                              child: Text(
-                                '${profileOwnerController.profileOwner.value!.username}\nchưa đăng phòng!!!',
-                                style: const TextStyle(
-                                  color: secondary20,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                                textAlign: TextAlign.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    'assets/lottie/empty.json',
+                                    repeat: true,
+                                    reverse: true,
+                                    height: 300,
+                                    width: double.infinity,
+                                  ),
+                                  Text(
+                                    '${profileOwnerController.profileOwner.value!.username}\nchưa đăng phòng!!!',
+                                    style: const TextStyle(
+                                      color: secondary20,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
                             );
                           }

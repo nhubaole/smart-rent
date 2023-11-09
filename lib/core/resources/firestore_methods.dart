@@ -29,4 +29,28 @@ class FireStoreMethods {
     }
     return res;
   }
+
+  Future<void> likePost(String postId, String uid, List likes) async {
+    print(postId);
+    try {
+      if (likes.contains(uid)) {
+        await _firestore
+            .collection(KeyValue.KEY_COLLECTION_ROOM)
+            .doc(postId)
+            .update({
+          'listLikes': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        await _firestore
+            .collection(KeyValue.KEY_COLLECTION_ROOM)
+            .doc(postId)
+            .update({
+          'listLikes': FieldValue.arrayUnion([uid]),
+        });
+      }
+      print('Liked Successfully');
+    } catch (err) {
+      print(err.toString());
+    }
+  }
 }

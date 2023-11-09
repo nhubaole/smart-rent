@@ -35,7 +35,6 @@ class HomeTopWidgetController extends GetxController {
         FirebaseAuth.instance.currentUser!.uid);
     if (currentAccount != null) {
       currentName.value = currentAccount!.username;
-      print(currentAccount!.username);
     }
   }
 

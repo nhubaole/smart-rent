@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/model/room/room.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 
@@ -69,6 +71,11 @@ class _RoomItemState extends State<RoomItem> {
                       iconSize: 30,
                       color: isLiked ? red60 : Colors.white,
                       onPressed: () {
+                        FireStoreMethods().likePost(
+                          widget.room.id,
+                          FirebaseAuth.instance.currentUser!.uid,
+                          widget.room.listLikes,
+                        );
                         setState(() {
                           isLiked = !isLiked;
                         });

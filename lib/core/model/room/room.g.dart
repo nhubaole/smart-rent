@@ -7,6 +7,7 @@ part of 'room.dart';
 // **************************************************************************
 
 _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
+      id: json['id'] as String? ?? '',
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       roomType: $enumDecodeNullable(_$RoomTypeEnumMap, json['roomType']) ??
@@ -36,10 +37,19 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      listComments: (json['listComments'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      listLikes: (json['listLikes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'description': instance.description,
       'roomType': _$RoomTypeEnumMap[instance.roomType]!,
@@ -61,6 +71,8 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'isRented': instance.isRented,
       'status': _$RoomStatusEnumMap[instance.status]!,
       'images': instance.images,
+      'listComments': instance.listComments,
+      'listLikes': instance.listLikes,
     };
 
 const _$RoomTypeEnumMap = {

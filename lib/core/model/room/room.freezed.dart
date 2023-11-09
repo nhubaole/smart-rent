@@ -20,6 +20,7 @@ Room _$RoomFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Room {
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   RoomType get roomType => throw _privateConstructorUsedError;
@@ -40,6 +41,8 @@ mixin _$Room {
   bool get isRented => throw _privateConstructorUsedError;
   RoomStatus get status => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
+  List<String> get listComments => throw _privateConstructorUsedError;
+  List<String> get listLikes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,7 +55,8 @@ abstract class $RoomCopyWith<$Res> {
       _$RoomCopyWithImpl<$Res, Room>;
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String description,
       RoomType roomType,
       int capacity,
@@ -71,7 +75,9 @@ abstract class $RoomCopyWith<$Res> {
       String dateTime,
       bool isRented,
       RoomStatus status,
-      List<String> images});
+      List<String> images,
+      List<String> listComments,
+      List<String> listLikes});
 }
 
 /// @nodoc
@@ -87,6 +93,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? description = null,
     Object? roomType = null,
@@ -107,8 +114,14 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
     Object? isRented = null,
     Object? status = null,
     Object? images = null,
+    Object? listComments = null,
+    Object? listLikes = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -189,6 +202,14 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      listComments: null == listComments
+          ? _value.listComments
+          : listComments // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      listLikes: null == listLikes
+          ? _value.listLikes
+          : listLikes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -201,7 +222,8 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String description,
       RoomType roomType,
       int capacity,
@@ -220,7 +242,9 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
       String dateTime,
       bool isRented,
       RoomStatus status,
-      List<String> images});
+      List<String> images,
+      List<String> listComments,
+      List<String> listLikes});
 }
 
 /// @nodoc
@@ -233,6 +257,7 @@ class __$$RoomImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? description = null,
     Object? roomType = null,
@@ -253,8 +278,14 @@ class __$$RoomImplCopyWithImpl<$Res>
     Object? isRented = null,
     Object? status = null,
     Object? images = null,
+    Object? listComments = null,
+    Object? listLikes = null,
   }) {
     return _then(_$RoomImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -335,6 +366,14 @@ class __$$RoomImplCopyWithImpl<$Res>
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      listComments: null == listComments
+          ? _value._listComments
+          : listComments // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      listLikes: null == listLikes
+          ? _value._listLikes
+          : listLikes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -343,7 +382,8 @@ class __$$RoomImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RoomImpl extends _Room {
   const _$RoomImpl(
-      {this.title = '',
+      {this.id = '',
+      this.title = '',
       this.description = '',
       this.roomType = RoomType.ROOM,
       this.capacity = 0,
@@ -362,14 +402,21 @@ class _$RoomImpl extends _Room {
       this.dateTime = '',
       this.isRented = true,
       this.status = RoomStatus.PENDING,
-      final List<String> images = const []})
+      final List<String> images = const [],
+      final List<String> listComments = const [],
+      final List<String> listLikes = const []})
       : _utilities = utilities,
         _images = images,
+        _listComments = listComments,
+        _listLikes = listLikes,
         super._();
 
   factory _$RoomImpl.fromJson(Map<String, dynamic> json) =>
       _$$RoomImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final String id;
   @override
   @JsonKey()
   final String title;
@@ -442,9 +489,27 @@ class _$RoomImpl extends _Room {
     return EqualUnmodifiableListView(_images);
   }
 
+  final List<String> _listComments;
+  @override
+  @JsonKey()
+  List<String> get listComments {
+    if (_listComments is EqualUnmodifiableListView) return _listComments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listComments);
+  }
+
+  final List<String> _listLikes;
+  @override
+  @JsonKey()
+  List<String> get listLikes {
+    if (_listLikes is EqualUnmodifiableListView) return _listLikes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listLikes);
+  }
+
   @override
   String toString() {
-    return 'Room(title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images)';
+    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images, listComments: $listComments, listLikes: $listLikes)';
   }
 
   @override
@@ -452,6 +517,7 @@ class _$RoomImpl extends _Room {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RoomImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -484,13 +550,18 @@ class _$RoomImpl extends _Room {
             (identical(other.isRented, isRented) ||
                 other.isRented == isRented) &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other._images, _images));
+            const DeepCollectionEquality().equals(other._images, _images) &&
+            const DeepCollectionEquality()
+                .equals(other._listComments, _listComments) &&
+            const DeepCollectionEquality()
+                .equals(other._listLikes, _listLikes));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
+        id,
         title,
         description,
         roomType,
@@ -510,7 +581,9 @@ class _$RoomImpl extends _Room {
         dateTime,
         isRented,
         status,
-        const DeepCollectionEquality().hash(_images)
+        const DeepCollectionEquality().hash(_images),
+        const DeepCollectionEquality().hash(_listComments),
+        const DeepCollectionEquality().hash(_listLikes)
       ]);
 
   @JsonKey(ignore: true)
@@ -529,7 +602,8 @@ class _$RoomImpl extends _Room {
 
 abstract class _Room extends Room {
   const factory _Room(
-      {final String title,
+      {final String id,
+      final String title,
       final String description,
       final RoomType roomType,
       final int capacity,
@@ -548,11 +622,15 @@ abstract class _Room extends Room {
       final String dateTime,
       final bool isRented,
       final RoomStatus status,
-      final List<String> images}) = _$RoomImpl;
+      final List<String> images,
+      final List<String> listComments,
+      final List<String> listLikes}) = _$RoomImpl;
   const _Room._() : super._();
 
   factory _Room.fromJson(Map<String, dynamic> json) = _$RoomImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get title;
   @override
@@ -593,6 +671,10 @@ abstract class _Room extends Room {
   RoomStatus get status;
   @override
   List<String> get images;
+  @override
+  List<String> get listComments;
+  @override
+  List<String> get listLikes;
   @override
   @JsonKey(ignore: true)
   _$$RoomImplCopyWith<_$RoomImpl> get copyWith =>
