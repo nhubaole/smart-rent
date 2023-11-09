@@ -4,6 +4,8 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_top_controller.dart';
 import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
 
+import '../../search/views/search_screen.dart';
+
 class HomeTopWidget extends StatelessWidget {
   const HomeTopWidget({super.key});
 
@@ -124,34 +126,39 @@ class HomeTopWidget extends StatelessWidget {
                 ),
               ),
               // search bar
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 18,
-                ),
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      color: secondary40,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'Tìm theo quận, tên đường, địa điểm',
-                      style: TextStyle(
+              InkWell(
+                onTap: () {
+                  Get.to(SearchScreen());
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 18,
+                  ),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.search,
                         color: secondary40,
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Tìm theo quận, tên đường, địa điểm',
+                        style: TextStyle(
+                          color: secondary40,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

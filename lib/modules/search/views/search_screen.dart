@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/search/views/result_screen.dart';
 
 import '../../../core/model/location/ward.dart';
 import 'package:tiengviet/tiengviet.dart';
@@ -34,10 +36,11 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Row(
@@ -53,13 +56,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   leading: Icon(Icons.search),
                   title: TextField(
                     controller: controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         hintText: 'Tìm theo phường/xã, địa điểm,...',
                         border: InputBorder.none),
                     onChanged: onSearchTextChanged,
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.cancel),
+                    icon: const Icon(Icons.cancel),
                     onPressed: () {
                       controller.clear();
                       onSearchTextChanged('');
@@ -67,15 +70,20 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
-              Text(
-                'Hủy',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: primary60,
-                    fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Text(
+                  'Hủy',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: primary60,
+                      fontWeight: FontWeight.bold),
+                ),
               )
             ],
           ),
@@ -92,6 +100,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   bottom: BorderSide(
                                       color: secondary80, width: 1))),
                           child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                  ResultScreen(location: _searchResult[index]));
+                            },
                             child: Row(
                               children: [
                                 Icon(
@@ -116,7 +128,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   : SizedBox()),
         ],
       ),
-      padding: EdgeInsets.all(16),
     ));
   }
 
