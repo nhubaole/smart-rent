@@ -1,12 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/auth_controller.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_contants.dart';
 import 'package:smart_rent/firebase_options.dart';
+import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
+
+import 'core/enums/utilities.dart';
+import 'package:zego_zim/zego_zim.dart';
+
+import 'modules/rootView/views/root_screen.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +27,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.lazyPut(() => DetailController());
 
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -26,12 +35,7 @@ void main() async {
   //   (value) => Get.put(AuthMethods()),
   // );
 
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
