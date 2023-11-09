@@ -3,8 +3,10 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
@@ -584,12 +586,18 @@ class DetailScreen extends StatelessWidget {
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(10.0)))),
-                          onPressed: () {
+                          onPressed: () async {
+                            var prefs = await SharedPreferences.getInstance();
+                            String userId = prefs.getString(
+                                    KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
+                                '';
                             Get.to(ChatScreen(
-                                conversationID:
-                                    controller.owner.value!.phoneNumber,
-                                conversationName:
-                                    controller.owner.value!.username));
+                              conversationID:
+                                  controller.owner.value!.phoneNumber,
+                              conversationName:
+                                  controller.owner.value!.username,
+                              userId: userId,
+                            ));
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
@@ -56,43 +58,48 @@ class ConversationScreen extends StatelessWidget {
                 ),
               ),
               child: ZIMKitConversationListView(
-                  itemBuilder: (zkContext, ZIMKitConversation conversation,
-                      defaultWidget) {
-                    return Slidable(
-                      key: Key('#conversation_${conversation.id}'),
-                      startActionPane:
-                          ActionPane(motion: const ScrollMotion(), children: [
-                        SlidableAction(
-                          // An action can be bigger than the others.
-                          onPressed: (context) {
-                            ZIMKit.instance.deleteConversation(
-                                conversation.id, conversation.type,
-                                isAlsoDeleteMessages: true);
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        ),
-                      ]),
-                      child: ZIMKitConversationWidget(
-                        conversation: conversation,
-                        onLongPress: (context, longPressDownDetails) => {},
-                        onPressed: (BuildContext zContext) {
-                          Get.to(
-                            () => ChatScreen(
-                              conversationID: conversation.id,
-                              conversationName: conversation.name,
-                            ),
-                          );
+                itemBuilder: (zkContext, ZIMKitConversation conversation,
+                    defaultWidget) {
+                  return Slidable(
+                    key: Key('#conversation_${conversation.id}'),
+                    startActionPane:
+                        ActionPane(motion: const ScrollMotion(), children: [
+                      SlidableAction(
+                        // An action can be bigger than the others.
+                        onPressed: (context) {
+                          ZIMKit.instance.deleteConversation(
+                              conversation.id, conversation.type,
+                              isAlsoDeleteMessages: true);
                         },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
                       ),
-                    );
-                  },
-                  emptyBuilder: (context, defaultWidget) => const Center(
-                    child: Text('Bạn chưa có tin nhắn nào.'),
-                  ),
+                    ]),
+                    child: ZIMKitConversationWidget(
+                      conversation: conversation,
+                      onLongPress: (context, longPressDownDetails) => {},
+                      onPressed: (BuildContext zContext) async {
+                        var prefs = await SharedPreferences.getInstance();
+                        String userId =
+                            prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
+                                '';
+                        Get.to(
+                          () => ChatScreen(
+                            conversationID: conversation.id,
+                            conversationName: conversation.name,
+                            userId: userId,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                emptyBuilder: (context, defaultWidget) => const Center(
+                  child: Text('Bạn chưa có tin nhắn nào.'),
                 ),
+              ),
             ),
           ),
         ],

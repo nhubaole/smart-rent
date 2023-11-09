@@ -26,7 +26,6 @@ class HomeTopWidgetController extends GetxController {
     currenLocation.value = prefs.getString(KeyValue.KEY_CURRENT_LOCATION) ??
         'Thành Phố Hồ Chí Minh';
     getName();
-    ZIMLogin();
   }
 
   void getName() async {
@@ -35,41 +34,6 @@ class HomeTopWidgetController extends GetxController {
       currentName.value = currentAccount!.username;
       print(currentAccount!.username);
     }
-  }
-
-  void ZIMLogin() {
-    ZIMAppConfig appConfig = ZIMAppConfig();
-    appConfig.appID = 2063303228;
-    appConfig.appSign =
-        "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
-
-    ZIMKit().init(
-      appID: 2063303228, // your appid
-      appSign:
-          "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
-    );
-
-    ZIM.create(appConfig);
-
-    ZIMUserInfo userInfo = ZIMUserInfo();
-    userInfo.userID = currenPhone.value; //Fill in a String type value.
-    userInfo.userName = currentName.value; //Fill in a String type value.
-
-    ZIM.getInstance()?.login(userInfo).then((value) {
-      print("Login successful");
-    }).catchError((onError) {
-      switch (onError.runtimeType) {
-        //This will be triggered when login failed.
-        case PlatformException:
-          print(onError.code); //Return the error code when login failed.
-          print(onError.message!); // Return the error indo when login failed.
-          break;
-        default:
-      }
-    });
-    ZIMKit()
-        .connectUser(id: userInfo.userID, name: userInfo.userName)
-        .then((value) => null);
   }
 
   void getCurrentLocation() async {
