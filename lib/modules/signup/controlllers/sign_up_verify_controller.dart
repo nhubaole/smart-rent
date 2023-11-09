@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
-import 'package:smart_rent/modules/rootView/views/root_screen.dart';
+import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 
 class SignUpVerifyController extends GetxController {
   static SignUpVerifyController get instance => Get.find();
@@ -16,7 +16,7 @@ class SignUpVerifyController extends GetxController {
       ).then(
         (value) {
           if (value == "Success") {
-            account.copyWith(
+            account = account.copyWith(
               uid: FirebaseAuth.instance.currentUser!.uid,
               dateOfCreate: DateTime.now(),
             );

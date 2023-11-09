@@ -24,9 +24,11 @@ class RecentlyViewScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(8),
         child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Obx(
                 () => recentlyViewController.isLoading.value

@@ -5,8 +5,6 @@ import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 
-import '../../modules/detail/controllers/detail_controller.dart';
-
 class RoomItem extends StatefulWidget {
   final Room room;
   final bool isLiked;

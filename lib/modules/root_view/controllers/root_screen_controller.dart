@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,12 +18,21 @@ class RootScreenController extends GetxController {
   void onInit() {
     pageController = PageController(initialPage: 0);
     getInfoAccount();
+    setIsOnline(true);
     super.onInit();
+  }
+
+  void setIsOnline(bool isOnline) {
+    FirebaseFirestore.instance
+        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({KeyValue.KEY_ACCOUNT_ISONLINE: isOnline});
   }
 
   @override
   void onClose() {
     pageController.dispose();
+    setIsOnline(false);
     super.onClose();
   }
 
@@ -38,6 +49,7 @@ class RootScreenController extends GetxController {
 
   Future<void> getInfoAccount() async {
     currentAccount = await AuthMethods.getUserDetails();
+    initSharedPreferences();
   }
 
   Future<void> initSharedPreferences() async {

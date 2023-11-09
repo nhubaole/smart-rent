@@ -6,7 +6,7 @@ import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
-import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
+import 'package:smart_rent/modules/root_view/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -20,6 +20,12 @@ class _RootScreenState extends State<RootScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    rootController.setIsOnline(false);
+    super.dispose();
   }
 
   @override
