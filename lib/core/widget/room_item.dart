@@ -31,9 +31,11 @@ class _RoomItemState extends State<RoomItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(DetailScreen(
-          room: widget.room,
-        ));
+        Get.to(
+          DetailScreen(
+            room: widget.room,
+          ),
+        );
       },
       child: Card(
         elevation: 0,
@@ -41,7 +43,7 @@ class _RoomItemState extends State<RoomItem> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width / 2 - 30,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -165,7 +167,7 @@ class _RoomItemState extends State<RoomItem> {
                     color: primary40),
               ),
               Text(
-                '${widget.room.location}',
+                widget.room.location,
                 textAlign: TextAlign.start,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
@@ -16,9 +17,13 @@ class SignUpVerifyController extends GetxController {
       ).then(
         (value) {
           if (value == "Success") {
+            DateTime dateOfCreate = DateTime.now();
+            String formattedDate =
+                DateFormat('dd-MM-yyyy').format(dateOfCreate);
+
             account = account.copyWith(
               uid: FirebaseAuth.instance.currentUser!.uid,
-              dateOfCreate: DateTime.now(),
+              dateOfCreate: DateFormat.yMd().format(DateTime.now()),
             );
 
             FireStoreMethods().signUpUserFireStore(account);

@@ -65,10 +65,8 @@ class RootScreenController extends GetxController {
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
-    String formattedDate =
-        DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
-
-    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());

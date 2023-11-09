@@ -33,14 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.9"
-  archive:
-    dependency: transitive
-    description:
-      name: archive
-      sha256: "7b875fd4a20b165a3084bd2d210439b22ebc653f21cea4842729c0c30c82596b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.9"
   args:
     dependency: transitive
     description:
@@ -1397,6 +1389,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  swipe_refresh:
+    dependency: "direct main"
+    description:
+      name: swipe_refresh
+      sha256: ba339b00af99257499f8c7690b703e2fb3a6bd473101962739d75c97d63cc3ef
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   synchronized:
     dependency: transitive
     description:

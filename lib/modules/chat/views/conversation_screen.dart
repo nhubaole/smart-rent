@@ -16,7 +16,7 @@ class ConversationScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   primary40,
@@ -56,43 +56,43 @@ class ConversationScreen extends StatelessWidget {
                 ),
               ),
               child: ZIMKitConversationListView(
-                  itemBuilder: (zkContext, ZIMKitConversation conversation,
-                      defaultWidget) {
-                    return Slidable(
-                      key: Key('#conversation_${conversation.id}'),
-                      startActionPane:
-                          ActionPane(motion: const ScrollMotion(), children: [
-                        SlidableAction(
-                          // An action can be bigger than the others.
-                          onPressed: (context) {
-                            ZIMKit.instance.deleteConversation(
-                                conversation.id, conversation.type,
-                                isAlsoDeleteMessages: true);
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        ),
-                      ]),
-                      child: ZIMKitConversationWidget(
-                        conversation: conversation,
-                        onLongPress: (context, longPressDownDetails) => {},
-                        onPressed: (BuildContext zContext) {
-                          Get.to(
-                            () => ChatScreen(
-                              conversationID: conversation.id,
-                              conversationName: conversation.name,
-                            ),
-                          );
+                itemBuilder: (zkContext, ZIMKitConversation conversation,
+                    defaultWidget) {
+                  return Slidable(
+                    key: Key('#conversation_${conversation.id}'),
+                    startActionPane:
+                        ActionPane(motion: const ScrollMotion(), children: [
+                      SlidableAction(
+                        // An action can be bigger than the others.
+                        onPressed: (context) {
+                          ZIMKit.instance.deleteConversation(
+                              conversation.id, conversation.type,
+                              isAlsoDeleteMessages: true);
                         },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
                       ),
-                    );
-                  },
-                  emptyBuilder: (context, defaultWidget) => const Center(
-                    child: Text('Bạn chưa có tin nhắn nào.'),
-                  ),
+                    ]),
+                    child: ZIMKitConversationWidget(
+                      conversation: conversation,
+                      onLongPress: (context, longPressDownDetails) => {},
+                      onPressed: (BuildContext zContext) {
+                        Get.to(
+                          () => ChatScreen(
+                            conversationID: conversation.id,
+                            conversationName: conversation.name,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                emptyBuilder: (context, defaultWidget) => const Center(
+                  child: Text('Bạn chưa có tin nhắn nào.'),
                 ),
+              ),
             ),
           ),
         ],

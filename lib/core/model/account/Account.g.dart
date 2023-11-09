@@ -6,7 +6,8 @@ part of 'Account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Account _$$_AccountFromJson(Map<String, dynamic> json) => _$_Account(
+_$AccountImpl _$$AccountImplFromJson(Map<String, dynamic> json) =>
+    _$AccountImpl(
       phoneNumber: json['phoneNumber'] as String,
       uid: json['uid'] as String,
       photoUrl: json['photoUrl'] as String,
@@ -14,12 +15,8 @@ _$_Account _$$_AccountFromJson(Map<String, dynamic> json) => _$_Account(
       address: json['address'] as String,
       sex: json['sex'] as bool,
       age: json['age'] as int,
-      dateOfBirth: json['dateOfBirth'] == null
-          ? null
-          : DateTime.parse(json['dateOfBirth'] as String),
-      dateOfCreate: json['dateOfCreate'] == null
-          ? null
-          : DateTime.parse(json['dateOfCreate'] as String),
+      dateOfBirth: json['dateOfBirth'] as String?,
+      dateOfCreate: json['dateOfCreate'] as String?,
       email: json['email'] as String? ?? 'user@one.com',
       verified: json['verified'] as bool? ?? false,
       isOnline: json['isOnline'] as bool? ?? false,
@@ -50,7 +47,7 @@ _$_Account _$$_AccountFromJson(Map<String, dynamic> json) => _$_Account(
           const [],
     );
 
-Map<String, dynamic> _$$_AccountToJson(_$_Account instance) =>
+Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>
     <String, dynamic>{
       'phoneNumber': instance.phoneNumber,
       'uid': instance.uid,
@@ -59,8 +56,8 @@ Map<String, dynamic> _$$_AccountToJson(_$_Account instance) =>
       'address': instance.address,
       'sex': instance.sex,
       'age': instance.age,
-      'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
-      'dateOfCreate': instance.dateOfCreate?.toIso8601String(),
+      'dateOfBirth': instance.dateOfBirth,
+      'dateOfCreate': instance.dateOfCreate,
       'email': instance.email,
       'verified': instance.verified,
       'isOnline': instance.isOnline,

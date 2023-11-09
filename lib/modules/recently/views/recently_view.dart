@@ -26,16 +26,18 @@ class RecentlyViewScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Obx(
-                () => recentlyViewController.isLoading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : GridView.builder(
+          child: Obx(
+            () => recentlyViewController.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: primary60,
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      GridView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -54,8 +56,8 @@ class RecentlyViewScreen extends StatelessWidget {
                           );
                         },
                       ),
-              ),
-            ],
+                    ],
+                  ),
           ),
         ),
       ),

@@ -6,7 +6,6 @@ import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
 import 'package:smart_rent/core/widget/dialog_custom.dart';
-import 'package:smart_rent/core/widget/dialog_otp.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/signup/controlllers/sign_up_controllers.dart';
@@ -262,6 +261,10 @@ class _SignScreenState extends State<SignUpScreen> {
                       GestureDetector(
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
+                            DateTime dateOfCreate = DateTime.now();
+                            String formattedDate =
+                                DateFormat('dd-MM-yyyy').format(dateOfCreate);
+
                             account = Account(
                               uid: '1',
                               sex: true,
@@ -272,7 +275,7 @@ class _SignScreenState extends State<SignUpScreen> {
                               phoneNumber: controller.phoneNumber.text.trim(),
                               dateOfBirth: dateOfBirth,
                               address: controller.address.text.trim(),
-                              dateOfCreate: DateTime.now(),
+                              dateOfCreate: formattedDate,
                             );
                             submit(account);
                           }

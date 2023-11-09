@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/values/key_value.dart';
 
-class RecentlyViewController extends GetxController {
+class WaitApproveRoomController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var isLoading = false.obs;
@@ -33,9 +33,5 @@ class RecentlyViewController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
-  }
-
-  Future<void> pullRefresh() async {
-    // why use freshNumbers var? https://stackoverflow.com/a/52992836/2301224
   }
 }
