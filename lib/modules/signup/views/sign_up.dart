@@ -30,33 +30,26 @@ class _SignScreenState extends State<SignUpScreen> {
 
   void submit(Account account) async {
     try {
+      // Kiểm tra tồn tại số điện thoại trong Firestore
       String resQuery = await SignUpController.instance
           .checkExistPhoneNumber(account.phoneNumber);
 
       if (resQuery != 'success') {
         Get.dialog(
           DialogCustom(
-              onPressed: () {
-                Get.to(() => const LoginScreen());
-              },
-              backgroundColor: Colors.white,
-              iconPath: 'assets/images/ic_notify.png',
-              title: 'Thông báo',
-              subTitle:
-                  'Đã tồn tại tài khoản với số điện thoại này, đăng nhập ngay'),
-        );
-      } else {
-        //Get.lazyPut(() => AuthMethods());
-        SignUpController.instance.phoneAuthentication(account.phoneNumber);
-
-        Get.dialog(
-          DialogOTP(
-            onPressed: () {},
-            backgroundColor: primary60,
-            phoneNumber: account.phoneNumber,
-            user: account,
+            onPressed: () {
+              Get.to(() => const LoginScreen());
+            },
+            backgroundColor: Colors.white,
+            iconPath: 'assets/images/ic_notify.png',
+            title: 'Thông báo',
+            subTitle:
+                'Đã tồn tại tài khoản với số điện thoại này, đăng nhập ngay',
           ),
         );
+      } else {
+        // Tiến hành đăng kí tài khoản
+        controller.phoneAuthentication(account.phoneNumber, account);
       }
     } catch (e) {
       Get.snackbar('Lỗi', e.toString());
@@ -194,29 +187,6 @@ class _SignScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      // TextFormFieldInput(
-                      //   textEditingController: controller.address,
-                      //   labelText: 'Địa chỉ hiện tại',
-                      //   hintText: 'Địa chỉ hiện tại (*)',
-                      //   textInputType: TextInputType.text,
-                      //   borderRadius: BorderRadius.circular(8),
-                      //   borderWidth: 2,
-                      //   borderColor: primary60,
-                      //   icon: const Icon(Icons.phone_android),
-                      //   onSaved: (newValue) {},
-                      //   onValidate: (value) {
-                      //     if (value == null ||
-                      //         value.isEmpty ||
-                      //         !provinces.contains(value.trim())) {
-                      //       return 'Vui lòng nhập địa chỉ';
-                      //     }
-
-                      //     return null;
-                      //   },
-                      //   autoCorrect: false,
-                      //   textCapitalization: TextCapitalization.none,
-                      // ),
-
                       DropdownButtonFormField(
                         items: provinces
                             .map(
@@ -260,11 +230,9 @@ class _SignScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-
                       const SizedBox(
                         height: 30,
                       ),
-
                       RichText(
                         textAlign: TextAlign.center,
                         text: const TextSpan(

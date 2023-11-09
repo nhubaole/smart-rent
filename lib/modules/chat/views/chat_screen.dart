@@ -21,14 +21,15 @@ class ChatScreen extends StatefulWidget {
   ChatScreen(
       {super.key,
       required this.conversationID,
-      required this.conversationName}) {
-    ZIM.getInstance()!.clearConversationUnreadMessageCount(
-        conversationID, ZIMConversationType.peer);
+      required this.conversationName,
+      required this.userId}) {
     clearUnReadMessage();
   }
 
   final String conversationID;
   final String conversationName;
+  final String userId;
+  ScrollController scrollController = ScrollController();
 
   List<ZIMMessage> _historyZIMMessageList = <ZIMMessage>[];
 
@@ -45,13 +46,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<types.Message> _messages = [];
-  final _user = types.User(
-    id: "0823306992",
-  );
+  var _user;
 
   @override
   void initState() {
     super.initState();
+    _user = types.User(
+      id: widget.userId,
+    );
     registerZIMEvent();
     if (widget._historyZIMMessageList.isEmpty) {
       queryMoreHistoryMessageList();
@@ -64,7 +66,80 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 64.0,
+        centerTitle: true,
+        title: Text(
+          widget.conversationName,
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: primary80,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                primary40,
+                primary80,
+              ],
+            ),
+          ),
+        ),
+        elevation: 0,
+        automaticallyImplyLeading: true,
+        titleSpacing: 0,
+        iconTheme: const IconThemeData(color: primary40),
+      ),
+      body: Scrollbar(
+        controller: widget.scrollController,
+        child: NotificationListener(
+          onNotification: (ScrollNotification notification) {
+            double progressMedian = notification.metrics.pixels /
+                notification.metrics.maxScrollExtent;
+            int progress = (progressMedian * 100).toInt();
+
+            if (progress >= 90) {
+              queryMoreHistoryMessageList();
+            }
+            return false;
+          },
+          child: Chat(
+            messages: _messages,
+            onAttachmentPressed: _handleAttachmentPressed,
+            onMessageTap: _handleMessageTap,
+            onPreviewDataFetched: _handlePreviewDataFetched,
+            onSendPressed: _handleSendPressed,
+            showUserAvatars: true,
+            showUserNames: true,
+            user: _user,
+            theme: const DefaultChatTheme(
+              inputBackgroundColor: primary40,
+              inputTextColor: Colors.white,
+              primaryColor: primary60,
+              secondaryColor: secondary90,
+            ),
+          ),
+        ),
+      ));
+
   queryMoreHistoryMessageList() async {
+    //await getUser();
+    print("queryHistoryMsgComplete: " +
+        widget.queryHistoryMsgComplete.toString());
+
     if (widget.queryHistoryMsgComplete) {
       return;
     }
@@ -74,6 +149,11 @@ class _ChatScreenState extends State<ChatScreen> {
     queryConfig.reverse = true;
     try {
       queryConfig.nextMessage = widget._historyZIMMessageList.first;
+      if (widget._historyZIMMessageList.first.type == ZIMMessageType.text) {
+        ZIMTextMessage textMessage =
+            widget._historyZIMMessageList.first as ZIMTextMessage;
+        print("========nextMessage: " + textMessage.message);
+      }
     } catch (onerror) {
       queryConfig.nextMessage = null;
     }
@@ -85,9 +165,20 @@ class _ChatScreenState extends State<ChatScreen> {
       if (result.messageList.length < 20) {
         widget.queryHistoryMsgComplete = true;
       }
+      List<types.Message> oldMessageWidgetList =
+          convertMessageToWidget(result.messageList);
+
       result.messageList.addAll(widget._historyZIMMessageList);
       widget._historyZIMMessageList = result.messageList;
-      syncUIMessage();
+
+      for (var item in widget._historyZIMMessageList) {
+        if (item.type == ZIMMessageType.text) {
+          ZIMTextMessage textMessage = item as ZIMTextMessage;
+          print("ITEM: " + textMessage.message);
+        }
+      }
+
+      _messages.addAll(oldMessageWidgetList);
 
       setState(() {});
     } catch (onError) {
@@ -95,21 +186,20 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void syncUIMessage() async {
-    for (ZIMMessage message in widget._historyZIMMessageList) {
-      print("TYPE: " + message.type.name);
+  List<types.Message> convertMessageToWidget(List<ZIMMessage> messageList) {
+    List<types.Message> widgets = [];
+
+    for (ZIMMessage message in messageList) {
       switch (message.type) {
         case ZIMMessageType.text:
           ZIMTextMessage textMessage = message as ZIMTextMessage;
           final textMessageUI = types.TextMessage(
-            author: types.User(
-              id: message.senderUserID,
-            ),
+            author: types.User(id: message.senderUserID),
             createdAt: message.timestamp,
             id: const Uuid().v4(),
             text: textMessage.message,
           );
-          _messages.insert(0, textMessageUI);
+          widgets.insert(0, textMessageUI);
           break;
         case ZIMMessageType.image:
           try {
@@ -127,7 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
               uri: imageMessage.fileDownloadUrl,
               width: imageMessage.originalImageWidth.toDouble(),
             );
-            _messages.insert(0, imageMessageUI);
+            widgets.insert(0, imageMessageUI);
           } catch (e) {
             print(e);
           }
@@ -145,12 +235,13 @@ class _ChatScreenState extends State<ChatScreen> {
             size: fileMessage.fileSize,
             uri: fileMessage.fileDownloadUrl,
           );
-          _messages.insert(0, fileMessageUI);
+          widgets.insert(0, fileMessageUI);
           break;
         default:
           break;
       }
     }
+    return widgets;
   }
 
   void _addMessage(types.Message message) {
@@ -351,7 +442,23 @@ class _ChatScreenState extends State<ChatScreen> {
       }
       widget.clearUnReadMessage();
       widget._historyZIMMessageList.addAll(messageList);
-      syncUIMessage();
+
+      List<types.Message> cells = convertMessageToWidget(messageList);
+      _messages.insertAll(0, cells);
+
+      setState(() {});
+    };
+
+    ZIMEventHandler.onReceiveGroupMessage = (zim, messageList, fromUserID) {
+      if (fromUserID != widget.conversationID) {
+        return;
+      }
+      widget.clearUnReadMessage();
+      widget._historyZIMMessageList.addAll(messageList);
+
+      List<types.Message> cells = convertMessageToWidget(messageList);
+      _messages.insertAll(0, cells);
+
       setState(() {});
     };
 
@@ -367,62 +474,8 @@ class _ChatScreenState extends State<ChatScreen> {
   unregisterZIMEvent() {
     ZIMEventHandler.onReceivePeerMessage = null;
     ZIMEventHandler.onMessageSentStatusChanged = null;
+    ZIMEventHandler.onReceiveGroupMessage = null;
   }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 64.0,
-          centerTitle: true,
-          title: Text(
-            widget.conversationName,
-            style: TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: primary80,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  primary40,
-                  primary80,
-                ],
-              ),
-            ),
-          ),
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          titleSpacing: 0,
-          iconTheme: const IconThemeData(color: primary40),
-        ),
-        body: Chat(
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
-          theme: const DefaultChatTheme(
-            inputBackgroundColor: primary40,
-            inputTextColor: Colors.white,
-            primaryColor: primary60,
-            secondaryColor: secondary90,
-          ),
-        ),
-      );
 
   sendTextMessage(String message) async {
     ZIMTextMessage textMessage = ZIMTextMessage(message: message);

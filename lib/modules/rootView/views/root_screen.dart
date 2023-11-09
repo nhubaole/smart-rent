@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
-import 'package:smart_rent/modules/manage_home/views/manage_home_screen.dart';
+import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
+import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
+import 'package:smart_rent/modules/rootView/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -15,50 +18,32 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
-  int selectedPage = 0;
-  void changeScreen(int index) {
-    setState(() {
-      selectedPage = index;
-    });
+  final rootController = Get.put(RootScreenController(), permanent: true);
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = const HomeScreen();
-    if (selectedPage == 0) {
-      activePage = const HomeScreen();
-    } else if (selectedPage == 1) {
-      activePage = const ManageHomeScreen();
-    } else if (selectedPage == 2) {
-      // activePage = ChatScreen(
-      //   conversationID: '0336942376',
-      //   conversationName: "Nguyễn Văn A",
-      // );
-      activePage = ConversationScreen();
-    } else if (selectedPage == 3) {
-      activePage = const ManageAccountScreen();
-    }
+    final screens = [
+      const HomeScreen(),
+      const ManageRoomScreen(),
+      const ConversationScreen(),
+      const ManageAccountScreen(),
+    ];
+
     return Scaffold(
-      body: activePage,
-      floatingActionButton: selectedPage == 2
-          ? null
-          : FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: primary95,
-              foregroundColor: Colors.black,
-              elevation: 24,
-              shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: const BorderSide(
-                  color: Colors.blue,
-                  width: 1.0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              mini: true,
-              child: const Icon(Icons.add),
-            ),
+      body: PageView(
+        onPageChanged: rootController.animateToTab,
+        controller: rootController.pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: screens,
+      ),
       bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 5,
+        ),
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -77,18 +62,19 @@ class _RootScreenState extends State<RootScreen> {
               vertical: 10,
               horizontal: 5,
             ),
-            activeColor: primary60,
-            rippleColor: Colors.red,
+            activeColor: primary40,
+            rippleColor: primary95,
             hoverColor: Colors.yellow,
             tabBackgroundColor: primary98,
             onTabChange: (index) {
-              changeScreen(index);
+              rootController.changeScreen(index);
             },
             tabs: const [
-              GButton(icon: Icons.home, text: 'Trang Chủ'),
-              GButton(icon: Icons.manage_search, text: 'Phòng của bạn'),
+              GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),
+              GButton(
+                  icon: Icons.manage_search_outlined, text: 'Phòng của bạn'),
               GButton(icon: Icons.chat_bubble_outline, text: 'Tin Nhắn'),
-              GButton(icon: Icons.manage_accounts, text: 'Tài Khoản'),
+              GButton(icon: Icons.manage_accounts_outlined, text: 'Tài Khoản'),
             ],
           ),
         ),

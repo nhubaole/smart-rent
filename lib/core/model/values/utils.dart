@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-
-  if (_file != null) {
-    return await _file.readAsBytes();
+  final imagePicker = ImagePicker();
+  final pickedImage = await imagePicker.pickImage(
+    source: source,
+    maxWidth: 600,
+  );
+  if (pickedImage != null) {
+    return await pickedImage.readAsBytes();
   }
 
-  print('No image selected');
+  Get.snackbar('Notify', 'No image selected');
 }
 
 showSnackBar(String content, BuildContext context) {

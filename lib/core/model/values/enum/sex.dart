@@ -1,0 +1,1 @@
+enum EnumSex { Nam, Nu }
