@@ -105,7 +105,7 @@ class RootScreenController extends GetxController {
     if (prefs.getStringList(KeyValue.KEY_ROOM_LIST_RECENTLY) == null) {
       await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, <String>[]);
     }
-    Get.snackbar('Notify', 'message');
+    //Get.snackbar('Notify', 'message');
   }
 
   void setIsOnline(bool isOnline) {
