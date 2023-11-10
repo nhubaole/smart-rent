@@ -1,11 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 
 class RootScreenController extends GetxController {
   late PageController pageController;
@@ -17,27 +18,53 @@ class RootScreenController extends GetxController {
   void onInit() {
     pageController = PageController(initialPage: 0);
     getInfoAccount();
-    setIsOnline(true);
     super.onInit();
-  }
-
-  void setIsOnline(bool isOnline) {
-    FirebaseFirestore.instance
-        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({KeyValue.KEY_ACCOUNT_ISONLINE: isOnline});
   }
 
   @override
   void onClose() {
     pageController.dispose();
-    setIsOnline(false);
     super.onClose();
   }
 
   void changeScreen(int index) {
     selectedPage.value = index;
     pageController.jumpToPage(index);
+  }
+
+  void ZIMLogin() {
+    ZIMAppConfig appConfig = ZIMAppConfig();
+    appConfig.appID = 2063303228;
+    appConfig.appSign =
+        "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
+
+    ZIMKit().init(
+      appID: 2063303228, // your appid
+      appSign:
+          "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
+    );
+
+    ZIM.create(appConfig);
+
+    ZIMUserInfo userInfo = ZIMUserInfo();
+    userInfo.userID = currentAccount.phoneNumber; //Fill in a String type value.
+    userInfo.userName = currentAccount.username; //Fill in a String type value.
+
+    ZIM.getInstance()?.login(userInfo).then((value) {
+      print("Login successful");
+    }).catchError((onError) {
+      switch (onError.runtimeType) {
+        //This will be triggered when login failed.
+        case PlatformException:
+          print(onError.code); //Return the error code when login failed.
+          print(onError.message!); // Return the error indo when login failed.
+          break;
+        default:
+      }
+    });
+    ZIMKit()
+        .connectUser(id: userInfo.userID, name: userInfo.userName)
+        .then((value) => null);
   }
 
   void animateToTab(int page) {
@@ -47,10 +74,8 @@ class RootScreenController extends GetxController {
   }
 
   Future<void> getInfoAccount() async {
-    currentAccount = await AuthMethods.getUserDetails(
-      FirebaseAuth.instance.currentUser!.uid,
-    );
-    initSharedPreferences();
+    currentAccount = await AuthMethods.getUserDetails();
+    ZIMLogin();
   }
 
   Future<void> initSharedPreferences() async {
@@ -66,8 +91,10 @@ class RootScreenController extends GetxController {
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
-    await prefs.setString(
-        KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);
+    String formattedDate =
+        DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
+
+    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());

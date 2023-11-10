@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
@@ -16,7 +18,7 @@ class ConversationScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   primary40,
@@ -78,11 +80,16 @@ class ConversationScreen extends StatelessWidget {
                     child: ZIMKitConversationWidget(
                       conversation: conversation,
                       onLongPress: (context, longPressDownDetails) => {},
-                      onPressed: (BuildContext zContext) {
+                      onPressed: (BuildContext zContext) async {
+                        var prefs = await SharedPreferences.getInstance();
+                        String userId =
+                            prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
+                                '';
                         Get.to(
                           () => ChatScreen(
                             conversationID: conversation.id,
                             conversationName: conversation.name,
+                            userId: userId,
                           ),
                         );
                       },
