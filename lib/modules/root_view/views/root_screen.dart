@@ -5,6 +5,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
 import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
@@ -19,9 +20,22 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   final rootController = Get.put(RootScreenController(), permanent: true);
-  final home = Get.lazyPut(() => HomeScreenController());
-  final mgRoom = Get.lazyPut(() => ManageRoomController());
-  final mgAccount = Get.lazyPut(() => ManageRoomController());
+  final home = Get.lazyPut(
+    () => HomeScreenController(),
+    fenix: true,
+  );
+  final mgRoom = Get.lazyPut(
+    () => ManageRoomController(),
+    fenix: true,
+  );
+  final mgAccount = Get.lazyPut(
+    () => ManageRoomController(),
+    fenix: true,
+  );
+  final detailAccount = Get.lazyPut(
+    () => AccountDetailController(),
+    fenix: true,
+  );
 
   @override
   void initState() {

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/widget/dialog_otp.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/recently/controllers/recently_view_controller.dart';
+import 'package:smart_rent/modules/recently/views/widgets/recently_dialog_widget.dart';
 
 class RecentlyViewScreen extends StatelessWidget {
   const RecentlyViewScreen({super.key});
@@ -27,7 +29,11 @@ class RecentlyViewScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              recentlyViewController.clearList();
+              Get.dialog(
+                RecentlyDialogWidget(
+                    onPressed: recentlyViewController.clearList()),
+              );
+              //recentlyViewController.clearList();
             },
             icon: const Icon(
               Icons.delete,
