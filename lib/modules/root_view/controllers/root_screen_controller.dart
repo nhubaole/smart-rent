@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
@@ -73,6 +72,9 @@ class RootScreenController extends GetxController {
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());
     await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount.email);
+    if (prefs.getStringList(KeyValue.KEY_ROOM_LIST_RECENTLY) == null) {
+      await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, <String>[]);
+    }
     Get.snackbar('Notify', 'message');
   }
 }

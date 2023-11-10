@@ -67,9 +67,9 @@ class PostReviewScreen extends StatelessWidget {
                             height: 300,
                             width: double.infinity,
                           ),
-                          Text(
-                            '\nchưa thích phòng nào hết!!!',
-                            style: const TextStyle(
+                          const Text(
+                            '\nchưa có bài đánh giá nào hết!!!',
+                            style: TextStyle(
                               color: secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w200,

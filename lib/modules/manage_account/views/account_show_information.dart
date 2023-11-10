@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -11,15 +12,8 @@ class AccountShowInformation extends StatefulWidget {
 }
 
 class _AccountShowInformationState extends State<AccountShowInformation> {
-  final AccountShowInformationController mainController = Get.find();
-
-  //mainController.getInfo();
-
-  @override
-  void initState() {
-    mainController.getInfo();
-    super.initState();
-  }
+  final AccountShowInformationController mainController =
+      Get.find<AccountShowInformationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +39,8 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
               Obx(
                 () => CircleAvatar(
                   radius: 64,
-                  backgroundImage: NetworkImage(
-                    mainController.photoUrl,
+                  backgroundImage: CachedNetworkImageProvider(
+                    mainController.profileOwner.value!.photoUrl,
                   ),
                 ),
               ),
@@ -79,7 +73,7 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
           ),
           Obx(
             () => Text(
-              mainController.currentName,
+              mainController.profileOwner.value!.username,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -92,13 +86,71 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
           ),
           Obx(
             () => Text(
-              mainController.email,
+              mainController.profileOwner.value!.email,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: secondary40,
               ),
             ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Obx(
+            () => mainController.profileOwner.value!.verified
+                ? Card(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.35,
+                    ),
+                    elevation: 0,
+                    color: primary98,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            IconData(0xe699, fontFamily: 'MaterialIcons'),
+                            color: Colors.blue,
+                          ),
+                          Spacer(),
+                          Text(
+                            'Đã xác thực',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Card(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.35,
+                    ),
+                    elevation: 0,
+                    color: const Color.fromARGB(255, 180, 180, 180),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            IconData(0xe16a, fontFamily: 'MaterialIcons'),
+                            color: Colors.red,
+                          ),
+                          Spacer(),
+                          Text(
+                            'Chưa xác thực',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),

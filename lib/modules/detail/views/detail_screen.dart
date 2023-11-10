@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import 'package:smart_rent/modules/post_review/views/post_review_screen.dart';
 import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
 import '../../../core/model/room/room.dart';
 
@@ -21,6 +24,7 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.room = room;
     controller.getOwner();
+    controller.setRoomRecently();
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -36,7 +40,13 @@ class DetailScreen extends StatelessWidget {
               )),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  FireStoreMethods().likePost(
+                    room.id,
+                    FirebaseAuth.instance.currentUser!.uid,
+                    room.listLikes,
+                  );
+                },
                 icon: const Icon(
                   Icons.favorite_outline,
                   color: Colors.white,
@@ -437,23 +447,23 @@ class DetailScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 16,
                               ),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Tốt',
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: primary40,
                                           fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 4,
                                     ),
                                     Text(
-                                      '14 đánh giá',
-                                      style: TextStyle(
+                                      '${room.listComments.length} đánh giá',
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           color: secondary40,
                                           fontWeight: FontWeight.w600),
@@ -461,7 +471,10 @@ class DetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Ink(
+                              InkWell(
+                                onTap: () {
+                                  Get.to(const PostReviewScreen());
+                                },
                                 child: const Text(
                                   'Xem mọi bài đánh giá',
                                   style: TextStyle(

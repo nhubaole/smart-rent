@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/resources/storage_methobs.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -14,29 +15,20 @@ import 'package:smart_rent/core/values/app_colors.dart';
 class AccountShowInformationController extends GetxController {
   late SharedPreferences prefs;
 
-  Account? currentAccount;
-  final _currentName = ''.obs;
-  final _photoUrl = ''.obs;
-  final _email = ''.obs;
+  var profileOwner = Rx<Account?>(null);
   var isLoading = false.obs;
   Uint8List? _image;
 
-  String get currentName => _currentName.value;
-  String get photoUrl => _photoUrl.value;
-  String get email => _email.value;
-
   @override
   onInit() {
-    getInfo();
+    getProfile(FirebaseAuth.instance.currentUser!.uid);
     super.onInit();
   }
 
-  Future<void> getInfo() async {
-    prefs = await SharedPreferences.getInstance();
-    _currentName.value =
-        prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
-    _photoUrl.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHOTOURL) ?? '';
-    _email.value = prefs.getString(KeyValue.KEY_ACCOUNT_EMAIL) ?? '';
+  Future<void> getProfile(String uid) async {
+    isLoading.value = true;
+    profileOwner.value = await AuthMethods.getUserDetails(uid);
+    isLoading.value = false;
   }
 
   Future<void> changeImage(BuildContext context) async {
@@ -95,8 +87,10 @@ class AccountShowInformationController extends GetxController {
                                 KeyValue.KEY_STORAGE_ACCOUNT_IMG,
                                 _image!,
                                 false);
+                        profileOwner.value !=
+                            profileOwner.value!
+                                .copyWith(photoUrl: photoUrlDevice);
 
-                        _photoUrl.value = photoUrlDevice;
                         await prefs.setString(
                             KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
@@ -106,8 +100,6 @@ class AccountShowInformationController extends GetxController {
                             .update({
                           KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
                         });
-
-                        getInfo();
                       } else {
                         Get.back();
                         Get.snackbar('Notify', 'No photo selected');
@@ -152,7 +144,9 @@ class AccountShowInformationController extends GetxController {
                                 _image!,
                                 false);
 
-                        _photoUrl.value = photoUrlDevice;
+                        profileOwner.value !=
+                            profileOwner.value!
+                                .copyWith(photoUrl: photoUrlDevice);
                         await prefs.setString(
                             KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
@@ -162,8 +156,6 @@ class AccountShowInformationController extends GetxController {
                             .update({
                           KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
                         });
-
-                        getInfo();
                       } else {
                         Get.snackbar('Notify', 'No photo selected');
                       }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
 import 'package:smart_rent/modules/home/views/home_list_room.dart';
@@ -14,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeScreenController controller = Get.put(HomeScreenController());
+  final HomeScreenController controller = Get.find<HomeScreenController>();
   // final HomeListRoomController listRoomController =
   //     Get.put(HomeListRoomController());
 

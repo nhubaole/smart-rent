@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
+import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
+import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
-import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
 import 'package:smart_rent/modules/root_view/controllers/root_screen_controller.dart';
 
 class RootScreen extends StatefulWidget {
@@ -19,6 +19,10 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   final rootController = Get.put(RootScreenController(), permanent: true);
+  final home = Get.lazyPut(() => HomeScreenController());
+  final mgRoom = Get.lazyPut(() => ManageRoomController());
+  final mgAccount = Get.lazyPut(() => ManageRoomController());
+
   @override
   void initState() {
     super.initState();
