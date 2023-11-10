@@ -126,69 +126,74 @@ class ProfileOwnerScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        Obx(() {
-                          if (profileOwnerController.isLoading.value) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: primary60,
-                              ),
-                            );
-                          } else if (profileOwnerController
-                              .listRoom.value.isEmpty) {
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Lottie.asset(
-                                    'assets/lottie/empty.json',
-                                    repeat: true,
-                                    reverse: true,
-                                    height: 300,
-                                    width: double.infinity,
-                                  ),
-                                  Text(
-                                    '${profileOwnerController.profileOwner.value!.username}\nchưa đăng phòng!!!',
-                                    style: const TextStyle(
-                                      color: secondary20,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.71,
-                                  crossAxisSpacing: 5,
-                                  // mainAxisSpacing: 20,
+                        Obx(
+                          () {
+                            if (profileOwnerController.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: primary60,
                                 ),
-                                itemCount:
-                                    profileOwnerController.listRoom.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return RoomItem(
-                                    room:
-                                        profileOwnerController.listRoom[index],
-                                    isLiked: false,
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        }),
+                              );
+                            } else if (profileOwnerController
+                                .listRoom.value.isEmpty) {
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset(
+                                      'assets/lottie/empty_box.json',
+                                      repeat: true,
+                                      reverse: true,
+                                      height: 300,
+                                      width: double.infinity,
+                                    ),
+                                    Text(
+                                      '${profileOwnerController.profileOwner.value!.username}\nchưa đăng phòng!!!',
+                                      style: const TextStyle(
+                                        color: secondary20,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.71,
+                                    crossAxisSpacing: 5,
+                                    // mainAxisSpacing: 20,
+                                  ),
+                                  itemCount:
+                                      profileOwnerController.listRoom.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return RoomItem(
+                                      room: profileOwnerController
+                                          .listRoom[index],
+                                      isLiked: profileOwnerController
+                                          .listRoom[index].listLikes
+                                          .contains(uidOwner),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                         // Obx(
                         //   () => profileOwnerController.isLoading.value
                         //       ? const Center(

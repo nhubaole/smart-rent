@@ -113,108 +113,155 @@ class AccountDetailController extends GetxController {
     showModalBottomSheet(
       context: context, // Use the context of the current Scaffold.
       builder: (ctx) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              InkWell(
-                onTap: () async {
-                  _image = await pickImage(ImageSource.camera);
-                  if (_image != null) {
-                    isLoading.value = true;
-                    Get.back();
-                    String photoUrlDevice = await StorageMethods()
-                        .uploadImageToStorage(
-                            KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
-
-                    photoUrl.value = photoUrlDevice;
-                    await prefs.setString(
-                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
-
-                    FirebaseFirestore.instance
-                        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
-
-                    getInfo();
-                  } else {
-                    Get.back();
-                    Get.snackbar('Notify', 'No photo selected');
-                  }
-                  isLoading.value = false;
-                },
-                child: const Row(
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.camera,
-                      color: primary40,
-                      size: 24,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      'Camera',
+                    const SizedBox(width: 20),
+                    const Text(
+                      'Chọn ảnh',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: primary40,
-                      ),
+                          color: primary40,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700),
                     ),
+                    GestureDetector(
+                        onTap: () => Get.back(),
+                        child: const Icon(
+                          Icons.close,
+                          color: secondary40,
+                        )),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              InkWell(
-                onTap: () async {
-                  _image = await pickImage(ImageSource.gallery);
-                  if (_image != null) {
-                    Get.back();
-                    isLoading.value = true;
-                    String photoUrlDevice = await StorageMethods()
-                        .uploadImageToStorage(
-                            KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: primary98),
+                  child: InkWell(
+                    onTap: () async {
+                      _image = await pickImage(ImageSource.camera);
+                      if (_image != null) {
+                        isLoading.value = true;
+                        Get.back();
+                        String photoUrlDevice = await StorageMethods()
+                            .uploadImageToStorage(
+                                KeyValue.KEY_STORAGE_ACCOUNT_IMG,
+                                _image!,
+                                false);
 
-                    photoUrl.value = photoUrlDevice;
-                    await prefs.setString(
-                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
+                        photoUrl.value = photoUrlDevice;
+                        await prefs.setString(
+                            KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
 
-                    FirebaseFirestore.instance
-                        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
+                        FirebaseFirestore.instance
+                            .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
+                        });
 
-                    getInfo();
-                  } else {
-                    Get.back();
-                    Get.snackbar('Notify', 'No photo selected');
-                  }
-                  isLoading.value = false;
-                },
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.photo,
-                      color: primary40,
-                      size: 24,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      'Gallery',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: primary40,
+                        getInfo();
+                      } else {
+                        Get.back();
+                        Get.snackbar('Notify', 'No photo selected');
+                      }
+                      isLoading.value = false;
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.image_outlined,
+                            color: primary60,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Chụp ảnh',
+                            style: TextStyle(
+                                color: primary60,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: primary98),
+                  child: InkWell(
+                    onTap: () async {
+                      _image = await pickImage(ImageSource.gallery);
+                      if (_image != null) {
+                        Get.back();
+                        isLoading.value = true;
+                        String photoUrlDevice = await StorageMethods()
+                            .uploadImageToStorage(
+                                KeyValue.KEY_STORAGE_ACCOUNT_IMG,
+                                _image!,
+                                false);
+
+                        photoUrl.value = photoUrlDevice;
+                        await prefs.setString(
+                            KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
+
+                        FirebaseFirestore.instance
+                            .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
+                        });
+
+                        getInfo();
+                      } else {
+                        Get.back();
+                        Get.snackbar('Notify', 'No photo selected');
+                      }
+                      isLoading.value = false;
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.photo_camera_outlined,
+                            color: primary60,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Chọn từ thư viện',
+                            style: TextStyle(
+                                color: primary60,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

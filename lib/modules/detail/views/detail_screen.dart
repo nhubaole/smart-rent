@@ -8,7 +8,7 @@ import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
+import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
 import '../../../core/model/room/room.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -477,6 +477,13 @@ class DetailScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => InkWell(
+                              onTap: () {
+                                Get.to(
+                                  ProfileOwnerScreen(
+                                    uidOwner: controller.owner.value!.uid,
+                                  ),
+                                );
+                              },
                               child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -507,9 +514,9 @@ class DetailScreen extends StatelessWidget {
                                                   color: secondary20,
                                                   fontWeight: FontWeight.w600),
                                             ),
-                                            const Text(
-                                              '9 phòng',
-                                              style: TextStyle(
+                                            Text(
+                                              '${controller.owner.value!.listRoomForRent.length} phòng',
+                                              style: const TextStyle(
                                                 color: primary60,
                                               ),
                                             ),

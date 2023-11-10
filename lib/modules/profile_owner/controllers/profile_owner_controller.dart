@@ -25,7 +25,6 @@ class ProfileOwnerController extends GetxController {
   Future<void> getProfile(String uid) async {
     isLoading.value = true;
     profileOwner.value = await AuthMethods.getUserDetails(uid);
-
     isLoading.value = false;
   }
 
@@ -35,7 +34,7 @@ class ProfileOwnerController extends GetxController {
     try {
       final querySnapshot = await firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where(KeyValue.KEY_ACCOUNT_UID, isEqualTo: profileOwner.value!.uid)
+          .where('createdByUid', isEqualTo: uidOwner)
           .get();
       listRoom.value = querySnapshot.docs
           .map(

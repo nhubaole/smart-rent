@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rating_summary/rating_summary.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/post_review/controllers/post_review_screen_controller.dart';
@@ -45,25 +46,61 @@ class PostReviewScreen extends StatelessWidget {
                   counterOneStars: 1,
                 ),
                 const Gap(20),
-                // ListView.separated(
-                //   shrinkWrap: true,
-                //   itemBuilder: (BuildContext context, index) {
-                //     return CardReviewWidget(
-                //       name: 'QuocDanh',
-                //       note: 'Good room',
-                //       photoUrl:
-                //           'https://images.unsplash.com/photo-1699482360781-47a3c8fe5736?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                //       value: 3.5,
-                //       reviewText: 'Phòng sạch sẽ, 💯 điểm không có nhưng',
-                //       timeText: DateTime.now().toString(),
-                //     );
-                //   },
-                //   separatorBuilder: (BuildContext context, index) =>
-                //       const Divider(
-                //     color: secondary60,
-                //   ),
-                //   itemCount: 20,
-                // ),
+                Obx(() {
+                  if (postReviewController.isLoading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: primary60,
+                      ),
+                    );
+                  } else if (postReviewController.listRoom.value.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/lottie/empty.json',
+                            repeat: true,
+                            reverse: true,
+                            height: 300,
+                            width: double.infinity,
+                          ),
+                          Text(
+                            '\nchưa thích phòng nào hết!!!',
+                            style: const TextStyle(
+                              color: secondary20,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w200,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, index) {
+                      return CardReviewWidget(
+                        name: 'QuocDanh',
+                        note: 'Good room',
+                        photoUrl:
+                            'https://images.unsplash.com/photo-1699482360781-47a3c8fe5736?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        value: 3.5,
+                        reviewText: 'Phòng sạch sẽ, 💯 điểm không có nhưng',
+                        timeText: DateTime.now().toString(),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, index) =>
+                        const Divider(
+                      color: secondary60,
+                      thickness: 0.5,
+                    ),
+                    itemCount: 20,
+                  );
+                })
               ],
             ),
           ),
