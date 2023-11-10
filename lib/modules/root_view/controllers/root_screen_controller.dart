@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
@@ -74,8 +77,10 @@ class RootScreenController extends GetxController {
   }
 
   Future<void> getInfoAccount() async {
-    currentAccount = await AuthMethods.getUserDetails();
-    ZIMLogin();
+    currentAccount = await AuthMethods.getUserDetails(
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+    initSharedPreferences();
   }
 
   Future<void> initSharedPreferences() async {
@@ -91,10 +96,8 @@ class RootScreenController extends GetxController {
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
-    String formattedDate =
-        DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
-
-    await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH, formattedDate);
+    await prefs.setString(
+        KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());
@@ -103,5 +106,12 @@ class RootScreenController extends GetxController {
       await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, <String>[]);
     }
     Get.snackbar('Notify', 'message');
+  }
+
+  void setIsOnline(bool isOnline) {
+    FirebaseFirestore.instance
+        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({KeyValue.KEY_ACCOUNT_ISONLINE: isOnline});
   }
 }
