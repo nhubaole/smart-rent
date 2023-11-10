@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-
+import 'package:smart_rent/modules/post_review/views/post_review_screen.dart';
+import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
 import '../../../core/model/room/room.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -23,6 +24,7 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.room = room;
     controller.getOwner();
+    controller.setRoomRecently();
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -38,7 +40,13 @@ class DetailScreen extends StatelessWidget {
               )),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  FireStoreMethods().likePost(
+                    room.id,
+                    FirebaseAuth.instance.currentUser!.uid,
+                    room.listLikes,
+                  );
+                },
                 icon: const Icon(
                   Icons.favorite_outline,
                   color: Colors.white,
@@ -439,23 +447,23 @@ class DetailScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 16,
                               ),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Tốt',
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: primary40,
                                           fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 4,
                                     ),
                                     Text(
-                                      '14 đánh giá',
-                                      style: TextStyle(
+                                      '${room.listComments.length} đánh giá',
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           color: secondary40,
                                           fontWeight: FontWeight.w600),
@@ -463,7 +471,10 @@ class DetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Ink(
+                              InkWell(
+                                onTap: () {
+                                  Get.to(const PostReviewScreen());
+                                },
                                 child: const Text(
                                   'Xem mọi bài đánh giá',
                                   style: TextStyle(
@@ -479,6 +490,13 @@ class DetailScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => InkWell(
+                              onTap: () {
+                                Get.to(
+                                  ProfileOwnerScreen(
+                                    uidOwner: controller.owner.value!.uid,
+                                  ),
+                                );
+                              },
                               child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -509,9 +527,9 @@ class DetailScreen extends StatelessWidget {
                                                   color: secondary20,
                                                   fontWeight: FontWeight.w600),
                                             ),
-                                            const Text(
-                                              '9 phòng',
-                                              style: TextStyle(
+                                            Text(
+                                              '${controller.owner.value!.listRoomForRent.length} phòng',
+                                              style: const TextStyle(
                                                 color: primary60,
                                               ),
                                             ),
@@ -588,18 +606,12 @@ class DetailScreen extends StatelessWidget {
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(10.0)))),
-                          onPressed: () async {
-                            var prefs = await SharedPreferences.getInstance();
-                            String userId = prefs.getString(
-                                    KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
-                                '';
+                          onPressed: () {
                             Get.to(ChatScreen(
-                              conversationID:
-                                  controller.owner.value!.phoneNumber,
-                              conversationName:
-                                  controller.owner.value!.username,
-                              userId: userId,
-                            ));
+                                conversationID:
+                                    controller.owner.value!.phoneNumber,
+                                conversationName:
+                                    controller.owner.value!.username));
                           },
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,

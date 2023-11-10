@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,11 +26,10 @@ import '../../../core/model/room/room.dart';
 import 'package:image/image.dart' as img;
 
 import '../../../core/values/KEY_VALUE.dart';
-import '../../detail/controllers/detail_controller.dart';
 
 class PostController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  var room = Room(
+  var room = const Room(
       roomType: RoomType.DORMITORY_HOMESTAY,
       gender: Gender.ALL,
       listComments: [],
@@ -73,7 +72,7 @@ class PostController extends GetxController
   RxBool validImageTotal = true.obs;
   List<String> urlImages = [];
 
-  RxList<UtilItem> utilList = [
+  RxList<UtilItem> utilList = const [
     UtilItem(utility: Utilities.WC, isChecked: false),
     UtilItem(utility: Utilities.WINDOW, isChecked: false),
     UtilItem(utility: Utilities.WIFI, isChecked: false),
@@ -181,6 +180,12 @@ class PostController extends GetxController
 
       try {
         firestore.collection('rooms').doc(postId).set(room.toJson());
+        firestore
+            .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'listRoomForRent': FieldValue.arrayUnion([room.value.id])
+        });
         print('Room added');
 
         Get.to(DetailScreen(

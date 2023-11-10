@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
+import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 
 class FireStoreMethods {
@@ -31,15 +32,21 @@ class FireStoreMethods {
   }
 
   Future<void> likePost(String postId, String uid, List likes) async {
-    print(postId);
     try {
-      if (likes.contains(uid)) {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(postId)
+          .get();
+      Map<String, dynamic>? room = querySnapshot.data();
+      //print(room);
+      if (room?['listLikes'].contains(uid)) {
         await _firestore
             .collection(KeyValue.KEY_COLLECTION_ROOM)
             .doc(postId)
             .update({
           'listLikes': FieldValue.arrayRemove([uid]),
         });
+        print('Unliked Successfully');
       } else {
         await _firestore
             .collection(KeyValue.KEY_COLLECTION_ROOM)
@@ -47,8 +54,8 @@ class FireStoreMethods {
             .update({
           'listLikes': FieldValue.arrayUnion([uid]),
         });
+        print('Liked Successfully');
       }
-      print('Liked Successfully');
     } catch (err) {
       print(err.toString());
     }

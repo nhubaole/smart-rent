@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/home/controllers/home_list_room_controller.dart';
@@ -57,7 +60,10 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
               itemBuilder: (BuildContext context, int index) {
                 return RoomItem(
                   room: listRoomController.listRoom[index],
-                  isLiked: false,
+                  isLiked:
+                      listRoomController.listRoom[index].listLikes.contains(
+                    FirebaseAuth.instance.currentUser!.uid,
+                  ),
                 );
               },
             ),

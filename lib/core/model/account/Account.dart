@@ -18,7 +18,7 @@ class Account with _$Account {
     required String? dateOfBirth,
     required String? dateOfCreate,
     @Default('user@one.com') String email,
-    @Default(false) bool? verified,
+    @Default(false) bool verified,
     @Default(false) bool? isOnline,
     @Default(0) double? rating,
     @Default([]) List<String> listRoomForRent,

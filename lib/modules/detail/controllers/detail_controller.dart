@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 
 import '../../../core/model/account/Account.dart';
@@ -12,6 +13,7 @@ class DetailController extends GetxController {
 
   Rx<int> activeImageIdx = 0.obs;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late SharedPreferences prefs;
 
   String getCapacity() {
     return room?.gender == Gender.ALL
@@ -53,5 +55,18 @@ class DetailController extends GetxController {
 
     Account account = Account.fromJson(snapshot.data()!);
     owner.value = account;
+  }
+
+  Future<void> setRoomRecently() async {
+    prefs = await SharedPreferences.getInstance();
+    final List<String> items =
+        prefs.getStringList(KeyValue.KEY_ROOM_LIST_RECENTLY) ?? [];
+
+    if (!items.contains(room!.id)) {
+      items.insert(0, room!.id);
+    }
+
+    await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, items);
+    print("items.toString() = " + items.toString());
   }
 }

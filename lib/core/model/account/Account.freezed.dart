@@ -30,7 +30,7 @@ mixin _$Account {
   String? get dateOfBirth => throw _privateConstructorUsedError;
   String? get dateOfCreate => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  bool? get verified => throw _privateConstructorUsedError;
+  bool get verified => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
   List<String> get listRoomForRent => throw _privateConstructorUsedError;
@@ -61,7 +61,7 @@ abstract class $AccountCopyWith<$Res> {
       String? dateOfBirth,
       String? dateOfCreate,
       String email,
-      bool? verified,
+      bool verified,
       bool? isOnline,
       double? rating,
       List<String> listRoomForRent,
@@ -95,7 +95,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     Object? dateOfBirth = freezed,
     Object? dateOfCreate = freezed,
     Object? email = null,
-    Object? verified = freezed,
+    Object? verified = null,
     Object? isOnline = freezed,
     Object? rating = freezed,
     Object? listRoomForRent = null,
@@ -146,10 +146,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      verified: freezed == verified
+      verified: null == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
       isOnline: freezed == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -204,7 +204,7 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
       String? dateOfBirth,
       String? dateOfCreate,
       String email,
-      bool? verified,
+      bool verified,
       bool? isOnline,
       double? rating,
       List<String> listRoomForRent,
@@ -236,7 +236,7 @@ class __$$AccountImplCopyWithImpl<$Res>
     Object? dateOfBirth = freezed,
     Object? dateOfCreate = freezed,
     Object? email = null,
-    Object? verified = freezed,
+    Object? verified = null,
     Object? isOnline = freezed,
     Object? rating = freezed,
     Object? listRoomForRent = null,
@@ -287,10 +287,10 @@ class __$$AccountImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      verified: freezed == verified
+      verified: null == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
       isOnline: freezed == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -384,7 +384,7 @@ class _$AccountImpl extends _Account {
   final String email;
   @override
   @JsonKey()
-  final bool? verified;
+  final bool verified;
   @override
   @JsonKey()
   final bool? isOnline;
@@ -540,7 +540,7 @@ abstract class _Account extends Account {
       required final String? dateOfBirth,
       required final String? dateOfCreate,
       final String email,
-      final bool? verified,
+      final bool verified,
       final bool? isOnline,
       final double? rating,
       final List<String> listRoomForRent,
@@ -574,7 +574,7 @@ abstract class _Account extends Account {
   @override
   String get email;
   @override
-  bool? get verified;
+  bool get verified;
   @override
   bool? get isOnline;
   @override

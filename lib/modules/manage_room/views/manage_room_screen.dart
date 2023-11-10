@@ -18,7 +18,8 @@ class ManageRoomScreen extends StatefulWidget {
 }
 
 class _ManageRoomScreenState extends State<ManageRoomScreen> {
-  final manageRoomController = Get.put(ManageRoomController());
+  final ManageRoomController manageRoomController =
+      Get.find<ManageRoomController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
