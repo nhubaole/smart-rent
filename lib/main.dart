@@ -6,6 +6,8 @@ import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
+import 'core/resources/auth_methods.dart';
+
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // firebaseInitialization.then((value) {
@@ -19,11 +21,11 @@ void main() async {
   );
   Get.lazyPut(() => DetailController());
 
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // ).then(
-  //   (value) => Get.put(AuthMethods()),
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then(
+    (value) => Get.put(AuthMethods()),
+  );
 
   runApp(const MyApp());
 }

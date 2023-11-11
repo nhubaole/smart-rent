@@ -44,7 +44,7 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   void dispose() {
-    rootController.setIsOnline(false);
+    //rootController.setIsOnline(false);
     super.dispose();
   }
 
