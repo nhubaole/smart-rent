@@ -26,16 +26,14 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Phổ biến',
+                'Phòng nổi bật',
                 style: TextStyle(
                   fontSize: 20,
                   color: secondary20,
@@ -45,14 +43,16 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
               ),
             ],
           ),
+          SizedBox(height: 8,),
           Obx(
             () => GridView.builder(
+              padding: EdgeInsets.zero,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.71,
+                childAspectRatio: 0.66,
                 crossAxisSpacing: 5,
                 // mainAxisSpacing: 20,
               ),

@@ -27,15 +27,15 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 1,
+            height: MediaQuery.sizeOf(context).height,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   primary40,
                   primary95,
                 ],
-                begin: Alignment(0, 0),
-                end: Alignment(0, 2),
+                begin: Alignment.topCenter,
+                end: Alignment(0.0, -0.5),
               ),
             ),
             child: const Padding(
@@ -53,10 +53,9 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
           Positioned(
             top: 120,
             left: 0,
-            right: 0,
             child: Container(
-              height: MediaQuery.of(context).size.height * 1,
-              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.sizeOf(context).width,
               padding: const EdgeInsets.symmetric(
                 horizontal: 24,
               ),
@@ -78,7 +77,7 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const SizedBox(
-                    height: 100,
+                    height: 50,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng yêu cầu thuê',

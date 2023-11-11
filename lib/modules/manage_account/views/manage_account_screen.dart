@@ -14,15 +14,15 @@ class ManageAccountScreen extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 1,
-              decoration: const BoxDecoration(
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     primary40,
-                    primary80,
+                    primary95,
                   ],
-                  begin: Alignment(0, 0),
-                  end: Alignment(0, 2),
+                  begin: Alignment.topCenter,
+                  end: Alignment(0.0, -0.5),
                 ),
               ),
               child: const Padding(
@@ -38,19 +38,14 @@ class ManageAccountScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 100,
+              top: 120,
               left: 0,
               right: 0,
               child: Container(
                 height: MediaQuery.of(context).size.height * 1,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white,
-                      Colors.white,
-                    ],
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),

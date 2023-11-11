@@ -65,7 +65,10 @@ class RootScreenController extends GetxController {
       }
     });
     ZIMKit()
-        .connectUser(id: userInfo.userID, name: userInfo.userName)
+        .connectUser(
+            id: userInfo.userID,
+            name: userInfo.userName,
+            avatarUrl: currentAccount.photoUrl)
         .then((value) => null);
   }
 

@@ -37,7 +37,7 @@ class RecentlyViewScreen extends StatelessWidget {
             },
             icon: const Icon(
               Icons.delete,
-              color: Colors.red,
+              color: red60,
             ),
           )
         ],

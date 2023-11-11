@@ -50,7 +50,7 @@ class HomeFeatureNavWidget extends StatelessWidget {
               child: const Column(
                 children: [
                   Icon(
-                    Icons.map_outlined,
+                    Icons.map,
                     color: primary40,
                   ),
                   Text('Bản đồ'),
@@ -76,7 +76,7 @@ class HomeFeatureNavWidget extends StatelessWidget {
               child: const Column(
                 children: [
                   Icon(
-                    Icons.add_to_queue_sharp,
+                    Icons.add_box,
                     color: primary40,
                   ),
                   Text('Đăng bài'),
@@ -100,7 +100,7 @@ class HomeFeatureNavWidget extends StatelessWidget {
               child: const Column(
                 children: [
                   Icon(
-                    Icons.timelapse_rounded,
+                    Icons.history,
                     color: primary40,
                   ),
                   Text('Đã xem\ngần đây'),
