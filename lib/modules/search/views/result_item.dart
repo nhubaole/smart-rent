@@ -19,18 +19,19 @@ class ResultItem extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        height: 160,
+        height: 180,
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(20)),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: CachedNetworkImage(
                     height: 120,
                     width: 120,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                     imageUrl: room.images[0])),
             const SizedBox(
               width: 16,
