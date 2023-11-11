@@ -141,9 +141,9 @@ class _RoomItemState extends State<RoomItem> {
                   const SizedBox(
                     width: 5.0,
                   ),
-                  const Text(
-                    '24 đánh giá',
-                    style: TextStyle(
+                  Text(
+                    '${widget.room.listComments.length} đánh giá',
+                    style: const TextStyle(
                         fontSize: 12,
                         color: secondary40,
                         fontWeight: FontWeight.w600),

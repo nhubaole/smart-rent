@@ -7,25 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/enum/sex.dart';
 import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/resources/storage_methobs.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
 class AccountDetailController extends GetxController {
-  late SharedPreferences prefs;
+  var profileOwner = Rx<Account?>(null);
 
-  var photoUrl = ''.obs;
-  var currentName = ''.obs;
-  var phoneNumber = ''.obs;
-  var address = ''.obs;
-  var sex = ''.obs;
-  var dateOfBirth = ''.obs;
-  var email = ''.obs;
   var isLoading = false.obs;
+  var isUpdate = false.obs;
   Uint8List? _image;
 
   final formKey = GlobalKey<FormState>();
@@ -40,31 +35,37 @@ class AccountDetailController extends GetxController {
 
   @override
   void onInit() {
+    isLoading.value = true;
+    getProfile(FirebaseAuth.instance.currentUser!.uid);
     super.onInit();
-    //getInfo();
-
-    initSharedPreferences();
   }
 
-  Future<void> initSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-
-    photoUrl.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHOTOURL) ?? '';
-    currentName.value = prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? '';
-    phoneNumber.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
-    address.value = prefs.getString(KeyValue.KEY_ACCOUNT_ADDRESS) ?? '';
-
-    if (prefs.getBool(KeyValue.KEY_ACCOUNT_SEX)!) {
-      sex.value = 'Nam';
-    } else {
-      sex.value = 'Nữ';
-    }
-    //sex.value = prefs.getBool(KeyValue.KEY_ACCOUNT_SEX) ?? '';
-    dateOfBirth.value = prefs.getString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH) ?? '';
-    nameTextInputController.text = currentName.value;
-    phoneNumberTextInputController.text = phoneNumber.value;
-    addressTextInputController.text = address.value;
+  Future<void> getProfile(String uid) async {
+    isLoading.value = true;
+    profileOwner.value = await AuthMethods.getUserDetails(uid);
+    isLoading.value = false;
   }
+
+  // Future<void> initSharedPreferences() async {
+  //   prefs = await SharedPreferences.getInstance();
+
+  //   photoUrl.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHOTOURL) ?? '';
+  //   currentName.value = prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? '';
+  //   phoneNumber.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
+  //   address.value = prefs.getString(KeyValue.KEY_ACCOUNT_ADDRESS) ?? '';
+
+  //   if (prefs.getBool(KeyValue.KEY_ACCOUNT_SEX)!) {
+  //     sex.value = 'Nam';
+  //   } else {
+  //     sex.value = 'Nữ';
+  //   }
+  //   //sex.value = prefs.getBool(KeyValue.KEY_ACCOUNT_SEX) ?? '';
+
+  //   dateOfBirth.value = prefs.getString(KeyValue.KEY_ACCOUNT_DATEOFBIRTH) ?? '';
+  //   nameTextInputController.text = currentName.value;
+  //   phoneNumberTextInputController.text = phoneNumber.value;
+  //   addressTextInputController.text = address.value;
+  // }
 
   @override
   void dispose() {
@@ -75,8 +76,6 @@ class AccountDetailController extends GetxController {
     sexTextInputController.dispose();
     dateOfBirthTextInputController.dispose();
   }
-
-  void getInfo() {}
 
   void showGenderDialog(BuildContext context) {
     showDialog(
@@ -102,7 +101,9 @@ class AccountDetailController extends GetxController {
       },
     ).then((selectedGender) {
       if (selectedGender != null) {
-        selectedGender == EnumSex.Nam ? sex.value = 'Nam' : sex.value = 'Nữ';
+        selectedGender == EnumSex.Nam
+            ? profileOwner.value = profileOwner.value!.copyWith(sex: true)
+            : profileOwner.value = profileOwner.value!.copyWith(sex: false);
         //sex.value = selectedGender;
         //Get.snackbar('title', 'Giới tính đã chọn: $selectedGender');
       }
@@ -113,108 +114,149 @@ class AccountDetailController extends GetxController {
     showModalBottomSheet(
       context: context, // Use the context of the current Scaffold.
       builder: (ctx) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              InkWell(
-                onTap: () async {
-                  _image = await pickImage(ImageSource.camera);
-                  if (_image != null) {
-                    isLoading.value = true;
-                    Get.back();
-                    String photoUrlDevice = await StorageMethods()
-                        .uploadImageToStorage(
-                            KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
-
-                    photoUrl.value = photoUrlDevice;
-                    await prefs.setString(
-                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
-
-                    FirebaseFirestore.instance
-                        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
-
-                    getInfo();
-                  } else {
-                    Get.back();
-                    Get.snackbar('Notify', 'No photo selected');
-                  }
-                  isLoading.value = false;
-                },
-                child: const Row(
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.camera,
-                      color: primary40,
-                      size: 24,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      'Camera',
+                    const SizedBox(width: 20),
+                    const Text(
+                      'Chọn ảnh',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: primary40,
-                      ),
+                          color: primary40,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700),
                     ),
+                    GestureDetector(
+                        onTap: () => Get.back(),
+                        child: const Icon(
+                          Icons.close,
+                          color: secondary40,
+                        )),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              InkWell(
-                onTap: () async {
-                  _image = await pickImage(ImageSource.gallery);
-                  if (_image != null) {
-                    Get.back();
-                    isLoading.value = true;
-                    String photoUrlDevice = await StorageMethods()
-                        .uploadImageToStorage(
-                            KeyValue.KEY_STORAGE_ACCOUNT_IMG, _image!, false);
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: primary98),
+                  child: InkWell(
+                    onTap: () async {
+                      _image = await pickImage(ImageSource.camera);
+                      if (_image != null) {
+                        isUpdate.value = true;
+                        Get.back();
+                        String photoUrlDevice = await StorageMethods()
+                            .uploadImageToStorage(
+                                KeyValue.KEY_STORAGE_ACCOUNT_IMG,
+                                _image!,
+                                false);
 
-                    photoUrl.value = photoUrlDevice;
-                    await prefs.setString(
-                        KeyValue.KEY_ACCOUNT_PHOTOURL, photoUrlDevice);
+                        profileOwner.value = profileOwner.value!
+                            .copyWith(photoUrl: photoUrlDevice);
 
-                    FirebaseFirestore.instance
-                        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                            {KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice});
-
-                    getInfo();
-                  } else {
-                    Get.back();
-                    Get.snackbar('Notify', 'No photo selected');
-                  }
-                  isLoading.value = false;
-                },
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.photo,
-                      color: primary40,
-                      size: 24,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      'Gallery',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: primary40,
+                        FirebaseFirestore.instance
+                            .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
+                        });
+                      } else {
+                        Get.back();
+                        Get.snackbar('Notify', 'No photo selected');
+                      }
+                      isUpdate.value = false;
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.image_outlined,
+                            color: primary60,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Chụp ảnh',
+                            style: TextStyle(
+                                color: primary60,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: primary98),
+                  child: InkWell(
+                    onTap: () async {
+                      _image = await pickImage(ImageSource.gallery);
+                      if (_image != null) {
+                        Get.back();
+                        isUpdate.value = true;
+                        String photoUrlDevice = await StorageMethods()
+                            .uploadImageToStorage(
+                                KeyValue.KEY_STORAGE_ACCOUNT_IMG,
+                                _image!,
+                                false);
+
+                        profileOwner.value = profileOwner.value!
+                            .copyWith(photoUrl: photoUrlDevice);
+
+                        FirebaseFirestore.instance
+                            .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          KeyValue.KEY_ACCOUNT_PHOTOURL: photoUrlDevice
+                        });
+                      } else {
+                        Get.back();
+                        Get.snackbar('Notify', 'No photo selected');
+                      }
+                      isUpdate.value = false;
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.photo_camera_outlined,
+                            color: primary60,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Chọn từ thư viện',
+                            style: TextStyle(
+                                color: primary60,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -255,7 +297,8 @@ class AccountDetailController extends GetxController {
         // );
 
         String formattedDate = DateFormat('dd-MM-yyyy').format(selectedDate);
-        dateOfBirth.value = formattedDate;
+        profileOwner.value =
+            profileOwner.value!.copyWith(dateOfBirth: formattedDate);
       } else {
         showDialog(
           context: context,
@@ -305,7 +348,8 @@ class AccountDetailController extends GetxController {
                 return ListTile(
                   title: Text(provinces[index]),
                   onTap: () {
-                    address.value = provinces[index];
+                    profileOwner.value =
+                        profileOwner.value!.copyWith(address: provinces[index]);
                     Get.back();
                   },
                 );
@@ -325,21 +369,19 @@ class AccountDetailController extends GetxController {
       return 'Vui lòng nhập đúng định dạng họ tên';
     }
     try {
+      isUpdate.value = true;
       FirebaseFirestore.instance
           .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         KeyValue.KEY_ACCOUNT_USERNAME: currentName,
-        KeyValue.KEY_ACCOUNT_ADDRESS: address.value,
-        KeyValue.KEY_ACCOUNT_SEX: sex.value == 'Nam' ? true : false,
-        KeyValue.KEY_ACCOUNT_DATEOFBIRTH: dateOfBirth.value,
+        KeyValue.KEY_ACCOUNT_ADDRESS: profileOwner.value!.address,
+        KeyValue.KEY_ACCOUNT_SEX: profileOwner.value!.sex,
+        KeyValue.KEY_ACCOUNT_DATEOFBIRTH: profileOwner.value!.dateOfBirth,
       });
-
-      await prefs.setString(KeyValue.KEY_ACCOUNT_USERNAME, currentName);
-      await prefs.setString(
-          KeyValue.KEY_ACCOUNT_DATEOFBIRTH, dateOfBirth.value);
-
+      update();
       res = 'Update successfully';
+      isUpdate.value = false;
     } catch (error) {
       res = error.toString();
     }

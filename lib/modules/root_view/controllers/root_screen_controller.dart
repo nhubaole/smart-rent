@@ -96,12 +96,18 @@ class RootScreenController extends GetxController {
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
 
+    // String formattedDate =
+    //     DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
+
     await prefs.setString(
         KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);
 
     await prefs.setString(KeyValue.KEY_ACCOUNT_DATEOFCREATE,
         currentAccount.dateOfCreate.toString());
     await prefs.setString(KeyValue.KEY_ACCOUNT_EMAIL, currentAccount.email);
+    if (prefs.getStringList(KeyValue.KEY_ROOM_LIST_RECENTLY) == null) {
+      await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, <String>[]);
+    }
     Get.snackbar('Notify', 'message');
   }
 }
