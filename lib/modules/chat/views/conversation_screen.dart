@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
+import 'package:smart_rent/modules/chat/views/conversation_item.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
 class ConversationScreen extends StatelessWidget {
@@ -24,8 +25,8 @@ class ConversationScreen extends StatelessWidget {
                   primary40,
                   primary95,
                 ],
-                begin: Alignment(0, 0),
-                end: Alignment(0, 2),
+                begin: Alignment.topCenter,
+                end: Alignment(0.0, -0.5),
               ),
             ),
             child: const Padding(
@@ -47,9 +48,6 @@ class ConversationScreen extends StatelessWidget {
             child: Container(
               height: MediaQuery.of(context).size.height * 1,
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -77,7 +75,7 @@ class ConversationScreen extends StatelessWidget {
                         label: 'Delete',
                       ),
                     ]),
-                    child: ZIMKitConversationWidget(
+                    child: ConversationItem(
                       conversation: conversation,
                       onLongPress: (context, longPressDownDetails) => {},
                       onPressed: (BuildContext zContext) async {

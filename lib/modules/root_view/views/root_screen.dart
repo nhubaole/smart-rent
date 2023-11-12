@@ -45,7 +45,7 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   void dispose() {
-    rootController.setIsOnline(false);
+    //rootController.setIsOnline(false);
     super.dispose();
   }
 
@@ -89,7 +89,7 @@ class _RootScreenState extends State<RootScreen> {
             ),
             activeColor: primary40,
             rippleColor: primary95,
-            hoverColor: Colors.yellow,
+            hoverColor: primary98,
             tabBackgroundColor: primary98,
             onTabChange: (index) {
               rootController.changeScreen(index);
@@ -97,9 +97,9 @@ class _RootScreenState extends State<RootScreen> {
             tabs: const [
               GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),
               GButton(
-                  icon: Icons.manage_search_outlined, text: 'Phòng của bạn'),
-              GButton(icon: Icons.chat_bubble_outline, text: 'Tin Nhắn'),
-              GButton(icon: Icons.manage_accounts_outlined, text: 'Tài Khoản'),
+                  icon: Icons.home_work_outlined, text: 'Phòng của bạn'),
+              GButton(icon: Icons.sms_outlined, text: 'Tin Nhắn'),
+              GButton(icon: Icons.person_outline, text: 'Tài Khoản'),
             ],
           ),
         ),

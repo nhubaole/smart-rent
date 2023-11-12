@@ -218,7 +218,7 @@ class _PostScreenState extends State<PostScreen> {
           style: TextStyle(
             color: primary60,
             fontWeight: FontWeight.w600,
-            fontSize: 18,
+            fontSize: 14,
           ),
           textAlign: TextAlign.center,
         ),

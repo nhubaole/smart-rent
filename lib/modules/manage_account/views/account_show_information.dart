@@ -131,32 +131,32 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
                               ),
                             ),
                           )
-                        : Card(
-                            margin: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.35,
+                        : Container(
+                            width: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: red90,
                             ),
-                            elevation: 0,
-                            color: const Color.fromARGB(255, 180, 180, 180),
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    IconData(0xe16a,
-                                        fontFamily: 'MaterialIcons'),
-                                    color: Colors.red,
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.close,
+                                  color: red60,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  'Chưa xác thực',
+                                  style: TextStyle(
+                                    color: red60,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500
                                   ),
-                                  Spacer(),
-                                  Text(
-                                    'Chưa xác thực',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                   ),

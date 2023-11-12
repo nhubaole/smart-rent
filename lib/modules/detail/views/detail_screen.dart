@@ -15,6 +15,7 @@ import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/post_review/views/post_review_screen.dart';
 import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
 import '../../../core/model/room/room.dart';
+import '../../../core/values/KEY_VALUE.dart';
 
 class DetailScreen extends StatelessWidget {
   DetailScreen({super.key, required this.room});

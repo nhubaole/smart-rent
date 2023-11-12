@@ -16,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:uuid/uuid.dart';
 import 'package:zego_zim/zego_zim.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen(
@@ -29,6 +30,8 @@ class ChatScreen extends StatefulWidget {
   final String conversationID;
   final String conversationName;
   final String userId;
+  String imgUrl = '';
+
   ScrollController scrollController = ScrollController();
 
   List<ZIMMessage> _historyZIMMessageList = <ZIMMessage>[];
@@ -54,10 +57,17 @@ class _ChatScreenState extends State<ChatScreen> {
     _user = types.User(
       id: widget.userId,
     );
+    queryAvatar();
+
     registerZIMEvent();
     if (widget._historyZIMMessageList.isEmpty) {
       queryMoreHistoryMessageList();
     }
+  }
+
+  void queryAvatar() async {
+    ZIMUserFullInfo u = await ZIMKit().queryUser(widget.conversationID);
+    widget.imgUrl = u.userAvatarUrl;
   }
 
   @override
@@ -194,7 +204,8 @@ class _ChatScreenState extends State<ChatScreen> {
         case ZIMMessageType.text:
           ZIMTextMessage textMessage = message as ZIMTextMessage;
           final textMessageUI = types.TextMessage(
-            author: types.User(id: message.senderUserID),
+            author:
+                types.User(id: message.senderUserID, imageUrl: widget.imgUrl),
             createdAt: message.timestamp,
             id: const Uuid().v4(),
             text: textMessage.message,
@@ -206,9 +217,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ZIMImageMessage imageMessage = message as ZIMImageMessage;
 
             final imageMessageUI = types.ImageMessage(
-              author: types.User(
-                id: message.senderUserID,
-              ),
+              author:
+                  types.User(id: message.senderUserID, imageUrl: widget.imgUrl),
               createdAt: message.timestamp,
               height: imageMessage.originalImageHeight.toDouble(),
               id: const Uuid().v4(),
@@ -225,9 +235,8 @@ class _ChatScreenState extends State<ChatScreen> {
         case ZIMMessageType.file:
           ZIMFileMessage fileMessage = message as ZIMFileMessage;
           final fileMessageUI = types.FileMessage(
-            author: types.User(
-              id: message.senderUserID,
-            ),
+            author:
+                types.User(id: message.senderUserID, imageUrl: widget.imgUrl),
             createdAt: message.timestamp,
             id: const Uuid().v4(),
             mimeType: lookupMimeType(fileMessage.fileLocalPath),
@@ -274,7 +283,7 @@ class _ChatScreenState extends State<ChatScreen> {
       context: context,
       builder: (BuildContext context) => SafeArea(
         child: SizedBox(
-          height: 144,
+          height: 96,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -285,7 +294,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
                 child: const Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('Photo'),
+                  child: Text('Hình ảnh'),
                 ),
               ),
               TextButton(
@@ -295,14 +304,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
                 child: const Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('File'),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancel'),
+                  child: Text('Tệp đính kèm'),
                 ),
               ),
             ],

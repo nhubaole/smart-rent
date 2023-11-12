@@ -66,7 +66,10 @@ class RootScreenController extends GetxController {
       }
     });
     ZIMKit()
-        .connectUser(id: userInfo.userID, name: userInfo.userName)
+        .connectUser(
+            id: userInfo.userID,
+            name: userInfo.userName,
+            avatarUrl: currentAccount.photoUrl)
         .then((value) => null);
   }
 
@@ -81,6 +84,7 @@ class RootScreenController extends GetxController {
       FirebaseAuth.instance.currentUser!.uid,
     );
     initSharedPreferences();
+    ZIMLogin();
   }
 
   Future<void> initSharedPreferences() async {
@@ -95,6 +99,9 @@ class RootScreenController extends GetxController {
     await prefs.setString(KeyValue.KEY_ACCOUNT_ADDRESS, currentAccount.address);
     await prefs.setBool(KeyValue.KEY_ACCOUNT_SEX, currentAccount.sex);
     await prefs.setInt(KeyValue.KEY_ACCOUNT_AGE, currentAccount.age);
+
+    // String formattedDate =
+    //     DateFormat('dd-MM-yyyy').format(currentAccount.dateOfBirth!);
 
     await prefs.setString(
         KeyValue.KEY_ACCOUNT_DATEOFBIRTH, currentAccount.dateOfBirth!);

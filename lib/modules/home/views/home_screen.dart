@@ -5,6 +5,8 @@ import 'package:smart_rent/modules/home/views/home_list_room.dart';
 import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
 import 'package:smart_rent/modules/home/views/home_top_widget.dart';
 
+import '../../post/views/post_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -36,7 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
           opacity: _showFab ? 1 : 0,
           child: FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Get.to(
+                const PostScreen(),
+              );
+            },
           ),
         ),
       ),
