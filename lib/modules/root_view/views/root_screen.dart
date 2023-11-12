@@ -19,7 +19,7 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState();
 }
 
-class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
+class _RootScreenState extends State<RootScreen> {
   final rootController = Get.put(RootScreenController(), permanent: true);
   final home = Get.lazyPut(
     () => HomeScreenController(),
