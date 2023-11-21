@@ -41,4 +41,5 @@ class KeyValue {
 
   //
   static const KEY_ROOM_LIST_RECENTLY = 'room_list_recently';
+  static const KEY_INVOICE = 'INVOICE_COLLECTION';
 }

@@ -277,8 +277,8 @@ class PaymentInforScreen extends StatelessWidget {
                               value: 1,
                               groupValue:
                                   paymentController.selectedMethod.value,
-                              title: const Text('Credit Card'),
-                              secondary: const Icon(Icons.credit_card),
+                              title: const Text('Qr Code'),
+                              secondary: const Icon(Icons.qr_code),
                               onChanged: (value) {
                                 paymentController.selectedMethod.value = value!;
                               },
@@ -317,7 +317,11 @@ class PaymentInforScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(const DetailTransactionScreen());
+                    Get.to(
+                      DetailTransactionScreen(
+                        invoice: paymentController.orderInvoice(),
+                      ),
+                    );
                   },
                   child: Container(
                     alignment: Alignment.center,

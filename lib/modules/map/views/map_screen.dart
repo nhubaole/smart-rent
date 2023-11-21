@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/map/controllers/map_screen_controller.dart';
-import 'package:smart_rent/modules/recently/controllers/recently_view_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MapScreen extends StatelessWidget {

@@ -16,7 +16,7 @@ class StatusWidget extends StatelessWidget {
       backgroundColor = const Color(0xffE9FFE8);
       textColor = const Color(0xFF3FA836);
     } else if (status == 'progress') {
-      backgroundColor = Colors.blue;
+      backgroundColor = Colors.grey;
       textColor = Colors.white;
     } else if (status == 'fail') {
       backgroundColor = Colors.red;
