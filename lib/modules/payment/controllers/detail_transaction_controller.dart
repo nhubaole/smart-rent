@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/model/invoice/invoice.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/resources/payment_os_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,15 +16,14 @@ class DetailTransactionController extends GetxController {
   var rxInvoice = Rx<Invoice?>(null);
   RxString statusTransaction = 'progress'.obs;
   RxBool isLoading = false.obs;
-
+  RxBool isExisting = false.obs;
+  var errorMessage = 'error'.obs;
   late WebViewController webViewController;
 
   //late Map<String, dynamic> order;
 
   @override
-  void onInit() {
-    mirrorRx(invoice);
-    getWebView();
+  void onInit() async {
     webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -44,16 +43,39 @@ class DetailTransactionController extends GetxController {
             return NavigationDecision.navigate;
           },
         ),
-      )
-      ..loadRequest(
-        Uri.parse('https://pay.payos.vn/web/ff128305033d4dbab20b410834de54d2'),
       );
+    // webViewController = WebViewController()
+    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    //   ..setNavigationDelegate(
+    //     NavigationDelegate(
+    //       onProgress: (int progress) {
+    //         // Update loading bar.
+    //       },
+    //       onPageStarted: (String url) {},
+    //       onPageFinished: (String url) {
+    //         readResponse();
+    //       },
+    //       onWebResourceError: (WebResourceError error) {},
+    //       onNavigationRequest: (NavigationRequest request) {
+    //         if (request.url.startsWith('https://www.youtube.com/')) {
+    //           return NavigationDecision.prevent;
+    //         }
+    //         return NavigationDecision.navigate;
+    //       },
+    //     ),
+    //   )
+    //   ..loadRequest(
+    //     Uri.parse('https://flutter.dev/'),
+    //   );
+
     super.onInit();
+    isLoading.value = true;
+    mirrorRx(invoice);
+    await getWebView();
   }
 
   mirrorRx(Invoice invoice) {
     rxInvoice.value = invoice;
-    print('rx duoc in ra' + rxInvoice.value.toString());
   }
 
   void copyToClipboard(String textToCopy) {
@@ -90,6 +112,7 @@ class DetailTransactionController extends GetxController {
     rxInvoice.value = rxInvoice.value!.copyWith(expireAt: timeStamp);
     var client = http.Client();
     try {
+      await FireStoreMethods().addOrderCode(invoice);
       var url = Uri.https('api-merchant.payos.vn', '/v2/payment-requests');
       var response = await http.post(url,
           headers: {
@@ -116,15 +139,47 @@ class DetailTransactionController extends GetxController {
       print('Response body: ${response.body}');
 
       final Map<String, dynamic> resData = await json.decode(response.body);
-      rxInvoice.value = rxInvoice.value!.copyWith(
-        paymentLinkId: resData['data']['paymentLinkId'].toString(),
-      );
 
-      print(resData['data']['checkoutUrl']);
-      webViewController.loadRequest(Uri.parse(resData['data']['checkoutUrl']));
+      if (response.statusCode == 200 && resData['code'] == '00') {
+        rxInvoice.value = rxInvoice.value!.copyWith(
+          paymentLinkId: resData['data']['paymentLinkId'].toString(),
+        );
+        await FireStoreMethods()
+            .addInforRequestPayOS(resData, rxInvoice.value!);
+        webViewController
+            .loadRequest(Uri.parse(resData['data']['checkoutUrl']));
+      } else if (response.statusCode == 200 && resData['code'] == '231') {
+        isLoading.value = false;
+        isExisting.value = true;
+        statusTransaction.value = 'fail';
+
+        Get.snackbar(
+          'Thông báo',
+          'Đơn hàng đã tồn tại, vui lòng thử lại sau',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+        );
+        errorMessage.value = resData['desc'];
+        return;
+      } else {
+        statusTransaction.value = 'fail';
+        Get.snackbar(
+          'Thông báo',
+          'Đã có lỗi xảy ra, vui lòng thử lại sau',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+        );
+        errorMessage.value = resData['desc'];
+        return;
+      }
+
+      //print(resData['data']['checkoutUrl']);
     } finally {
       client.close();
     }
+    isLoading.value = false;
   }
 
   Future<void> readResponse() async {
@@ -132,7 +187,9 @@ class DetailTransactionController extends GetxController {
     String? currentUrl = await webViewController.currentUrl();
     if (currentUrl ==
         'https://pay.payos.vn/web/${rxInvoice.value!.paymentLinkId}/success') {
+      await FireStoreMethods().addInvoice(rxInvoice.value!);
       statusTransaction.value = 'success';
+      await FireStoreMethods().updateInvoice(rxInvoice.value!, 'SUCCESS');
     }
 
     // You can perform actions based on the current URL here

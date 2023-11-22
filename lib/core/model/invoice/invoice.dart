@@ -15,6 +15,7 @@ class Invoice with _$Invoice {
     required String recieverPhoneNumber,
     required String recieverNumberBank,
     required String recieverBank,
+    required String roomId,
     required String addressRoom,
     required int amountRoom,
     required String description,

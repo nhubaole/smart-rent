@@ -26,6 +26,7 @@ mixin _$Invoice {
   String get recieverPhoneNumber => throw _privateConstructorUsedError;
   String get recieverNumberBank => throw _privateConstructorUsedError;
   String get recieverBank => throw _privateConstructorUsedError;
+  String get roomId => throw _privateConstructorUsedError;
   String get addressRoom => throw _privateConstructorUsedError;
   int get amountRoom => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -58,6 +59,7 @@ abstract class $InvoiceCopyWith<$Res> {
       String recieverPhoneNumber,
       String recieverNumberBank,
       String recieverBank,
+      String roomId,
       String addressRoom,
       int amountRoom,
       String description,
@@ -93,6 +95,7 @@ class _$InvoiceCopyWithImpl<$Res, $Val extends Invoice>
     Object? recieverPhoneNumber = null,
     Object? recieverNumberBank = null,
     Object? recieverBank = null,
+    Object? roomId = null,
     Object? addressRoom = null,
     Object? amountRoom = null,
     Object? description = null,
@@ -132,6 +135,10 @@ class _$InvoiceCopyWithImpl<$Res, $Val extends Invoice>
       recieverBank: null == recieverBank
           ? _value.recieverBank
           : recieverBank // ignore: cast_nullable_to_non_nullable
+              as String,
+      roomId: null == roomId
+          ? _value.roomId
+          : roomId // ignore: cast_nullable_to_non_nullable
               as String,
       addressRoom: null == addressRoom
           ? _value.addressRoom
@@ -207,6 +214,7 @@ abstract class _$$InvoiceImplCopyWith<$Res> implements $InvoiceCopyWith<$Res> {
       String recieverPhoneNumber,
       String recieverNumberBank,
       String recieverBank,
+      String roomId,
       String addressRoom,
       int amountRoom,
       String description,
@@ -240,6 +248,7 @@ class __$$InvoiceImplCopyWithImpl<$Res>
     Object? recieverPhoneNumber = null,
     Object? recieverNumberBank = null,
     Object? recieverBank = null,
+    Object? roomId = null,
     Object? addressRoom = null,
     Object? amountRoom = null,
     Object? description = null,
@@ -279,6 +288,10 @@ class __$$InvoiceImplCopyWithImpl<$Res>
       recieverBank: null == recieverBank
           ? _value.recieverBank
           : recieverBank // ignore: cast_nullable_to_non_nullable
+              as String,
+      roomId: null == roomId
+          ? _value.roomId
+          : roomId // ignore: cast_nullable_to_non_nullable
               as String,
       addressRoom: null == addressRoom
           ? _value.addressRoom
@@ -350,6 +363,7 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
       required this.recieverPhoneNumber,
       required this.recieverNumberBank,
       required this.recieverBank,
+      required this.roomId,
       required this.addressRoom,
       required this.amountRoom,
       required this.description,
@@ -382,6 +396,8 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
   final String recieverNumberBank;
   @override
   final String recieverBank;
+  @override
+  final String roomId;
   @override
   final String addressRoom;
   @override
@@ -424,7 +440,7 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Invoice(orderCode: $orderCode, recieverId: $recieverId, recieverName: $recieverName, recieverPhoneNumber: $recieverPhoneNumber, recieverNumberBank: $recieverNumberBank, recieverBank: $recieverBank, addressRoom: $addressRoom, amountRoom: $amountRoom, description: $description, buyerId: $buyerId, buyerName: $buyerName, buyerEmail: $buyerEmail, buyerPhone: $buyerPhone, buyerAddress: $buyerAddress, items: $items, cancelUrl: $cancelUrl, returnUrl: $returnUrl, expireAt: $expireAt, signalture: $signalture, paymentLinkId: $paymentLinkId)';
+    return 'Invoice(orderCode: $orderCode, recieverId: $recieverId, recieverName: $recieverName, recieverPhoneNumber: $recieverPhoneNumber, recieverNumberBank: $recieverNumberBank, recieverBank: $recieverBank, roomId: $roomId, addressRoom: $addressRoom, amountRoom: $amountRoom, description: $description, buyerId: $buyerId, buyerName: $buyerName, buyerEmail: $buyerEmail, buyerPhone: $buyerPhone, buyerAddress: $buyerAddress, items: $items, cancelUrl: $cancelUrl, returnUrl: $returnUrl, expireAt: $expireAt, signalture: $signalture, paymentLinkId: $paymentLinkId)';
   }
 
   @override
@@ -438,6 +454,7 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('recieverPhoneNumber', recieverPhoneNumber))
       ..add(DiagnosticsProperty('recieverNumberBank', recieverNumberBank))
       ..add(DiagnosticsProperty('recieverBank', recieverBank))
+      ..add(DiagnosticsProperty('roomId', roomId))
       ..add(DiagnosticsProperty('addressRoom', addressRoom))
       ..add(DiagnosticsProperty('amountRoom', amountRoom))
       ..add(DiagnosticsProperty('description', description))
@@ -471,6 +488,7 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
                 other.recieverNumberBank == recieverNumberBank) &&
             (identical(other.recieverBank, recieverBank) ||
                 other.recieverBank == recieverBank) &&
+            (identical(other.roomId, roomId) || other.roomId == roomId) &&
             (identical(other.addressRoom, addressRoom) ||
                 other.addressRoom == addressRoom) &&
             (identical(other.amountRoom, amountRoom) ||
@@ -509,6 +527,7 @@ class _$InvoiceImpl extends _Invoice with DiagnosticableTreeMixin {
         recieverPhoneNumber,
         recieverNumberBank,
         recieverBank,
+        roomId,
         addressRoom,
         amountRoom,
         description,
@@ -547,6 +566,7 @@ abstract class _Invoice extends Invoice {
       required final String recieverPhoneNumber,
       required final String recieverNumberBank,
       required final String recieverBank,
+      required final String roomId,
       required final String addressRoom,
       required final int amountRoom,
       required final String description,
@@ -577,6 +597,8 @@ abstract class _Invoice extends Invoice {
   String get recieverNumberBank;
   @override
   String get recieverBank;
+  @override
+  String get roomId;
   @override
   String get addressRoom;
   @override
