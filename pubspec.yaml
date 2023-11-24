@@ -50,7 +50,7 @@ dependencies:
   http: ^1.1.0
   im_stepper: ^1.0.1+1
   image_picker: ^1.0.4
-  intl: ^0.18.1
+  intl: ^0.17.0
   json_annotation: ^4.8.1
   location: ^5.0.3
   pinput: ^3.0.1
@@ -72,6 +72,7 @@ dependencies:
   tiengviet: ^1.0.0
   rating_summary: ^1.0.2+1
   gap: ^3.0.1
+  quantity_input: ^1.0.2
 
 dev_dependencies:
   build_runner: ^2.4.6

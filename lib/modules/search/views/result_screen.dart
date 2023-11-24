@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/modules/search/controllers/result_controller.dart';
+import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/result_item.dart';
 
 import '../../../core/values/app_colors.dart';
@@ -103,7 +104,9 @@ class ResultScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(FilterScreen(location: location));
+                          },
                           icon: Icon(
                             Icons.keyboard_arrow_down,
                             size: 20,
