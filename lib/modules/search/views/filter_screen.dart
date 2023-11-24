@@ -4,46 +4,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:quantity_input/quantity_input.dart';
+import 'package:smart_rent/core/enums/filter_type.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/sort.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 
 class FilterScreen extends StatelessWidget {
   FilterScreen({super.key, required this.location});
+  FilterController controller = Get.put(FilterController());
 
   final String location;
-  List<String> filterList = [
-    "Giá cả",
-    "Tiện ích",
-    "Loại phòng",
-    "Số người",
-    "Sắp xếp"
-  ];
-
-  List<UtilItem> utilList = const [
-    UtilItem(utility: Utilities.WC, isChecked: false),
-    UtilItem(utility: Utilities.WINDOW, isChecked: false),
-    UtilItem(utility: Utilities.WIFI, isChecked: false),
-    UtilItem(utility: Utilities.KITCHEN, isChecked: false),
-    UtilItem(utility: Utilities.LAUNDRY, isChecked: false),
-    UtilItem(utility: Utilities.FRIDGE, isChecked: false),
-    UtilItem(utility: Utilities.PARKING, isChecked: false),
-    UtilItem(utility: Utilities.SECURITY, isChecked: false),
-    UtilItem(utility: Utilities.FLEXIBLE_HOURS, isChecked: false),
-    UtilItem(utility: Utilities.PRIVATE, isChecked: false),
-    UtilItem(utility: Utilities.LOFT, isChecked: false),
-    UtilItem(utility: Utilities.PET, isChecked: false),
-    UtilItem(utility: Utilities.BED, isChecked: false),
-    UtilItem(utility: Utilities.WARDROBE, isChecked: false),
-    UtilItem(utility: Utilities.AIR_CONDITIONER, isChecked: false)
-  ];
 
   RangeValues _currentRangeValues = const RangeValues(40, 80);
 
   @override
   Widget build(BuildContext context) {
+    controller.setLocation(location);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -115,30 +95,47 @@ class FilterScreen extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            backgroundColor: secondary90,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                            color: secondary40,
-                          ),
-                          label: Text(
-                            filterList[index],
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: secondary40,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        );
+                        return Obx(() => FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                backgroundColor:
+                                    controller.selectedFilter.value ==
+                                            controller.filterType[index]
+                                        ? primary40
+                                        : secondary90,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              onPressed: () {
+                                controller.selectedFilter.value =
+                                    controller.filterType[index];
+                              },
+                              icon: Icon(
+                                controller.selectedFilter.value ==
+                                        controller.filterType[index]
+                                    ? Icons.keyboard_arrow_up
+                                    : Icons.keyboard_arrow_down,
+                                size: 20,
+                                color: controller.selectedFilter.value ==
+                                        controller.filterType[index]
+                                    ? Colors.white
+                                    : secondary40,
+                              ),
+                              label: Text(
+                                controller.filterType[index]
+                                    .getNameFilterType(),
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: controller.selectedFilter.value ==
+                                            controller.filterType[index]
+                                        ? Colors.white
+                                        : secondary40,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ));
                       },
-                      itemCount: filterList.length,
+                      itemCount: controller.filterType.length,
                       separatorBuilder: (BuildContext context, int index) {
                         return SizedBox(width: 8);
                       },
@@ -179,7 +176,8 @@ class FilterScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    filterList[index],
+                                    controller.filterType[index]
+                                        .getNameFilterType(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 12,
@@ -198,7 +196,7 @@ class FilterScreen extends StatelessWidget {
                                 ],
                               ));
                         },
-                        itemCount: filterList.length,
+                        itemCount: controller.filterType.length,
                         separatorBuilder: (BuildContext context, int index) {
                           return SizedBox(width: 8);
                         },
@@ -214,11 +212,7 @@ class FilterScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    //...priceFilter(),
-                    //utilFilter(),
-                    //...roomTypeFilter(),
-                    //...capacityFilter(),
-                    ...sortFilter(),
+                    Obx(() => loadPageContent(controller.selectedFilter.value)),
                     SizedBox(
                       height: 30,
                     ),
@@ -330,92 +324,94 @@ class FilterScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> priceFilter() {
-    return [
-      Row(
-        children: [
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Từ",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: secondary20),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: TextEditingController(),
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  border: OutlineInputBorder(),
-                  hintText: 'Nhập giá',
-                  suffixText: '₫',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primary40, width: 2)),
+  Widget priceFilter() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Từ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: secondary20),
                 ),
-              ),
-            ],
-          )),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Đến",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: secondary20),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: TextEditingController(),
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  border: OutlineInputBorder(),
-                  hintText: 'Nhập giá',
-                  suffixText: '₫',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primary40, width: 2)),
+                SizedBox(
+                  height: 4,
                 ),
-              ),
-            ],
-          )),
-        ],
-      ),
-      SizedBox(
-        height: 30,
-      ),
-      RangeSlider(
-        activeColor: primary40,
-        inactiveColor: primary95,
-        values: _currentRangeValues,
-        max: 100,
-        labels: RangeLabels(
-          _currentRangeValues.start.round().toString(),
-          _currentRangeValues.end.round().toString(),
+                TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: TextEditingController(),
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập giá',
+                    suffixText: '₫',
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primary40, width: 2)),
+                  ),
+                ),
+              ],
+            )),
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Đến",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: secondary20),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: TextEditingController(),
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập giá',
+                    suffixText: '₫',
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primary40, width: 2)),
+                  ),
+                ),
+              ],
+            )),
+          ],
         ),
-        onChanged: (RangeValues values) {
-          // setState(() {
-          //   _currentRangeValues = values;
-          // });
-        },
-      ),
-    ];
+        SizedBox(
+          height: 30,
+        ),
+        RangeSlider(
+          activeColor: primary40,
+          inactiveColor: primary95,
+          values: _currentRangeValues,
+          max: 100,
+          labels: RangeLabels(
+            _currentRangeValues.start.round().toString(),
+            _currentRangeValues.end.round().toString(),
+          ),
+          onChanged: (RangeValues values) {
+            // setState(() {
+            //   _currentRangeValues = values;
+            // });
+          },
+        ),
+      ],
+    );
   }
 
   Widget utilFilter() {
@@ -427,31 +423,34 @@ class FilterScreen extends StatelessWidget {
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
       ),
-      itemCount: utilList.length,
+      itemCount: controller.utilList.length,
       itemBuilder: (context, index) {
         return FilledButton.icon(
           style: FilledButton.styleFrom(
             padding: EdgeInsets.all(0),
             backgroundColor:
-                utilList[index].isChecked ? primary98 : secondary90,
+                controller.utilList[index].isChecked ? primary98 : secondary90,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),
           ),
           onPressed: () {
-            utilList[index] =
-                utilList[index].copyWith(isChecked: !utilList[index].isChecked);
+            controller.utilList[index] = controller.utilList[index]
+                .copyWith(isChecked: !controller.utilList[index].isChecked);
           },
           icon: Icon(
-            utilList[index].utility.getIconUtil(),
+            controller.utilList[index].utility.getIconUtil(),
             size: 20,
-            color: utilList[index].isChecked ? primary40 : secondary40,
+            color:
+                controller.utilList[index].isChecked ? primary40 : secondary40,
           ),
           label: Text(
-            utilList[index].utility.getNameUtil(),
+            controller.utilList[index].utility.getNameUtil(),
             style: TextStyle(
                 fontSize: 12,
-                color: utilList[index].isChecked ? primary40 : secondary40,
+                color: controller.utilList[index].isChecked
+                    ? primary40
+                    : secondary40,
                 fontWeight: FontWeight.w500),
           ),
         );
@@ -459,97 +458,101 @@ class FilterScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> roomTypeFilter() {
-    return [
-      radioTypeItem(RoomType.DORMITORY_HOMESTAY),
-      Divider(
-        thickness: 0.7,
-      ),
-      radioTypeItem(RoomType.ROOM),
-      Divider(
-        thickness: 0.7,
-      ),
-      radioTypeItem(RoomType.WHOLE_HOUSE),
-      Divider(
-        thickness: 0.7,
-      ),
-      radioTypeItem(RoomType.APARTMENT),
-      Divider(
-        thickness: 0.7,
-      ),
-    ];
+  Widget roomTypeFilter() {
+    return Column(
+      children: [
+        radioTypeItem(RoomType.DORMITORY_HOMESTAY),
+        Divider(
+          thickness: 0.7,
+        ),
+        radioTypeItem(RoomType.ROOM),
+        Divider(
+          thickness: 0.7,
+        ),
+        radioTypeItem(RoomType.WHOLE_HOUSE),
+        Divider(
+          thickness: 0.7,
+        ),
+        radioTypeItem(RoomType.APARTMENT),
+        Divider(
+          thickness: 0.7,
+        ),
+      ],
+    );
   }
 
-  List<Widget> capacityFilter() {
-    return [
-      Row(
-        children: [
-          Expanded(
-            child: Text(
-              "Số người",
-              style: TextStyle(fontSize: 16, color: secondary20),
-            ),
-          ),
-          QuantityInput(
-              acceptsNegatives: false,
-              acceptsZero: false,
-              buttonColor: primary60,
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: primary40, width: 2)),
-              ),
-              value: 1,
-              onChanged: (value) {
-                //simpleIntInput = int.parse(value.replaceAll(',', ''));
-              }),
-        ],
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: Text(
-              "Giới tính",
-              style: TextStyle(fontSize: 16, color: secondary20),
-            ),
-          ),
-          Container(
-            width: 210,
-            child: DefaultTabController(
-              length: 3,
-              child: TabBar(
-                indicatorColor: primary40,
-                labelColor: primary40,
-                unselectedLabelColor: secondary40,
-                labelPadding: EdgeInsets.symmetric(horizontal: 20),
-                isScrollable: true,
-                dividerColor: Colors.transparent,
-                tabs: <Widget>[
-                  Tab(
-                    text: 'Nữ',
-                  ),
-                  Tab(
-                    text: 'Nam',
-                  ),
-                  Tab(
-                    text: 'Tất cả',
-                  ),
-                ],
+  Widget capacityFilter() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Số người",
+                style: TextStyle(fontSize: 16, color: secondary20),
               ),
             ),
-          )
-        ],
-      ),
-    ];
+            QuantityInput(
+                acceptsNegatives: false,
+                acceptsZero: false,
+                buttonColor: primary60,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: primary40, width: 2)),
+                ),
+                value: 1,
+                onChanged: (value) {
+                  //simpleIntInput = int.parse(value.replaceAll(',', ''));
+                }),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Giới tính",
+                style: TextStyle(fontSize: 16, color: secondary20),
+              ),
+            ),
+            Container(
+              width: 210,
+              child: DefaultTabController(
+                length: 3,
+                child: TabBar(
+                  indicatorColor: primary40,
+                  labelColor: primary40,
+                  unselectedLabelColor: secondary40,
+                  labelPadding: EdgeInsets.symmetric(horizontal: 20),
+                  isScrollable: true,
+                  dividerColor: Colors.transparent,
+                  tabs: <Widget>[
+                    Tab(
+                      text: 'Nữ',
+                    ),
+                    Tab(
+                      text: 'Nam',
+                    ),
+                    Tab(
+                      text: 'Tất cả',
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
   }
 
-  List<Widget> sortFilter() {
-    return [
+  Widget sortFilter() {
+    return Column(children: [
       radioSortItem(Sort.MOST_RELATED),
       Divider(
         thickness: 0.7,
@@ -566,6 +569,23 @@ class FilterScreen extends StatelessWidget {
       Divider(
         thickness: 0.7,
       ),
-    ];
+    ]);
+  }
+
+  Widget loadPageContent(FilterType? value) {
+    switch (value) {
+      case FilterType.PRICE:
+        return priceFilter();
+      case FilterType.UTIL:
+        return utilFilter();
+      case FilterType.ROOM_TYPE:
+        return roomTypeFilter();
+      case FilterType.CAPACITY:
+        return capacityFilter();
+      case FilterType.SORT:
+        return sortFilter();
+      default:
+        return const SizedBox();
+    }
   }
 }
