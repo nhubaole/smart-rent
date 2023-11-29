@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +8,7 @@ import 'package:smart_rent/modules/search/views/result_item.dart';
 
 import '../../../core/values/app_colors.dart';
 
+// ignore: must_be_immutable
 class ResultScreen extends StatelessWidget {
   ResultScreen({super.key, required this.location});
 
@@ -26,7 +26,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.setLocation(location);
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
+        value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.dark,
@@ -35,7 +35,7 @@ class ResultScreen extends StatelessWidget {
             body: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -46,7 +46,7 @@ class ResultScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
                           width: MediaQuery.sizeOf(context).width - 80,
                           decoration: BoxDecoration(
@@ -57,13 +57,13 @@ class ResultScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SvgPicture.asset('assets/images/ic_location.svg'),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Expanded(
                                 child: Text(
                                   controller.location,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: primary60),
@@ -78,7 +78,7 @@ class ResultScreen extends StatelessWidget {
                         onTap: () {
                           Get.back();
                         },
-                        child: Text(
+                        child: const Text(
                           'Hủy',
                           style: TextStyle(
                               fontSize: 14,
@@ -88,7 +88,7 @@ class ResultScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   SizedBox(
@@ -98,7 +98,7 @@ class ResultScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return FilledButton.icon(
                           style: FilledButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             backgroundColor: secondary90,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
@@ -107,14 +107,14 @@ class ResultScreen extends StatelessWidget {
                           onPressed: () {
                             Get.to(FilterScreen(location: location));
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.keyboard_arrow_down,
                             size: 20,
                             color: secondary40,
                           ),
                           label: Text(
                             filterList[index],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 12,
                                 color: secondary40,
                                 fontWeight: FontWeight.w500),
@@ -123,11 +123,11 @@ class ResultScreen extends StatelessWidget {
                       },
                       itemCount: filterList.length,
                       separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(width: 8);
+                        return const SizedBox(width: 8);
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Obx(
@@ -135,7 +135,7 @@ class ResultScreen extends StatelessWidget {
                       controller.isLoaded.value
                           ? "${controller.results.value.length} Kết quả"
                           : "",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: secondary20,
                           fontWeight: FontWeight.w600,
                           fontSize: 20),
@@ -153,7 +153,7 @@ class ResultScreen extends StatelessWidget {
                           itemCount: controller.results.value.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.only(bottom: 16),
                               child: ResultItem(
                                 room: controller.results.value[index],
                               ),
