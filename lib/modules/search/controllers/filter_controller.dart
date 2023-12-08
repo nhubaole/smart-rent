@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/enums/filter_type.dart';
@@ -11,10 +12,16 @@ import 'package:smart_rent/core/model/filter/price_filter.dart';
 import 'package:smart_rent/core/model/filter/room_type_filter.dart';
 import 'package:smart_rent/core/model/filter/sort_filter.dart';
 import 'package:smart_rent/core/model/filter/util_filter.dart';
+import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
+import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class FilterController extends GetxController {
   late String location;
+  var results = Rx<List<Room>>([]);
+  RxBool isLoaded = false.obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var filter = const Filter().obs;
   var filterStringList = RxList<String>([]);
   RxInt itemFilterCount = 0.obs;
@@ -54,6 +61,7 @@ class FilterController extends GetxController {
 
   void setLocation(String location) {
     this.location = location;
+    queryRoomByLocation();
   }
 
   void setPrice(RangeValues values) {
@@ -138,5 +146,80 @@ class FilterController extends GetxController {
       filterStringList.add(filter.value.sortFilter!.sort.getNameSort());
     }
     itemFilterCount.value = filterStringList.length;
+  }
+
+  void queryRoomByLocation() async {
+    try {
+      final querySnapshot =
+          await firestore.collection(KeyValue.KEY_COLLECTION_ROOM).get();
+      results.value = querySnapshot.docs
+          .map(
+            (e) => Room.fromJson(
+              e.data(),
+            ),
+          )
+          .where((element) => TiengViet.parse(element.location.toLowerCase())
+              .contains(TiengViet.parse(location.toLowerCase())))
+          .toList();
+      isLoaded.value = true;
+      print(results.value.length);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
+
+  void applyFilter() {
+    if (filter.value.priceFilter != null) {
+      results.value = results.value
+          .where((element) =>
+              element.price >= filter.value.priceFilter!.fromPrice &&
+              element.price <= filter.value.priceFilter!.toPrice)
+          .toList();
+    }
+    if (filter.value.utilFilter != null) {
+      results.value = results.value.where((element) {
+        for (var i in filter.value.utilFilter!.listUtils) {
+          if (element.utilities.any((filter) => filter == i)) {
+          } else {
+            return false;
+          }
+        }
+        return true;
+      }).toList();
+    }
+    if (filter.value.roomTypeFilter != null) {
+      results.value = results.value
+          .where((element) =>
+              element.roomType == filter.value.roomTypeFilter!.roomType)
+          .toList();
+    }
+    if (filter.value.capacityFilter != null) {
+      results.value = results.value
+          .where((element) =>
+              element.capacity == filter.value.capacityFilter!.capacity &&
+              element.gender == filter.value.capacityFilter!.gender)
+          .toList();
+    }
+    if (filter.value.sortFilter != null) {
+      switch (filter.value.sortFilter!.sort) {
+        case Sort.MOST_RELATED:
+          break;
+        case Sort.LATEST:
+          results.value.sort((a, b) {
+            DateTime aDate = DateTime.parse(a.dateTime);
+            DateTime bDate = DateTime.parse(b.dateTime);
+            return aDate.compareTo(bDate);
+          });
+          break;
+        case Sort.HIGHEST_TO_LOWEST:
+          results.value.sort((a, b) => b.price.compareTo(a.price));
+          break;
+        case Sort.LOWEST_TO_HIGHEST:
+          results.value.sort((a, b) => a.price.compareTo(b.price));
+          break;
+        default:
+          break;
+      }
+    }
   }
 }

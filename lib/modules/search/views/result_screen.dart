@@ -7,13 +7,14 @@ import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/result_item.dart';
 
 import '../../../core/values/app_colors.dart';
+import '../controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
 class ResultScreen extends StatelessWidget {
   ResultScreen({super.key, required this.location});
 
   final String location;
-  ResultController controller = Get.put(ResultController());
+  FilterController controller = Get.put(FilterController());
   List<String> filterList = [
     "Giá cả",
     "Tiện ích",
@@ -105,7 +106,7 @@ class ResultScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Get.to(FilterScreen(location: location));
+                            Get.to(FilterScreen());
                           },
                           icon: const Icon(
                             Icons.keyboard_arrow_down,

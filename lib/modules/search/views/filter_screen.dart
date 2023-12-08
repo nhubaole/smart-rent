@@ -13,15 +13,11 @@ import 'package:smart_rent/modules/search/views/util_filter_page.dart';
 
 // ignore: must_be_immutable
 class FilterScreen extends StatelessWidget {
-  FilterScreen({super.key, required this.location});
+  FilterScreen({super.key});
   FilterController controller = Get.put(FilterController());
-
-  final String location;
 
   @override
   Widget build(BuildContext context) {
-    controller.setLocation(location);
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -59,7 +55,7 @@ class FilterScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  location,
+                                  controller.location,
                                   style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
@@ -247,7 +243,10 @@ class FilterScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: FilledButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      controller.applyFilter();
+                                      Get.back();
+                                    },
                                     style: FilledButton.styleFrom(
                                       backgroundColor: primary60,
                                     ),
