@@ -1,14 +1,14 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
-import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
 class RootScreenController extends GetxController {
@@ -19,8 +19,14 @@ class RootScreenController extends GetxController {
 
   @override
   void onInit() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
     pageController = PageController(initialPage: 0);
     getInfoAccount();
+
     super.onInit();
   }
 
@@ -83,6 +89,7 @@ class RootScreenController extends GetxController {
     currentAccount = await AuthMethods.getUserDetails(
       FirebaseAuth.instance.currentUser!.uid,
     );
+    await FireStoreMethods().setTokenDevice(currentAccount.uid);
     initSharedPreferences();
     ZIMLogin();
   }

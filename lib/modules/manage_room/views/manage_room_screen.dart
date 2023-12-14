@@ -76,8 +76,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const SizedBox(
-                    height: 50,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng yêu cầu thuê',
@@ -147,6 +147,18 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                       );
                     },
                     firstIcon: Icons.heart_broken,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  AccountButtonNav(
+                    nameButton: 'Quản lí hóa đơn',
+                    onPressed: () {
+                      manageRoomController.goToScreen(
+                        const LikedRoomScreen(),
+                      );
+                    },
+                    firstIcon: Icons.payment,
                   ),
                   const Spacer(),
                 ],
