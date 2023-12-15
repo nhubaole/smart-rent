@@ -5,6 +5,7 @@ import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/model/review_ticket/review_ticket.dart';
 import 'package:smart_rent/core/model/room/room.dart';
+import 'package:smart_rent/core/resources/firebase_fcm.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 
 class FireStoreMethods {
@@ -176,10 +177,31 @@ class FireStoreMethods {
           .orderBy('orderCode', descending: true)
           .limit(1)
           .get()
-          .then((value) => value.docs.forEach((element) {
+          .then(
+            (value) => value.docs.forEach(
+              (element) {
                 newestOrderCode = element.data()['orderCode'] as int;
-              }));
+              },
+            ),
+          );
     } catch (err) {}
     return newestOrderCode;
+  }
+
+  Future<void> setTokenDevice(
+    String uidOwner,
+  ) async {
+    try {
+      String token = await FirebaseFCM().getCurrentToken();
+      String uid =
+          _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      await _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc(uid).set({
+        'uid': uid,
+        'uidOwner': uidOwner,
+        'token': token,
+      });
+    } catch (err) {
+      Get.snackbar('title', err.toString());
+    }
   }
 }
