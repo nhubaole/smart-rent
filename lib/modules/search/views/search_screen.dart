@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/result_screen.dart';
 
 import '../../../core/model/location/ward.dart';
@@ -65,7 +66,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset('assets/images/ic_location.svg'),
-                          SizedBox(width: 4,),
+                          SizedBox(
+                            width: 4,
+                          ),
                           Expanded(
                             child: TextField(
                               autofocus: true,
@@ -77,9 +80,15 @@ class _SearchScreenState extends State<SearchScreen> {
                               onChanged: onSearchTextChanged,
                             ),
                           ),
-                          SizedBox(width: 4,),
+                          SizedBox(
+                            width: 4,
+                          ),
                           InkWell(
-                            child: Icon(Icons.cancel, size: 16, color: secondary40,),
+                            child: Icon(
+                              Icons.cancel,
+                              size: 16,
+                              color: secondary40,
+                            ),
                             onTap: () {
                               controller.clear();
                               onSearchTextChanged('');
@@ -118,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           color: secondary80, width: 1))),
                               child: InkWell(
                                 onTap: () {
-                                  Get.to(ResultScreen(
+                                  Get.to(FilterScreen(
                                       location: _searchResult[index]));
                                 },
                                 child: Row(
