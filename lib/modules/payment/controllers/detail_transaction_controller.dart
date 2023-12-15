@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -87,24 +88,6 @@ class DetailTransactionController extends GetxController {
         colorText: Colors.black);
   }
 
-  // void payment() {
-
-  //   order = {
-  //     'orderCode': invoice.orderCode,
-  //     'amount': invoice.amountRoom,
-  //     'description': invoice.description,
-  //     'buyerName': invoice.buyerName,
-  //     'buyerEmail': invoice.buyerEmail,
-  //     'buyerPhone': invoice.buyerPhone,
-  //     'buyerAddress': invoice.buyerAddress,
-  //     'items': invoice.items,
-  //     'cancelUrl': invoice.cancelUrl,
-  //     'returnUrl': invoice.returnUrl,
-  //     'expiredAt': timeStamp,
-  //     'signature': PaymentOSService().getSignature(invoice)
-  //   };
-  // }
-
   Future<void> getWebView() async {
     DateTime now = DateTime.now().add(const Duration(hours: 1)).toUtc();
     final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
@@ -174,8 +157,6 @@ class DetailTransactionController extends GetxController {
         errorMessage.value = resData['desc'];
         return;
       }
-
-      //print(resData['data']['checkoutUrl']);
     } finally {
       client.close();
     }
@@ -190,6 +171,20 @@ class DetailTransactionController extends GetxController {
       await FireStoreMethods().addInvoice(rxInvoice.value!);
       statusTransaction.value = 'success';
       await FireStoreMethods().updateInvoice(rxInvoice.value!, 'SUCCESS');
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 10,
+          channelKey: 'basic_channel',
+          title: 'Thanh toán thành công',
+          body: 'Bạn đã thanh toán thành công cho căn nhà ...',
+        ),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'AGREED1', label: 'I agree', autoDismissible: true),
+          NotificationActionButton(
+              key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+        ],
+      );
     }
 
     // You can perform actions based on the current URL here

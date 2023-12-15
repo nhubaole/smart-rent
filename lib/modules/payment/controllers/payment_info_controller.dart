@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
@@ -47,7 +48,7 @@ class PaymentInfoController extends GetxController {
       addressRoom: 'addressRoom',
       amountRoom: 5000,
       description: 'test coc phong tro',
-      buyerId: 'x47CBjhEVvVD4sBVWMDkYHYgfcg1',
+      buyerId: FirebaseAuth.instance.currentUser!.uid,
       buyerName: 'Pham Quoc Danh',
       buyerEmail: 'quocdanhmyker@gmail.com',
       buyerPhone: '+84373855259',

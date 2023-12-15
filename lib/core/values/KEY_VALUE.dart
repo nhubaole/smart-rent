@@ -39,7 +39,7 @@ class KeyValue {
   static const KEY_ROOM_POSTED = 'posted';
   static const KEY_ROOM_PENDING_APPROVED = 'pending';
 
-  //
+  // payments
   static const KEY_ROOM_LIST_RECENTLY = 'room_list_recently';
   static const KEY_INVOICE_COLLECTION = 'INVOICE_COLLECTION';
   static const KEY_REVIEW_TICKET_COLLECTION = 'REVIEW_TICKET_COLLECTION';

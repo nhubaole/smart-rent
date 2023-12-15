@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/notification/views/notification_item_widget.dart';
-import 'package:uuid/uuid.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});

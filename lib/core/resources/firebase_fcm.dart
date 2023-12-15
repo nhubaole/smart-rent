@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_rent/blank.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class FirebaseFCM {
   final _fibaseMessaging = FirebaseMessaging.instance;
@@ -34,11 +35,11 @@ class FirebaseFCM {
   void handleMessageForeground(RemoteMessage? message) {
     if (message == null) return;
 
-    // Get.to(
-    //   () => Blank(
-    //     message: message,
-    //   ),
-    // );
+    Get.to(
+      () => Blank(
+        message: message,
+      ),
+    );
 
     AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -95,20 +96,30 @@ class FirebaseFCM {
     String senderUid,
     String receiverUid,
     String receiverTokenFCM,
-    String typeNoti,
     String title,
     String body,
+    bool sound,
+    String? imgUrl,
+    String contentType,
   ) async {
     String res = 'Something went wrong';
     try {
       _fibaseMessaging.getToken().then((value) async {
         var data = {
           'to': receiverTokenFCM,
-          'priority': 'high',
           'notification': {
             'title': title,
             'body': body,
-          }
+            'sound': true,
+            'image': imgUrl,
+          },
+          'data': {
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'senderUid': senderUid,
+            'receiverUid': receiverUid,
+            'content_type': contentType
+          },
+          'priority': 'high'
         };
         var response = await http.post(Uri.parse(dotenv.get('fcm_google_url')),
             body: jsonEncode(data),
@@ -116,7 +127,10 @@ class FirebaseFCM {
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'key=${dotenv.get('server_key')}',
             });
-        print(response.statusCode);
+        //print(response.statusCode);
+        if (response.statusCode == 200) {
+          FireStoreMethods().setContentNotification(receiverUid, data);
+        }
       });
     } catch (e) {
       Get.snackbar('title', e.toString());
