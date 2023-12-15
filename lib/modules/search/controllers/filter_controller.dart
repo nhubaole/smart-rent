@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +25,7 @@ class FilterController extends GetxController {
   RxBool isLoaded = false.obs;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var filter = const Filter().obs;
-  var filterStringList = RxList<String>([]);
+  var filterStringList = RxList<Map<String, dynamic>>([]);
   RxInt itemFilterCount = 0.obs;
   var selectedFilter = Rx<FilterType?>(FilterType.PRICE);
 
@@ -61,6 +63,7 @@ class FilterController extends GetxController {
 
   void setLocation(String location) {
     this.location = location;
+    selectedFilter.value = null;
     queryRoomByLocation();
   }
 
@@ -122,33 +125,93 @@ class FilterController extends GetxController {
   void convertFilterToListString() {
     filterStringList.clear();
     if (filter.value.priceFilter != null) {
-      filterStringList.add(
-          "${filter.value.priceFilter!.fromPrice.toString()} - ${filter.value.priceFilter!.toPrice.toString()}");
+      filterStringList.add({
+        "${filter.value.priceFilter!.fromPrice.toString()} - ${filter.value.priceFilter!.toPrice.toString()}":
+            filter.value.priceFilter
+      });
     }
     if (filter.value.utilFilter != null) {
       for (var item in filter.value.utilFilter!.listUtils) {
-        filterStringList.add(item.getNameUtil());
+        filterStringList.add({item.getNameUtil(): item});
       }
     }
     if (filter.value.roomTypeFilter != null) {
-      filterStringList
-          .add(filter.value.roomTypeFilter!.roomType.getNameRoomType());
+      filterStringList.add({
+        filter.value.roomTypeFilter!.roomType.getNameRoomType():
+            filter.value.roomTypeFilter
+      });
     }
     if (filter.value.capacityFilter != null) {
       if (filter.value.capacityFilter!.gender == Gender.ALL) {
-        filterStringList.add("${filter.value.capacityFilter!.capacity} Nam/Nữ");
+        filterStringList.add({
+          "${filter.value.capacityFilter!.capacity} Nam/Nữ":
+              filter.value.capacityFilter
+        });
       } else {
-        filterStringList.add(
-            "${filter.value.capacityFilter!.capacity} ${filter.value.capacityFilter!.gender.getNameGender()}");
+        filterStringList.add({
+          "${filter.value.capacityFilter!.capacity} ${filter.value.capacityFilter!.gender.getNameGender()}":
+              filter.value.capacityFilter
+        });
       }
     }
     if (filter.value.sortFilter != null) {
-      filterStringList.add(filter.value.sortFilter!.sort.getNameSort());
+      filterStringList.add({
+        filter.value.sortFilter!.sort.getNameSort(): filter.value.sortFilter
+      });
     }
     itemFilterCount.value = filterStringList.length;
   }
 
-  void queryRoomByLocation() async {
+  void removeFilter(Map<String, dynamic> element) {
+    var type = element.values.first.runtimeType;
+
+    if (type == filter.value.priceFilter.runtimeType) {
+      filter.value = filter.value.copyWith(priceFilter: null);
+
+      currentRangeValues.value = RangeValues(0, 100000000);
+      int startValue = currentRangeValues.value.start.round();
+      int endValue = currentRangeValues.value.end.round();
+      fromPriceTextController.text = startValue.toString();
+      toPriceTextController.text = endValue.toString();
+    } else if (filter.value.utilFilter != null &&
+        filter.value.utilFilter!.listUtils.isNotEmpty &&
+        type == filter.value.utilFilter!.listUtils[0].runtimeType) {
+      List<Utilities> list = [];
+      for (var i in filter.value.utilFilter!.listUtils) {
+        list.add(i);
+      }
+      list.remove(element.values.first);
+      for (int i = 0; i < utilList.length; i++) {
+        if (utilList[i].utility == element.values.first) {
+          utilList[i] = utilList[i].copyWith(isChecked: false);
+        }
+      }
+      filter.value =
+          filter.value.copyWith(utilFilter: UtilFilter(listUtils: list));
+    } else if (type == filter.value.roomTypeFilter.runtimeType) {
+      filter.value = filter.value.copyWith(roomTypeFilter: null);
+    } else if (type == filter.value.capacityFilter.runtimeType) {
+      filter.value = filter.value.copyWith(capacityFilter: null);
+
+      quantity.value = 0;
+      genderIdx.value = 0;
+    } else if (type == filter.value.sortFilter.runtimeType) {
+      filter.value = filter.value.copyWith(sortFilter: null);
+    }
+
+    filterStringList.remove(element);
+    itemFilterCount.value = filterStringList.length;
+  }
+
+  void removeAllFilter() {
+    var copyList = filterStringList.toList();
+
+    for (var e in copyList) {
+      removeFilter(e);
+    }
+  }
+
+  Future<void> queryRoomByLocation() async {
     try {
       final querySnapshot =
           await firestore.collection(KeyValue.KEY_COLLECTION_ROOM).get();
@@ -162,6 +225,7 @@ class FilterController extends GetxController {
               .contains(TiengViet.parse(location.toLowerCase())))
           .toList();
       isLoaded.value = true;
+      applyFilter();
       print(results.value.length);
     } catch (e) {
       Get.snackbar('Error', e.toString());

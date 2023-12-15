@@ -7,17 +7,21 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 import 'package:smart_rent/modules/search/views/capacity_filter_page.dart';
 import 'package:smart_rent/modules/search/views/price_filter_page.dart';
+import 'package:smart_rent/modules/search/views/result_item.dart';
 import 'package:smart_rent/modules/search/views/room_type_filter_page.dart';
 import 'package:smart_rent/modules/search/views/sort_filter_page.dart';
 import 'package:smart_rent/modules/search/views/util_filter_page.dart';
 
 // ignore: must_be_immutable
 class FilterScreen extends StatelessWidget {
-  FilterScreen({super.key});
+  FilterScreen({super.key, required this.location});
+  final String location;
   FilterController controller = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
+    controller.setLocation(location);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -26,6 +30,7 @@ class FilterScreen extends StatelessWidget {
         ),
         child: Scaffold(
             body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -139,149 +144,203 @@ class FilterScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-                height: 50,
-                color: secondary90,
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      "Bộ lọc",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: secondary20),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: Obx(
-                      () => ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        itemBuilder: (context, index) {
-                          return Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Obx(() => Text(
-                                        controller.filterStringList[index],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                            color: secondary40),
-                                      )),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  const InkWell(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: secondary40,
-                                      size: 16,
-                                    ),
-                                  )
-                                ],
-                              ));
-                        },
-                        itemCount: controller.itemFilterCount.value,
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(width: 8);
-                        },
-                      ),
-                    ))
-                  ],
-                )),
-            const SizedBox(
-              height: 30,
-            ),
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: Get.height * 0.6,
-                    child: Column(
+            Obx(() => controller.filterStringList.isNotEmpty
+                ? Container(
+                    height: 50,
+                    color: secondary90,
+                    child: Row(
                       children: [
-                        Obx(() =>
-                            loadPageContent(controller.selectedFilter.value)),
                         const SizedBox(
-                          height: 30,
+                          width: 10,
+                        ),
+                        const Text(
+                          "Bộ lọc",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: secondary20),
+                        ),
+                        const SizedBox(
+                          width: 10,
                         ),
                         Expanded(
-                            child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () {},
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                          color: primary60, width: 1.5),
-                                    ),
-                                    child: const Text(
-                                      'Xóa bộ lọc',
-                                      style: TextStyle(
-                                        color: primary60,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                            child: Obx(
+                          () => ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Obx(() => Text(
+                                            controller.filterStringList[index]
+                                                .keys.first,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: secondary40),
+                                          )),
+                                      const SizedBox(
+                                        width: 10,
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Expanded(
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      controller.applyFilter();
-                                      Get.back();
-                                    },
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: primary60,
-                                    ),
-                                    child: const Text(
-                                      'Áp dụng',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            const Text(
-                              "Vui lòng chọn yêu cầu, sau đó bấm áp dụng để tìm kiếm!",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: secondary20,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                                      InkWell(
+                                        onTap: () {
+                                          controller.removeFilter(controller
+                                              .filterStringList[index]);
+                                          controller.queryRoomByLocation();
+                                        },
+                                        child: Icon(
+                                          Icons.cancel,
+                                          color: secondary40,
+                                          size: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ));
+                            },
+                            itemCount: controller.itemFilterCount.value,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const SizedBox(width: 8);
+                            },
+                          ),
                         ))
                       ],
+                    ))
+                : SizedBox()),
+            Obx(() => SizedBox(
+                  height: controller.filterStringList.isNotEmpty ? 16 : 0,
+                )),
+            Obx(() => controller.selectedFilter.value == null
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      controller.isLoaded.value
+                          ? "${controller.results.value.length} Kết quả"
+                          : "",
+                      style: const TextStyle(
+                          color: secondary20,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20),
                     ),
-                  ),
-                ),
-              ),
-            )
+                  )
+                : SizedBox()),
+            Obx(() => controller.selectedFilter.value == null
+                ? const SizedBox(
+                    height: 16,
+                  )
+                : SizedBox()),
+            Obx(() => controller.selectedFilter.value == null
+                ? Expanded(
+                    child: Container(
+                        width: double.infinity,
+                        color: primary95,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Obx(() => ListView.builder(
+                              itemCount: controller.results.value.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: ResultItem(
+                                    room: controller.results.value[index],
+                                  ),
+                                );
+                              },
+                            ))))
+                : SizedBox()),
+            Obx(() => controller.selectedFilter.value == null
+                ? SizedBox()
+                : Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        child: Container(
+                          height: Get.height * 0.6,
+                          child: Column(
+                            children: [
+                              Obx(() => loadPageContent(
+                                  controller.selectedFilter.value)),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Expanded(
+                                  child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            controller.removeAllFilter();
+                                            controller.queryRoomByLocation();
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(
+                                                color: primary60, width: 1.5),
+                                          ),
+                                          child: const Text(
+                                            'Xóa bộ lọc',
+                                            style: TextStyle(
+                                              color: primary60,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Expanded(
+                                        child: FilledButton(
+                                          onPressed: () async {
+                                            await controller
+                                                .queryRoomByLocation();
+                                            controller.selectedFilter.value =
+                                                null;
+                                          },
+                                          style: FilledButton.styleFrom(
+                                            backgroundColor: primary60,
+                                          ),
+                                          child: const Text(
+                                            'Áp dụng',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  const Text(
+                                    "Vui lòng chọn yêu cầu, sau đó bấm áp dụng để tìm kiếm!",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: secondary20,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
           ],
         )));
   }
