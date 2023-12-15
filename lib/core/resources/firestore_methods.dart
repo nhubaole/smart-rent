@@ -129,7 +129,6 @@ class FireStoreMethods {
       Map<String, dynamic> request, Invoice invoice) async {
     String rs = 'Some thing went wrong';
     try {
-      print('invoice.orderCode ' + invoice.orderCode.toString());
       await _firestore
           .collection(KeyValue.KEY_PAYOS_REQUEST_COLLECTION)
           .doc(invoice.orderCode.toString())
@@ -145,9 +144,10 @@ class FireStoreMethods {
                 .toUtc()
                 .millisecondsSinceEpoch ~/
             1000,
-        'status': 'SUCCESS',
+        'statusInvoice': 'PENDING',
       }).onError(
-              (error, stackTrace) => print("Error writing document: $error"));
+        (error, stackTrace) => print("Error writing document: $error"),
+      );
       rs = 'sucess';
     } catch (err) {
       rs = err.toString();
@@ -160,8 +160,12 @@ class FireStoreMethods {
     try {
       await _firestore
           .collection(KeyValue.KEY_PAYOS_REQUEST_COLLECTION)
-          .doc(invoice.paymentLinkId)
-          .update({'status': result});
+          .doc(invoice.orderCode.toString())
+          .update({'statusInvoice': result});
+      await _firestore
+          .collection(KeyValue.KEY_PAYOS_REQUEST_COLLECTION)
+          .doc(invoice.orderCode.toString())
+          .update({'response.data.status': result});
       rs = 'sucess';
     } catch (err) {
       rs = err.toString();
@@ -185,6 +189,7 @@ class FireStoreMethods {
             ),
           );
     } catch (err) {}
+
     return newestOrderCode;
   }
 
@@ -193,15 +198,74 @@ class FireStoreMethods {
   ) async {
     try {
       String token = await FirebaseFCM().getCurrentToken();
-      String uid =
-          _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
-      await _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc(uid).set({
-        'uid': uid,
+      // String uid =
+      //     _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      await _firestore
+          .collection(KeyValue.KEY_DEVICE_COLLECTION)
+          .doc(uidOwner)
+          .set({
+        // 'uid': uid,
         'uidOwner': uidOwner,
         'token': token,
       });
     } catch (err) {
-      Get.snackbar('title', err.toString());
+      Get.snackbar('Error', err.toString());
     }
+  }
+
+  Future<String> getTokenDevice(String uidOwner) async {
+    String token = '';
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_DEVICE_COLLECTION)
+          .doc(uidOwner)
+          .get()
+          .then((value) => token = value.data()!['token']);
+    } catch (err) {
+      Get.snackbar('Error', err.toString());
+    }
+    return token;
+  }
+
+  Future<void> setContentNotification(
+    String uidOwner,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      // String uid =
+      //     _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      await _firestore
+          .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
+          .doc(uidOwner)
+          .collection(uidOwner)
+          .doc()
+          .set(data);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getListInvoice(
+      String uid, bool descending, String statusInvoice) async {
+    List<Map<String, dynamic>> listInvoice = [];
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_PAYOS_REQUEST_COLLECTION)
+          .where('buyer', isEqualTo: uid)
+          .where('statusInvoice', isEqualTo: statusInvoice)
+          .orderBy(
+            'timeStamp',
+            descending: descending,
+          )
+          .get();
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        listInvoice.add(documentData);
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+    return listInvoice;
   }
 }
