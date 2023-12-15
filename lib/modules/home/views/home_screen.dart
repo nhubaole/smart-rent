@@ -4,6 +4,7 @@ import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart'
 import 'package:smart_rent/modules/home/views/home_list_room.dart';
 import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
 import 'package:smart_rent/modules/home/views/home_top_widget.dart';
+import 'package:smart_rent/modules/search/views/search_screen.dart';
 
 import '../../post/views/post_screen.dart';
 
@@ -27,38 +28,69 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool _showFab = true;
+    final homeController = Get.find<HomeScreenController>();
 
     return Scaffold(
-      floatingActionButton: AnimatedSlide(
-        duration: const Duration(milliseconds: 300),
-        offset: _showFab ? Offset.zero : Offset(0, 2),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _showFab ? 1 : 0,
-          child: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              Get.to(
-                const PostScreen(),
-              );
-            },
-          ),
-        ),
+      floatingActionButton: Obx(
+        () => !homeController.isScrollingUp.value
+            ? FloatingActionButton(
+                child: const Icon(Icons.search),
+                onPressed: () {
+                  Get.to(
+                    const SearchScreen(),
+                    preventDuplicates: true,
+                    curve: Curves.easeInBack,
+                  );
+                })
+            : FloatingActionButton.extended(
+                label: const Row(
+                  children: [Icon(Icons.search), Text('Tìm phòng trọ ngay')],
+                ),
+                onPressed: () {
+                  Get.to(
+                    const SearchScreen(),
+                  );
+                }),
       ),
-      body: const SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            // top widget
-            HomeTopWidget(),
-            // pho bien
-            HomePopularWidget(),
-            //list room
-            HomeListRoomWidget(),
-          ],
+      body: NotificationListener(
+        onNotification: (notification) {
+          if (notification is ScrollUpdateNotification) {
+            // Check if the user is scrolling up or down based on delta
+            if (notification.dragDetails != null) {
+              final delta = notification.dragDetails!.delta.dy;
+              if (delta < 0) {
+                // Scrolling up
+                homeController.isScrollingUp.value = true;
+                print('Scrolling Up');
+              } else if (delta > 0) {
+                // Scrolling down
+                homeController.isScrollingUp.value = true;
+                print('Scrolling Down');
+              }
+            }
+          } else if (notification is ScrollStartNotification) {
+            // When scrolling starts
+            //homeController.isScrollingUp.value = true;
+          } else if (notification is ScrollEndNotification) {
+            // When scrolling ends
+            homeController.isScrollingUp.value = false;
+          }
+          return true; // Return true to continue handling the notification
+        },
+        child: const SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              // top widget
+              HomeTopWidget(),
+              // pho bien
+              HomePopularWidget(),
+              //list room
+              HomeListRoomWidget(),
+            ],
+          ),
         ),
       ),
     );

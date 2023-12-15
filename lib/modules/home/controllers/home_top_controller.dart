@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
@@ -9,8 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:crypto/crypto.dart';
-import 'package:zego_zim/zego_zim.dart';
-import 'package:zego_zimkit/zego_zimkit.dart';
 
 class HomeTopWidgetController extends GetxController {
   late Account? currentAccount;
