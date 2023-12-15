@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/manage_account/controllers/account_nav_button_controller.dart';
 import 'package:smart_rent/modules/manage_account/views/nav_screen/account_detail.dart';
 import 'package:smart_rent/modules/manage_account/views/nav_screen/notify_setting.dart';
@@ -63,6 +64,7 @@ class AccountNavButton extends StatelessWidget {
             InkWell(
               onTap: () {
                 AuthMethods.logout();
+                Get.offAll(const LoginScreen());
               },
               child: Container(
                 alignment: Alignment.center,

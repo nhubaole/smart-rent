@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -111,6 +112,13 @@ class RootScreenController extends GetxController {
     if (prefs.getStringList(KeyValue.KEY_ROOM_LIST_RECENTLY) == null) {
       await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, <String>[]);
     }
-    Get.snackbar('Notify', 'message');
+    //Get.snackbar('Notify', 'message');
+  }
+
+  void setIsOnline(bool isOnline) {
+    FirebaseFirestore.instance
+        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({KeyValue.KEY_ACCOUNT_ISONLINE: isOnline});
   }
 }
