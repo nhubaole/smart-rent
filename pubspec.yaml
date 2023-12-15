@@ -28,7 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  awesome_notifications: ^0.8.2
+  awesome_notifications: ^0.7.4+1
   awesome_notifications_core: ^0.8.1
   cached_network_image: ^3.3.0
   cloud_firestore: ^4.9.2
@@ -76,11 +76,6 @@ dependencies:
   transparent_image: ^2.0.1
   uuid: ^3.0.4
   webview_flutter: ^4.4.2
-  swipe_refresh: ^1.0.2
-  lottie: ^2.7.0
-  tiengviet: ^1.0.0
-  rating_summary: ^1.0.2+1
-  gap: ^3.0.1
   quantity_input: ^1.0.2
   zego_zim: ^2.6.0
   zego_zimkit: ^1.11.1
