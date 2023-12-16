@@ -57,6 +57,20 @@ class FireStoreMethods {
     }
   }
 
+  Future<List<Room>> getManyRoom(int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .limit(index)
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
   Future<Room> getRoom(String roomId) async {
     Room room = await _firestore
         .collection(KeyValue.KEY_COLLECTION_ROOM)
@@ -224,6 +238,7 @@ class FireStoreMethods {
     } catch (err) {
       Get.snackbar('Error', err.toString());
     }
+    print(token);
     return token;
   }
 
@@ -232,13 +247,12 @@ class FireStoreMethods {
     Map<String, dynamic> data,
   ) async {
     try {
-      // String uid =
-      //     _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      String id =
+          _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      data['id'] = id;
       await _firestore
           .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
-          .doc(uidOwner)
-          .collection(uidOwner)
-          .doc()
+          .doc(id)
           .set(data);
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -246,7 +260,10 @@ class FireStoreMethods {
   }
 
   Future<List<Map<String, dynamic>>> getListInvoice(
-      String uid, bool descending, String statusInvoice) async {
+    String uid,
+    bool descending,
+    String statusInvoice,
+  ) async {
     List<Map<String, dynamic>> listInvoice = [];
     try {
       QuerySnapshot querySnapshot = await _firestore
@@ -267,5 +284,41 @@ class FireStoreMethods {
       print(err.toString());
     }
     return listInvoice;
+  }
+
+  Future<List<Map<String, dynamic>>> getListNotification(
+    String uidOwner,
+    int page,
+  ) async {
+    List<Map<String, dynamic>> listNotification = [];
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
+          .where('data.recieverId', isEqualTo: uidOwner)
+          .orderBy('timeStamp', descending: true)
+          .limit(page)
+          .get();
+      print('querySnapshot.docs.length: ${querySnapshot.docs.length}');
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        listNotification.add(documentData);
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+
+    return listNotification;
+  }
+
+  Future<void> markAsReadNotification(String id) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
+          .doc(id)
+          .update({'isRead': true});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
   }
 }

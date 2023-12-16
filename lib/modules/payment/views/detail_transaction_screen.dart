@@ -138,10 +138,9 @@ class DetailTransactionScreen extends StatelessWidget {
                                             .isExisting.value) {
                                           detailTransactionController
                                               .copyToClipboard(
-                                                  detailTransactionController
-                                                      .rxInvoice
-                                                      .value!
-                                                      .paymentLinkId);
+                                            detailTransactionController
+                                                .rxInvoice.value!.paymentLinkId,
+                                          );
                                         }
                                       },
                                       icon: const Icon(Icons.copy),

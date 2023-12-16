@@ -40,7 +40,7 @@ class PaymentInfoController extends GetxController {
   Invoice orderInvoice() {
     return Invoice(
       orderCode: orderCode,
-      recieverId: '88dO1ziekDTn3jflaopWQWeZPM12',
+      recieverId: 'x47CBjhEVvVD4sBVWMDkYHYgfcg1',
       recieverName: 'Le Bao Nhu',
       recieverPhoneNumber: '+84823306992',
       recieverNumberBank: 'recieverNumberBank',
