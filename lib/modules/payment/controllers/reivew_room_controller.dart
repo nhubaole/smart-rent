@@ -30,7 +30,7 @@ class ReviewRoomController extends GetxController {
   }
 
   Future<void> getRoom() async {
-    room.value = await FireStoreMethods().getRoom(invoice.roomId);
+    room.value = await FireStoreMethods().getRoomById(invoice.roomId);
     reviewTicket = ReviewTicket(
       id: 'id',
       roomId: invoice.roomId,
@@ -39,17 +39,18 @@ class ReviewRoomController extends GetxController {
       userId: invoice.buyerId,
       content: '',
       rating: 0,
-      createdAt: '',
+      createdAt: 0,
       image: room.value!.images,
     );
   }
 
   void submitReview() async {
+    DateTime now = DateTime.now().toUtc();
+    final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
     reviewTicket = reviewTicket.copyWith(
       title: room.value!.title,
       content: titleController.text,
-      createdAt:
-          DateFormat('yy-MMMM-dd HH:mm:ss').format(DateTime.now()).toString(),
+      createdAt: timeStamp,
     );
     await FireStoreMethods().addReviewTicket(reviewTicket);
     Get.offAll(() => const RootScreen());

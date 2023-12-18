@@ -3,10 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
-enum contentType {
-  RENT_ROOM,
-  NEW_ROOM,
-}
+// enum contentType {
+//   RENT_ROOM,
+//   NEW_ROOM,
+//   PAYMENT,
+//   REQUEST_RETURN_ROOM,
+// }
 
 class NotificationItemWidget extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -51,8 +53,10 @@ class NotificationItemWidget extends StatelessWidget {
                 width: deviceWidth * 0.2,
                 child: Lottie.asset(
                   data['data']['content_type'] == 'RENT_ROOM'
-                      ? 'assets/lottie/home.json'
-                      : 'assets/lottie/like.json',
+                      ? 'assets/lottie/like.json'
+                      : data['data']['content_type'] == 'PAYMENT'
+                          ? 'assets/lottie/noti_payment.json'
+                          : 'assets/lottie/home.json',
                   repeat: true,
                   reverse: true,
                   height: deviceHeight * 0.2,

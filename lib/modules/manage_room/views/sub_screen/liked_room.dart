@@ -18,6 +18,7 @@ class _LikedRoomScreenState extends State<LikedRoomScreen> {
   Widget build(BuildContext context) {
     final LikedRoomController likedRoomController =
         Get.put(LikedRoomController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -29,105 +30,162 @@ class _LikedRoomScreenState extends State<LikedRoomScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Center(child: Obx(() {
-          if (likedRoomController.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: primary60,
+      body: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: () {
+            return likedRoomController.getListRoom(false);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Center(
+              child: Obx(
+                () => likedRoomController.isLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primary60,
+                        ),
+                      )
+                    : likedRoomController.listRoom.value.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/lottie/empty.json',
+                                  repeat: true,
+                                  reverse: true,
+                                  height: 300,
+                                  width: double.infinity,
+                                ),
+                                Text(
+                                  '${likedRoomController.profileOwner.value!.username}\nchưa thích phòng nào hết!!!',
+                                  style: const TextStyle(
+                                    color: secondary20,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        likedRoomController.getListRoom(false);
+                                      },
+                                      style: ButtonStyle(
+                                        side: MaterialStateProperty.all(
+                                          const BorderSide(
+                                            color: primary40,
+                                          ),
+                                        ),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Tải lại',
+                                        style: TextStyle(
+                                          color: primary40,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.71,
+                                  crossAxisSpacing: 5,
+                                ),
+                                itemCount:
+                                    likedRoomController.listRoom.value.length +
+                                        1,
+                                itemBuilder: (context, index) {
+                                  if (index <
+                                      likedRoomController
+                                          .listRoom.value.length) {
+                                    return RoomItem(
+                                      isHandleRequestReturnRoom: false,
+                                      isReturnRent: false,
+                                      isRented: false,
+                                      room: likedRoomController
+                                          .listRoom.value[index],
+                                      isLiked: likedRoomController
+                                          .listRoom.value[index].listLikes
+                                          .contains(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                      ),
+                                    );
+                                  } else {
+                                    return Obx(
+                                      () => likedRoomController.isLoadMore.value
+                                          ? const Center(
+                                              child: CircularProgressIndicator(
+                                                color: primary95,
+                                                backgroundColor: Colors.white,
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    likedRoomController
+                                                        .getListRoom(true);
+                                                  },
+                                                  style: ButtonStyle(
+                                                    side: MaterialStateProperty
+                                                        .all(
+                                                      const BorderSide(
+                                                        color: primary40,
+                                                      ),
+                                                    ),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Xem thêm',
+                                                    style: TextStyle(
+                                                      color: primary40,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
               ),
-            );
-          } else if (likedRoomController.listRoom.value.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Lottie.asset(
-                    'assets/lottie/empty.json',
-                    repeat: true,
-                    reverse: true,
-                    height: 300,
-                    width: double.infinity,
-                  ),
-                  Text(
-                    '${likedRoomController.profileOwner.value!.username}\nchưa thích phòng nào hết!!!',
-                    style: const TextStyle(
-                      color: secondary20,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w200,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            );
-          }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              GridView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.71,
-                  crossAxisSpacing: 5,
-                  // mainAxisSpacing: 20,
-                ),
-                itemCount: likedRoomController.listRoom.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return RoomItem(
-                    room: likedRoomController.listRoom[index],
-                    isLiked:
-                        likedRoomController.listRoom[index].listLikes.contains(
-                      FirebaseAuth.instance.currentUser!.uid,
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        })
-
-            // Obx(
-            //   () => likedRoomController.isLoading.value
-            //       ? const Center(
-            //           child: CircularProgressIndicator(
-            //             color: primary60,
-            //           ),
-            //         )
-            //       : Column(
-            //           mainAxisAlignment: MainAxisAlignment.start,
-            //           mainAxisSize: MainAxisSize.max,
-            //           children: [
-            //             GridView.builder(
-            //               scrollDirection: Axis.vertical,
-            //               shrinkWrap: true,
-            //               physics: const NeverScrollableScrollPhysics(),
-            //               gridDelegate:
-            //                   const SliverGridDelegateWithFixedCrossAxisCount(
-            //                 crossAxisCount: 2,
-            //                 childAspectRatio: 0.71,
-            //                 crossAxisSpacing: 5,
-            //                 // mainAxisSpacing: 20,
-            //               ),
-            //               itemCount: likedRoomController.listRoom.length,
-            //               itemBuilder: (BuildContext context, int index) {
-            //                 return RoomItem(
-            //                   room: likedRoomController.listRoom[index],
-            //                   isLiked: false,
-            //                 );
-            //               },
-            //             ),
-            //           ],
-            //         ),
-            // ),
             ),
+          ),
+        ),
       ),
     );
   }

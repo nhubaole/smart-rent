@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rent/blank.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class FirebaseFCM {
@@ -101,6 +100,7 @@ class FirebaseFCM {
     bool sound,
     String? imgUrl,
     String contentType,
+    Map<String, dynamic>? dataOptions,
   ) async {
     String res = 'Something went wrong';
     try {
@@ -121,6 +121,7 @@ class FirebaseFCM {
             'recieverId': receiverId,
             'content_type': contentType
           },
+          'room': dataOptions,
           'priority': 'high',
           'isRead': false,
           'timeStamp': timeStamp

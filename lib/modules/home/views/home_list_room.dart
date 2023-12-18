@@ -101,6 +101,9 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                             if (index <
                                 listRoomController.listRoom.value.length) {
                               return RoomItem(
+                                isHandleRequestReturnRoom: false,
+                                isReturnRent: false,
+                                isRented: false,
                                 room: listRoomController.listRoom.value[index],
                                 isLiked: listRoomController
                                     .listRoom.value[index].listLikes
@@ -149,7 +152,6 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                                       ),
                               );
                             }
-                            ;
                           },
                         ),
                       ),

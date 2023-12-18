@@ -16,7 +16,7 @@ class ReviewTicket with _$ReviewTicket {
     required String title,
     required String content,
     required double rating,
-    required String createdAt,
+    required num createdAt,
     @Default([]) List<String> image,
   }) = _ReviewTicket;
 

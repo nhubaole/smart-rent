@@ -4,50 +4,48 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/values/key_value.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class WaitApproveRoomController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   var isLoading = false.obs;
-  RxList<Room> listRoom = <Room>[].obs;
+  var isLoadMore = false.obs;
+  var listTicket = Rx<List<Map<String, dynamic>>>([]);
+  var listRoom = Rx<List<Room>>([]);
   var profileOwner = Rx<Account?>(null);
+  var page = Rx<int>(10);
 
   @override
   void onInit() {
     super.onInit();
-    getListRoom();
+    getListRoom(false);
     getProfile(FirebaseAuth.instance.currentUser!.uid);
   }
 
   Future<void> getProfile(String uid) async {
     isLoading.value = true;
     profileOwner.value = await AuthMethods.getUserDetails(uid);
-
     isLoading.value = false;
   }
 
-  Future<void> getListRoom() async {
-    isLoading.value = true;
-    update();
-    try {
-      final querySnapshot = await firestore
-          .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('createdByUid',
-              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('status', isEqualTo: 'PENDING')
-          .get();
-      listRoom.value = querySnapshot.docs
-          .map(
-            (e) => Room.fromJson(
-              e.data(),
-            ),
-          )
-          .toList();
-      update();
+  Future<void> getListRoom(bool isPagination) async {
+    if (isPagination) {
+      isLoadMore.value = true;
+      listRoom.value = await FireStoreMethods().getManyRoomWithStatus(
+        FirebaseAuth.instance.currentUser!.uid,
+        page.value += 10,
+        'PENDING',
+      );
+      isLoadMore.value = false;
+    } else {
+      isLoading.value = true;
+      listRoom.value.clear();
+      listRoom.value = await FireStoreMethods().getManyRoomWithStatus(
+        FirebaseAuth.instance.currentUser!.uid,
+        page.value,
+        'PENDING',
+      );
       isLoading.value = false;
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
     }
   }
 }

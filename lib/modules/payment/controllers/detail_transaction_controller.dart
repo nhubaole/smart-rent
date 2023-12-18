@@ -12,8 +12,9 @@ import 'package:smart_rent/core/resources/payment_os_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailTransactionController extends GetxController {
-  DetailTransactionController({required this.invoice});
-  late Invoice invoice;
+  DetailTransactionController({required this.invoice, required this.isReturn});
+  final Invoice invoice;
+  final bool isReturn;
 
   var rxInvoice = Rx<Invoice?>(null);
   RxString statusTransaction = 'progress'.obs;
@@ -82,11 +83,11 @@ class DetailTransactionController extends GetxController {
 
   void copyToClipboard(String textToCopy) {
     Clipboard.setData(ClipboardData(text: textToCopy));
-    print(FireStoreMethods().getTokenDevice(rxInvoice.value!.recieverId));
+
     Get.snackbar(
       'Thông báo',
       'Đã sao chép vào bộ nhớ tạm $textToCopy',
-      snackPosition: SnackPosition.TOP,
+      snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.white,
       colorText: Colors.black,
     );
@@ -177,6 +178,31 @@ class DetailTransactionController extends GetxController {
       await FireStoreMethods().updateInvoice(rxInvoice.value!, 'SUCCESS');
       String token =
           await FireStoreMethods().getTokenDevice(rxInvoice.value!.recieverId);
+      if (isReturn) {
+        await FirebaseFCM().sendNotificationHTTP(
+          rxInvoice.value!.buyerId,
+          rxInvoice.value!.recieverId,
+          token,
+          'Bạn vừa được hoàn cọc từ ${rxInvoice.value!.recieverName}',
+          'Nội dung: ${rxInvoice.value!.description} - ${rxInvoice.value!.amountRoom} VNĐ',
+          true,
+          'imgUrl',
+          'APPROVEDPAYMENT',
+          {},
+        );
+
+        String ticketId = await FireStoreMethods().getTicketRequestReturnRentId(
+          rxInvoice.value!.roomId,
+          rxInvoice.value!.buyerId,
+          rxInvoice.value!.recieverId,
+        );
+
+        await FireStoreMethods()
+            .updateStatusTicketRequestReturnRent(ticketId, 'NOTWORKING');
+        await FireStoreMethods()
+            .updateStatusRoom(rxInvoice.value!.roomId, 'APPROVED');
+      }
+
       await FirebaseFCM().sendNotificationHTTP(
         rxInvoice.value!.buyerId,
         rxInvoice.value!.recieverId,
@@ -185,7 +211,8 @@ class DetailTransactionController extends GetxController {
         'Nội dung: ${rxInvoice.value!.description} - ${rxInvoice.value!.amountRoom} VNĐ',
         true,
         'imgUrl',
-        'RENT_ROOM',
+        'PAYMENT',
+        {},
       );
       AwesomeNotifications().createNotification(
         content: NotificationContent(

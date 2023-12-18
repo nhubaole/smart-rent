@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/resources/firebase_fcm.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 import '../../../core/model/account/Account.dart';
 import '../../../core/model/room/room.dart';
@@ -29,7 +31,7 @@ class DetailController extends GetxController {
     if (price <= 0) {
       return "Miễn phí";
     } else if (price < 1000) {
-      return "${price}₫";
+      return "$price₫";
     } else if (price >= 1000 && price < 1000000) {
       return "${price / 1000}k";
     } else {
@@ -68,5 +70,30 @@ class DetailController extends GetxController {
 
     await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, items);
     print("items.toString() = " + items.toString());
+  }
+
+  Future<void> sendNotificationReturnRentRoom(
+    String idRoom,
+    String senderId,
+    String receiverId,
+    String title,
+    String body,
+    bool sound,
+    String imgUrl,
+    String contentType,
+  ) async {
+    String receiverTokenFCM =
+        await FireStoreMethods().getTokenDevice(receiverId);
+    await FirebaseFCM().sendNotificationHTTP(
+      senderId,
+      receiverId,
+      receiverTokenFCM,
+      title,
+      body,
+      sound,
+      imgUrl,
+      contentType,
+      {},
+    );
   }
 }

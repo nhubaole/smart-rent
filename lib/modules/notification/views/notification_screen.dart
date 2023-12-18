@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
 import 'package:smart_rent/modules/notification/controllers/notification_controller.dart';
 import 'package:smart_rent/modules/notification/views/notification_item_widget.dart';
 
@@ -14,6 +14,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final notificationController = Get.put(NotificationController());
     notificationController.getListNoti(false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primary98,
@@ -102,10 +103,29 @@ class NotificationScreen extends StatelessWidget {
                             ),
                             child: GestureDetector(
                               onTap: () async {
-                                await FireStoreMethods().markAsReadNotification(
-                                  notificationController
-                                      .listNotifications.value[index]['id'],
-                                );
+                                // notificationController.getListNoti(true);
+                                if (notificationController.listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'REQUEST_RETURN_ROOM') {
+                                  notificationController.showDialogLoading(
+                                    'Đang xử lý...',
+                                    notificationController.listNotifications
+                                        .value[index]['room']['roomId'],
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                  );
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'APPROVEDPAYMENT') {
+                                } else {
+                                  await FireStoreMethods()
+                                      .markAsReadNotification(
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                  );
+                                  Get.to(const PostedRoomScreen());
+                                }
                                 notificationController.getListNoti(true);
                               },
                               child: NotificationItemWidget(

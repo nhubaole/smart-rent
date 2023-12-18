@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_rent/blank.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/detail_transaction_controller.dart';
 import 'package:smart_rent/modules/payment/controllers/reivew_room_controller.dart';
 import 'package:smart_rent/modules/payment/views/review_room.dart';
 import 'package:smart_rent/modules/payment/views/widgets/status_widget.dart';
+import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
   final Invoice invoice;
+  final bool isReturn;
   const DetailTransactionScreen({
     super.key,
     required this.invoice,
+    required this.isReturn,
   });
 
   @override
@@ -21,6 +25,7 @@ class DetailTransactionScreen extends StatelessWidget {
     final detailTransactionController = Get.put(
       DetailTransactionController(
         invoice: invoice,
+        isReturn: isReturn,
       ),
     );
     Get.lazyPut(() => ReviewRoomController(invoice: invoice));
@@ -227,6 +232,33 @@ class DetailTransactionScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 28,
                                 ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Nội dung giao dịch',
+                                      style: TextStyle(
+                                        color: secondary40,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Obx(
+                                      () => Text(
+                                        detailTransactionController
+                                            .rxInvoice.value!.description
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 28,
+                                ),
                                 const Row(
                                   children: [
                                     Text(
@@ -319,12 +351,21 @@ class DetailTransactionScreen extends StatelessWidget {
                                   'success'
                               ? GestureDetector(
                                   onTap: () {
-                                    Get.offAll(
-                                      ReviewRoom(
-                                        invoice: detailTransactionController
-                                            .rxInvoice.value!,
-                                      ),
-                                    );
+                                    isReturn
+                                        ? Get.offAll(
+                                            const Blank(
+                                              message:
+                                                  'Cảm ơn vì đã thanh toán',
+                                              screen: RootScreen(),
+                                            ),
+                                          )
+                                        : Get.offAll(
+                                            ReviewRoom(
+                                              invoice:
+                                                  detailTransactionController
+                                                      .rxInvoice.value!,
+                                            ),
+                                          );
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
@@ -333,11 +374,13 @@ class DetailTransactionScreen extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         color: primary60),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(16.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
                                       child: Text(
-                                        'Đánh giá phòng đã thuê',
-                                        style: TextStyle(
+                                        isReturn
+                                            ? 'Thanh toán hoàn tất'
+                                            : 'Đánh giá phòng đã thuê',
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400),

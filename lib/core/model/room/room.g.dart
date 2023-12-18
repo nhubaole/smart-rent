@@ -111,4 +111,7 @@ const _$RoomStatusEnumMap = {
   RoomStatus.APPROVED: 'APPROVED',
   RoomStatus.EXPIRED: 'EXPIRED',
   RoomStatus.DELETED: 'DELETED',
+  RoomStatus.REQUESTRENT: 'REQUESTRENT',
+  RoomStatus.REQUESTRETURN: 'REQUESTRETURN',
+  RoomStatus.RENTED: 'RENTED',
 };

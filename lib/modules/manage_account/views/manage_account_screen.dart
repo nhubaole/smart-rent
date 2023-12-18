@@ -4,10 +4,13 @@ import 'package:smart_rent/modules/manage_account/views/account_nav_button.dart'
 import 'package:smart_rent/modules/manage_account/views/account_show_information.dart';
 
 class ManageAccountScreen extends StatelessWidget {
-  const ManageAccountScreen({super.key});
-
+  ManageAccountScreen({super.key});
+  late double deviceHeight;
+  late double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -15,7 +18,7 @@ class ManageAccountScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     primary40,
@@ -51,16 +54,16 @@ class ManageAccountScreen extends StatelessWidget {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     SizedBox(
-                      height: 30,
+                      height: deviceHeight * 0.01,
                     ),
                     AccountShowInformation(),
                     SizedBox(
-                      height: 30,
+                      height: deviceHeight * 0.01,
                     ),
-                    AccountNavButton(),
+                    const AccountNavButton(),
                   ],
                 ),
               ),

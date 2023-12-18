@@ -99,6 +99,9 @@ class RecentlyViewScreen extends StatelessWidget {
                       itemCount: recentlyViewController.listRoom.length,
                       itemBuilder: (BuildContext context, int index) {
                         return RoomItem(
+                          isHandleRequestReturnRoom: false,
+                          isReturnRent: false,
+                          isRented: false,
                           room: recentlyViewController.listRoom[index],
                           isLiked: recentlyViewController
                               .listRoom[index].listLikes

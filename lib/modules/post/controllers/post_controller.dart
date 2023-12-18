@@ -188,9 +188,14 @@ class PostController extends GetxController
         });
         print('Room added');
 
-        Get.to(DetailScreen(
-          room: room.value,
-        ));
+        Get.to(
+          DetailScreen(
+            isReturnRent: false,
+            isRented: false,
+            room: room.value,
+            isHandleRequestReturnRoom: false,
+          ),
+        );
       } catch (e) {
         print('Error adding room : $e');
       }
