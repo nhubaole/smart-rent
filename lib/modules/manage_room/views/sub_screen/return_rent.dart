@@ -113,9 +113,10 @@ class ReturnRentScreen extends StatelessWidget {
                                     returnRentController
                                         .listRoom.value.length) {
                                   return RoomItem(
+                                    isHandleRentRoom: false,
                                     isHandleRequestReturnRoom: false,
-                                    isReturnRent: true,
-                                    isRented: false,
+                                    isRequestReturnRent: true,
+                                    isRequestRented: false,
                                     room: returnRentController
                                         .listRoom.value[index],
                                     isLiked: returnRentController

@@ -181,9 +181,10 @@ class ProfileOwnerScreen extends StatelessWidget {
                                       profileOwnerController.listRoom.length,
                                   itemBuilder: (context, index) {
                                     return RoomItem(
+                                      isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
-                                      isReturnRent: false,
-                                      isRented: false,
+                                      isRequestReturnRent: false,
+                                      isRequestRented: false,
                                       room: profileOwnerController
                                           .listRoom[index],
                                       isLiked: profileOwnerController

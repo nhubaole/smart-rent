@@ -30,10 +30,15 @@ class NotificationController extends GetxController {
     String message,
     String roomId,
     String notificationId,
+    bool isRequestRented,
+    bool isRequestReturnRent,
+    bool isHandleRentRoom,
+    bool isHandleRequestReturnRoo,
+    bool isRenting,
   ) async {
     Get.dialog(
       PopScope(
-        //canPop: false,
+        canPop: false,
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Center(
@@ -65,9 +70,11 @@ class NotificationController extends GetxController {
     Get.to(
       DetailScreen(
         room: room,
-        isRented: false,
-        isReturnRent: false,
-        isHandleRequestReturnRoom: true,
+        isRequestRented: isRequestRented,
+        isRequestReturnRent: isRequestReturnRent,
+        isHandleRequestReturnRoom: isHandleRequestReturnRoo,
+        isHandleRentRoom: isHandleRentRoom,
+        isRenting: isRenting,
         notificationId: notificationId,
       ),
     );

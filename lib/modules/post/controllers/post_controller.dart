@@ -15,6 +15,7 @@ import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/location/district.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
 import 'package:uuid/uuid.dart';
@@ -166,12 +167,14 @@ class PostController extends GetxController
       uid = prefs.getString(KeyValue.KEY_ACCOUNT_UID) ?? '';
     } finally {
       updateConfirmRoom();
-      //TODO: update UID
-      String postId = const Uuid().v1();
+      DateTime now = DateTime.now().add(const Duration(hours: 1)).toUtc();
+      final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
+      String postId =
+          await FireStoreMethods().getDocumentId(KeyValue.KEY_COLLECTION_ROOM);
       room.value = room.value.copyWith(
         id: postId,
         createdByUid: uid,
-        dateTime: DateTime.now().toString(),
+        dateTime: timeStamp,
         isRented: false,
         status: RoomStatus.PENDING,
       );
@@ -179,7 +182,10 @@ class PostController extends GetxController
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       try {
-        firestore.collection('rooms').doc(postId).set(room.toJson());
+        firestore
+            .collection(KeyValue.KEY_COLLECTION_ROOM)
+            .doc(postId)
+            .set(room.toJson());
         firestore
             .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -190,10 +196,12 @@ class PostController extends GetxController
 
         Get.to(
           DetailScreen(
-            isReturnRent: false,
-            isRented: false,
-            room: room.value,
+            isRequestReturnRent: false,
+            isRequestRented: false,
             isHandleRequestReturnRoom: false,
+            isHandleRentRoom: false,
+            isRenting: false,
+            room: room.value,
           ),
         );
       } catch (e) {

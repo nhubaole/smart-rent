@@ -12,6 +12,7 @@ class RequestRentController extends GetxController {
   var isLoading = false.obs;
   var isLoadMore = false.obs;
   var listRoom = Rx<List<Room>>([]);
+  List<Map<String, dynamic>> listMap = [];
   var profileOwner = Rx<Account?>(null);
   var page = Rx<int>(10);
 
@@ -31,18 +32,35 @@ class RequestRentController extends GetxController {
   Future<void> getListRoom(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listRoom.value = await FireStoreMethods().getManyRoomRequestRent(
+      listMap = await FireStoreMethods().getTicketsRequestRent(
         FirebaseAuth.instance.currentUser!.uid,
         page.value += 10,
+        'PENDING',
       );
+
+      for (int i = 0; i < listMap.length; i++) {
+        isLoadMore.value = true;
+        listRoom.value.add(
+          await FireStoreMethods().getRoomById(listMap[i]['roomId']),
+        );
+      }
+
       isLoadMore.value = false;
     } else {
       isLoading.value = true;
       listRoom.value.clear();
-      listRoom.value = await FireStoreMethods().getManyRoomRequestRent(
+      listMap = await FireStoreMethods().getTicketsRequestRent(
         FirebaseAuth.instance.currentUser!.uid,
         page.value,
+        'PENDING',
       );
+
+      for (int i = 0; i < listMap.length; i++) {
+        isLoading.value = true;
+        listRoom.value.add(
+          await FireStoreMethods().getRoomById(listMap[i]['roomId']),
+        );
+      }
       isLoading.value = false;
     }
   }

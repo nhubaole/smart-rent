@@ -99,7 +99,9 @@ class _ConfirmPageState extends State<ConfirmPage> {
                   height: 100,
                   color: Colors.white.withOpacity(0.5),
                   child: Center(
-                    child: CircularProgressIndicator(color: secondary40,),
+                    child: CircularProgressIndicator(
+                      color: secondary40,
+                    ),
                   ),
                 ),
               ),

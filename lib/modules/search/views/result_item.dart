@@ -17,10 +17,12 @@ class ResultItem extends StatelessWidget {
       onTap: () {
         Get.to(
           DetailScreen(
-            isReturnRent: false,
-            isRented: false,
-            room: room,
+            isRequestReturnRent: false,
+            isRequestRented: false,
             isHandleRequestReturnRoom: false,
+            isHandleRentRoom: false,
+            isRenting: false,
+            room: room,
           ),
         );
       },

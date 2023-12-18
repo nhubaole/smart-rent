@@ -113,11 +113,32 @@ class NotificationScreen extends StatelessWidget {
                                         .value[index]['room']['roomId'],
                                     notificationController
                                         .listNotifications.value[index]['id'],
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                    false,
                                   );
                                 } else if (notificationController
                                         .listNotifications
                                         .value[index]['data']['content_type'] ==
                                     'APPROVEDPAYMENT') {
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'REQUEST_RENT_ROOM') {
+                                  notificationController.showDialogLoading(
+                                    'Đang xử lý...',
+                                    notificationController.listNotifications
+                                        .value[index]['room']['roomId'],
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                    false,
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                  );
                                 } else {
                                   await FireStoreMethods()
                                       .markAsReadNotification(

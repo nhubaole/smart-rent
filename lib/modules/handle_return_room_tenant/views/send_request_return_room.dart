@@ -24,6 +24,8 @@ class SendRequestReturnRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
+    var date = DateTime.fromMillisecondsSinceEpoch(room.dateTime * 1000);
+    String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     final sendRequestController = Get.put(
       SendRequestReturnRoomController(
         room: room,
@@ -166,9 +168,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                             width: deviceWidth * 0.03,
                           ),
                           Text(
-                            DateFormat('HH:mm dd/MM/yyyy').format(
-                              DateTime.parse(room.dateTime),
-                            ),
+                            formattedDate,
                             style: const TextStyle(
                               color: secondary40,
                               fontSize: 16,
@@ -240,7 +240,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                     Obx(
                       () => !sendRequestController.isReturnNow.value
                           ? DateInputField(
-                              firstDate: 1900,
+                              firstDate: DateTime.now().year,
                               lastDate: DateTime.now().year + 1,
                               borderRadius: BorderRadius.circular(8),
                               borderWidth: 2,

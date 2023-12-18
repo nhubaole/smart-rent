@@ -114,9 +114,10 @@ class _RentedRoomScreenState extends State<RentedRoomScreen> {
                               if (index <
                                   rentedRoomController.listRoom.value.length) {
                                 return RoomItem(
+                                  isHandleRentRoom: false,
                                   isHandleRequestReturnRoom: false,
-                                  isReturnRent: false,
-                                  isRented: true,
+                                  isRequestReturnRent: false,
+                                  isRequestRented: true,
                                   room: rentedRoomController
                                       .listRoom.value[index],
                                   isLiked: rentedRoomController

@@ -122,9 +122,10 @@ class _LikedRoomScreenState extends State<LikedRoomScreen> {
                                       likedRoomController
                                           .listRoom.value.length) {
                                     return RoomItem(
+                                      isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
-                                      isReturnRent: false,
-                                      isRented: false,
+                                      isRequestReturnRent: false,
+                                      isRequestRented: false,
                                       room: likedRoomController
                                           .listRoom.value[index],
                                       isLiked: likedRoomController

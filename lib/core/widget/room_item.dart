@@ -10,16 +10,18 @@ import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 class RoomItem extends StatefulWidget {
   final Room room;
   final bool isLiked;
-  final bool isRented;
-  final bool isReturnRent;
+  final bool isRequestRented;
+  final bool isRequestReturnRent;
   final bool isHandleRequestReturnRoom;
+  final bool isHandleRentRoom;
   const RoomItem({
     super.key,
     required this.room,
     required this.isLiked,
-    required this.isRented,
-    required this.isReturnRent,
+    required this.isRequestRented,
+    required this.isRequestReturnRent,
     required this.isHandleRequestReturnRoom,
+    required this.isHandleRentRoom,
   });
 
   @override
@@ -43,13 +45,15 @@ class _RoomItemState extends State<RoomItem> {
     deviceWidth = MediaQuery.of(context).size.width;
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         Get.to(
           DetailScreen(
-            isReturnRent: widget.isReturnRent,
-            isRented: widget.isRented,
+            isRequestReturnRent: widget.isRequestReturnRent,
+            isRequestRented: widget.isRequestRented,
             room: widget.room,
             isHandleRequestReturnRoom: widget.isHandleRequestReturnRoom,
+            isHandleRentRoom: widget.isHandleRentRoom,
+            isRenting: false,
           ),
         );
       },

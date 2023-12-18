@@ -13,11 +13,12 @@ class HomeListRoomController extends GetxController {
   Future<void> getListRoom(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listRoom.value = await FireStoreMethods().getManyRoom(page.value += 10);
+      listRoom.value =
+          await FireStoreMethods().getListRoomForHome(page.value += 10);
       isLoadMore.value = false;
     } else {
       isLoading.value = true;
-      listRoom.value = await FireStoreMethods().getManyRoom(page.value);
+      listRoom.value = await FireStoreMethods().getListRoomForHome(page.value);
       isLoading.value = false;
     }
   }

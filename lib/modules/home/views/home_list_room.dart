@@ -76,6 +76,34 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                               ),
                               textAlign: TextAlign.center,
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    listRoomController.getListRoom(false);
+                                  },
+                                  style: ButtonStyle(
+                                    side: MaterialStateProperty.all(
+                                      const BorderSide(
+                                        color: primary40,
+                                      ),
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Tải lại',
+                                    style: TextStyle(
+                                      color: primary40,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -97,13 +125,14 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                           ),
                           itemCount:
                               listRoomController.listRoom.value.length + 1,
-                          itemBuilder: (BuildContext context, int index) {
+                          itemBuilder: (context, index) {
                             if (index <
                                 listRoomController.listRoom.value.length) {
                               return RoomItem(
+                                isHandleRentRoom: false,
                                 isHandleRequestReturnRoom: false,
-                                isReturnRent: false,
-                                isRented: false,
+                                isRequestReturnRent: false,
+                                isRequestRented: false,
                                 room: listRoomController.listRoom.value[index],
                                 isLiked: listRoomController
                                     .listRoom.value[index].listLikes
