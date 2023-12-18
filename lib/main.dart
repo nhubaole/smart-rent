@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/resources/firebase_fcm.dart';
@@ -8,7 +9,6 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
-
 import 'core/resources/auth_methods.dart';
 
 void main() async {
@@ -40,6 +40,11 @@ void main() async {
     debug: true,
   );
   await dotenv.load(fileName: ".env");
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(const MyApp()));
+
   runApp(const MyApp());
 }
 

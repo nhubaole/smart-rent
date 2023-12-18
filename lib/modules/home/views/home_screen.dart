@@ -6,8 +6,6 @@ import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
 import 'package:smart_rent/modules/home/views/home_top_widget.dart';
 import 'package:smart_rent/modules/search/views/search_screen.dart';
 
-import '../../post/views/post_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

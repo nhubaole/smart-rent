@@ -57,13 +57,187 @@ class FireStoreMethods {
     }
   }
 
-  Future<Room> getRoom(String roomId) async {
+  Future<List<Room>> getListRoomForHome(int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('status', isEqualTo: 'APPROVED')
+          .where('isRented', isEqualTo: false)
+          .where('rentBy', isEqualTo: 'UNKNOWN')
+          .limit(index)
+          .orderBy('dateTime', descending: true)
+          .get();
+      print('querySnapshot.docs.length: ${querySnapshot.docs.length}');
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      print(e.toString());
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<void> updateStatusRoom(String uidRoom, String status) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(uidRoom)
+          .update({'status': status});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
+  Future<bool> checkStatusRoom(String uidRoom, String status) async {
+    bool result = false;
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(uidRoom)
+          .get()
+          .then((value) {
+        result = value.data()!['status'] == status;
+      });
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+    return result;
+  }
+
+  Future<void> updateRoomIsRented(String roomId, bool isRented) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(roomId)
+          .update({'isRented': isRented});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
+  Future<List<Room>> getManyRoomRequestRent(String uid, int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('createdByUid', isEqualTo: uid)
+          .where('status', isEqualTo: 'REQUESTRENT')
+          .limit(index)
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      print(e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getTicketsRequestReturn(
+      String uid, int index, String status) async {
+    List<Map<String, dynamic>> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .where('uidTenant', isEqualTo: uid)
+          .where('status', isEqualTo: status)
+          .limit(index)
+          .get();
+
+      result = querySnapshot.docs.map((e) => e.data()).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Room>> getManyRoomRented(String uid, int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('createdByUid', isEqualTo: uid)
+          .where('status', isEqualTo: 'RENTED')
+          .limit(index)
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Room>> getManyRoomPosted(String uid, int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('createdByUid', isEqualTo: uid)
+          .limit(index)
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Room>> getManyRoomWithStatus(
+    String uid,
+    int index,
+    String status,
+  ) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('createdByUid', isEqualTo: uid)
+          .where('status', isEqualTo: status)
+          .limit(index)
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Room>> getLikedRoom(String uid, int index) async {
+    List<Room> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where(
+            'listLikes',
+            arrayContains: FirebaseAuth.instance.currentUser!.uid,
+          )
+          .get();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<Room> getRoomById(String roomId) async {
     Room room = await _firestore
         .collection(KeyValue.KEY_COLLECTION_ROOM)
         .doc(roomId)
         .get()
         .then((value) => Room.fromJson(value.data()!));
     return room;
+  }
+
+  Future<List<Room>> getListRoomFromListId(List<String> list) async {
+    List<Room> roomList = [];
+    try {
+      for (var i in list) {
+        Room room = await getRoomById(i);
+        roomList.add(room);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return roomList;
   }
 
   Future<String> addInvoice(Invoice invoice) async {
@@ -86,7 +260,7 @@ class FireStoreMethods {
       String key = _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
           .doc(reviewTicket.roomId)
-          .collection(KeyValue.KEY_REVIEW_TICKET_COLLECTION)
+          .collection(KeyValue.KEY_TICKET_REVIEW_COLLECTION)
           .doc()
           .id;
       reviewTicket = reviewTicket.copyWith(id: key);
@@ -94,7 +268,7 @@ class FireStoreMethods {
       await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
           .doc(reviewTicket.roomId)
-          .collection(KeyValue.KEY_REVIEW_TICKET_COLLECTION)
+          .collection(KeyValue.KEY_TICKET_REVIEW_COLLECTION)
           .add(reviewTicket.toJson());
       await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
@@ -224,6 +398,7 @@ class FireStoreMethods {
     } catch (err) {
       Get.snackbar('Error', err.toString());
     }
+    print(token);
     return token;
   }
 
@@ -232,21 +407,45 @@ class FireStoreMethods {
     Map<String, dynamic> data,
   ) async {
     try {
-      // String uid =
-      //     _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      String id =
+          _firestore.collection(KeyValue.KEY_DEVICE_COLLECTION).doc().id;
+      data['id'] = id;
       await _firestore
           .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
-          .doc(uidOwner)
-          .collection(uidOwner)
-          .doc()
+          .doc(id)
           .set(data);
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
   }
 
+  Future<Map<String, dynamic>> getpOneNewestInvoice(
+    String roomId,
+    String buyer,
+    bool descending,
+  ) async {
+    Map<String, dynamic> invoice = {};
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_PAYOS_REQUEST_COLLECTION)
+          .where('buyer', isEqualTo: buyer)
+          .orderBy('timeStamp', descending: descending)
+          .limit(1)
+          .get();
+
+      invoice = querySnapshot.docs.first.data() as Map<String, dynamic>;
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return invoice;
+  }
+
   Future<List<Map<String, dynamic>>> getListInvoice(
-      String uid, bool descending, String statusInvoice) async {
+    String uid,
+    bool descending,
+    String statusInvoice,
+    int page,
+  ) async {
     List<Map<String, dynamic>> listInvoice = [];
     try {
       QuerySnapshot querySnapshot = await _firestore
@@ -257,6 +456,7 @@ class FireStoreMethods {
             'timeStamp',
             descending: descending,
           )
+          .limit(page)
           .get();
       for (var document in querySnapshot.docs) {
         Map<String, dynamic> documentData =
@@ -267,5 +467,313 @@ class FireStoreMethods {
       print(err.toString());
     }
     return listInvoice;
+  }
+
+  Future<List<Map<String, dynamic>>> getListNotification(
+    String uidOwner,
+    int page,
+  ) async {
+    List<Map<String, dynamic>> listNotification = [];
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
+          .where('data.recieverId', isEqualTo: uidOwner)
+          .orderBy('timeStamp', descending: true)
+          .limit(page)
+          .get();
+      print('querySnapshot.docs.length: ${querySnapshot.docs.length}');
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        listNotification.add(documentData);
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+
+    return listNotification;
+  }
+
+  Future<void> markAsReadNotification(String id) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_NOTIFICATION_COLLECTION)
+          .doc(id)
+          .update({'isRead': true});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
+  Future<bool> isRented(String uidOwner, String uidRoom) async {
+    bool isRented = false;
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(uidRoom)
+          .get()
+          .then((value) {
+        isRented = value.data()!['status'] == 'RENTED';
+      });
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+    return isRented;
+  }
+
+  Future<String> sendTicketRequestReturnRent(Map<String, dynamic> data) async {
+    String rs = 'Some thing went wrong';
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .doc(data['id'])
+          .set(data);
+
+      rs = 'success';
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      rs = e.toString();
+    }
+    return rs;
+  }
+
+  Future<String> updateTicketRequestReturnRent(
+    String ticketId,
+    Map<String, dynamic> data,
+  ) async {
+    String rs = 'Some thing went wrong';
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .doc(ticketId)
+          .update(data);
+
+      rs = 'success';
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      rs = e.toString();
+    }
+    return rs;
+  }
+
+  Future<Map<String, dynamic>> getTicketRequestReturnRent(
+    String uidLandlord,
+    String roomId,
+    String status,
+  ) async {
+    Map<String, dynamic> result = {};
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .where('uidLandlord', isEqualTo: uidLandlord)
+          .where('roomId', isEqualTo: roomId)
+          .where('status', isEqualTo: status)
+          .orderBy('timeStamp', descending: true)
+          .limit(1)
+          .get();
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        result = documentData;
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<String> getTicketRequestReturnRentId(
+    String roomId,
+    String uidLandlord,
+    String uidTenant,
+  ) async {
+    String status = '';
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .where('uidLandlord', isEqualTo: uidLandlord)
+          .where('uidTenant', isEqualTo: uidTenant)
+          .where('roomId', isEqualTo: roomId)
+          .orderBy('timeStamp', descending: true)
+          .limit(1)
+          .get();
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        status = documentData['id'];
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return status;
+  }
+
+  Future<void> updateStatusTicketRequestReturnRent(
+    String ticketId,
+    String status,
+  ) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_RETURN_RENT_ROOM_COLLECTION)
+          .doc(ticketId)
+          .update({'status': status});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
+  Future<String> getDocumentId(String collection) async {
+    return _firestore.collection(collection).doc().id;
+  }
+
+  // Future<void> addReviewRoom(String roomId, Map<String, dynamic> data) async {
+  //   try {
+  //     await _firestore
+  //         .collection(KeyValue.KEY_TICKET_REVIEW_COLLECTION)
+  //         .doc(roomId)
+  //         .set(data);
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString());
+  //   }
+  // }
+
+  Future<Map<String, dynamic>> getListReviews(String roomId, int page) async {
+    Map<String, dynamic> data = {}; // Initialize data as an empty map
+    double sumRating = 0;
+    int counterFiveStars = 0;
+    int counterFourStars = 0;
+    int counterThreeStars = 0;
+    int counterTwoStars = 0;
+    int counterOneStars = 0;
+    try {
+      var querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(roomId)
+          .collection(KeyValue.KEY_TICKET_REVIEW_COLLECTION)
+          .limit(page)
+          .get();
+      querySnapshot.docs.forEach((element) {
+        print(element.data());
+      });
+
+      var reviews = querySnapshot.docs.map((e) {
+        var rating = e.data()['rating'];
+        if (rating > 4) counterFiveStars++;
+        if (rating > 3 && rating <= 4) counterFourStars++;
+        if (rating > 2 && rating <= 3) counterThreeStars++;
+        if (rating > 1 && rating <= 2) counterTwoStars++;
+        if (rating > 0 && rating <= 1) counterOneStars++;
+
+        sumRating += rating;
+        return e.data();
+      }).toList();
+
+      data['list'] = reviews;
+      data['sumRating'] = sumRating;
+      data['counterFiveStars'] = counterFiveStars;
+      data['counterFourStars'] = counterFourStars;
+      data['counterThreeStars'] = counterThreeStars;
+      data['counterTwoStars'] = counterTwoStars;
+      data['counterOneStars'] = counterOneStars;
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return data;
+  }
+
+  Future<int> getCountReview(String roomId) async {
+    int count = 0;
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REVIEW_COLLECTION)
+          .doc(roomId)
+          .get()
+          .then((value) {
+        count = value.data()!['listReview'].length;
+      });
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return count;
+  }
+
+  Future<String> sendTicketRequestRent(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
+    String rs = 'Something when wrong';
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
+          .doc(id)
+          .set(data);
+      rs = 'success';
+    } catch (e) {
+      rs = e.toString();
+      print(e.toString());
+    }
+    return rs;
+  }
+
+  Future<List<Map<String, dynamic>>> getTicketsRequestRent(
+    String uidTenant,
+    int index,
+    String status,
+  ) async {
+    List<Map<String, dynamic>> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
+          .where('uidTenant', isEqualTo: uidTenant)
+          .where('status', isEqualTo: status)
+          .limit(index)
+          .get();
+
+      result = querySnapshot.docs.map((e) => e.data()).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> getTicketRequestRent(
+    String uidTenant,
+    String roomId,
+    String status,
+  ) async {
+    Map<String, dynamic> result = {};
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
+          .where('uidTenant', isEqualTo: uidTenant)
+          .where('roomId', isEqualTo: roomId)
+          .where('status', isEqualTo: status)
+          .orderBy('timeStamp', descending: true)
+          .limit(1)
+          .get();
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        result = documentData;
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<void> updateStausTicketRequestRent(
+    String ticketId,
+    String status,
+  ) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
+          .doc(ticketId)
+          .update({'status': status});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
   }
 }

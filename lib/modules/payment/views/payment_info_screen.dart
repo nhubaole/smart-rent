@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/payment_info_controller.dart';
-import 'package:smart_rent/modules/payment/views/detail_transaction_screen.dart';
 
 class PaymentInforScreen extends StatelessWidget {
-  const PaymentInforScreen({super.key});
+  final Invoice invoice;
+  final bool isReturn;
+  const PaymentInforScreen({
+    super.key,
+    required this.invoice,
+    required this.isReturn,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final paymentController = Get.put(PaymentInfoController());
+    final paymentController = Get.put(PaymentInfoController(
+      invoice: invoice,
+      isReturn: isReturn,
+    ));
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -44,9 +53,9 @@ class PaymentInforScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Text(
-                                  'Bạn đang đặt cọc cho phòng trọ ở địa chỉ',
-                                  style: TextStyle(
+                                Text(
+                                  'Bạn đang ${isReturn ? 'trả cọc' : 'đặt cọc'} cho phòng trọ ở địa chỉ',
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -55,13 +64,13 @@ class PaymentInforScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 40,
                                   ),
                                   child: Text(
-                                    '97 đường số 11, phường Trường Thọ, TP Thủ Đức, TP HCM ',
-                                    style: TextStyle(
+                                    invoice.addressRoom,
+                                    style: const TextStyle(
                                       color: primary40,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -69,18 +78,18 @@ class PaymentInforScreen extends StatelessWidget {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const Text.rich(
+                                Text.rich(
                                   TextSpan(
                                     children: [
-                                      TextSpan(
+                                      const TextSpan(
                                           text: 'Sổ tiền: ',
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: secondary20,
                                           )),
                                       TextSpan(
-                                        text: '2.000.000đ!',
-                                        style: TextStyle(
+                                        text: '${invoice.amountRoom}!',
+                                        style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
                                           color: secondary20,
@@ -105,13 +114,13 @@ class PaymentInforScreen extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Người nhận',
                                       style: TextStyle(
                                         color: secondary40,
@@ -119,10 +128,10 @@ class PaymentInforScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
-                                      'Nguyễn Văn A',
-                                      style: TextStyle(
+                                      invoice.recieverName,
+                                      style: const TextStyle(
                                         color: secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -131,14 +140,14 @@ class PaymentInforScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Divider(
+                              const Divider(
                                 color: secondary80,
                               ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Số điện thoại',
                                       style: TextStyle(
                                         color: secondary40,
@@ -146,10 +155,10 @@ class PaymentInforScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
-                                      '0915355488',
-                                      style: TextStyle(
+                                      invoice.recieverPhoneNumber,
+                                      style: const TextStyle(
                                         color: secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -158,23 +167,23 @@ class PaymentInforScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Divider(
+                              const Divider(
                                 color: secondary80,
                               ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Số tháng đặt cọc',
-                                      style: TextStyle(
+                                      'Số tháng ${isReturn ? 'trả' : 'đặt'} cọc',
+                                      style: const TextStyle(
                                         color: secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Spacer(),
-                                    Text(
+                                    const Spacer(),
+                                    const Text(
                                       '1',
                                       style: TextStyle(
                                         color: secondary20,
@@ -185,14 +194,14 @@ class PaymentInforScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Divider(
+                              const Divider(
                                 color: secondary80,
                               ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Số tiền thanh toán',
                                       style: TextStyle(
                                         color: secondary40,
@@ -200,10 +209,10 @@ class PaymentInforScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
-                                      '2.000.000đ',
-                                      style: TextStyle(
+                                      invoice.amountRoom.toString(),
+                                      style: const TextStyle(
                                         color: secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -249,28 +258,6 @@ class PaymentInforScreen extends StatelessWidget {
                         const SizedBox(
                           height: 18,
                         ),
-                        // Obx(
-                        //   () => paymentController.isChosenMethod.value
-                        //       ? const Column(
-                        //           children: [
-                        //             ListTile(
-                        //               leading: Icon(Icons.payment),
-                        //               title: Text('Credit Card'),
-                        //             ),
-                        //             ListTile(
-                        //               leading: Icon(Icons.mobile_friendly),
-                        //               title: Text('Mobile Payment'),
-                        //             ),
-                        //             ListTile(
-                        //               leading: Icon(Icons.account_balance_wallet),
-                        //               title: Text('Cash'),
-                        //             )
-                        //           ],
-                        //         )
-                        //       : const SizedBox(
-                        //           height: 18,
-                        //         ),
-                        // ),
                         Obx(
                           () => paymentController.isChosenMethod.value
                               ? Column(
@@ -324,11 +311,13 @@ class PaymentInforScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.offAll(
-                              DetailTransactionScreen(
-                                invoice: paymentController.orderInvoice(),
-                              ),
-                            );
+                            // Get.offAll(
+                            //   DetailTransactionScreen(
+                            //     //invoice: paymentController.orderInvoice(),
+                            //     invoice: invoice,
+                            //   ),
+                            // );
+                            paymentController.goToPayment();
                           },
                           child: Container(
                             alignment: Alignment.center,

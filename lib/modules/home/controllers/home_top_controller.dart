@@ -24,6 +24,7 @@ class HomeTopWidgetController extends GetxController {
     currenLocation.value = prefs.getString(KeyValue.KEY_CURRENT_LOCATION) ??
         'Thành Phố Hồ Chí Minh';
     getName();
+    print(FirebaseAuth.instance.currentUser!.uid);
   }
 
   void getName() async {

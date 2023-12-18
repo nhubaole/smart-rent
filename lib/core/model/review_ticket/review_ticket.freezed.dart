@@ -27,7 +27,7 @@ mixin _$ReviewTicket {
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
-  String get createdAt => throw _privateConstructorUsedError;
+  num get createdAt => throw _privateConstructorUsedError;
   List<String> get image => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $ReviewTicketCopyWith<$Res> {
       String title,
       String content,
       double rating,
-      String createdAt,
+      num createdAt,
       List<String> image});
 }
 
@@ -109,7 +109,7 @@ class _$ReviewTicketCopyWithImpl<$Res, $Val extends ReviewTicket>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
+              as num,
       image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -134,7 +134,7 @@ abstract class _$$ReviewTicketImplCopyWith<$Res>
       String title,
       String content,
       double rating,
-      String createdAt,
+      num createdAt,
       List<String> image});
 }
 
@@ -191,7 +191,7 @@ class __$$ReviewTicketImplCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
+              as num,
       image: null == image
           ? _value._image
           : image // ignore: cast_nullable_to_non_nullable
@@ -234,7 +234,7 @@ class _$ReviewTicketImpl extends _ReviewTicket with DiagnosticableTreeMixin {
   @override
   final double rating;
   @override
-  final String createdAt;
+  final num createdAt;
   final List<String> _image;
   @override
   @JsonKey()
@@ -320,7 +320,7 @@ abstract class _ReviewTicket extends ReviewTicket {
       required final String title,
       required final String content,
       required final double rating,
-      required final String createdAt,
+      required final num createdAt,
       final List<String> image}) = _$ReviewTicketImpl;
   const _ReviewTicket._() : super._();
 
@@ -342,7 +342,7 @@ abstract class _ReviewTicket extends ReviewTicket {
   @override
   double get rating;
   @override
-  String get createdAt;
+  num get createdAt;
   @override
   List<String> get image;
   @override

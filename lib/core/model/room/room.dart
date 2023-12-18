@@ -29,12 +29,13 @@ class Room with _$Room {
     @Default('') String location,
     @Default([]) List<Utilities> utilities,
     @Default('') String createdByUid,
-    @Default('') String dateTime,
+    @Default(0) int dateTime,
     @Default(true) bool isRented,
     @Default(RoomStatus.PENDING) RoomStatus status,
     @Default([]) List<String> images,
     @Default([]) List<String> listComments,
     @Default([]) List<String> listLikes,
+    @Default('UNKNOWN') String rentBy,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

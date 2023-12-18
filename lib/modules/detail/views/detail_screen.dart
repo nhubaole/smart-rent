@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
@@ -12,23 +13,310 @@ import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import 'package:smart_rent/modules/handle_rent_room_tenant/views/send_request_rent_room.dart';
+import 'package:smart_rent/modules/handle_return_room_landlord/views/detail_request_return_room_screen.dart';
+import 'package:smart_rent/modules/handle_return_room_tenant/views/send_request_return_room.dart';
 import 'package:smart_rent/modules/post_review/views/post_review_screen.dart';
 import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
 import '../../../core/model/room/room.dart';
-import '../../../core/values/KEY_VALUE.dart';
 
+// ignore: must_be_immutable
 class DetailScreen extends StatelessWidget {
-  DetailScreen({super.key, required this.room});
+  DetailScreen({
+    super.key,
+    required this.room,
+    required this.isRequestRented,
+    required this.isRequestReturnRent,
+    required this.isHandleRequestReturnRoom,
+    required this.isHandleRentRoom,
+    this.notificationId,
+    required this.isRenting,
+  });
   final Room room;
-
-  final DetailController controller = Get.find<DetailController>();
-
+  final bool isRequestRented;
+  final bool isRequestReturnRent;
+  final bool isHandleRequestReturnRoom;
+  final bool isHandleRentRoom;
+  final bool isRenting;
+  String? notificationId;
+  final DetailController controller = Get.put(DetailController());
+  late double deviceHeight;
+  late double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    deviceHeight = MediaQuery.sizeOf(context).height;
+    deviceWidth = MediaQuery.sizeOf(context).width;
     controller.room = room;
     controller.getOwner();
     controller.setRoomRecently();
+    var date = DateTime.fromMillisecondsSinceEpoch(room.dateTime * 1000);
+    String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     return Scaffold(
+        floatingActionButton: Stack(
+          children: [
+            Positioned(
+              bottom: deviceHeight * 0.1,
+              right: deviceWidth * 0.001,
+              child: isRenting
+                  ? FloatingActionButton.extended(
+                      backgroundColor: Colors.white,
+                      heroTag: UniqueKey(),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 2,
+                          color: primary60,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      label: const Row(
+                        children: [
+                          Text(
+                            'Yêu cầu trả phòng',
+                            style: TextStyle(color: primary60),
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Icon(
+                            Icons.wifi_protected_setup_rounded,
+                            color: primary60,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        Get.to(
+                          SendRequestReturnRoom(
+                            room: room,
+                          ),
+                        );
+                      },
+                    )
+                  : isRequestReturnRent || isRequestRented
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            FloatingActionButton.extended(
+                              backgroundColor: Colors.white,
+                              heroTag: UniqueKey(),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 2,
+                                  color: primary60,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              label: const Row(
+                                children: [
+                                  Text(
+                                    'Sửa yêu cầu',
+                                    style: TextStyle(color: primary60),
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Icon(
+                                    Icons.wifi_protected_setup_rounded,
+                                    color: primary60,
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                if (isRequestReturnRent) {
+                                  Map<String, dynamic> result =
+                                      await FireStoreMethods()
+                                          .getTicketRequestReturnRent(
+                                    room.createdByUid,
+                                    room.id,
+                                    'PENDING',
+                                  );
+                                  if (result.isNotEmpty) {
+                                    Get.to(
+                                      SendRequestReturnRoom(
+                                        result: result,
+                                        room: room,
+                                      ),
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Thông báo',
+                                      'Bạn chưa có yêu cầu trả phòng nào',
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                  }
+                                } else if (isRequestRented) {
+                                  Map<String, dynamic> result =
+                                      await FireStoreMethods()
+                                          .getTicketRequestRent(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    room.id,
+                                    'PENDING',
+                                  );
+                                  if (result.isNotEmpty) {
+                                    Get.to(
+                                      SendRequestRentRoom(
+                                        room: room,
+                                        result: result,
+                                      ),
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Thông báo',
+                                      'Bạn chưa có yêu cầu trả phòng nào',
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                            SizedBox(
+                              height: deviceHeight * 0.01,
+                            ),
+                            FloatingActionButton.extended(
+                              backgroundColor: Colors.white,
+                              heroTag: UniqueKey(),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 1,
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              label: const Row(
+                                children: [
+                                  Text(
+                                    'Xóa yêu cầu',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                if (isRequestReturnRent) {
+                                  Map<String, dynamic> result =
+                                      await FireStoreMethods()
+                                          .getTicketRequestReturnRent(
+                                    room.createdByUid,
+                                    room.id,
+                                    'PENDING',
+                                  );
+
+                                  Get.defaultDialog(
+                                    title: 'Thông báo',
+                                    middleText:
+                                        'Bạn có chắc chắn muốn xóa yêu cầu trả phòng này?',
+                                    textConfirm: 'Xóa',
+                                    textCancel: 'Hủy',
+                                    confirmTextColor: Colors.white,
+                                    onConfirm: () async {
+                                      await FireStoreMethods()
+                                          .updateStatusTicketRequestReturnRent(
+                                        result['id'],
+                                        'NOTWORKING',
+                                      );
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
+                                      // Get.off(() => RootScreen());
+                                    },
+                                  );
+                                } else if (isRequestRented) {
+                                  Map<String, dynamic> result =
+                                      await FireStoreMethods()
+                                          .getTicketRequestRent(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    room.id,
+                                    'PENDING',
+                                  );
+
+                                  Get.defaultDialog(
+                                    title: 'Thông báo',
+                                    middleText:
+                                        'Bạn có chắc chắn muốn xóa yêu cầu trả phòng này?',
+                                    textConfirm: 'Xóa',
+                                    textCancel: 'Hủy',
+                                    confirmTextColor: Colors.white,
+                                    onConfirm: () async {
+                                      await FireStoreMethods()
+                                          .updateStausTicketRequestRent(
+                                        result['id'],
+                                        'NOTWORKING',
+                                      );
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
+                                      // Get.off(() => RootScreen());
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        )
+                      : FirebaseAuth.instance.currentUser!.uid !=
+                              room.createdByUid
+                          ? FloatingActionButton.extended(
+                              backgroundColor: Colors.white,
+                              heroTag: UniqueKey(),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 2,
+                                  color: primary60,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              label: const Row(
+                                children: [
+                                  Text(
+                                    'Yêu cầu thuê phòng',
+                                    style: TextStyle(color: primary60),
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Icon(
+                                    Icons.contact_emergency_sharp,
+                                    color: primary60,
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                bool isAPPROVED = await FireStoreMethods()
+                                    .checkStatusRoom(room.id, 'APPROVED');
+                                if (isAPPROVED) {
+                                  Get.to(
+                                    Get.to(
+                                      SendRequestRentRoom(
+                                        room: room,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  Get.snackbar(
+                                    'Thông báo',
+                                    'Phòng này đã được người khác thuê trước bạn đã chậm chân rồi',
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                }
+                              },
+                            )
+                          : const SizedBox(),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: primary40,
@@ -71,6 +359,26 @@ class DetailScreen extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          FirebaseAuth.instance.currentUser!.uid ==
+                                  room.createdByUid
+                              ? TextButton(
+                                  onPressed: () {
+                                    Get.to(
+                                      DetailRequestReturnRoomScreen(
+                                        roomId: room.id,
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Yêu cầu ${isHandleRentRoom ? 'thuê' : isHandleRequestReturnRoom ? 'trả' : ''} phòng',
+                                    style: const TextStyle(
+                                      color: primary40,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
                           Row(
                             children: [
                               Expanded(
@@ -351,7 +659,7 @@ class DetailScreen extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                controller.room!.dateTime.substring(0, 10),
+                                formattedDate,
                                 style: const TextStyle(color: secondary40),
                               )
                             ],
@@ -476,7 +784,9 @@ class DetailScreen extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Get.to(const PostReviewScreen());
+                                  Get.to(PostReviewScreen(
+                                    roomId: room.id,
+                                  ));
                                 },
                                 child: const Text(
                                   'Xem mọi bài đánh giá',
@@ -567,112 +877,117 @@ class DetailScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-                bottom: 0,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  height: 72,
-                  width: MediaQuery.sizeOf(context).width,
-                  decoration: const BoxDecoration(
-                    color: primary40,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30.0),
-                      topLeft: Radius.circular(30.0),
+              bottom: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                height: 72,
+                width: MediaQuery.sizeOf(context).width,
+                decoration: const BoxDecoration(
+                  color: primary40,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30.0),
+                    topLeft: Radius.circular(30.0),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      controller.priceFormatterFull(),
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
                     ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        controller.priceFormatterFull(),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                      const Text(
-                        '/phòng',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(primary98),
-                              foregroundColor:
-                                  MaterialStateProperty.all(primary40),
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)))),
-                          onPressed: () async {
-                            var prefs = await SharedPreferences.getInstance();
-                            String userId = prefs.getString(
-                                    KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
-                                '';
-                            Get.to(ChatScreen(
-                              conversationID:
-                                  controller.owner.value!.phoneNumber,
-                              conversationName:
-                                  controller.owner.value!.username,
-                              userId: userId,
-                            ));
-                          },
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Chat'),
-                              SizedBox(
-                                width: 5,
+                    const Text(
+                      '/phòng',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    FirebaseAuth.instance.currentUser!.uid != room.createdByUid
+                        ? Expanded(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(primary98),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(primary40),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)))),
+                              onPressed: () async {
+                                var prefs =
+                                    await SharedPreferences.getInstance();
+                                String userId = prefs.getString(
+                                        KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
+                                    '';
+                                Get.to(ChatScreen(
+                                  conversationID:
+                                      controller.owner.value!.phoneNumber,
+                                  conversationName:
+                                      controller.owner.value!.username,
+                                  userId: userId,
+                                ));
+                              },
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Chat'),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.sms_outlined,
+                                    size: 24.0,
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.sms_outlined,
-                                size: 24.0,
+                            ),
+                          )
+                        : const SizedBox(),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    FirebaseAuth.instance.currentUser!.uid != room.createdByUid
+                        ? Expanded(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(secondary90),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(secondary40),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)))),
+                              onPressed: () {},
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Gọi'),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.phone_outlined,
+                                    size: 24.0,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(secondary90),
-                              foregroundColor:
-                                  MaterialStateProperty.all(secondary40),
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)))),
-                          onPressed: () {},
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Gọi'),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.phone_outlined,
-                                size: 24.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ))
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
+                ),
+              ),
+            )
           ],
         ));
   }
@@ -745,7 +1060,7 @@ class DetailScreen extends StatelessWidget {
                           imageUrl: controller.room!.images[0],
                           fit: BoxFit.cover,
                           height: 90,
-                          color: controller.activeImageIdx == 0
+                          color: controller.activeImageIdx.value == 0
                               ? null
                               : const Color.fromRGBO(0, 0, 0, 0.7),
                           colorBlendMode: BlendMode.multiply),
@@ -758,7 +1073,7 @@ class DetailScreen extends StatelessWidget {
                           imageUrl: controller.room!.images[1],
                           fit: BoxFit.cover,
                           height: 90,
-                          color: controller.activeImageIdx == 1
+                          color: controller.activeImageIdx.value == 1
                               ? null
                               : const Color.fromRGBO(0, 0, 0, 0.7),
                           colorBlendMode: BlendMode.multiply),
@@ -771,7 +1086,7 @@ class DetailScreen extends StatelessWidget {
                           imageUrl: controller.room!.images[2],
                           fit: BoxFit.cover,
                           height: 90,
-                          color: controller.activeImageIdx == 2
+                          color: controller.activeImageIdx.value == 2
                               ? null
                               : const Color.fromRGBO(0, 0, 0, 0.7),
                           colorBlendMode: BlendMode.multiply),

@@ -55,7 +55,7 @@ class _RootScreenState extends State<RootScreen> {
       const HomeScreen(),
       const ManageRoomScreen(),
       const ConversationScreen(),
-      const ManageAccountScreen(),
+      ManageAccountScreen(),
     ];
 
     return Scaffold(
@@ -96,8 +96,7 @@ class _RootScreenState extends State<RootScreen> {
             },
             tabs: const [
               GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),
-              GButton(
-                  icon: Icons.home_work_outlined, text: 'Phòng của bạn'),
+              GButton(icon: Icons.home_work_outlined, text: 'Phòng của bạn'),
               GButton(icon: Icons.sms_outlined, text: 'Tin Nhắn'),
               GButton(icon: Icons.person_outline, text: 'Tài Khoản'),
             ],

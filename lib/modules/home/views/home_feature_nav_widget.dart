@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_feature_nav_controller.dart';
 import 'package:smart_rent/modules/map/views/map_screen.dart';
-import 'package:smart_rent/modules/payment/views/detail_transaction_screen.dart';
 import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
+import 'package:smart_rent/modules/post/views/post_screen.dart';
 import 'package:smart_rent/modules/recently/views/recently_view.dart';
 
 class HomeFeatureNavWidget extends StatelessWidget {
@@ -61,9 +63,37 @@ class HomeFeatureNavWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Get.to(
-                const PaymentInforScreen(),
-              );
+              // Get.to(
+              //   PaymentInforScreen(
+              //     invoice: Invoice(
+              //       orderCode: 10,
+              //       recieverId: 'x47CBjhEVvVD4sBVWMDkYHYgfcg1',
+              //       recieverName: 'Le Bao Nhu',
+              //       recieverPhoneNumber: '+84823306992',
+              //       recieverNumberBank: 'recieverNumberBank',
+              //       recieverBank: 'recieverBank',
+              //       addressRoom: 'addressRoom',
+              //       amountRoom: 5000,
+              //       description: 'test coc phong tro',
+              //       buyerId: FirebaseAuth.instance.currentUser!.uid,
+              //       buyerName: 'Pham Quoc Danh',
+              //       buyerEmail: 'quocdanhmyker@gmail.com',
+              //       buyerPhone: '+84373855259',
+              //       buyerAddress: 'buyerAddress',
+              //       items: [
+              //         {
+              //           'name': 'Phong tro',
+              //           'quantity': 1,
+              //           'price': 5000,
+              //           'description': 'Phong tro',
+              //         }
+              //       ],
+              //       roomId: '7DogDiAfgjQqfItXyG6a',
+              //     ),
+              //     isReturn: false,
+              //   ),
+              // );
+              Get.to(PostScreen());
             },
             child: Container(
               decoration: BoxDecoration(

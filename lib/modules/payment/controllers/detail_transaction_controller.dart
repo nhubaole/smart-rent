@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_rent/core/model/invoice/invoice.dart';
+import 'package:smart_rent/core/resources/firebase_fcm.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/resources/payment_os_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailTransactionController extends GetxController {
-  DetailTransactionController({required this.invoice});
-  late Invoice invoice;
+  DetailTransactionController({required this.invoice, required this.isReturn});
+  final Invoice invoice;
+  final bool isReturn;
 
   var rxInvoice = Rx<Invoice?>(null);
   RxString statusTransaction = 'progress'.obs;
@@ -82,10 +84,13 @@ class DetailTransactionController extends GetxController {
   void copyToClipboard(String textToCopy) {
     Clipboard.setData(ClipboardData(text: textToCopy));
 
-    Get.snackbar('Thông báo', 'Đã sao chép vào bộ nhớ tạm $textToCopy',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.white,
-        colorText: Colors.black);
+    Get.snackbar(
+      'Thông báo',
+      'Đã sao chép vào bộ nhớ tạm $textToCopy',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.white,
+      colorText: Colors.black,
+    );
   }
 
   Future<void> getWebView() async {
@@ -171,6 +176,44 @@ class DetailTransactionController extends GetxController {
       await FireStoreMethods().addInvoice(rxInvoice.value!);
       statusTransaction.value = 'success';
       await FireStoreMethods().updateInvoice(rxInvoice.value!, 'SUCCESS');
+      String token =
+          await FireStoreMethods().getTokenDevice(rxInvoice.value!.recieverId);
+      if (isReturn) {
+        await FirebaseFCM().sendNotificationHTTP(
+          rxInvoice.value!.buyerId,
+          rxInvoice.value!.recieverId,
+          token,
+          'Bạn vừa được hoàn cọc từ ${rxInvoice.value!.recieverName}',
+          'Nội dung: ${rxInvoice.value!.description} - ${rxInvoice.value!.amountRoom} VNĐ',
+          true,
+          'imgUrl',
+          'APPROVEDPAYMENT',
+          {},
+        );
+
+        String ticketId = await FireStoreMethods().getTicketRequestReturnRentId(
+          rxInvoice.value!.roomId,
+          rxInvoice.value!.buyerId,
+          rxInvoice.value!.recieverId,
+        );
+
+        await FireStoreMethods()
+            .updateStatusTicketRequestReturnRent(ticketId, 'NOTWORKING');
+        await FireStoreMethods()
+            .updateStatusRoom(rxInvoice.value!.roomId, 'APPROVED');
+      }
+
+      await FirebaseFCM().sendNotificationHTTP(
+        rxInvoice.value!.buyerId,
+        rxInvoice.value!.recieverId,
+        token,
+        'Bạn vừa nhận thanh toán từ ${rxInvoice.value!.recieverName}',
+        'Nội dung: ${rxInvoice.value!.description} - ${rxInvoice.value!.amountRoom} VNĐ',
+        true,
+        'imgUrl',
+        'PAYMENT',
+        {},
+      );
       AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 10,

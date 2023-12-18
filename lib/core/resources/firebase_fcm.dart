@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rent/blank.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class FirebaseFCM {
@@ -35,11 +34,11 @@ class FirebaseFCM {
   void handleMessageForeground(RemoteMessage? message) {
     if (message == null) return;
 
-    Get.to(
-      () => Blank(
-        message: message,
-      ),
-    );
+    // Get.to(
+    //   () => Blank(
+    //     message: message,
+    //   ),
+    // );
 
     AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -93,17 +92,20 @@ class FirebaseFCM {
   }
 
   Future<String> sendNotificationHTTP(
-    String senderUid,
-    String receiverUid,
+    String senderId,
+    String receiverId,
     String receiverTokenFCM,
     String title,
     String body,
     bool sound,
     String? imgUrl,
     String contentType,
+    Map<String, dynamic>? dataOptions,
   ) async {
     String res = 'Something went wrong';
     try {
+      DateTime now = DateTime.now().add(const Duration(hours: 1)).toUtc();
+      final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
       _fibaseMessaging.getToken().then((value) async {
         var data = {
           'to': receiverTokenFCM,
@@ -115,11 +117,14 @@ class FirebaseFCM {
           },
           'data': {
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'senderUid': senderUid,
-            'receiverUid': receiverUid,
+            'senderId': senderId,
+            'recieverId': receiverId,
             'content_type': contentType
           },
-          'priority': 'high'
+          'room': dataOptions,
+          'priority': 'high',
+          'isRead': false,
+          'timeStamp': timeStamp
         };
         var response = await http.post(Uri.parse(dotenv.get('fcm_google_url')),
             body: jsonEncode(data),
@@ -129,7 +134,7 @@ class FirebaseFCM {
             });
         //print(response.statusCode);
         if (response.statusCode == 200) {
-          FireStoreMethods().setContentNotification(receiverUid, data);
+          FireStoreMethods().setContentNotification(receiverId, data);
         }
       });
     } catch (e) {

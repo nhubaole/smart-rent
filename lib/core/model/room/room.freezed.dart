@@ -37,12 +37,13 @@ mixin _$Room {
   String get location => throw _privateConstructorUsedError;
   List<Utilities> get utilities => throw _privateConstructorUsedError;
   String get createdByUid => throw _privateConstructorUsedError;
-  String get dateTime => throw _privateConstructorUsedError;
+  int get dateTime => throw _privateConstructorUsedError;
   bool get isRented => throw _privateConstructorUsedError;
   RoomStatus get status => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   List<String> get listComments => throw _privateConstructorUsedError;
   List<String> get listLikes => throw _privateConstructorUsedError;
+  String get rentBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -72,12 +73,13 @@ abstract class $RoomCopyWith<$Res> {
       String location,
       List<Utilities> utilities,
       String createdByUid,
-      String dateTime,
+      int dateTime,
       bool isRented,
       RoomStatus status,
       List<String> images,
       List<String> listComments,
-      List<String> listLikes});
+      List<String> listLikes,
+      String rentBy});
 }
 
 /// @nodoc
@@ -116,6 +118,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
     Object? images = null,
     Object? listComments = null,
     Object? listLikes = null,
+    Object? rentBy = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -189,7 +192,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       isRented: null == isRented
           ? _value.isRented
           : isRented // ignore: cast_nullable_to_non_nullable
@@ -210,6 +213,10 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
           ? _value.listLikes
           : listLikes // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      rentBy: null == rentBy
+          ? _value.rentBy
+          : rentBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -239,12 +246,13 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
       String location,
       List<Utilities> utilities,
       String createdByUid,
-      String dateTime,
+      int dateTime,
       bool isRented,
       RoomStatus status,
       List<String> images,
       List<String> listComments,
-      List<String> listLikes});
+      List<String> listLikes,
+      String rentBy});
 }
 
 /// @nodoc
@@ -280,6 +288,7 @@ class __$$RoomImplCopyWithImpl<$Res>
     Object? images = null,
     Object? listComments = null,
     Object? listLikes = null,
+    Object? rentBy = null,
   }) {
     return _then(_$RoomImpl(
       id: null == id
@@ -353,7 +362,7 @@ class __$$RoomImplCopyWithImpl<$Res>
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       isRented: null == isRented
           ? _value.isRented
           : isRented // ignore: cast_nullable_to_non_nullable
@@ -374,6 +383,10 @@ class __$$RoomImplCopyWithImpl<$Res>
           ? _value._listLikes
           : listLikes // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      rentBy: null == rentBy
+          ? _value.rentBy
+          : rentBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -399,12 +412,13 @@ class _$RoomImpl extends _Room {
       this.location = '',
       final List<Utilities> utilities = const [],
       this.createdByUid = '',
-      this.dateTime = '',
+      this.dateTime = 0,
       this.isRented = true,
       this.status = RoomStatus.PENDING,
       final List<String> images = const [],
       final List<String> listComments = const [],
-      final List<String> listLikes = const []})
+      final List<String> listLikes = const [],
+      this.rentBy = 'UNKNOWN'})
       : _utilities = utilities,
         _images = images,
         _listComments = listComments,
@@ -473,7 +487,7 @@ class _$RoomImpl extends _Room {
   final String createdByUid;
   @override
   @JsonKey()
-  final String dateTime;
+  final int dateTime;
   @override
   @JsonKey()
   final bool isRented;
@@ -508,8 +522,12 @@ class _$RoomImpl extends _Room {
   }
 
   @override
+  @JsonKey()
+  final String rentBy;
+
+  @override
   String toString() {
-    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images, listComments: $listComments, listLikes: $listLikes)';
+    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images, listComments: $listComments, listLikes: $listLikes, rentBy: $rentBy)';
   }
 
   @override
@@ -554,7 +572,8 @@ class _$RoomImpl extends _Room {
             const DeepCollectionEquality()
                 .equals(other._listComments, _listComments) &&
             const DeepCollectionEquality()
-                .equals(other._listLikes, _listLikes));
+                .equals(other._listLikes, _listLikes) &&
+            (identical(other.rentBy, rentBy) || other.rentBy == rentBy));
   }
 
   @JsonKey(ignore: true)
@@ -583,7 +602,8 @@ class _$RoomImpl extends _Room {
         status,
         const DeepCollectionEquality().hash(_images),
         const DeepCollectionEquality().hash(_listComments),
-        const DeepCollectionEquality().hash(_listLikes)
+        const DeepCollectionEquality().hash(_listLikes),
+        rentBy
       ]);
 
   @JsonKey(ignore: true)
@@ -619,12 +639,13 @@ abstract class _Room extends Room {
       final String location,
       final List<Utilities> utilities,
       final String createdByUid,
-      final String dateTime,
+      final int dateTime,
       final bool isRented,
       final RoomStatus status,
       final List<String> images,
       final List<String> listComments,
-      final List<String> listLikes}) = _$RoomImpl;
+      final List<String> listLikes,
+      final String rentBy}) = _$RoomImpl;
   const _Room._() : super._();
 
   factory _Room.fromJson(Map<String, dynamic> json) = _$RoomImpl.fromJson;
@@ -664,7 +685,7 @@ abstract class _Room extends Room {
   @override
   String get createdByUid;
   @override
-  String get dateTime;
+  int get dateTime;
   @override
   bool get isRented;
   @override
@@ -675,6 +696,8 @@ abstract class _Room extends Room {
   List<String> get listComments;
   @override
   List<String> get listLikes;
+  @override
+  String get rentBy;
   @override
   @JsonKey(ignore: true)
   _$$RoomImplCopyWith<_$RoomImpl> get copyWith =>

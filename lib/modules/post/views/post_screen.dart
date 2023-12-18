@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:im_stepper/stepper.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/button_fill.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
@@ -11,8 +10,6 @@ import 'package:smart_rent/modules/post/views/confirm_page.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
 import 'package:smart_rent/modules/post/views/location_page.dart';
 import 'package:smart_rent/modules/post/views/utilities_page.dart';
-
-import '../../../core/enums/gender.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -28,16 +25,16 @@ class _PostScreenState extends State<PostScreen> {
 
   int upperBound = 5; // upperBound MUST BE total number of icons minus 1.
 
-  LocationPage locationPage = LocationPage();
-  UtilitiesPage utilitiesPage = UtilitiesPage();
-  ConfirmPage confirmPage = ConfirmPage();
-  InfoPage infoPage = InfoPage();
+  LocationPage locationPage = const LocationPage();
+  UtilitiesPage utilitiesPage = const UtilitiesPage();
+  ConfirmPage confirmPage = const ConfirmPage();
+  InfoPage infoPage = const InfoPage();
 
   List<Icon> icons = [
-    Icon(Icons.info_outline, color: Colors.white),
-    Icon(Icons.location_on_outlined, color: Colors.white),
-    Icon(Icons.extension_outlined, color: Colors.white),
-    Icon(Icons.verified_outlined, color: Colors.white),
+    const Icon(Icons.info_outline, color: Colors.white),
+    const Icon(Icons.location_on_outlined, color: Colors.white),
+    const Icon(Icons.extension_outlined, color: Colors.white),
+    const Icon(Icons.verified_outlined, color: Colors.white),
   ];
 
   @override
@@ -51,18 +48,18 @@ class _PostScreenState extends State<PostScreen> {
         ),
         appBar: AppBar(
           toolbarHeight: 64.0,
-          title: Text(
+          title: const Text(
             'Đăng phòng',
             style: TextStyle(
                 color: primary40, fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarBrightness: Brightness.light,
             statusBarIconBrightness: Brightness.dark,
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: primary40),
+            icon: const Icon(Icons.arrow_back, color: primary40),
             onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: primary80,
@@ -128,23 +125,21 @@ class _PostScreenState extends State<PostScreen> {
 
   /// Returns the next button.
   Widget nextButton() {
-    return Container(
+    return SizedBox(
       height: 50,
       child: activeStep == 3
           ? ButtonFill(
               onPressed: () {
                 if (controller.formInfoKey.currentState!.validate()) {
-                  // post
-                  print("POST");
                   controller.postRoom();
                 }
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.add_box_rounded,
                 size: 20,
                 color: Colors.white,
               ),
-              text: Text(
+              text: const Text(
                 'Đăng bài',
                 style: TextStyle(
                     color: Colors.white,
@@ -178,21 +173,17 @@ class _PostScreenState extends State<PostScreen> {
                 }
 
                 if (activeStep < upperBound - 2 && allowNext) {
-                  print("CITIES: ${controller.cities.length}");
-                  print("upperbound: ${upperBound}");
-                  print("Active step: ${activeStep}");
-                  print("allowNext: ${allowNext}");
                   setState(() {
                     activeStep++;
                   });
                 }
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 20,
                 color: primary60,
               ),
-              text: Text(
+              text: const Text(
                 'Tiếp theo',
                 style: TextStyle(
                     color: primary60,
@@ -208,14 +199,14 @@ class _PostScreenState extends State<PostScreen> {
   Widget header() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       decoration: BoxDecoration(
           color: primary95, borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
           headerText(),
-          style: TextStyle(
+          style: const TextStyle(
             color: primary60,
             fontWeight: FontWeight.w600,
             fontSize: 14,

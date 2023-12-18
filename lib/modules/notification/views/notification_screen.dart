@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
+import 'package:smart_rent/modules/notification/controllers/notification_controller.dart';
 import 'package:smart_rent/modules/notification/views/notification_item_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -8,6 +12,9 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final notificationController = Get.put(NotificationController());
+    notificationController.getListNoti(false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primary98,
@@ -20,73 +27,186 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
       ),
-      // body: const SingleChildScrollView(
-      //   child: Padding(
-      //     padding: EdgeInsets.all(24),
-      //     child: Center(
-      //       child: Column(
-      //         mainAxisAlignment: MainAxisAlignment.start,
-      //         mainAxisSize: MainAxisSize.max,
-      //         children: [
-      //           NotificationItemWidget(
-      //             content: 'Có phòng trọ mới vừa được đăng trên Rent House',
-      //             time: '12:17 18/06/2023',
-      //             typeNotification: 'new_room',
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
-      body: ListView.builder(
-        itemCount: 100,
-        itemBuilder: (context, index) => Dismissible(
-          key: UniqueKey(),
-          background: Container(
-            alignment: Alignment.centerLeft,
-            color: Colors.red,
-            child: Container(
-              margin: const EdgeInsets.only(left: 50),
-              child: const Text(
-                'Delete',
-                style: TextStyle(
-                  color: Colors.white,
+      body: Obx(
+        () => notificationController.isLoading.value
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: primary95,
+                  backgroundColor: Colors.white,
                 ),
-              ),
-            ),
-          ),
-          secondaryBackground: Container(
-            color: Colors.green,
-            child: Container(
-              alignment: Alignment.centerRight,
-              margin: const EdgeInsets.only(right: 50),
-              child: const Text(
-                'Undo',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          child: index % 2 == 0
-              ? const NotificationItemWidget(
-                  content: 'Có phòng trọ mới vừa được đăng trên Rent House',
-                  time: '12:17 18/06/2023',
-                  typeNotification: 'like',
-                )
-              : const NotificationItemWidget(
-                  content: 'Phòng trọ của bạn có một lượt yêu thích mới',
-                  time: '12:17 18/06/2023',
-                  typeNotification: 'new_room',
-                ),
-          onDismissed: (direction) {
-            if (direction == DismissDirection.startToEnd) {
-              Get.snackbar('delete', 'message');
-            } else if (direction == DismissDirection.endToStart) {
-              Get.snackbar('undo', 'message');
-            }
-          },
-        ),
+              )
+            : notificationController.listNotifications.value.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/lottie/empty.json',
+                          repeat: true,
+                          reverse: true,
+                          height: 300,
+                          width: double.infinity,
+                        ),
+                        const Text(
+                          'Bạn chưa có thông báo',
+                          style: TextStyle(
+                            color: secondary20,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () {
+                      return notificationController.getListNoti(false);
+                    },
+                    child: ListView.builder(
+                      itemCount: notificationController
+                              .listNotifications.value.length +
+                          1,
+                      itemBuilder: (context, index) {
+                        if (index <
+                            notificationController
+                                .listNotifications.value.length) {
+                          return Dismissible(
+                            key: UniqueKey(),
+                            background: Container(
+                              alignment: Alignment.centerLeft,
+                              color: Colors.red,
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 50),
+                                child: const Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            secondaryBackground: Container(
+                              color: Colors.green,
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                margin: const EdgeInsets.only(right: 50),
+                                child: const Text(
+                                  'Undo',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            child: GestureDetector(
+                              onTap: () async {
+                                // notificationController.getListNoti(true);
+                                if (notificationController.listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'REQUEST_RETURN_ROOM') {
+                                  notificationController.showDialogLoading(
+                                    'Đang xử lý...',
+                                    notificationController.listNotifications
+                                        .value[index]['room']['roomId'],
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                    false,
+                                  );
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'APPROVEDPAYMENT') {
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'REQUEST_RENT_ROOM') {
+                                  notificationController.showDialogLoading(
+                                    'Đang xử lý...',
+                                    notificationController.listNotifications
+                                        .value[index]['room']['roomId'],
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                    false,
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                  );
+                                } else {
+                                  await FireStoreMethods()
+                                      .markAsReadNotification(
+                                    notificationController
+                                        .listNotifications.value[index]['id'],
+                                  );
+                                  Get.to(const PostedRoomScreen());
+                                }
+                                notificationController.getListNoti(true);
+                              },
+                              child: NotificationItemWidget(
+                                data: notificationController
+                                    .listNotifications.value[index],
+                              ),
+                            ),
+                            onDismissed: (direction) {
+                              if (direction == DismissDirection.startToEnd) {
+                                Get.snackbar('delete', 'message');
+                              } else if (direction ==
+                                  DismissDirection.endToStart) {
+                                Get.snackbar('undo', 'message');
+                              }
+                            },
+                          );
+                        } else {
+                          return Obx(
+                            () => notificationController.isLoadMore.value
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: primary95,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          notificationController
+                                              .getListNoti(true);
+                                        },
+                                        style: ButtonStyle(
+                                          side: MaterialStateProperty.all(
+                                            const BorderSide(
+                                              color: primary40,
+                                            ),
+                                          ),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Xem thêm',
+                                          style: TextStyle(
+                                            color: primary40,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
       ),
     );
   }

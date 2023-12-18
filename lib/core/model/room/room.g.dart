@@ -29,7 +29,7 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
               .toList() ??
           const [],
       createdByUid: json['createdByUid'] as String? ?? '',
-      dateTime: json['dateTime'] as String? ?? '',
+      dateTime: json['dateTime'] as int? ?? 0,
       isRented: json['isRented'] as bool? ?? true,
       status: $enumDecodeNullable(_$RoomStatusEnumMap, json['status']) ??
           RoomStatus.PENDING,
@@ -45,6 +45,7 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      rentBy: json['rentBy'] as String? ?? 'UNKNOWN',
     );
 
 Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
@@ -73,6 +74,7 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'images': instance.images,
       'listComments': instance.listComments,
       'listLikes': instance.listLikes,
+      'rentBy': instance.rentBy,
     };
 
 const _$RoomTypeEnumMap = {
@@ -111,4 +113,7 @@ const _$RoomStatusEnumMap = {
   RoomStatus.APPROVED: 'APPROVED',
   RoomStatus.EXPIRED: 'EXPIRED',
   RoomStatus.DELETED: 'DELETED',
+  RoomStatus.REQUESTRENT: 'REQUESTRENT',
+  RoomStatus.REQUESTRETURN: 'REQUESTRETURN',
+  RoomStatus.RENTED: 'RENTED',
 };

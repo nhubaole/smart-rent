@@ -179,9 +179,12 @@ class ProfileOwnerScreen extends StatelessWidget {
                                   ),
                                   itemCount:
                                       profileOwnerController.listRoom.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (context, index) {
                                     return RoomItem(
+                                      isHandleRentRoom: false,
+                                      isHandleRequestReturnRoom: false,
+                                      isRequestReturnRent: false,
+                                      isRequestRented: false,
                                       room: profileOwnerController
                                           .listRoom[index],
                                       isLiked: profileOwnerController
@@ -194,43 +197,6 @@ class ProfileOwnerScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        // Obx(
-                        //   () => profileOwnerController.isLoading.value
-                        //       ? const Center(
-                        //           child: CircularProgressIndicator(
-                        //             color: primary60,
-                        //           ),
-                        //         )
-                        //       : Column(
-                        //           mainAxisAlignment: MainAxisAlignment.start,
-                        //           mainAxisSize: MainAxisSize.max,
-                        //           children: [
-                        //             GridView.builder(
-                        //               scrollDirection: Axis.vertical,
-                        //               shrinkWrap: true,
-                        //               physics:
-                        //                   const NeverScrollableScrollPhysics(),
-                        //               gridDelegate:
-                        //                   const SliverGridDelegateWithFixedCrossAxisCount(
-                        //                 crossAxisCount: 2,
-                        //                 childAspectRatio: 0.71,
-                        //                 crossAxisSpacing: 5,
-                        //                 // mainAxisSpacing: 20,
-                        //               ),
-                        //               itemCount: profileOwnerController
-                        //                   .listRoom.length,
-                        //               itemBuilder:
-                        //                   (BuildContext context, int index) {
-                        //                 return RoomItem(
-                        //                   room: profileOwnerController
-                        //                       .listRoom[index],
-                        //                   isLiked: false,
-                        //                 );
-                        //               },
-                        //             ),
-                        //           ],
-                        //         ),
-                        // ),
                       ],
                     )
                   : const CircularProgressIndicator(
