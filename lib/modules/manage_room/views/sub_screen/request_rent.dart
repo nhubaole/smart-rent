@@ -121,6 +121,7 @@ class _RequestRentScreenState extends State<RequestRentScreen> {
                                     requestRentController
                                         .listRoom.value.length) {
                                   return RoomItem(
+                                    isRenting: false,
                                     isHandleRentRoom: false,
                                     isHandleRequestReturnRoom: false,
                                     isRequestReturnRent: false,

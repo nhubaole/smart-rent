@@ -75,8 +75,9 @@ class SendRequestRentRoomController extends GetxController {
       };
 
       if (isJoinNow.value) {
-        data['dateJoin'] =
-            DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+        // data['dateJoin'] =
+        //     DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+        data['dateJoin'] = 'joinNow';
       } else {
         data['dateJoin'] = dateJoinTextController.value.text;
       }

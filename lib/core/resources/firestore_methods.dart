@@ -88,6 +88,22 @@ class FireStoreMethods {
     }
   }
 
+  Future<void> updateRentedRoom(
+      String uidRoom, String status, bool isRented, String rentBy) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(uidRoom)
+          .update({
+        'isRented': isRented,
+        'rentby': rentBy,
+        'status': status,
+      });
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
   Future<bool> checkStatusRoom(String uidRoom, String status) async {
     bool result = false;
     try {
@@ -155,7 +171,7 @@ class FireStoreMethods {
     try {
       final querySnapshot = await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('createdByUid', isEqualTo: uid)
+          .where('rentby', isEqualTo: uid)
           .where('status', isEqualTo: 'RENTED')
           .limit(index)
           .get();
@@ -726,6 +742,27 @@ class FireStoreMethods {
       final querySnapshot = await _firestore
           .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
           .where('uidTenant', isEqualTo: uidTenant)
+          .where('status', isEqualTo: status)
+          .limit(index)
+          .get();
+
+      result = querySnapshot.docs.map((e) => e.data()).toList();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getTicketsHandleRequestRent(
+    String uidLandlord,
+    int index,
+    String status,
+  ) async {
+    List<Map<String, dynamic>> result = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_TICKET_REQUEST_REQUEST_RENT_ROOM_COLLECTION)
+          .where('uidLandlord', isEqualTo: uidLandlord)
           .where('status', isEqualTo: status)
           .limit(index)
           .get();

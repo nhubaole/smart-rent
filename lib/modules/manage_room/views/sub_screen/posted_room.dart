@@ -122,6 +122,7 @@ class _PostedRoomScreenState extends State<PostedRoomScreen> {
                                       postedRoomController
                                           .listRoom.value.length) {
                                     return RoomItem(
+                                      isRenting: false,
                                       isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
                                       isRequestReturnRent: false,

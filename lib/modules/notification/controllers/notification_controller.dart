@@ -33,7 +33,7 @@ class NotificationController extends GetxController {
     bool isRequestRented,
     bool isRequestReturnRent,
     bool isHandleRentRoom,
-    bool isHandleRequestReturnRoo,
+    bool isHandleRequestReturnRoom,
     bool isRenting,
   ) async {
     Get.dialog(
@@ -72,7 +72,7 @@ class NotificationController extends GetxController {
         room: room,
         isRequestRented: isRequestRented,
         isRequestReturnRent: isRequestReturnRent,
-        isHandleRequestReturnRoom: isHandleRequestReturnRoo,
+        isHandleRequestReturnRoom: isHandleRequestReturnRoom,
         isHandleRentRoom: isHandleRentRoom,
         isRenting: isRenting,
         notificationId: notificationId,

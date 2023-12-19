@@ -13,6 +13,7 @@ import 'package:smart_rent/core/values/KEY_VALUE.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import 'package:smart_rent/modules/handle_rent_room_landlord/views/list_request_rent_room_screen.dart';
 import 'package:smart_rent/modules/handle_rent_room_tenant/views/send_request_rent_room.dart';
 import 'package:smart_rent/modules/handle_return_room_landlord/views/detail_request_return_room_screen.dart';
 import 'package:smart_rent/modules/handle_return_room_tenant/views/send_request_return_room.dart';
@@ -360,14 +361,27 @@ class DetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FirebaseAuth.instance.currentUser!.uid ==
-                                  room.createdByUid
+                                      room.createdByUid &&
+                                  (isRequestRented ||
+                                      isRequestReturnRent ||
+                                      isHandleRequestReturnRoom ||
+                                      isHandleRentRoom ||
+                                      isRenting)
                               ? TextButton(
                                   onPressed: () {
-                                    Get.to(
-                                      DetailRequestReturnRoomScreen(
-                                        roomId: room.id,
-                                      ),
-                                    );
+                                    if (isHandleRentRoom) {
+                                      Get.to(
+                                        ListRequestRentRoomScreen(
+                                          room: room,
+                                        ),
+                                      );
+                                    } else if (isHandleRequestReturnRoom) {
+                                      Get.to(
+                                        DetailRequestReturnRoomScreen(
+                                          roomId: room.id,
+                                        ),
+                                      );
+                                    }
                                   },
                                   child: Text(
                                     'Yêu cầu ${isHandleRentRoom ? 'thuê' : isHandleRequestReturnRoom ? 'trả' : ''} phòng',
