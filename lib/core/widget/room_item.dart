@@ -14,6 +14,7 @@ class RoomItem extends StatefulWidget {
   final bool isRequestReturnRent;
   final bool isHandleRequestReturnRoom;
   final bool isHandleRentRoom;
+  final bool isRenting;
   const RoomItem({
     super.key,
     required this.room,
@@ -22,6 +23,7 @@ class RoomItem extends StatefulWidget {
     required this.isRequestReturnRent,
     required this.isHandleRequestReturnRoom,
     required this.isHandleRentRoom,
+    required this.isRenting,
   });
 
   @override
@@ -53,7 +55,7 @@ class _RoomItemState extends State<RoomItem> {
             room: widget.room,
             isHandleRequestReturnRoom: widget.isHandleRequestReturnRoom,
             isHandleRentRoom: widget.isHandleRentRoom,
-            isRenting: false,
+            isRenting: widget.isRenting,
           ),
         );
       },

@@ -117,6 +117,7 @@ class _WaitApproveRoomScreenState extends State<WaitApproveRoomScreen> {
                                   waitApproveRoomController
                                       .listRoom.value.length) {
                                 return RoomItem(
+                                  isRenting: false,
                                   isHandleRentRoom: false,
                                   isHandleRequestReturnRoom: false,
                                   isRequestReturnRent: false,

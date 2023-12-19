@@ -130,6 +130,7 @@ class RecentlyViewScreen extends StatelessWidget {
                         if (index <
                             recentlyViewController.listRoom.value.length) {
                           return RoomItem(
+                            isRenting: false,
                             isHandleRentRoom: false,
                             isHandleRequestReturnRoom: false,
                             isRequestReturnRent: false,

@@ -135,7 +135,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                                 ),
                               );
                             } else if (profileOwnerController
-                                .listRoom.value.isEmpty) {
+                                .listRoom.isEmpty) {
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -181,6 +181,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                                       profileOwnerController.listRoom.length,
                                   itemBuilder: (context, index) {
                                     return RoomItem(
+                                      isRenting: false,
                                       isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
                                       isRequestReturnRent: false,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
 import 'package:smart_rent/modules/notification/controllers/notification_controller.dart';
 import 'package:smart_rent/modules/notification/views/notification_item_widget.dart';
+import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -114,15 +115,24 @@ class NotificationScreen extends StatelessWidget {
                                     notificationController
                                         .listNotifications.value[index]['id'],
                                     false,
+                                    false,
+                                    false,
                                     true,
-                                    false,
-                                    false,
                                     false,
                                   );
                                 } else if (notificationController
                                         .listNotifications
                                         .value[index]['data']['content_type'] ==
-                                    'APPROVEDPAYMENT') {
+                                    'ACCEPT_REQUEST_RENT') {
+                                  Map<String, dynamic> response =
+                                      notificationController
+                                          .listNotifications.value[index];
+                                  Invoice invoice = Invoice.fromJson(
+                                      response['room']['invoice']);
+                                  Get.to(
+                                    PaymentInforScreen(
+                                        invoice: invoice, isReturn: false),
+                                  );
                                 } else if (notificationController
                                         .listNotifications
                                         .value[index]['data']['content_type'] ==
@@ -139,14 +149,18 @@ class NotificationScreen extends StatelessWidget {
                                     false,
                                     false,
                                   );
-                                } else {
-                                  await FireStoreMethods()
-                                      .markAsReadNotification(
-                                    notificationController
-                                        .listNotifications.value[index]['id'],
-                                  );
-                                  Get.to(const PostedRoomScreen());
-                                }
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'ACCEPT_REQUEST_RENT') {
+                                } else if (notificationController
+                                        .listNotifications
+                                        .value[index]['data']['content_type'] ==
+                                    'DECLINE_REQUEST_RENT') {}
+                                await FireStoreMethods().markAsReadNotification(
+                                  notificationController
+                                      .listNotifications.value[index]['id'],
+                                );
                                 notificationController.getListNoti(true);
                               },
                               child: NotificationItemWidget(

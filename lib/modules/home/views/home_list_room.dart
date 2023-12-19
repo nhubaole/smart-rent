@@ -15,6 +15,8 @@ class HomeListRoomWidget extends StatefulWidget {
 
 class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
   HomeListRoomController listRoomController = Get.put(HomeListRoomController());
+  double deviceHeight = MediaQuery.of(Get.context!).size.height;
+  double deviceWidth = MediaQuery.of(Get.context!).size.width;
 
   @override
   void initState() {
@@ -25,7 +27,10 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(
+        horizontal: deviceWidth * 0.05,
+        vertical: deviceHeight * 0.02,
+      ),
       child: Column(
         children: [
           const Row(
@@ -77,7 +82,7 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                               textAlign: TextAlign.center,
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(deviceWidth * 0.01),
                               child: Center(
                                 child: OutlinedButton(
                                   onPressed: () {
@@ -129,6 +134,7 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                             if (index <
                                 listRoomController.listRoom.value.length) {
                               return RoomItem(
+                                isRenting: false,
                                 isHandleRentRoom: false,
                                 isHandleRequestReturnRoom: false,
                                 isRequestReturnRent: false,
@@ -150,7 +156,8 @@ class _HomeListRoomWidgetState extends State<HomeListRoomWidget> {
                                         ),
                                       )
                                     : Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding:
+                                            EdgeInsets.all(deviceWidth * 0.01),
                                         child: Center(
                                           child: OutlinedButton(
                                             onPressed: () {
