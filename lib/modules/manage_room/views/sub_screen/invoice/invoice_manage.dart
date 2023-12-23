@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice_manage_controller.dart';
+import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice/invoice_manage_controller.dart';
 
 class InvoiceManage extends StatefulWidget {
   const InvoiceManage({super.key});
