@@ -16,7 +16,7 @@ class ReviewRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewController = Get.find<ReviewRoomController>();
+    final reviewController = Get.put(ReviewRoomController(invoice: invoice));
     reviewController.getRoom();
     return Scaffold(
       appBar: AppBar(
