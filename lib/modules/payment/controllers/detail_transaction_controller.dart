@@ -102,6 +102,7 @@ class DetailTransactionController extends GetxController {
     try {
       await FireStoreMethods().addOrderCode(invoice);
       var url = Uri.https('api-merchant.payos.vn', '/v2/payment-requests');
+      print('order-code: ${rxInvoice.value!.orderCode}');
       var response = await http.post(url,
           headers: {
             'Content-Type': 'application/json',
@@ -179,6 +180,13 @@ class DetailTransactionController extends GetxController {
       String token =
           await FireStoreMethods().getTokenDevice(rxInvoice.value!.recieverId);
       if (isReturn) {
+        await FireStoreMethods().updateRentedRoom(
+          rxInvoice.value!.roomId,
+          'APPROVED',
+          false,
+          'UNKNOWN',
+        );
+        print('order-code-noti: ${rxInvoice.value!.orderCode}');
         await FirebaseFCM().sendNotificationHTTP(
           rxInvoice.value!.buyerId,
           rxInvoice.value!.recieverId,
@@ -188,7 +196,9 @@ class DetailTransactionController extends GetxController {
           true,
           'imgUrl',
           'APPROVEDPAYMENT',
-          {},
+          {
+            'invoice': rxInvoice.value!.toJson(),
+          },
         );
 
         String ticketId = await FireStoreMethods().getTicketRequestReturnRentId(

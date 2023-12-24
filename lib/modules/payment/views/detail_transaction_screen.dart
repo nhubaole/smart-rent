@@ -351,21 +351,12 @@ class DetailTransactionScreen extends StatelessWidget {
                                   'success'
                               ? GestureDetector(
                                   onTap: () {
-                                    isReturn
-                                        ? Get.offAll(
-                                            const Blank(
-                                              message:
-                                                  'Cảm ơn vì đã thanh toán',
-                                              screen: RootScreen(),
-                                            ),
-                                          )
-                                        : Get.offAll(
-                                            ReviewRoom(
-                                              invoice:
-                                                  detailTransactionController
-                                                      .rxInvoice.value!,
-                                            ),
-                                          );
+                                    Get.offAll(
+                                      const Blank(
+                                        message: 'Cảm ơn vì đã thanh toán',
+                                        screen: RootScreen(),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
@@ -374,13 +365,14 @@ class DetailTransactionScreen extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         color: primary60),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(16.0),
                                       child: Text(
-                                        isReturn
-                                            ? 'Thanh toán hoàn tất'
-                                            : 'Đánh giá phòng đã thuê',
-                                        style: const TextStyle(
+                                        // isReturn
+                                        //     ? 'Thanh toán hoàn tất'
+                                        //     : 'Đánh giá phòng đã thuê',
+                                        'Thanh toán hoàn tất',
+                                        style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400),

@@ -62,9 +62,6 @@ class FireStoreMethods {
     try {
       final querySnapshot = await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('status', isEqualTo: 'APPROVED')
-          .where('isRented', isEqualTo: false)
-          .where('rentBy', isEqualTo: 'UNKNOWN')
           .limit(index)
           .orderBy('dateTime', descending: true)
           .get();
