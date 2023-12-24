@@ -270,8 +270,8 @@ class FilterController extends GetxController {
           break;
         case Sort.LATEST:
           results.value.sort((a, b) {
-            DateTime aDate = DateTime.parse(a.dateTime);
-            DateTime bDate = DateTime.parse(b.dateTime);
+            DateTime aDate = DateTime.parse(a.dateTime.toString());
+            DateTime bDate = DateTime.parse(b.dateTime.toString());
             return aDate.compareTo(bDate);
           });
           break;
