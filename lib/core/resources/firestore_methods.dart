@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/enums/room_status.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/model/review_ticket/review_ticket.dart';
@@ -66,7 +67,7 @@ class FireStoreMethods {
           .orderBy('dateTime', descending: true)
           .get();
       print('querySnapshot.docs.length: ${querySnapshot.docs.length}');
-      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).where((element) => element.status != RoomStatus.DELETED).toList();
     } catch (e) {
       print(e.toString());
       Get.snackbar('Error', e.toString());
