@@ -18,6 +18,7 @@ import 'package:smart_rent/core/model/room/util_item.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
+import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/model/location/city.dart';
@@ -193,6 +194,9 @@ class PostController extends GetxController
           'listRoomForRent': FieldValue.arrayUnion([room.value.id])
         });
         print('Room added');
+
+        Get.offUntil(MaterialPageRoute(builder: (context) => RootScreen()),
+            (Route<dynamic> route) => false);
 
         Get.to(
           DetailScreen(

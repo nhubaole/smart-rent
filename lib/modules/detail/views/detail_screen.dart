@@ -962,7 +962,54 @@ class DetailScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                        : const SizedBox(),
+                        : Expanded(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(red90),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(red50),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)))),
+                              onPressed: () async {
+                                Get.defaultDialog(
+                                  title: 'Thông báo',
+                                  middleText:
+                                      'Bạn có chắc chắn muốn xóa phòng trọ này?',
+                                  textConfirm: 'Xóa',
+                                  textCancel: 'Hủy',
+                                  confirmTextColor: Colors.white,
+                                  buttonColor: primary40,
+                                  backgroundColor: primary98,
+                                  cancelTextColor: primary40,
+                                  onConfirm: () async {
+                                    FireStoreMethods()
+                                        .updateStatusRoom(room.id, 'DELETED');
+                                    Get.back();
+                                    Get.back();
+                                  },
+                                );
+                              },
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    size: 24.0,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text('Xóa'),
+                                ],
+                              ),
+                            ),
+                          ),
                     const SizedBox(
                       width: 8,
                     ),
@@ -997,7 +1044,36 @@ class DetailScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                        : const SizedBox(),
+                        : Expanded(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(secondary90),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(secondary40),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.zero),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)))),
+                              onPressed: () {},
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.edit,
+                                    size: 24.0,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text('Sửa'),
+                                ],
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),

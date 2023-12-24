@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_popular_controller.dart';
+import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class HomePopularWidget extends StatefulWidget {
@@ -61,8 +62,9 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                 clipBehavior: Clip.hardEdge,
                 child: InkWell(
                   onTap: () {
-                    Get.closeAllSnackbars();
-                    Get.snackbar('Notify', 'message');
+                    Get.to(FilterScreen(
+                        location:
+                            controller.dataList[index]['address'] as String));
                   },
                   child: Stack(
                     children: [
@@ -86,8 +88,8 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                           padding: const EdgeInsets.only(
                             top: 12,
                             bottom: 6,
-                            right: 20,
-                            left: 20,
+                            right: 10,
+                            left: 0,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -115,9 +117,6 @@ class _HomePopularWidgetState extends State<HomePopularWidget> {
                                     color: Colors.white,
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 6,
                               ),
                             ],
                           ),
