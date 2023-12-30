@@ -8,8 +8,11 @@ import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/widget/dialog_otp.dart';
 
 class SignUpController extends GetxController {
-  static SignUpController get instance => Get.find();
+  late Account account;
+  final controller = Get.put(SignUpController());
 
+  final _formKey = GlobalKey<FormState>();
+  var dateOfBirth;
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
   final dateOfBirth = TextEditingController();

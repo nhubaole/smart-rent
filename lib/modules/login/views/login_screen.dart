@@ -7,57 +7,14 @@ import 'package:smart_rent/modules/login/controllers/login_controller.dart';
 import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
 import 'package:smart_rent/modules/signup/views/sign_up.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({
     super.key,
   });
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-  final controller = Get.put(LoginController());
-
-  void submit() async {
-    try {
-      String resQuery = await LoginController.instance
-          .checkExistPhoneNumber(controller.phoneNo.text.trim());
-      // Kiểm tra tồn tại số điện thoại trong FireStore hay không
-
-      if (resQuery == 'exist') {
-        controller.phoneAuthentication(controller.phoneNo.text.trim());
-        Get.to(
-          () => LoginVerifyScreen(
-            phoneNumber: controller.phoneNo.text.trim(),
-          ),
-        );
-      } else {
-        Get.dialog(
-          DialogCustom(
-              onPressed: () {
-                Get.to(() => const SignUpScreen());
-              },
-              backgroundColor: Colors.white,
-              iconPath: 'assets/images/ic_notify.png',
-              title: 'Thông báo',
-              subTitle:
-                  'Không tồn tại tài khoản với số điện thoại này, đăng kí ngay'),
-        );
-      }
-    } catch (error) {
-      Get.snackbar('Error', error.toString());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final loginController = Get.put(LoginController());
     return Scaffold(
       body: Center(
         child: Column(
@@ -93,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8,
             ),
             Form(
-              key: formKey,
+              key: loginController.formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -103,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextFormFieldInput(
                       maxLength: 10,
-                      textEditingController: controller.phoneNo,
+                      textEditingController: loginController.phoneNo,
                       labelText: 'Số điện thoại',
                       hintText: 'Nhập số điện thoại',
                       textInputType: TextInputType.phone,
@@ -124,29 +81,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        if (formKey.currentState!.validate()) {
-                          submit();
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: primary60),
-                        child: const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            'Đăng nhập ngay',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ),
+                    Obx(
+                      () => loginController.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: primary95,
+                                backgroundColor: primary40,
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                if (loginController.formKey.currentState!
+                                    .validate()) {
+                                  loginController.formKey.currentState!.save();
+                                  loginController.submit();
+                                }
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: primary60),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'Đăng nhập ngay',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                     const SizedBox(
                       height: 8,
