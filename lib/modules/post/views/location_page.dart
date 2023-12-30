@@ -223,7 +223,8 @@ class _LocationPageState extends State<LocationPage> {
                     border: OutlineInputBorder(),
                     hintText: 'Ví dụ: 41/1A',
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primary40, width: 2)),
+                      borderSide: BorderSide(color: primary40, width: 2),
+                    ),
                   ),
                 ),
                 const SizedBox(

@@ -24,6 +24,7 @@ class HomeScreenController extends GetxController {
     getCurrentLocation();
     fetchDataAndConvertToList();
     getListRoom(false);
+
     super.onInit();
   }
 
@@ -32,7 +33,6 @@ class HomeScreenController extends GetxController {
     currentName.value =
         prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
     currenPhone.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
-
     getName();
   }
 
@@ -71,6 +71,8 @@ class HomeScreenController extends GetxController {
     final lat = locationData.latitude;
     final lon = locationData.longitude;
 
+    print('$lat,$lon');
+
     Map<String, dynamic> currentLocationMap =
         await GoogleMapServices().convertLatLngToAddress(
       lat!,
@@ -79,6 +81,12 @@ class HomeScreenController extends GetxController {
     );
     currenLocation.value =
         currentLocationMap['results'][0]['formatted_address'];
+
+    String s =
+        currentLocationMap['results'][0]['address_components'][2]['long_name'];
+
+    print(s.substring(s.indexOf(' ')).trim());
+    getListRoomInArea(s.substring(s.indexOf(' ')).trim());
 
     // final url = Uri.parse(
     //     'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
@@ -204,6 +212,18 @@ class HomeScreenController extends GetxController {
       isLoading.value = true;
       listRoom.value = await FireStoreMethods().getListRoomForHome(page.value);
       isLoading.value = false;
+    }
+  }
+
+  // handle google show room around
+  var listRoomInArea = Rx<List<Room>>([]);
+
+  Future<void> getListRoomInArea(String area) async {
+    listRoomInArea.value = await FireStoreMethods().getRoomInArea(area, 10);
+    if (listRoomInArea.value.isNotEmpty) {
+      for (var room in listRoomInArea.value) {
+        print(room.location);
+      }
     }
   }
 }

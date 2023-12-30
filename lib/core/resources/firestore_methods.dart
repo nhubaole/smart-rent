@@ -934,19 +934,14 @@ class FireStoreMethods {
     return listTenant;
   }
 
-  Future<List<Room>> getRoomInArer(String area, int page) async {
+  Future<List<Room>> getRoomInArea(String area, int page) async {
     List<Room> listRoom = [];
     try {
       final querySnapshot = await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
           .where(
-            (element) => TiengViet.parse(
-              element.location.toLowerCase(),
-            ).contains(
-              TiengViet.parse(
-                area.toLowerCase(),
-              ),
-            ),
+            'locationArray',
+            arrayContains: area,
           )
           .limit(10)
           .orderBy('dateTime', descending: true)

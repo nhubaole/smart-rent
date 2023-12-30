@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/map/controllers/map_screen_controller.dart';
 
 // ignore: must_be_immutable
 class MapScreen extends StatefulWidget {
-  MapScreen({super.key, required this.fromDetailRoom, this.lat, this.lon});
+  MapScreen({
+    super.key,
+    required this.fromDetailRoom,
+    this.lat,
+    this.lon,
+    this.roomInArea,
+  });
   final bool fromDetailRoom;
   double? lat = 0;
   double? lon = 0;
+  List<Room>? roomInArea;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -24,6 +32,7 @@ class _MapScreenState extends State<MapScreen> {
         fromDetailRoom: widget.fromDetailRoom,
         lat: widget.lat,
         lon: widget.lon,
+        roomInArea: widget.roomInArea,
       ),
     );
     super.initState();
@@ -53,7 +62,7 @@ class _MapScreenState extends State<MapScreen> {
                 : Obx(
                     () => GoogleMap(
                       onMapCreated: (GoogleMapController controller) {
-                        mapController.ggMapController = controller;
+                        //mapController.ggMapController = controller;
                         mapController.mapController.complete(controller);
                       },
                       initialCameraPosition: CameraPosition(
@@ -66,7 +75,11 @@ class _MapScreenState extends State<MapScreen> {
                       scrollGesturesEnabled: true,
                       tiltGesturesEnabled: true,
                       polylines: Set<Polyline>.of(
-                          mapController.polylines.value.values),
+                        mapController.listPolylines.value,
+                      ),
+                      markers: Set<Marker>.of(
+                        mapController.listMarkers.value,
+                      ),
                     ),
                   ),
       ),

@@ -6,10 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
-import 'package:smart_rent/modules/home/views/home_feature_nav_widget.dart';
-import 'package:smart_rent/modules/home/views/home_list_room.dart';
-import 'package:smart_rent/modules/home/views/home_popular_widget.dart';
-import 'package:smart_rent/modules/home/views/home_top_widget.dart';
 import 'package:smart_rent/modules/map/views/map_screen.dart';
 import 'package:smart_rent/modules/notification/views/notification_screen.dart';
 import 'package:smart_rent/modules/post/views/post_screen.dart';
@@ -159,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w300,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                             maxLines: 3,
                                             overflow: TextOverflow.ellipsis,
@@ -260,7 +256,11 @@ class HomeScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   Get.to(
-                                    () => MapScreen(fromDetailRoom: false),
+                                    () => MapScreen(
+                                      fromDetailRoom: false,
+                                      roomInArea:
+                                          homeController.listRoomInArea.value,
+                                    ),
                                   );
                                 },
                                 child: Container(

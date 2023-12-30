@@ -48,6 +48,10 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
           const [],
       rentBy: json['rentBy'] as String? ?? 'UNKNOWN',
       regulations: json['regulations'] as String? ?? '',
+      locationArray: (json['locationArray'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
@@ -79,6 +83,7 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'listLikes': instance.listLikes,
       'rentBy': instance.rentBy,
       'regulations': instance.regulations,
+      'locationArray': instance.locationArray,
     };
 
 const _$RoomTypeEnumMap = {

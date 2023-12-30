@@ -38,6 +38,7 @@ class Room with _$Room {
     @Default([]) List<String> listLikes,
     @Default('UNKNOWN') String rentBy,
     @Default('') String regulations,
+    @Default([]) List<String> locationArray,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

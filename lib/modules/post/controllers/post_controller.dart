@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,8 +17,6 @@ import 'package:smart_rent/core/model/room/util_item.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
-import 'package:uuid/uuid.dart';
-
 import '../../../core/model/location/city.dart';
 import '../../../core/model/location/location.dart';
 import '../../../core/model/location/ward.dart';
@@ -95,9 +92,7 @@ class PostController extends GetxController
 
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
-    print("INIT");
     cities = await loadCities();
 
     picker = ImagePicker();
@@ -129,14 +124,21 @@ class PostController extends GetxController
 
   void updateLocationRoom() {
     room.value = room.value.copyWith(
-        location: Location(
-                city: selectedCity.value!,
-                district: selectedDistrict.value!,
-                ward: selectedWard.value!,
-                street: streetTextController.text,
-                address: addressTextController.text)
-            .toString());
-    print(room.value.toString());
+      location: Location(
+        city: selectedCity.value!,
+        district: selectedDistrict.value!,
+        ward: selectedWard.value!,
+        street: streetTextController.text,
+        address: addressTextController.text,
+      ).toString(),
+      locationArray: [
+        selectedCity.value!.name,
+        selectedDistrict.value!.name,
+        selectedWard.value!.name,
+        streetTextController.text,
+        addressTextController.text,
+      ],
+    );
   }
 
   Future<void> updateUtilitiesRoom() async {
@@ -148,14 +150,12 @@ class PostController extends GetxController
           .map((util) => util.utility)
           .toList(),
     );
-    print(room.value.toString());
   }
 
   void updateConfirmRoom() {
     room.value = room.value.copyWith(
         title: titleTextController.text,
         description: descriptionTextController.text);
-    print(room.value.toString());
   }
 
   Future<void> postRoom() async {
@@ -177,6 +177,13 @@ class PostController extends GetxController
         dateTime: timeStamp,
         isRented: false,
         status: RoomStatus.PENDING,
+        locationArray: [
+          selectedCity.value!.name,
+          selectedDistrict.value!.name,
+          selectedWard.value!.name,
+          streetTextController.text,
+          addressTextController.text,
+        ],
       );
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -192,9 +199,8 @@ class PostController extends GetxController
             .update({
           'listRoomForRent': FieldValue.arrayUnion([room.value.id])
         });
-        print('Room added');
 
-        Get.to(
+        Get.off(
           () => DetailScreen(
             isRequestReturnRent: false,
             isRequestRented: false,
@@ -238,35 +244,36 @@ class PostController extends GetxController
 
   Future<void> handleChooseImage(BuildContext context) async {
     showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return ChooseImageBottomSheet(
-            onGallarySelected: () async {
-              final images = await picker.pickMultiImage();
-              if (images != null) {
-                for (var i in images) {
-                  pickedImages.value?.add(i);
-                  pickedImages.update(
-                    (val) {},
-                  );
-                }
-                validImageTotal.value = true;
-              }
-            },
-            onCameraSelected: () async {
-              final image = await picker.pickImage(source: ImageSource.camera);
-              if (image != null) {
-                pickedImages.value?.add(image);
+      context: context,
+      builder: (_) {
+        return ChooseImageBottomSheet(
+          onGallarySelected: () async {
+            final images = await picker.pickMultiImage();
+            if (images != null) {
+              for (var i in images) {
+                pickedImages.value?.add(i);
                 pickedImages.update(
                   (val) {},
                 );
               }
               validImageTotal.value = true;
-            },
-            messageRequestPermission:
-                "Vui lòng cho phép Smart Rent truy cập tệp hình ảnh của bạn để tải lên ảnh.",
-          );
-        });
+            }
+          },
+          onCameraSelected: () async {
+            final image = await picker.pickImage(source: ImageSource.camera);
+            if (image != null) {
+              pickedImages.value?.add(image);
+              pickedImages.update(
+                (val) {},
+              );
+            }
+            validImageTotal.value = true;
+          },
+          messageRequestPermission:
+              "Vui lòng cho phép Smart Rent truy cập tệp hình ảnh của bạn để tải lên ảnh.",
+        );
+      },
+    );
   }
 
   Future<List<int>> compressImage(File imageFile, int quality) async {

@@ -46,6 +46,7 @@ mixin _$Room {
   List<String> get listLikes => throw _privateConstructorUsedError;
   String get rentBy => throw _privateConstructorUsedError;
   String get regulations => throw _privateConstructorUsedError;
+  List<String> get locationArray => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -83,7 +84,8 @@ abstract class $RoomCopyWith<$Res> {
       List<String> listComments,
       List<String> listLikes,
       String rentBy,
-      String regulations});
+      String regulations,
+      List<String> locationArray});
 }
 
 /// @nodoc
@@ -125,6 +127,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
     Object? listLikes = null,
     Object? rentBy = null,
     Object? regulations = null,
+    Object? locationArray = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -231,6 +234,10 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
           ? _value.regulations
           : regulations // ignore: cast_nullable_to_non_nullable
               as String,
+      locationArray: null == locationArray
+          ? _value.locationArray
+          : locationArray // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -268,7 +275,8 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
       List<String> listComments,
       List<String> listLikes,
       String rentBy,
-      String regulations});
+      String regulations,
+      List<String> locationArray});
 }
 
 /// @nodoc
@@ -307,6 +315,7 @@ class __$$RoomImplCopyWithImpl<$Res>
     Object? listLikes = null,
     Object? rentBy = null,
     Object? regulations = null,
+    Object? locationArray = null,
   }) {
     return _then(_$RoomImpl(
       id: null == id
@@ -413,6 +422,10 @@ class __$$RoomImplCopyWithImpl<$Res>
           ? _value.regulations
           : regulations // ignore: cast_nullable_to_non_nullable
               as String,
+      locationArray: null == locationArray
+          ? _value._locationArray
+          : locationArray // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -446,11 +459,13 @@ class _$RoomImpl extends _Room {
       final List<String> listComments = const [],
       final List<String> listLikes = const [],
       this.rentBy = 'UNKNOWN',
-      this.regulations = ''})
+      this.regulations = '',
+      final List<String> locationArray = const []})
       : _utilities = utilities,
         _images = images,
         _listComments = listComments,
         _listLikes = listLikes,
+        _locationArray = locationArray,
         super._();
 
   factory _$RoomImpl.fromJson(Map<String, dynamic> json) =>
@@ -558,10 +573,18 @@ class _$RoomImpl extends _Room {
   @override
   @JsonKey()
   final String regulations;
+  final List<String> _locationArray;
+  @override
+  @JsonKey()
+  List<String> get locationArray {
+    if (_locationArray is EqualUnmodifiableListView) return _locationArray;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_locationArray);
+  }
 
   @override
   String toString() {
-    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, sumRating: $sumRating, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images, listComments: $listComments, listLikes: $listLikes, rentBy: $rentBy, regulations: $regulations)';
+    return 'Room(id: $id, title: $title, description: $description, roomType: $roomType, capacity: $capacity, gender: $gender, area: $area, price: $price, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, sumRating: $sumRating, hasParking: $hasParking, parkingFee: $parkingFee, location: $location, utilities: $utilities, createdByUid: $createdByUid, dateTime: $dateTime, isRented: $isRented, status: $status, images: $images, listComments: $listComments, listLikes: $listLikes, rentBy: $rentBy, regulations: $regulations, locationArray: $locationArray)';
   }
 
   @override
@@ -611,7 +634,9 @@ class _$RoomImpl extends _Room {
                 .equals(other._listLikes, _listLikes) &&
             (identical(other.rentBy, rentBy) || other.rentBy == rentBy) &&
             (identical(other.regulations, regulations) ||
-                other.regulations == regulations));
+                other.regulations == regulations) &&
+            const DeepCollectionEquality()
+                .equals(other._locationArray, _locationArray));
   }
 
   @JsonKey(ignore: true)
@@ -643,7 +668,8 @@ class _$RoomImpl extends _Room {
         const DeepCollectionEquality().hash(_listComments),
         const DeepCollectionEquality().hash(_listLikes),
         rentBy,
-        regulations
+        regulations,
+        const DeepCollectionEquality().hash(_locationArray)
       ]);
 
   @JsonKey(ignore: true)
@@ -687,7 +713,8 @@ abstract class _Room extends Room {
       final List<String> listComments,
       final List<String> listLikes,
       final String rentBy,
-      final String regulations}) = _$RoomImpl;
+      final String regulations,
+      final List<String> locationArray}) = _$RoomImpl;
   const _Room._() : super._();
 
   factory _Room.fromJson(Map<String, dynamic> json) = _$RoomImpl.fromJson;
@@ -744,6 +771,8 @@ abstract class _Room extends Room {
   String get rentBy;
   @override
   String get regulations;
+  @override
+  List<String> get locationArray;
   @override
   @JsonKey(ignore: true)
   _$$RoomImplCopyWith<_$RoomImpl> get copyWith =>
