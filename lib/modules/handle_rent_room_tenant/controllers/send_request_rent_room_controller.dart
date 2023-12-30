@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:smart_rent/blank.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/room/room.dart';
@@ -30,8 +29,7 @@ class SendRequestRentRoomController extends GetxController {
   var isJoinNow = Rx<bool>(false);
   var isLeave = Rx<bool>(false);
   var account = Rx<Account?>(null);
-
-  late MoneyFormatterOutput fo;
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   // NumberFormat numberFormat =
   //     NumberFormat.currency(locale: 'vi_VN', symbol: '');
@@ -47,8 +45,8 @@ class SendRequestRentRoomController extends GetxController {
     dateLeaveTextController.text = result != null ? result!['dateLeave'] : '';
     specialRequestTextController.text =
         result != null ? result!['specialRequest'] : '';
-    fo = MoneyFormatter(amount: double.parse(room.price.toString())).output;
 
+    currencyFormat.format(room.price);
     super.onInit();
   }
 

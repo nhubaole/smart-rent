@@ -70,7 +70,6 @@ dependencies:
   json_annotation: ^4.8.1
   location: ^5.0.3
   lottie: ^2.7.0
-  money_formatter: ^0.0.5
   open_filex: ^4.3.4
   pinput: ^3.0.1
   rating_summary: ^1.0.2+1

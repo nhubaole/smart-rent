@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_formatter/money_formatter.dart';
+
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/payment_info_controller.dart';
@@ -90,7 +90,7 @@ class PaymentInforScreen extends StatelessWidget {
                                           )),
                                       TextSpan(
                                         text:
-                                            '${paymentController.fo.withoutFractionDigits} VNĐ',
+                                            '${paymentController.currencyFormat.format(invoice.amountRoom)} VNĐ',
                                         style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
@@ -213,7 +213,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '${paymentController.fo.withoutFractionDigits} VNĐ',
+                                      '${paymentController.currencyFormat.format(invoice.amountRoom)} VNĐ',
                                       style: const TextStyle(
                                         color: secondary20,
                                         fontSize: 14,
