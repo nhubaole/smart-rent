@@ -5,17 +5,12 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/home/controllers/home_popular_controller.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class HomePopularWidget extends StatefulWidget {
+class HomePopularWidget extends StatelessWidget {
   const HomePopularWidget({super.key});
 
   @override
-  State<HomePopularWidget> createState() => _HomePopularWidgetState();
-}
-
-class _HomePopularWidgetState extends State<HomePopularWidget> {
-  final HomePopularController controller = Get.put(HomePopularController());
-  @override
   Widget build(BuildContext context) {
+    final HomePopularController controller = Get.put(HomePopularController());
     controller.fetchDataAndConvertToList();
     return Column(
       children: [

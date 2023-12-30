@@ -17,7 +17,7 @@ class LoginController extends GetxController {
       phone: phoneNo,
       errorStep: () => Get.snackbar('Thông báo', 'Lỗi gửi OTP'),
       nextStep: () => Get.to(
-        LoginVerifyScreen(phoneNumber: phoneNo),
+        () => LoginVerifyScreen(phoneNumber: phoneNo),
       ),
     );
   }

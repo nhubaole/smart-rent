@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
@@ -94,11 +95,12 @@ class SendRequestRentRoom extends StatelessWidget {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller:
                           sendRequestController.priceSuggestTextController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '5.000.000đ',
-                        suffixText: '| đ',
-                        focusedBorder: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText:
+                            '${sendRequestController.fo.withoutFractionDigits} VNĐ',
+                        suffixText: '| VNĐ',
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: secondary60,
                             width: 2,

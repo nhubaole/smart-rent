@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice/invoice_manage.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice_water_electricity_manager/invoic_we_manager.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/liked_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/rented_room.dart';
@@ -11,18 +12,16 @@ import 'package:smart_rent/modules/manage_room/views/sub_screen/return_rent.dart
 import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
 import 'package:smart_rent/modules/manage_room/views/widgets/TextFormFieldAccount.dart';
 
-class ManageRoomScreen extends StatefulWidget {
-  const ManageRoomScreen({super.key});
-
-  @override
-  State<ManageRoomScreen> createState() => _ManageRoomScreenState();
-}
-
-class _ManageRoomScreenState extends State<ManageRoomScreen> {
-  final ManageRoomController manageRoomController =
-      Get.find<ManageRoomController>();
+// ignore: must_be_immutable
+class ManageRoomScreen extends StatelessWidget {
+  ManageRoomScreen({super.key});
+  late double deviceHeight;
+  late double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    final manageRoomController = Get.find<ManageRoomController>();
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
         children: [
@@ -39,9 +38,13 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                 end: Alignment(0.0, -0.5),
               ),
             ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 62, horizontal: 24),
-              child: Text(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: deviceHeight * 0.05,
+                left: deviceWidth * 0.05,
+                right: deviceWidth * 0.08,
+              ),
+              child: const Text(
                 'Phòng của bạn',
                 style: TextStyle(
                   fontSize: 22,
@@ -52,7 +55,7 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
             ),
           ),
           Positioned(
-            top: 120,
+            top: deviceHeight * 0.1,
             left: 0,
             child: Container(
               height: MediaQuery.of(context).size.height,
@@ -60,16 +63,16 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 24,
               ),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
                   colors: [
                     Colors.white,
                     Colors.white,
                   ],
                 ),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(deviceWidth * 0.08),
+                  topRight: Radius.circular(deviceWidth * 0.08),
                 ),
               ),
               child: Column(
@@ -78,7 +81,7 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
+                    height: deviceHeight * 0.05,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng yêu cầu thuê',
@@ -89,8 +92,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.luggage,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng yêu cầu trả',
@@ -101,8 +104,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.no_luggage,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng đã thuê',
@@ -113,8 +116,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.key,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng đã đăng',
@@ -125,8 +128,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.upload,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng đang chờ duyệt',
@@ -137,8 +140,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.verified,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Phòng yêu thích',
@@ -149,8 +152,8 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                     },
                     firstIcon: Icons.heart_broken,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   AccountButtonNav(
                     nameButton: 'Quản lí hóa đơn',
@@ -160,6 +163,18 @@ class _ManageRoomScreenState extends State<ManageRoomScreen> {
                       );
                     },
                     firstIcon: Icons.payment,
+                  ),
+                  SizedBox(
+                    height: deviceHeight * 0.02,
+                  ),
+                  AccountButtonNav(
+                    nameButton: 'Gửi hóa đơn điện nước',
+                    onPressed: () {
+                      manageRoomController.goToScreen(
+                        InvoiceWEManager(),
+                      );
+                    },
+                    firstIcon: Icons.inventory_outlined,
                   ),
                   const Spacer(),
                 ],

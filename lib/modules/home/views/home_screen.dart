@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return true; // Return true to continue handling the notification
         },
-        child: const SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,9 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
               // top widget
               HomeTopWidget(),
               // pho bien
-              HomePopularWidget(),
+              const HomePopularWidget(),
               //list room
-              HomeListRoomWidget(),
+              const HomeListRoomWidget(),
             ],
           ),
         ),

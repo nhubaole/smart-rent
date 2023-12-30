@@ -51,12 +51,6 @@ class FirebaseFCM {
           'id': message.data['id'],
         },
       ),
-      actionButtons: [
-        NotificationActionButton(
-            key: 'AGREED1', label: 'I agree', autoDismissible: true),
-        NotificationActionButton(
-            key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-      ],
     );
   }
 
@@ -69,15 +63,15 @@ class FirebaseFCM {
         title: message.notification!.title,
         body: message.notification!.body,
       ),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'AGREED1',
-          label: 'I agree',
-          autoDismissible: true,
-        ),
-        NotificationActionButton(
-            key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-      ],
+      // actionButtons: [
+      //   NotificationActionButton(
+      //     key: 'AGREED1',
+      //     label: 'I agree',
+      //     autoDismissible: true,
+      //   ),
+      //   NotificationActionButton(
+      //       key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+      // ],
     );
 
     // Get.to(() => NotificationScreen(

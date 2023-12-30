@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rating_summary/rating_summary.dart';
+import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/post_review/controllers/post_review_screen_controller.dart';
 import 'package:smart_rent/modules/post_review/views/widgets/card_review_widget.dart';
 
 // ignore: must_be_immutable
 class PostReviewScreen extends StatelessWidget {
-  PostReviewScreen({super.key, required this.roomId});
+  PostReviewScreen({
+    super.key,
+    required this.roomId,
+    required this.room,
+  });
   final String roomId;
+  final Room room;
   late double deviceHeight;
   late double deviceWidth;
 
@@ -52,7 +58,9 @@ class PostReviewScreen extends StatelessWidget {
                           children: [
                             RatingSummary(
                               counter: postReviewController.counter.value,
-                              average: postReviewController.everage.value,
+                              average: room.listComments.isNotEmpty
+                                  ? room.sumRating / room.listComments.length
+                                  : 0,
                               showAverage: true,
                               counterFiveStars:
                                   postReviewController.counterFiveStars.value,

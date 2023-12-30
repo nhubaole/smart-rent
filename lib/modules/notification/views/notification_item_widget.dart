@@ -10,6 +10,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 //   REQUEST_RETURN_ROOM,
 // }
 
+// ignore: must_be_immutable
 class NotificationItemWidget extends StatelessWidget {
   final Map<String, dynamic> data;
 

@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/modules/payment/views/detail_transaction_screen.dart';
@@ -14,10 +14,13 @@ class PaymentInfoController extends GetxController {
   final scrollKey = GlobalKey();
   late int orderCode;
   var isLoading = false.obs;
+  late MoneyFormatterOutput fo;
 
   @override
   void onInit() async {
     isLoading.value = true;
+    fo = MoneyFormatter(amount: double.parse(invoice.amountRoom.toString()))
+        .output;
     orderCode = await FireStoreMethods().getNewestOrderCode() + 1;
     print(orderCode);
     super.onInit();

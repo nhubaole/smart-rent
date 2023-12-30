@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:smart_rent/blank.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/room/room.dart';
@@ -30,8 +31,14 @@ class SendRequestRentRoomController extends GetxController {
   var isLeave = Rx<bool>(false);
   var account = Rx<Account?>(null);
 
+  late MoneyFormatterOutput fo;
+
+  // NumberFormat numberFormat =
+  //     NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
   @override
   void onInit() {
+    priceSuggestTextController.addListener(formatCurrency);
     priceSuggestTextController.text =
         result != null ? result!['price'].toString() : '';
     quantityPeopleTextController.text =
@@ -40,7 +47,40 @@ class SendRequestRentRoomController extends GetxController {
     dateLeaveTextController.text = result != null ? result!['dateLeave'] : '';
     specialRequestTextController.text =
         result != null ? result!['specialRequest'] : '';
+    fo = MoneyFormatter(amount: double.parse(room.price.toString())).output;
+
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    priceSuggestTextController.removeListener(formatCurrency);
+    priceSuggestTextController.dispose();
+    quantityPeopleTextController.dispose();
+    dateJoinTextController.dispose();
+    dateLeaveTextController.dispose();
+    specialRequestTextController.dispose();
+    super.onClose();
+  }
+
+  void formatCurrency() {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
+    if (priceSuggestTextController.text.isNotEmpty) {
+      final doubleAmount = double.tryParse(
+        priceSuggestTextController.text.replaceAll(RegExp(r'[^\d]'), ''),
+      );
+
+      if (doubleAmount != null) {
+        final formattedValue = formatter.format(doubleAmount);
+        priceSuggestTextController.value = TextEditingValue(
+          text: formattedValue,
+          selection: TextSelection.collapsed(offset: formattedValue.length - 1),
+        );
+      }
+    }
+
+    print(priceSuggestTextController.text);
   }
 
   bool isDate(String str) {
@@ -69,7 +109,8 @@ class SendRequestRentRoomController extends GetxController {
 
       data = {
         'id': result != null ? result!['id'] : id,
-        'price': int.parse(priceSuggestTextController.value.text),
+        'price': int.parse(
+            priceSuggestTextController.value.text.replaceAll('.', '')),
         'quantityPeople': int.parse(quantityPeopleTextController.value.text),
         'timeStamp': timeStamp,
       };

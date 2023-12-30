@@ -180,7 +180,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                       ),
                                       onPressed: () async {
                                         Get.to(
-                                          ChatScreen(
+                                          () => ChatScreen(
                                             conversationID:
                                                 detailRequestController
                                                     .profileOwner
@@ -200,13 +200,18 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: deviceWidth * 0.03,
+                                          horizontal: deviceWidth * 0.06,
                                           vertical: deviceHeight * 0.01,
                                         ),
                                         child: const Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text('Chat'),
+                                            Text(
+                                              'Chat',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
                                             SizedBox(
                                               width: 5,
                                             ),
@@ -219,7 +224,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: deviceWidth * 0.1,
+                                      width: deviceWidth * 0.05,
                                     ),
                                     ElevatedButton(
                                       style: ButtonStyle(
@@ -242,7 +247,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                       onPressed: () {},
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: deviceWidth * 0.03,
+                                          horizontal: deviceWidth * 0.06,
                                           vertical: deviceHeight * 0.01,
                                         ),
                                         child: const Row(
@@ -268,7 +273,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                               () => Column(
                                 children: [
                                   CircleAvatar(
-                                    radius: deviceWidth * 0.13,
+                                    radius: deviceWidth * 0.1,
                                     backgroundImage: CachedNetworkImageProvider(
                                       detailRequestController
                                           .profileOwner.value!.photoUrl,

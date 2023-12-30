@@ -52,9 +52,9 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const HomeScreen(),
-      const ManageRoomScreen(),
-      const ConversationScreen(),
+      HomeScreen(),
+      ManageRoomScreen(),
+      ConversationScreen(),
       ManageAccountScreen(),
     ];
 

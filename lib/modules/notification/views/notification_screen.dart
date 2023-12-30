@@ -105,81 +105,95 @@ class NotificationScreen extends StatelessWidget {
                             ),
                             child: GestureDetector(
                               onTap: () async {
-                                // notificationController.getListNoti(true);
-                                switch (notificationController.listNotifications
-                                    .value[index]['data']['content_type']) {
-                                  case 'REQUEST_RETURN_ROOM':
-                                    {
-                                      notificationController.showDialogLoading(
-                                        'Đang xử lý...',
-                                        notificationController.listNotifications
-                                            .value[index]['room']['roomId'],
-                                        notificationController.listNotifications
-                                            .value[index]['id'],
-                                        false,
-                                        false,
-                                        false,
-                                        true,
-                                        false,
-                                      );
-                                      break;
-                                    }
-                                  case 'ACCEPT_REQUEST_RENT':
-                                    {
-                                      Map<String, dynamic> response =
+                                if (!notificationController
+                                    .listNotifications.value[index]['isRead']) {
+                                  switch (notificationController
+                                      .listNotifications
+                                      .value[index]['data']['content_type']) {
+                                    case 'REQUEST_RETURN_ROOM':
+                                      {
+                                        notificationController
+                                            .showDialogLoading(
+                                          'Đang xử lý...',
                                           notificationController
-                                              .listNotifications.value[index];
-                                      Invoice invoice = Invoice.fromJson(
-                                          response['room']['invoice']);
-                                      Get.to(
-                                        PaymentInforScreen(
-                                            invoice: invoice, isReturn: false),
-                                      );
-                                      break;
-                                    }
-                                  case 'REQUEST_RENT_ROOM':
-                                    {
-                                      notificationController.showDialogLoading(
-                                        'Đang xử lý...',
-                                        notificationController.listNotifications
-                                            .value[index]['room']['roomId'],
-                                        notificationController.listNotifications
-                                            .value[index]['id'],
-                                        false,
-                                        false,
-                                        true,
-                                        false,
-                                        false,
-                                      );
-                                      break;
-                                    }
-                                  case 'DECLINE_REQUEST_RENT':
-                                    {
-                                      await FireStoreMethods()
-                                          .markAsReadNotification(
-                                        notificationController.listNotifications
-                                            .value[index]['id'],
-                                      );
-                                      notificationController.getListNoti(true);
-                                      break;
-                                    }
-                                  case 'APPROVEDPAYMENT':
-                                    {
-                                      Get.to(
-                                        ReviewRoom(
-                                          invoice: Invoice.fromJson(
-                                              notificationController
-                                                      .listNotifications
-                                                      .value[index]['room']
-                                                  ['invoice']),
-                                        ),
-                                      );
-                                      print(notificationController
-                                          .listNotifications
-                                          .value[index]['room']['invoice']);
-                                      break;
-                                    }
+                                              .listNotifications
+                                              .value[index]['room']['roomId'],
+                                          notificationController
+                                              .listNotifications
+                                              .value[index]['id'],
+                                          false,
+                                          false,
+                                          false,
+                                          true,
+                                          false,
+                                        );
+                                        break;
+                                      }
+                                    case 'ACCEPT_REQUEST_RENT':
+                                      {
+                                        Map<String, dynamic> response =
+                                            notificationController
+                                                .listNotifications.value[index];
+                                        Invoice invoice = Invoice.fromJson(
+                                            response['room']['invoice']);
+                                        Get.to(
+                                          () => PaymentInforScreen(
+                                              invoice: invoice,
+                                              isReturn: false),
+                                        );
+                                        break;
+                                      }
+                                    case 'REQUEST_RENT_ROOM':
+                                      {
+                                        notificationController
+                                            .showDialogLoading(
+                                          'Đang xử lý...',
+                                          notificationController
+                                              .listNotifications
+                                              .value[index]['room']['roomId'],
+                                          notificationController
+                                              .listNotifications
+                                              .value[index]['id'],
+                                          false,
+                                          false,
+                                          true,
+                                          false,
+                                          false,
+                                        );
+                                        break;
+                                      }
+                                    case 'DECLINE_REQUEST_RENT':
+                                      {
+                                        await FireStoreMethods()
+                                            .markAsReadNotification(
+                                          notificationController
+                                              .listNotifications
+                                              .value[index]['id'],
+                                        );
+                                        notificationController
+                                            .getListNoti(true);
+                                        break;
+                                      }
+                                    case 'APPROVEDPAYMENT':
+                                      {
+                                        Get.to(
+                                          () => ReviewRoom(
+                                            invoice: Invoice.fromJson(
+                                                notificationController
+                                                        .listNotifications
+                                                        .value[index]['room']
+                                                    ['invoice']),
+                                          ),
+                                        );
+
+                                        break;
+                                      }
+                                  }
+                                  FireStoreMethods().markAsReadNotification(
+                                      notificationController.listNotifications
+                                          .value[index]['id']);
                                 }
+                                notificationController.getListNoti(true);
                               },
                               child: NotificationItemWidget(
                                 data: notificationController

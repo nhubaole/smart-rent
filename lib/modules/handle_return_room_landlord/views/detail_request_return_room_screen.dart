@@ -5,6 +5,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/handle_return_room_landlord/controllers/detail_request_return_room_controller.dart';
 
+// ignore: must_be_immutable
 class DetailRequestReturnRoomScreen extends StatelessWidget {
   DetailRequestReturnRoomScreen({super.key, required this.roomId});
   final String roomId;
@@ -153,7 +154,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                           ),
                                           onPressed: () async {
                                             Get.to(
-                                              ChatScreen(
+                                              () => ChatScreen(
                                                 conversationID:
                                                     detailRequestController
                                                         .profileOwner

@@ -8,23 +8,26 @@ import 'package:smart_rent/modules/notification/views/notification_screen.dart';
 
 import '../../search/views/search_screen.dart';
 
+// ignore: must_be_immutable
 class HomeTopWidget extends StatelessWidget {
-  const HomeTopWidget({super.key});
+  HomeTopWidget({super.key});
+  late double deviceHeight;
+  late double deviceWidth;
 
   @override
   Widget build(BuildContext context) {
-    final HomeTopWidgetController controller =
-        Get.put(HomeTopWidgetController());
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
+    final controller = Get.put(HomeTopWidgetController());
     controller.getSharedPreferences();
     controller.getCurrentLocation();
-    controller.getSign();
 
     return Stack(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.4,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
+          height: deviceHeight * 0.4,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
               colors: [
                 primary40,
                 primary80,
@@ -33,8 +36,8 @@ class HomeTopWidget extends StatelessWidget {
               end: Alignment.bottomCenter,
             ),
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(deviceWidth * 0.1),
+              bottomRight: Radius.circular(deviceWidth * 0.1),
             ),
           ),
         ),
@@ -45,9 +48,9 @@ class HomeTopWidget extends StatelessWidget {
                 height: 80,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
+                padding: EdgeInsets.symmetric(
+                  horizontal: deviceWidth * 0.05,
+                  vertical: deviceWidth * 0.01,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,8 +85,8 @@ class HomeTopWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 4,
+                        SizedBox(
+                          height: deviceHeight * 0.008,
                         ),
                         Row(
                           children: [
@@ -92,16 +95,21 @@ class HomeTopWidget extends StatelessWidget {
                               color: Colors.white,
                               size: 16,
                             ),
-                            const SizedBox(
-                              width: 4,
+                            SizedBox(
+                              width: deviceWidth * 0.009,
                             ),
                             Obx(
-                              () => Text(
-                                controller.currenLocation.value,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              () => SizedBox(
+                                width: deviceWidth * 0.7,
+                                child: Text(
+                                  controller.currenLocation.value,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -110,25 +118,17 @@ class HomeTopWidget extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    // chuong thong bao
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: deviceWidth * 0.13,
+                      height: deviceWidth * 0.13,
                       decoration: BoxDecoration(
                         color: primary95,
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(deviceWidth * 0.13),
                       ),
-                      // child: IconButton(
-                      //   onPressed: () {},
-                      //   icon: const Icon(
-                      //     Icons.notification_add,
-                      //     color: Colors.white,
-                      //   ),
-                      // ),
                       child: InkWell(
                         onTap: () {
                           Get.to(
-                            const NotificationScreen(),
+                            () => const NotificationScreen(),
                           );
                         },
                         child: Lottie.asset('assets/lottie/bell.json',
@@ -144,7 +144,7 @@ class HomeTopWidget extends StatelessWidget {
               // search bar
               InkWell(
                 onTap: () {
-                  Get.to(SearchScreen());
+                  Get.to(() => const SearchScreen());
                 },
                 child: Container(
                   decoration: BoxDecoration(

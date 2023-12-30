@@ -22,7 +22,7 @@ class DetailRequestRentRoomController extends GetxController {
 
   @override
   void onInit() {
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
+    getProfile(data['uidTenant']);
     getRoom(data['roomId']);
     super.onInit();
   }

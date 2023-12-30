@@ -36,7 +36,10 @@ class HomeFeatureNavWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              mainController.jumpToScreen(const MapScreen());
+              mainController.jumpToScreen(MapScreen(
+                fromDetailRoom: false,
+              ));
+              //mainController.jumpToScreen(const PaymentInforScreen());
             },
             child: Container(
               decoration: BoxDecoration(
@@ -60,37 +63,7 @@ class HomeFeatureNavWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              // Get.to(
-              //   PaymentInforScreen(
-              //     invoice: Invoice(
-              //       orderCode: 10,
-              //       recieverId: 'x47CBjhEVvVD4sBVWMDkYHYgfcg1',
-              //       recieverName: 'Le Bao Nhu',
-              //       recieverPhoneNumber: '+84823306992',
-              //       recieverNumberBank: 'recieverNumberBank',
-              //       recieverBank: 'recieverBank',
-              //       addressRoom: 'addressRoom',
-              //       amountRoom: 5000,
-              //       description: 'test coc phong tro',
-              //       buyerId: FirebaseAuth.instance.currentUser!.uid,
-              //       buyerName: 'Pham Quoc Danh',
-              //       buyerEmail: 'quocdanhmyker@gmail.com',
-              //       buyerPhone: '+84373855259',
-              //       buyerAddress: 'buyerAddress',
-              //       items: [
-              //         {
-              //           'name': 'Phong tro',
-              //           'quantity': 1,
-              //           'price': 5000,
-              //           'description': 'Phong tro',
-              //         }
-              //       ],
-              //       roomId: '7DogDiAfgjQqfItXyG6a',
-              //     ),
-              //     isReturn: false,
-              //   ),
-              // );
-              Get.to(PostScreen());
+              Get.to(() => const PostScreen());
             },
             child: Container(
               decoration: BoxDecoration(

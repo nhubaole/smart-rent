@@ -195,7 +195,7 @@ class PostController extends GetxController
         print('Room added');
 
         Get.to(
-          DetailScreen(
+          () => DetailScreen(
             isRequestReturnRent: false,
             isRequestRented: false,
             isHandleRequestReturnRoom: false,

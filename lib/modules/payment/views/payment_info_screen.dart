@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/payment_info_controller.dart';
@@ -88,7 +89,8 @@ class PaymentInforScreen extends StatelessWidget {
                                             color: secondary20,
                                           )),
                                       TextSpan(
-                                        text: '${invoice.amountRoom}!',
+                                        text:
+                                            '${paymentController.fo.withoutFractionDigits} VNĐ',
                                         style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
@@ -211,7 +213,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      invoice.amountRoom.toString(),
+                                      '${paymentController.fo.withoutFractionDigits} VNĐ',
                                       style: const TextStyle(
                                         color: secondary20,
                                         fontSize: 14,
@@ -258,56 +260,45 @@ class PaymentInforScreen extends StatelessWidget {
                         const SizedBox(
                           height: 18,
                         ),
-                        Obx(
-                          () => paymentController.isChosenMethod.value
-                              ? Column(
-                                  children: [
-                                    RadioListTile(
-                                      value: 1,
-                                      groupValue: paymentController
-                                          .selectedMethod.value,
-                                      title: const Text('Qr Code'),
-                                      secondary: const Icon(Icons.qr_code),
-                                      onChanged: (value) {
-                                        paymentController.selectedMethod.value =
-                                            value!;
-                                      },
-                                      activeColor: primary60,
-                                    ),
-                                    RadioListTile(
-                                      value: 2,
-                                      groupValue: paymentController
-                                          .selectedMethod.value,
-                                      title: const Text('PayPal'),
-                                      secondary:
-                                          const Icon(Icons.mobile_friendly),
-                                      onChanged: (value) {
-                                        paymentController.selectedMethod.value =
-                                            value!;
-                                      },
-                                      activeColor: primary60,
-                                    ),
-                                    RadioListTile(
-                                      value: 3,
-                                      groupValue: paymentController
-                                          .selectedMethod.value,
-                                      title: const Text('Cash'),
-                                      secondary:
-                                          const Icon(Icons.monetization_on),
-                                      onChanged: (value) {
-                                        paymentController.selectedMethod.value =
-                                            value!;
-                                      },
-                                      activeColor: primary60,
-                                    ),
-                                    const SizedBox(
-                                      height: 18,
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox(
-                                  height: 18,
-                                ),
+                        Column(
+                          children: [
+                            RadioListTile(
+                              value: 1,
+                              groupValue:
+                                  paymentController.selectedMethod.value,
+                              title: const Text('Qr Code'),
+                              secondary: const Icon(Icons.qr_code),
+                              onChanged: (value) {
+                                paymentController.selectedMethod.value = value!;
+                              },
+                              activeColor: primary60,
+                            ),
+                            // RadioListTile(
+                            //   value: 2,
+                            //   groupValue:
+                            //       paymentController.selectedMethod.value,
+                            //   title: const Text('PayPal'),
+                            //   secondary: const Icon(Icons.mobile_friendly),
+                            //   onChanged: (value) {
+                            //     paymentController.selectedMethod.value = value!;
+                            //   },
+                            //   activeColor: primary60,
+                            // ),
+                            // RadioListTile(
+                            //   value: 3,
+                            //   groupValue:
+                            //       paymentController.selectedMethod.value,
+                            //   title: const Text('Cash'),
+                            //   secondary: const Icon(Icons.monetization_on),
+                            //   onChanged: (value) {
+                            //     paymentController.selectedMethod.value = value!;
+                            //   },
+                            //   activeColor: primary60,
+                            // ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                          ],
                         ),
                         GestureDetector(
                           onTap: () {

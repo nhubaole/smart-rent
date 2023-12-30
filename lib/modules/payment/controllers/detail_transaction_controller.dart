@@ -102,7 +102,7 @@ class DetailTransactionController extends GetxController {
     try {
       await FireStoreMethods().addOrderCode(invoice);
       var url = Uri.https('api-merchant.payos.vn', '/v2/payment-requests');
-      print('order-code: ${rxInvoice.value!.orderCode}');
+      // print('order-code: ${rxInvoice.value!.orderCode}');
       var response = await http.post(url,
           headers: {
             'Content-Type': 'application/json',
@@ -124,8 +124,8 @@ class DetailTransactionController extends GetxController {
             'signature': PaymentOSService().getSignature(rxInvoice.value!)
           }));
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
 
       final Map<String, dynamic> resData = await json.decode(response.body);
 
@@ -180,13 +180,22 @@ class DetailTransactionController extends GetxController {
       String token =
           await FireStoreMethods().getTokenDevice(rxInvoice.value!.recieverId);
       if (isReturn) {
+        // DANH CHO NGUOI CHU PHONG TRA COC CHO NGUOI THUE
         await FireStoreMethods().updateRentedRoom(
           rxInvoice.value!.roomId,
           'APPROVED',
           false,
           'UNKNOWN',
         );
-        print('order-code-noti: ${rxInvoice.value!.orderCode}');
+        await FireStoreMethods().addHistoryRoomId(
+          rxInvoice.value!.recieverId,
+          rxInvoice.value!.roomId,
+        );
+        await FireStoreMethods().removeRentingRoomId(
+          rxInvoice.value!.recieverId,
+          rxInvoice.value!.roomId,
+        );
+        //print('order-code-noti: ${rxInvoice.value!.orderCode}');
         await FirebaseFCM().sendNotificationHTTP(
           rxInvoice.value!.buyerId,
           rxInvoice.value!.recieverId,
@@ -213,6 +222,13 @@ class DetailTransactionController extends GetxController {
             .updateStatusRoom(rxInvoice.value!.roomId, 'APPROVED');
       }
 
+      // DANH CHO NGUOI DI THUE PHONG - NGUOI NAY SE GUI TIEN COC DI
+      if (!isReturn) {
+        await FireStoreMethods().addRentingRoomId(
+          rxInvoice.value!.buyerId,
+          rxInvoice.value!.roomId,
+        );
+      }
       await FirebaseFCM().sendNotificationHTTP(
         rxInvoice.value!.buyerId,
         rxInvoice.value!.recieverId,
@@ -231,16 +247,13 @@ class DetailTransactionController extends GetxController {
           title: 'Thanh toán thành công',
           body: 'Bạn đã thanh toán thành công cho căn nhà ...',
         ),
-        actionButtons: [
-          NotificationActionButton(
-              key: 'AGREED1', label: 'I agree', autoDismissible: true),
-          NotificationActionButton(
-              key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-        ],
+        // actionButtons: [
+        //   NotificationActionButton(
+        //       key: 'AGREED1', label: 'I agree', autoDismissible: true),
+        //   NotificationActionButton(
+        //       key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+        // ],
       );
     }
-
-    // You can perform actions based on the current URL here
-    // For example, check if the URL contains certain data or parse the response
   }
 }
