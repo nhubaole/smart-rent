@@ -7,6 +7,7 @@ import 'package:smart_rent/core/model/review_ticket/review_ticket.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/firebase_fcm.dart';
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class FireStoreMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -931,5 +932,30 @@ class FireStoreMethods {
       print(e.toString());
     }
     return listTenant;
+  }
+
+  Future<List<Room>> getRoomInArer(String area, int page) async {
+    List<Room> listRoom = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where(
+            (element) => TiengViet.parse(
+              element.location.toLowerCase(),
+            ).contains(
+              TiengViet.parse(
+                area.toLowerCase(),
+              ),
+            ),
+          )
+          .limit(10)
+          .orderBy('dateTime', descending: true)
+          .get();
+      listRoom =
+          querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      print(e.toString());
+    }
+    return listRoom;
   }
 }

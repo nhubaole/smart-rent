@@ -6,7 +6,6 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
 
 class MapScreenController extends GetxController {
   final bool fromDetailRoom;
@@ -17,156 +16,122 @@ class MapScreenController extends GetxController {
     this.lat,
     this.lon,
   });
+  final Completer<GoogleMapController> mapController =
+      Completer<GoogleMapController>();
 
-  late Completer<GoogleMapController> mapController;
-  Location locationController = Location();
-  late LocationData locationData;
-
-  var currentPosition = Rx<LatLng?>(null);
+  late GoogleMapController ggMapController;
   var polylines = Rx<Map<PolylineId, Polyline>>({});
-  var markers = Rx<Set<Marker>>({});
+  var currentPosition = Rx<LatLng?>(null);
+  var destination = Rx<LatLng?>(null);
   var isLoading = Rx<bool>(false);
-
   @override
   void onInit() async {
-    mapController = Completer<GoogleMapController>();
-    await getLocationUpdates().then((_) => {
-          getPolylinePoints()
-              .then((coordinates) => {generatePolyLineFromPoints(coordinates)})
-        });
-
+    await getCurrentLocation();
+    if (fromDetailRoom == true) {
+      destination.value = LatLng(lat!, lon!);
+      await getPolylinePoints();
+    }
     super.onInit();
   }
 
-  Future<void> getCurrentLocation() async {}
-  Future<void> cameraToPosition(LatLng pos) async {
-    final GoogleMapController controller = await mapController.future;
-    CameraPosition newCameraPosition = CameraPosition(
-      target: pos,
-      zoom: 11.0,
-    );
-    await controller.animateCamera(
-      CameraUpdate.newCameraPosition(newCameraPosition),
-    );
+  @override
+  void onClose() {
+    super.onClose();
   }
 
-  Future<void> getLocationUpdates() async {
+  Future<void> getCurrentLocation() async {
+    Location location = Location();
+
     bool serviceEnabled;
     PermissionStatus permissionGranted;
-    serviceEnabled = await locationController.serviceEnabled();
-    if (serviceEnabled) {
-      serviceEnabled = await locationController.requestService();
-    } else {
-      return;
-    }
-    permissionGranted = await locationController.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await locationController.requestPermission();
-      if (permissionGranted == PermissionStatus.granted) {
+    LocationData locationData;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return;
       }
     }
 
-    // locationController.onLocationChanged.listen((LocationData currentLocation) {
-    //   if (currentLocation.latitude != null &&
-    //       currentLocation.longitude != null) {
-    //     if (!fromDetailRoom) {
-    //       currentPosition.value =
-    //           LatLng(currentLocation.latitude!, currentLocation.longitude!);
-    //     } else {
-    //       currentPosition.value = LatLng(lat!, lon!);
-    //     }
-
-    //     //cameraToPosition(currentPosition.value!);
-    //   }
-    // });
-
-    locationController.onLocationChanged.listen((LocationData currentLocation) {
-      if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
-        if (!fromDetailRoom) {
-          currentPosition.value =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
-        } else {
-          currentPosition.value = LatLng(lat!, lon!);
-        }
-        // Gọi hàm tạo đường đi mới khi có thay đổi vị trí
-        getPolylinePoints().then((coordinates) {
-          generatePolyLineFromPoints(coordinates);
-        });
-        //cameraToPosition(currentPosition.value!);
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
       }
-    });
+    }
+
+    locationData = await location.getLocation();
+    final lat = locationData.latitude;
+    final lon = locationData.longitude;
+
+    currentPosition.value = LatLng(lat!, lon!);
+  }
+
+  Future<void> cameraToPosition(LatLng pos) async {
+    ggMapController = await mapController.future;
+    CameraPosition newCameraPosition = CameraPosition(
+      target: pos,
+      zoom: 11,
+    );
+
+    await ggMapController.animateCamera(
+      CameraUpdate.newCameraPosition(newCameraPosition),
+    );
+  }
+
+  Future<void> cameraToRoute() async {
+    await ggMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(
+              currentPosition.value!.latitude,
+              currentPosition.value!.longitude,
+            ),
+            zoom: 20.0),
+      ),
+    );
   }
 
   Future<List<LatLng>> getPolylinePoints() async {
-    List<LatLng> poplylineCoordinates = [];
+    List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
-    String googleMapApiKey = dotenv.env['google_map_api']!;
-
-    LocationData currentLocationUser = await Location().getLocation();
-
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapApiKey,
+      dotenv.env['google_map_api']!,
       PointLatLng(
-          currentLocationUser.latitude!, currentLocationUser.longitude!),
+        currentPosition.value!.latitude,
+        currentPosition.value!.longitude,
+      ),
       PointLatLng(lat!, lon!),
-      travelMode: TravelMode.driving,
+      //PointLatLng(21.036061770676426, 105.83355592370253),
     );
 
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
-        poplylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        isLoading.value = true;
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
     } else {
-      print('Error getPoly: ${result.errorMessage}');
+      print(result.errorMessage);
     }
-    return poplylineCoordinates;
+
+    print(polylineCoordinates);
+    await generatePolylineFromPoint(polylineCoordinates);
+    isLoading.value = false;
+    return polylineCoordinates;
   }
 
-  void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
+  Future<void> generatePolylineFromPoint(List<LatLng> points) async {
     PolylineId id = const PolylineId('poly');
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.black,
-      points: polylineCoordinates,
-      width: 9,
+      color: Colors.red,
+      points: points,
+      width: 6,
     );
     polylines.value[id] = polyline;
-  }
-
-  Future<void> showDialogLoading() async {
-    Get.dialog(
-      const PopScope(
-        canPop: false,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                CircularProgressIndicator(
-                  color: primary60,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Đang xử lý dữ liệu bản đồ',
-                  style: TextStyle(color: primary60),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-
-    await Future.delayed(
-      const Duration(seconds: 1),
-    );
+    await cameraToRoute();
+    isLoading.value = false;
   }
 }

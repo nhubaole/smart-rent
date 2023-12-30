@@ -26,8 +26,15 @@ class ResultController extends GetxController {
               e.data(),
             ),
           )
-          .where((element) => TiengViet.parse(element.location.toLowerCase())
-              .contains(TiengViet.parse(location.toLowerCase())))
+          .where(
+            (element) => TiengViet.parse(
+              element.location.toLowerCase(),
+            ).contains(
+              TiengViet.parse(
+                location.toLowerCase(),
+              ),
+            ),
+          )
           .toList();
       isLoaded.value = true;
       print(results.value.length);

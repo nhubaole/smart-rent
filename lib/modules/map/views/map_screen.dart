@@ -19,24 +19,13 @@ class _MapScreenState extends State<MapScreen> {
   late MapScreenController mapController;
   @override
   void initState() {
-    widget.fromDetailRoom
-        ? mapController = Get.put(
-            MapScreenController(
-              fromDetailRoom: widget.fromDetailRoom,
-              lat: widget.lat,
-              lon: widget.lon,
-            ),
-          )
-        : mapController = Get.put(
-            MapScreenController(
-              fromDetailRoom: widget.fromDetailRoom,
-            ),
-          );
-    mapController.getLocationUpdates().then((value) => {
-          mapController.getPolylinePoints().then(
-              (value) => {mapController.generatePolyLineFromPoints(value)})
-        });
-
+    mapController = Get.put(
+      MapScreenController(
+        fromDetailRoom: widget.fromDetailRoom,
+        lat: widget.lat,
+        lon: widget.lon,
+      ),
+    );
     super.initState();
   }
 
@@ -50,32 +39,36 @@ class _MapScreenState extends State<MapScreen> {
         () => mapController.currentPosition.value == null
             ? const Center(
                 child: CircularProgressIndicator(
-                  backgroundColor: primary95,
-                  color: primary98,
+                  color: primary95,
+                  backgroundColor: primary40,
                 ),
               )
-            : GoogleMap(
-                myLocationButtonEnabled: true,
-                myLocationEnabled: true,
-                rotateGesturesEnabled: true,
-                scrollGesturesEnabled: true,
-                tiltGesturesEnabled: true,
-                onMapCreated: ((GoogleMapController controller) =>
-                    mapController.mapController.complete(controller)),
-                initialCameraPosition: CameraPosition(
-                  target: mapController.currentPosition.value!,
-                  zoom: 11.0,
-                ),
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('_currentLocation'),
-                    icon: BitmapDescriptor.defaultMarker,
-                    position: mapController.currentPosition.value!,
+            : mapController.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: primary95,
+                      backgroundColor: primary40,
+                    ),
                   )
-                },
-                polylines:
-                    Set<Polyline>.of(mapController.polylines.value.values),
-              ),
+                : Obx(
+                    () => GoogleMap(
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController.ggMapController = controller;
+                        mapController.mapController.complete(controller);
+                      },
+                      initialCameraPosition: CameraPosition(
+                        target: mapController.currentPosition.value!,
+                        zoom: 11.0,
+                      ),
+                      myLocationEnabled: true,
+                      mapToolbarEnabled: true,
+                      rotateGesturesEnabled: true,
+                      scrollGesturesEnabled: true,
+                      tiltGesturesEnabled: true,
+                      polylines: Set<Polyline>.of(
+                          mapController.polylines.value.values),
+                    ),
+                  ),
       ),
     );
   }
