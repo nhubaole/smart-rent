@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/result_screen.dart';
 
 import '../../../core/model/location/ward.dart';
@@ -19,10 +20,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController controller = TextEditingController();
+  TextEditingController controller = new TextEditingController();
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     loadData();
   }
@@ -35,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
+        value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.dark,
@@ -53,8 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 10),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
                       width: MediaQuery.sizeOf(context).width - 80,
                       decoration: BoxDecoration(
                           border: Border.all(color: primary60, width: 1),
@@ -64,13 +66,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SvgPicture.asset('assets/images/ic_location.svg'),
-                          const SizedBox(
+                          SizedBox(
                             width: 4,
                           ),
                           Expanded(
                             child: TextField(
                               autofocus: true,
-                              style: const TextStyle(fontSize: 12),
+                              style: TextStyle(fontSize: 12),
                               controller: controller,
                               decoration: const InputDecoration(
                                   hintText: 'Tìm theo phường/xã, địa điểm,...',
@@ -78,11 +80,11 @@ class _SearchScreenState extends State<SearchScreen> {
                               onChanged: onSearchTextChanged,
                             ),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             width: 4,
                           ),
                           InkWell(
-                            child: const Icon(
+                            child: Icon(
                               Icons.cancel,
                               size: 16,
                               color: secondary40,
@@ -101,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     onTap: () {
                       Get.back();
                     },
-                    child: const Text(
+                    child: Text(
                       'Hủy',
                       style: TextStyle(
                           fontSize: 14,
@@ -112,35 +114,35 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
               Expanded(
-                  child: _searchResult.isNotEmpty || controller.text.isNotEmpty
+                  child: _searchResult.length != 0 || controller.text.isNotEmpty
                       ? ListView.builder(
                           itemCount: _searchResult.length,
                           itemBuilder: (context, index) {
                             return Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
                                           color: secondary80, width: 1))),
                               child: InkWell(
                                 onTap: () {
-                                  Get.to(() => ResultScreen(
+                                  Get.to(FilterScreen(
                                       location: _searchResult[index]));
                                 },
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.location_on_outlined,
                                       color: secondary40,
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                       width: 8,
                                     ),
                                     Flexible(
                                       child: Text(
                                         _searchResult[index],
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: secondary20, fontSize: 14),
                                         softWrap: true,
                                       ),
@@ -151,7 +153,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             );
                           },
                         )
-                      : const SizedBox()),
+                      : SizedBox()),
             ],
           ),
         )));
@@ -164,18 +166,17 @@ class _SearchScreenState extends State<SearchScreen> {
       return;
     }
 
-    for (var address in _address) {
+    _address.forEach((address) {
       if (TiengViet.parse(address)
           .toLowerCase()
-          .contains(TiengViet.parse(text.toLowerCase()))) {
+          .contains(TiengViet.parse(text.toLowerCase())))
         _searchResult.add(address);
-      }
-    }
+    });
 
     setState(() {});
   }
 
-  final List<String> _searchResult = [];
+  List<String> _searchResult = [];
 
   List<String> _address = [];
 

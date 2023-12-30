@@ -8,7 +8,7 @@ import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import '../../../core/values/app_colors.dart';
 
 class ResultItem extends StatelessWidget {
-  ResultItem({super.key, required this.room});
+  const ResultItem({super.key, required this.room});
   final Room room;
 
   @override
@@ -51,12 +51,12 @@ class ResultItem extends StatelessWidget {
                 children: [
                   Text(
                     getCapacity(room),
-                    style: TextStyle(fontSize: 10, color: secondary60),
+                    style: const TextStyle(fontSize: 10, color: secondary60),
                   ),
                   Text(
                     room.title,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       color: secondary20,
                       fontWeight: FontWeight.bold,
@@ -66,12 +66,12 @@ class ResultItem extends StatelessWidget {
                   Text(
                     room.location,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 10, color: secondary20),
+                    style: const TextStyle(fontSize: 10, color: secondary20),
                     maxLines: 2,
                   ),
                   Text(
                     priceFormatterFull(room),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       color: primary60,
                       fontWeight: FontWeight.bold,
@@ -87,16 +87,16 @@ class ResultItem extends StatelessWidget {
   }
 
   String getCapacity(Room room) {
-    return room?.gender == Gender.ALL
-        ? "${room?.capacity} NAM/NỮ"
-        : "${room?.capacity} ${room?.gender.getNameGender().toUpperCase()}";
+    return room.gender == Gender.ALL
+        ? "${room.capacity} NAM/NỮ"
+        : "${room.capacity} ${room.gender.getNameGender().toUpperCase()}";
   }
 
   String priceFormatterFull(Room room) {
-    String formattedNumber = room!.price.toString().replaceAllMapped(
+    String formattedNumber = room.price.toString().replaceAllMapped(
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
           (Match match) => '${match[1]}.',
         );
-    return formattedNumber + " ₫/phòng";
+    return "$formattedNumber ₫/phòng";
   }
 }
