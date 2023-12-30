@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -17,7 +16,14 @@ class InvoiceWEManager extends StatelessWidget {
     deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quản lý hóa đơn điện nước'),
+        title: const Text(
+          'Quản lý hóa đơn điện nước',
+          style: TextStyle(
+            color: primary40,
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
       body: Center(
         child: Padding(

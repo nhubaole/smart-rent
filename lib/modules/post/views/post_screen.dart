@@ -83,6 +83,9 @@ class _PostScreenState extends State<PostScreen> {
         body: Container(
           color: Colors.white,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconStepper(
                 activeStepBorderWidth: 1,
@@ -131,6 +134,7 @@ class _PostScreenState extends State<PostScreen> {
           ? ButtonFill(
               onPressed: () {
                 if (controller.formInfoKey.currentState!.validate()) {
+                  controller.formInfoKey.currentState!.save();
                   controller.postRoom();
                 }
               },

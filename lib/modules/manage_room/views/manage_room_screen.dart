@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice/invoice_manage.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice_water_electricity_manager/invoic_we_manager.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice_water_electricity_manager/invoice_we_manager.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/liked_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/rented_room.dart';

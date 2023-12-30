@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
@@ -34,7 +35,7 @@ class _RoomItemState extends State<RoomItem> {
   late bool isLiked;
   late double deviceHeight;
   late double deviceWidth;
-
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
   @override
   void initState() {
     super.initState();
@@ -129,19 +130,21 @@ class _RoomItemState extends State<RoomItem> {
                                 BorderRadius.circular(deviceWidth * 0.01),
                           ),
                           padding: EdgeInsets.all(deviceWidth * 0.005),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Text(
-                                '4.2',
-                                style: TextStyle(
+                                widget.room.listComments.isNotEmpty
+                                    ? '${widget.room.sumRating / widget.room.listComments.length}'
+                                    : '0',
+                                style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 3,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.star,
                                 color: Color(0xFFffd21d),
                                 size: 16,
@@ -152,9 +155,17 @@ class _RoomItemState extends State<RoomItem> {
                         const SizedBox(
                           width: 5.0,
                         ),
-                        const Text(
-                          'Tốt',
-                          style: TextStyle(
+                        Text(
+                          widget.room.sumRating /
+                                      widget.room.listComments.length <
+                                  2.5
+                              ? 'Tệ'
+                              : widget.room.sumRating /
+                                          widget.room.listComments.length <
+                                      4
+                                  ? 'Có tiềm năng'
+                                  : 'Tốt',
+                          style: const TextStyle(
                               fontSize: 12,
                               color: secondary20,
                               fontWeight: FontWeight.w600),

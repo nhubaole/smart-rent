@@ -6,14 +6,9 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/liked_room_controller.dart';
 
-class LikedRoomScreen extends StatefulWidget {
+class LikedRoomScreen extends StatelessWidget {
   const LikedRoomScreen({super.key});
 
-  @override
-  State<LikedRoomScreen> createState() => _LikedRoomScreenState();
-}
-
-class _LikedRoomScreenState extends State<LikedRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final LikedRoomController likedRoomController =
@@ -30,11 +25,11 @@ class _LikedRoomScreenState extends State<LikedRoomScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: () {
-            return likedRoomController.getListRoom(false);
-          },
+      body: RefreshIndicator(
+        onRefresh: () {
+          return likedRoomController.getListRoom(false);
+        },
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Center(

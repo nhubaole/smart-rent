@@ -86,13 +86,20 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
   }
 
   Widget listRentingRoom() {
-    return SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () {
+        return rentedRoomController.getListRentingRoom(false);
+      },
       child: Center(
         child: Obx(
           () => rentedRoomController.isLoading.value
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: primary60,
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: primary60,
+                      backgroundColor: primary40,
+                    ),
                   ),
                 )
               : rentedRoomController.listRentingRoom.value.isEmpty
@@ -237,13 +244,20 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
   }
 
   Widget listHistoryRoom() {
-    return SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () {
+        return rentedRoomController.getListHistoryRoom(false);
+      },
       child: Center(
         child: Obx(
           () => rentedRoomController.isLoading.value
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: primary60,
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: primary60,
+                      backgroundColor: primary40,
+                    ),
                   ),
                 )
               : rentedRoomController.listHistoryRoom.value.isEmpty

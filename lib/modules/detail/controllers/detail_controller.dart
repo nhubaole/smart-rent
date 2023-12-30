@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,7 +16,6 @@ class DetailController extends GetxController {
   var owner = Rx<Account?>(null);
 
   Rx<int> activeImageIdx = 0.obs;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late SharedPreferences prefs;
   var isShowMore = Rx<bool>(false);
 
