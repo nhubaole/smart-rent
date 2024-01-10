@@ -17,7 +17,7 @@ class DetailController extends GetxController {
 
   Rx<int> activeImageIdx = 0.obs;
   late SharedPreferences prefs;
-  var isShowMore = Rx<bool>(false);
+  var isShowMore = Rx<bool>(true);
 
   @override
   void onInit() async {

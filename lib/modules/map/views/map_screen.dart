@@ -6,7 +6,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/map/controllers/map_screen_controller.dart';
 
 // ignore: must_be_immutable
-class MapScreen extends StatefulWidget {
+class MapScreen extends StatelessWidget {
   MapScreen({
     super.key,
     required this.fromDetailRoom,
@@ -20,26 +20,16 @@ class MapScreen extends StatefulWidget {
   List<Room>? roomInArea;
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
-}
-
-class _MapScreenState extends State<MapScreen> {
-  late MapScreenController mapController;
-  @override
-  void initState() {
+  Widget build(BuildContext context) {
+    MapScreenController mapController;
     mapController = Get.put(
       MapScreenController(
-        fromDetailRoom: widget.fromDetailRoom,
-        lat: widget.lat,
-        lon: widget.lon,
-        roomInArea: widget.roomInArea,
+        fromDetailRoom: fromDetailRoom,
+        lat: lat,
+        lon: lon,
+        roomInArea: roomInArea,
       ),
     );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

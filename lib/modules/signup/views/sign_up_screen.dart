@@ -5,67 +5,20 @@ import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
-import 'package:smart_rent/core/widget/dialog_custom.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/signup/controlllers/sign_up_controllers.dart';
 import 'package:smart_rent/modules/signup/controlllers/sign_up_verify_controller.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatelessWidget {
   const SignUpScreen({
     super.key,
   });
 
   @override
-  State<SignUpScreen> createState() => _SignScreenState();
-}
-
-class _SignScreenState extends State<SignUpScreen> {
-  late Account account;
-  final controller = Get.put(SignUpController());
-
-  final _formKey = GlobalKey<FormState>();
-  var dateOfBirth;
-
-  void submit(Account account) async {
-    try {
-      // Kiểm tra tồn tại số điện thoại trong Firestore
-      String resQuery = await SignUpController.instance
-          .checkExistPhoneNumber(account.phoneNumber);
-
-      if (resQuery != 'success') {
-        Get.dialog(
-          DialogCustom(
-            onPressed: () {
-              Get.to(() => const LoginScreen());
-            },
-            backgroundColor: Colors.white,
-            iconPath: 'assets/images/ic_notify.png',
-            title: 'Thông báo',
-            subTitle:
-                'Đã tồn tại tài khoản với số điện thoại này, đăng nhập ngay',
-          ),
-        );
-      } else {
-        // Tiến hành đăng kí tài khoản
-        controller.phoneAuthentication(account.phoneNumber, account);
-      }
-    } catch (e) {
-      Get.snackbar('Lỗi', e.toString());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller.dateOfBirth.text =
-        DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
-    dateOfBirth = DateTime.now();
-    Get.put(SignUpVerifyController());
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final signUpController = Get.put(SignUpController());
+    final signUpVerifyController = Get.put(SignUpVerifyController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -99,7 +52,7 @@ class _SignScreenState extends State<SignUpScreen> {
                 height: 16,
               ),
               Form(
-                key: _formKey,
+                key: signUpController.signUpFormKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -108,7 +61,7 @@ class _SignScreenState extends State<SignUpScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextFormFieldInput(
-                        textEditingController: controller.name,
+                        textEditingController: signUpController.name,
                         labelText: 'Họ và tên',
                         hintText: 'Họ và tên (*)',
                         textInputType: TextInputType.text,
@@ -133,7 +86,7 @@ class _SignScreenState extends State<SignUpScreen> {
                       ),
                       TextFormFieldInput(
                         maxLength: 10,
-                        textEditingController: controller.phoneNumber,
+                        textEditingController: signUpController.phoneNumber,
                         labelText: 'Số điện thoại',
                         hintText: 'Số điện thoại (*)',
                         textInputType: TextInputType.phone,
@@ -162,22 +115,24 @@ class _SignScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(8),
                         borderWidth: 2,
                         borderColor: primary60,
-                        textEditingController: controller.dateOfBirth,
+                        textEditingController: signUpController.dateOfBirth,
                         labelText: 'Ngày tháng năm sinh',
                         hintText: 'Ngày tháng năm sinh (*)',
                         icon: Icons.phone_android,
                         onDateSelected: (DateTime selectedDate) {
-                          controller.dateOfBirth.text = DateFormat('dd/MM/yyyy')
-                              .format(selectedDate)
-                              .toString();
-                          dateOfBirth = selectedDate;
+                          signUpController.dateOfBirth.text =
+                              DateFormat('dd/MM/yyyy')
+                                  .format(selectedDate)
+                                  .toString();
+                          signUpController.dateOfBirthCheck.value =
+                              selectedDate;
                         },
                         onValidate: (value) {
-                          if (!SignUpController.instance.isDate(value!)) {
+                          if (!signUpController.isDate(value!)) {
                             return 'Vui lòng nhập ngày tháng năm sinh';
                           }
-                          if (!SignUpController.instance
-                              .is18OrOlder(dateOfBirth)) {
+                          if (!signUpController.is18OrOlder(
+                              signUpController.dateOfBirthCheck.value!)) {
                             return 'Bạn phải trên 18 tuổi';
                           }
                           return null;
@@ -196,7 +151,7 @@ class _SignScreenState extends State<SignUpScreen> {
                             )
                             .toList(),
                         onChanged: (value) {
-                          controller.address.text = value.toString();
+                          signUpController.address.text = value.toString();
                         },
                         menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
                         decoration: InputDecoration(
@@ -258,46 +213,64 @@ class _SignScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            DateTime dateOfCreate = DateTime.now();
-                            String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(dateOfCreate);
+                      Obx(
+                        () => signUpController.isVerifying.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: primary40,
+                                  color: primary95,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  if (signUpController
+                                      .signUpFormKey.currentState!
+                                      .validate()) {
+                                    DateTime dateOfCreate = DateTime.now();
+                                    String formattedDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(dateOfCreate);
 
-                            account = Account(
-                              uid: '1',
-                              sex: true,
-                              age: 18,
-                              photoUrl:
-                                  'https://images.unsplash.com/photo-1695239510467-f1e93d649c2b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-                              username: controller.name.text.trim(),
-                              phoneNumber: controller.phoneNumber.text.trim(),
-                              dateOfBirth:
-                                  DateFormat('dd-MM-yyyy').format(dateOfBirth),
-                              address: controller.address.text.trim(),
-                              dateOfCreate: formattedDate,
-                            );
-                            submit(account);
-                          }
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: primary60),
-                          child: const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text(
-                              'Đăng ký ngay',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
+                                    signUpController.account = Account(
+                                      uid: '1',
+                                      sex: true,
+                                      age: 18,
+                                      photoUrl:
+                                          'https://images.unsplash.com/photo-1695239510467-f1e93d649c2b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
+                                      username:
+                                          signUpController.name.text.trim(),
+                                      phoneNumber: signUpController
+                                          .phoneNumber.text
+                                          .trim(),
+                                      dateOfBirth: DateFormat('dd-MM-yyyy')
+                                          .format(signUpController
+                                              .dateOfBirthCheck.value!),
+                                      address:
+                                          signUpController.address.text.trim(),
+                                      dateOfCreate: formattedDate,
+                                    );
+                                    signUpController
+                                        .submit(signUpController.account);
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: primary60),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text(
+                                      'Đăng ký ngay',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ),
                       const SizedBox(
                         height: 30,

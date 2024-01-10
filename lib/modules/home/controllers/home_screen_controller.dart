@@ -84,9 +84,13 @@ class HomeScreenController extends GetxController {
 
     String s =
         currentLocationMap['results'][0]['address_components'][2]['long_name'];
-
+    print(currentLocationMap['results']);
     print(s.substring(s.indexOf(' ')).trim());
-    getListRoomInArea(s.substring(s.indexOf(' ')).trim());
+    List<String> areas = currentLocationMap['results'][0]['formatted_address']
+        .toString()
+        .split(',');
+    getListRoomByListSplit(areas);
+    //getListRoomInArea(s.substring(s.indexOf(' ')).trim());
 
     // final url = Uri.parse(
     //     'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
@@ -224,6 +228,13 @@ class HomeScreenController extends GetxController {
       for (var room in listRoomInArea.value) {
         print(room.location);
       }
+    }
+  }
+
+  Future<void> getListRoomByListSplit(List<String> areas) async {
+    for (var i = 0; i < areas.length; i++) {
+      print(areas[i]);
+      getListRoomInArea(areas[i].trim());
     }
   }
 }

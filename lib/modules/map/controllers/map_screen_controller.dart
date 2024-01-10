@@ -76,6 +76,7 @@ class MapScreenController extends GetxController {
     locationData = await location.getLocation();
     final lat = locationData.latitude;
     final lon = locationData.longitude;
+    print('lat: $lat - lon: $lon');
 
     currentPosition.value = LatLng(lat!, lon!);
   }

@@ -5,7 +5,7 @@ import 'package:smart_rent/core/widget/dialog_custom.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 import 'package:smart_rent/modules/login/controllers/login_controller.dart';
 import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
-import 'package:smart_rent/modules/signup/views/sign_up.dart';
+import 'package:smart_rent/modules/signup/views/sign_up_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({

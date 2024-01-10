@@ -5,7 +5,7 @@ import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
 import 'package:smart_rent/core/widget/dialog_custom.dart';
 import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
-import 'package:smart_rent/modules/signup/views/sign_up.dart';
+import 'package:smart_rent/modules/signup/views/sign_up_screen.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
