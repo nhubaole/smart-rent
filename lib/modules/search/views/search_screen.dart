@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/search/controllers/search_room_controller.dart';
 import 'package:smart_rent/modules/search/views/filter_screen.dart';
-import 'package:smart_rent/modules/search/views/result_screen.dart';
 
 import '../../../core/model/location/ward.dart';
 import 'package:tiengviet/tiengviet.dart';
@@ -20,18 +20,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController controller = new TextEditingController();
+  SearchRoomController controller = Get.put(SearchRoomController());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadData();
-  }
-
-  loadData() async {
-    _address = await loadAddress();
-    setState(() {});
   }
 
   @override
@@ -73,11 +67,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: TextField(
                               autofocus: true,
                               style: TextStyle(fontSize: 12),
-                              controller: controller,
+                              controller: controller.textController,
                               decoration: const InputDecoration(
                                   hintText: 'Tìm theo phường/xã, địa điểm,...',
                                   border: InputBorder.none),
-                              onChanged: onSearchTextChanged,
+                              onChanged: controller.onSearchTextChanged,
                             ),
                           ),
                           SizedBox(
@@ -90,8 +84,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               color: secondary40,
                             ),
                             onTap: () {
-                              controller.clear();
-                              onSearchTextChanged('');
+                              controller.textController.clear();
+                              controller.onSearchTextChanged('');
                             },
                           )
                         ],
@@ -113,76 +107,124 @@ class _SearchScreenState extends State<SearchScreen> {
                   )
                 ],
               ),
-              Expanded(
-                  child: _searchResult.length != 0 || controller.text.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: _searchResult.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: secondary80, width: 1))),
-                              child: InkWell(
-                                onTap: () {
-                                  Get.to(FilterScreen(
-                                      location: _searchResult[index]));
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on_outlined,
-                                      color: secondary40,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        _searchResult[index],
-                                        style: TextStyle(
-                                            color: secondary20, fontSize: 14),
-                                        softWrap: true,
+              SizedBox(
+                height: 8,
+              ),
+              Obx(() => Text(
+                    controller.textfieldString.isEmpty
+                        ? "Tìm kiếm gần đây"
+                        : "Gợi ý",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: secondary20,
+                        fontWeight: FontWeight.bold),
+                  )),
+              Obx(
+                () => Expanded(
+                    child: controller.textfieldString.isNotEmpty
+                        ? controller.searchResult.length != 0
+                            ? ListView.builder(
+                                itemCount: controller.searchResult.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: secondary80, width: 1))),
+                                    child: InkWell(
+                                      onTap: () {
+                                        controller.saveRecent(
+                                            controller.searchResult[index]);
+                                        Get.to(FilterScreen(
+                                            location: controller
+                                                .searchResult[index]));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.location_on_outlined,
+                                            color: secondary40,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              controller.searchResult[index],
+                                              style: TextStyle(
+                                                  color: secondary20,
+                                                  fontSize: 14),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
+                                  );
+                                },
+                              )
+                            : Container(
+                                padding: EdgeInsets.only(top: 16),
+                                width: double.infinity,
+                                child: Text(
+                                  "Không tìm thấy kết quả",
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      : SizedBox()),
+                              )
+                        : ListView.builder(
+                            itemCount: controller.searchRecently.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: secondary80, width: 1))),
+                                child: InkWell(
+                                  onTap: () {
+                                    Get.to(FilterScreen(
+                                        location:
+                                            controller.searchRecently[index]));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on_outlined,
+                                        color: secondary40,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          controller.searchRecently[index],
+                                          style: TextStyle(
+                                              color: secondary20, fontSize: 14),
+                                          softWrap: true,
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          controller.removeRecent(
+                                              controller.searchRecently[index]);
+                                        },
+                                        child: Icon(
+                                          Icons.close,
+                                          color: secondary20,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
+              )
             ],
           ),
         )));
-  }
-
-  onSearchTextChanged(String text) async {
-    _searchResult.clear();
-    if (text.isEmpty) {
-      setState(() {});
-      return;
-    }
-
-    _address.forEach((address) {
-      if (TiengViet.parse(address)
-          .toLowerCase()
-          .contains(TiengViet.parse(text.toLowerCase())))
-        _searchResult.add(address);
-    });
-
-    setState(() {});
-  }
-
-  List<String> _searchResult = [];
-
-  List<String> _address = [];
-
-  Future<List<String>> loadAddress() async {
-    var jsonString = await rootBundle.loadString('assets/data/wards.json');
-    List<dynamic> jsonList = json.decode(jsonString);
-    return jsonList.map((json) => Ward.fromJson(json).path_with_type).toList();
   }
 }
