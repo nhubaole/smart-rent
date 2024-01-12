@@ -34,6 +34,7 @@ class MapScreenController extends GetxController {
   @override
   void onInit() async {
     print(roomInArea);
+    isLoading.value = true;
     await getCurrentLocation();
     if (fromDetailRoom == true) {
       destination.value = LatLng(lat!, lon!);
@@ -41,7 +42,7 @@ class MapScreenController extends GetxController {
     } else {
       await getListMarkers(roomInArea!);
     }
-
+    isLoading.value = false;
     super.onInit();
   }
 
@@ -51,11 +52,10 @@ class MapScreenController extends GetxController {
   }
 
   Future<void> getCurrentLocation() async {
-    Location location = Location();
-
     bool serviceEnabled;
-    PermissionStatus permissionGranted;
     LocationData locationData;
+    Location location = Location();
+    PermissionStatus permissionGranted;
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
@@ -196,6 +196,7 @@ class MapScreenController extends GetxController {
 
   Future<void> getListMarkers(List<Room> listRoomInArea) async {
     if (listRoomInArea.isNotEmpty) {
+      print('listRoomInArea.length: ${listRoomInArea.length}');
       for (var i = 0; i < listRoomInArea.length; i++) {
         isLoading.value = true;
         LatLng latLng = await GoogleMapServices().getLatLngFromAddress(
@@ -203,11 +204,16 @@ class MapScreenController extends GetxController {
           'vi',
         );
         await getPolylinePointsInArea(latLng);
+        isLoading.value = true;
         listMarkers.value.add(
           Marker(
             markerId: MarkerId(listRoomInArea[i].title),
             position: latLng,
-            infoWindow: const InfoWindow(title: 'Business 1'),
+            infoWindow: InfoWindow(
+              title: listRoomInArea[i].location,
+              snippet: 'Khoảng cách: }',
+              onTap: () {},
+            ),
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           ),
@@ -215,5 +221,13 @@ class MapScreenController extends GetxController {
       }
     }
     isLoading.value = false;
+  }
+
+  double coordinateDistance(lat1, lon1, lat2, lon2) {
+    const p = 0.017453292519943295;
+    final a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
   }
 }

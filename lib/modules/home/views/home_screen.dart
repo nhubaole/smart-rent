@@ -255,13 +255,23 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(
-                                    () => MapScreen(
-                                      fromDetailRoom: false,
-                                      roomInArea:
-                                          homeController.listRoomInArea.value,
-                                    ),
-                                  );
+                                  if (homeController.isLoadingMap.value ==
+                                      false) {
+                                    Get.to(
+                                      () => MapScreen(
+                                        fromDetailRoom: false,
+                                        roomInArea:
+                                            homeController.listRoomInArea.value,
+                                      ),
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Thông báo',
+                                      'Hệ thống đang tải dữ liệu',
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
