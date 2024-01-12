@@ -192,6 +192,9 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: 16,
+                        ),
                         // search bar
                         InkWell(
                           onTap: () {

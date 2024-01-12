@@ -353,6 +353,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  easy_image_viewer:
+    dependency: "direct main"
+    description:
+      name: easy_image_viewer
+      sha256: "6d765e9040a6e625796b387140b95f23318f25a448bf2647af30d17a77cea022"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   encrypt:
     dependency: transitive
     description:

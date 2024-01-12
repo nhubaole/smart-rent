@@ -83,6 +83,7 @@ dependencies:
   quantity_input: ^1.0.2
   zego_zim: ^2.6.0
   zego_zimkit: ^1.11.1
+  easy_image_viewer: ^1.4.0
 
 dev_dependencies:
   build_runner: ^2.4.6

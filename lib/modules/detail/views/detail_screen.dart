@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -1205,12 +1206,27 @@ class DetailScreen extends StatelessWidget {
       child: Stack(
         children: [
           Obx(
-            () => CachedNetworkImage(
-              imageUrl:
-                  controller.room!.images[controller.activeImageIdx.value],
-              height: MediaQuery.sizeOf(context).width + 50,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            () => InkWell(
+              onTap: () {
+                MultiImageProvider multiImageProvider = MultiImageProvider(
+                    controller.room!.images
+                        .map((url) => NetworkImage(url))
+                        .toList(),
+                    initialIndex: controller.activeImageIdx.value);
+                showImageViewerPager(context, multiImageProvider,
+                    onPageChanged: (page) {
+                  print("page changed to $page");
+                }, onViewerDismissed: (page) {
+                  print("dismissed while on page $page");
+                });
+              },
+              child: CachedNetworkImage(
+                imageUrl:
+                    controller.room!.images[controller.activeImageIdx.value],
+                height: MediaQuery.sizeOf(context).width + 50,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
