@@ -49,6 +49,11 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<types.Message> _messages = [];
+  List<String> suggest = [
+    "Phòng này còn không ạ?",
+    "Khi nào mình đi xem phòng được?",
+    "Cảm ơn nhưng tôi không thích phòng này."
+  ];
   var _user;
 
   @override
@@ -78,72 +83,115 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 64.0,
-        centerTitle: true,
-        title: Text(
-          widget.conversationName,
-          style: TextStyle(
-              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: primary80,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                primary40,
-                primary80,
-              ],
+        appBar: AppBar(
+          toolbarHeight: 64.0,
+          centerTitle: true,
+          title: Text(
+            widget.conversationName,
+            style: TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.light,
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: primary80,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  primary40,
+                  primary80,
+                ],
+              ),
             ),
           ),
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          titleSpacing: 0,
+          iconTheme: const IconThemeData(color: primary40),
         ),
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        titleSpacing: 0,
-        iconTheme: const IconThemeData(color: primary40),
-      ),
-      body: Scrollbar(
-        controller: widget.scrollController,
-        child: NotificationListener(
-          onNotification: (ScrollNotification notification) {
-            double progressMedian = notification.metrics.pixels /
-                notification.metrics.maxScrollExtent;
-            int progress = (progressMedian * 100).toInt();
+        body: Scrollbar(
+          controller: widget.scrollController,
+          child: NotificationListener(
+            onNotification: (ScrollNotification notification) {
+              double progressMedian = notification.metrics.pixels /
+                  notification.metrics.maxScrollExtent;
+              int progress = (progressMedian * 100).toInt();
 
-            if (progress >= 90) {
-              queryMoreHistoryMessageList();
-            }
-            return false;
-          },
-          child: Chat(
-            messages: _messages,
-            onAttachmentPressed: _handleAttachmentPressed,
-            onMessageTap: _handleMessageTap,
-            onPreviewDataFetched: _handlePreviewDataFetched,
-            onSendPressed: _handleSendPressed,
-            showUserAvatars: true,
-            showUserNames: true,
-            user: _user,
-            theme: const DefaultChatTheme(
-              inputBackgroundColor: primary40,
-              inputTextColor: Colors.white,
-              primaryColor: primary60,
-              secondaryColor: secondary90,
-            ),
+              if (progress >= 90) {
+                queryMoreHistoryMessageList();
+              }
+              return false;
+            },
+            child: Chat(
+                messages: _messages,
+                onAttachmentPressed: _handleAttachmentPressed,
+                onMessageTap: _handleMessageTap,
+                onPreviewDataFetched: _handlePreviewDataFetched,
+                onSendPressed: _handleSendPressed,
+                showUserAvatars: true,
+                showUserNames: true,
+                user: _user,
+                theme: const DefaultChatTheme(
+                  inputBackgroundColor: primary40,
+                  inputTextColor: Colors.white,
+                  primaryColor: primary60,
+                  secondaryColor: secondary90,
+                ),
+                customBottomWidget: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      height: 40,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return FilledButton(
+                            style: FilledButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              backgroundColor: primary40,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            onPressed: () {
+                              _handleSendPressed(
+                                  PartialText(text: suggest[index]));
+                            },
+                            child: Text(
+                              suggest[index],
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          );
+                        },
+                        itemCount: suggest.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(width: 8);
+                        },
+                      ),
+                    ),
+                    Input(
+                      isAttachmentUploading: false,
+                      onAttachmentPressed: _handleAttachmentPressed,
+                      onSendPressed: _handleSendPressed,
+                    ),
+                  ],
+                )),
           ),
         ),
-      ));
+      );
 
   queryMoreHistoryMessageList() async {
     //await getUser();
