@@ -1,7 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/resources/firebase_fcm.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
 
@@ -14,8 +16,27 @@ class DetailController extends GetxController {
   var owner = Rx<Account?>(null);
 
   Rx<int> activeImageIdx = 0.obs;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late SharedPreferences prefs;
+  var isShowMore = Rx<bool>(true);
+
+  @override
+  void onInit() async {
+    await getLatLng();
+    getOwner();
+    setRoomRecently();
+    super.onInit();
+  }
+
+  Future<LatLng> getLatLng() async {
+    LatLng result = const LatLng(0, 0);
+    try {
+      List<Location> locations = await locationFromAddress(room!.location);
+      result = LatLng(locations[0].latitude, locations[0].longitude);
+    } catch (e) {
+      print(e.toString());
+    }
+    return result;
+  }
 
   String getCapacity() {
     return room?.gender == Gender.ALL
@@ -44,19 +65,21 @@ class DetailController extends GetxController {
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
           (Match match) => '${match[1]}.',
         );
-    return formattedNumber + " ₫";
+    return '$formattedNumber ₫';
   }
 
   void getOwner() async {
-    final snapshot = await _firestore
-        .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-        .doc(room!.createdByUid)
-        .get();
+    // final snapshot = await _firestore
+    //     .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+    //     .doc(room!.createdByUid)
+    //     .get();
 
-    print(snapshot.data().toString());
+    // // print(snapshot.data().toString());
 
-    Account account = Account.fromJson(snapshot.data()!);
-    owner.value = account;
+    // Account account = Account.fromJson(snapshot.data()!);
+    // owner.value = account;
+
+    owner.value = await AuthMethods.getUserDetails(room!.createdByUid);
   }
 
   Future<void> setRoomRecently() async {
@@ -69,7 +92,7 @@ class DetailController extends GetxController {
     }
 
     await prefs.setStringList(KeyValue.KEY_ROOM_LIST_RECENTLY, items);
-    print("items.toString() = " + items.toString());
+    // print("items.toString() = " + items.toString());
   }
 
   Future<void> sendNotificationReturnRentRoom(

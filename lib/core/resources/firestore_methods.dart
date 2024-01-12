@@ -8,6 +8,7 @@ import 'package:smart_rent/core/model/review_ticket/review_ticket.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/firebase_fcm.dart';
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class FireStoreMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -94,7 +95,7 @@ class FireStoreMethods {
           .doc(uidRoom)
           .update({
         'isRented': isRented,
-        'rentby': rentBy,
+        'rentBy': rentBy,
         'status': status,
       });
     } catch (e) {
@@ -169,7 +170,7 @@ class FireStoreMethods {
     try {
       final querySnapshot = await _firestore
           .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('rentby', isEqualTo: uid)
+          .where('rentBy', isEqualTo: uid)
           .where('status', isEqualTo: 'RENTED')
           .limit(index)
           .get();
@@ -810,5 +811,147 @@ class FireStoreMethods {
     } catch (e) {
       print('error: ${e.toString()}');
     }
+  }
+
+  // MANAGE ROOM RENTING AND HISTORY ROOM
+
+  Future<void> addRentingRoomId(
+    String uid,
+    String roomId,
+  ) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_HISTORY_RENT_ROOM_COLLECTION)
+          .doc(uid)
+          .set({
+        'listRentingRoom': [roomId],
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> removeRentingRoomId(
+    String uid,
+    String roomId,
+  ) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_HISTORY_RENT_ROOM_COLLECTION)
+          .doc(uid)
+          .update({
+        'listRentingRoom': FieldValue.arrayRemove([roomId]),
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> addHistoryRoomId(
+    String uid,
+    String roomId,
+  ) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_HISTORY_RENT_ROOM_COLLECTION)
+          .doc(uid)
+          .set({
+        'listHistoryRoom': [roomId],
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<List<String>> getRentingRoom(
+    String uid,
+    int index,
+  ) async {
+    List<String> listRoom = [];
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_HISTORY_RENT_ROOM_COLLECTION)
+          .doc(uid)
+          .get()
+          .then((value) {
+        List<dynamic>? dynamicList = value.data()?['listRentingRoom'];
+
+        if (dynamicList != null) {
+          listRoom =
+              dynamicList.map((dynamic item) => item.toString()).toList();
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return listRoom;
+  }
+
+  Future<List<String>> getHistoryRoom(
+    String uid,
+    int index,
+  ) async {
+    List<String> listRoom = [];
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_HISTORY_RENT_ROOM_COLLECTION)
+          .doc(uid)
+          .get()
+          .then((value) {
+        List<dynamic>? dynamicList = value.data()?['listHistoryRoom'];
+
+        if (dynamicList != null) {
+          listRoom =
+              dynamicList.map((dynamic item) => item.toString()).toList();
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return listRoom;
+  }
+
+  Future<List<Map<String, dynamic>>> getListTenant(
+      String landLordUid, int page) async {
+    List<Map<String, dynamic>> listTenant = [];
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where('createdByUid', isEqualTo: landLordUid)
+          .where('isRented', isEqualTo: true)
+          .orderBy('dateTime', descending: true)
+          .limit(page)
+          .get();
+      for (var document in querySnapshot.docs) {
+        Map<String, dynamic> documentData =
+            document.data() as Map<String, dynamic>;
+        listTenant.add(documentData);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return listTenant;
+  }
+
+  Future<List<Room>> getRoomInArea(String area, int page) async {
+    List<Room> listRoom = [];
+    try {
+      final querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .where(
+            'locationArray',
+            arrayContains: area,
+          )
+          .limit(10)
+          .orderBy('dateTime', descending: true)
+          .get();
+      listRoom =
+          querySnapshot.docs.map((e) => Room.fromJson(e.data())).toList();
+    } catch (e) {
+      print(e.toString());
+    }
+    return listRoom;
   }
 }

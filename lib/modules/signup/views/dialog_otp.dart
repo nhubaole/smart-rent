@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/values/utils.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/modules/signup/controlllers/dialog_otp_controller.dart';
 import 'package:smart_rent/modules/signup/controlllers/sign_up_verify_controller.dart';
 
 class DialogOTP extends StatelessWidget {
@@ -68,25 +70,9 @@ class CardDialog extends StatefulWidget {
 }
 
 class _CardDialogState extends State<CardDialog> {
-  bool isWrongOTP = false;
-  void submit(String otp, Account user) async {
-    String res =
-        await SignUpVerifyController.instance.verifyOTP(otp, widget.user);
-
-    if (res != 'success') {
-      setState(() {
-        isWrongOTP = true;
-      });
-    } else {
-      setState(() {
-        isWrongOTP = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    var otp;
+    final dialogController = Get.put(DialogOtpController());
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -142,14 +128,14 @@ class _CardDialogState extends State<CardDialog> {
               focusedPinTheme: focusedPinTheme,
               submittedPinTheme: submittedPinTheme,
               validator: (value) {
-                otp = value;
+                dialogController.otp.value = value;
                 return null;
                 //SignUpVerifyController.instance.verifyOTP(otp, user, false);
               },
               pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
               showCursor: true,
               onCompleted: (pin) {
-                otp = pin;
+                dialogController.otp.value = pin;
                 //SignUpVerifyController.instance.verifyOTP(otp, user, false);
               },
             ),
@@ -157,28 +143,30 @@ class _CardDialogState extends State<CardDialog> {
           const SizedBox(
             height: 8,
           ),
-          isWrongOTP
-              ? const Text(
-                  'Mã OTP không đúng',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                )
-              : const Text(
-                  'Đăng kí thành công',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
+          dialogController.isSubmit.value
+              ? dialogController.isWrongOTP.value
+                  ? const Text(
+                      'Mã OTP không đúng',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                  : const Text(
+                      'Đăng kí thành công',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+              : const SizedBox(
+                  height: 8,
                 ),
-          const SizedBox(
-            height: 8,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               OutlinedButton(
                 onPressed: () {
-                  submit(otp, widget.user);
+                  dialogController.submit(
+                      dialogController.otp.value!, widget.user);
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

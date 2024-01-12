@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_status.dart';
@@ -16,11 +16,9 @@ import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/location/district.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
 import 'package:smart_rent/core/resources/firestore_methods.dart';
+import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
-import 'package:uuid/uuid.dart';
-
 import '../../../core/model/location/city.dart';
 import '../../../core/model/location/location.dart';
 import '../../../core/model/location/ward.dart';
@@ -68,6 +66,9 @@ class PostController extends GetxController
 
   var titleTextController = TextEditingController();
   var descriptionTextController = TextEditingController();
+  var regulationsTextController = TextEditingController();
+
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   late ImagePicker picker;
   var pickedImages = Rxn<List<XFile>>([]);
@@ -96,12 +97,45 @@ class PostController extends GetxController
 
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
-    print("INIT");
     cities = await loadCities();
+    priceTextController.addListener(() => formatCurrency(priceTextController));
+    depositTextController
+        .addListener(() => formatCurrency(depositTextController));
+
+    electricityCostTextController
+        .addListener(() => formatCurrency(electricityCostTextController));
+    waterCostTextController
+        .addListener(() => formatCurrency(waterCostTextController));
+    internetCostTextController
+        .addListener(() => formatCurrency(internetCostTextController));
+    parkingFeeTextController
+        .addListener(() => formatCurrency(parkingFeeTextController));
 
     picker = ImagePicker();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  void formatCurrency(TextEditingController textEditingController) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
+    if (textEditingController.text.isNotEmpty) {
+      final doubleAmount = double.tryParse(
+        textEditingController.text.replaceAll(RegExp(r'[^\d]'), ''),
+      );
+
+      if (doubleAmount != null) {
+        final formattedValue = formatter.format(doubleAmount);
+        textEditingController.value = TextEditingValue(
+          text: formattedValue,
+          selection: TextSelection.collapsed(offset: formattedValue.length - 1),
+        );
+      }
+    }
   }
 
   String? fieldValidator(String value) {
@@ -118,26 +152,46 @@ class PostController extends GetxController
 
   void updateInfoRoom() {
     room.value = room.value.copyWith(
-        capacity: int.parse(capacityTextController.text),
-        area: double.parse(areaTextController.text),
-        price: int.parse(priceTextController.text),
-        deposit: int.parse(depositTextController.text),
-        electricityCost: int.parse(electricityCostTextController.text),
-        waterCost: int.parse(waterCostTextController.text),
-        internetCost: int.parse(internetCostTextController.text),
-        parkingFee: int.parse(parkingFeeTextController.text));
+      capacity: int.parse(capacityTextController.text),
+      area: double.parse(areaTextController.text),
+      price: int.parse(
+        priceTextController.text.replaceAll('.', ''),
+      ),
+      deposit: int.parse(
+        depositTextController.text.replaceAll('.', ''),
+      ),
+      electricityCost: int.parse(
+        electricityCostTextController.text.replaceAll('.', ''),
+      ),
+      waterCost: int.parse(
+        waterCostTextController.text.replaceAll('.', ''),
+      ),
+      internetCost: int.parse(
+        internetCostTextController.text.replaceAll('.', ''),
+      ),
+      parkingFee: int.parse(
+        parkingFeeTextController.text.replaceAll('.', ''),
+      ),
+    );
   }
 
   void updateLocationRoom() {
     room.value = room.value.copyWith(
-        location: Location(
-                city: selectedCity.value!,
-                district: selectedDistrict.value!,
-                ward: selectedWard.value!,
-                street: streetTextController.text,
-                address: addressTextController.text)
-            .toString());
-    print(room.value.toString());
+      location: Location(
+        city: selectedCity.value!,
+        district: selectedDistrict.value!,
+        ward: selectedWard.value!,
+        street: streetTextController.text,
+        address: addressTextController.text,
+      ).toString(),
+      locationArray: [
+        selectedCity.value!.name,
+        selectedDistrict.value!.name,
+        selectedWard.value!.name,
+        streetTextController.text,
+        addressTextController.text,
+      ],
+    );
   }
 
   Future<void> updateUtilitiesRoom() async {
@@ -149,17 +203,16 @@ class PostController extends GetxController
           .map((util) => util.utility)
           .toList(),
     );
-    print(room.value.toString());
   }
 
   void updateConfirmRoom() {
     room.value = room.value.copyWith(
         title: titleTextController.text,
         description: descriptionTextController.text);
-    print(room.value.toString());
   }
 
   Future<void> postRoom() async {
+    showDialogLoading('Đang đăng bài...');
     isLoading.value = true;
     String uid = '';
     try {
@@ -178,6 +231,14 @@ class PostController extends GetxController
         dateTime: timeStamp,
         isRented: false,
         status: RoomStatus.PENDING,
+        locationArray: [
+          selectedCity.value!.name,
+          selectedDistrict.value!.name,
+          selectedWard.value!.name,
+          streetTextController.text,
+          addressTextController.text,
+        ],
+        regulations: regulationsTextController.text,
       );
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -193,13 +254,9 @@ class PostController extends GetxController
             .update({
           'listRoomForRent': FieldValue.arrayUnion([room.value.id])
         });
-        print('Room added');
-
-        Get.offUntil(MaterialPageRoute(builder: (context) => RootScreen()),
-            (Route<dynamic> route) => false);
-
-        Get.to(
-          DetailScreen(
+        Get.back();
+        Get.off(
+          () => DetailScreen(
             isRequestReturnRent: false,
             isRequestRented: false,
             isHandleRequestReturnRoom: false,
@@ -242,35 +299,36 @@ class PostController extends GetxController
 
   Future<void> handleChooseImage(BuildContext context) async {
     showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return ChooseImageBottomSheet(
-            onGallarySelected: () async {
-              final images = await picker.pickMultiImage();
-              if (images != null) {
-                for (var i in images) {
-                  pickedImages.value?.add(i);
-                  pickedImages.update(
-                    (val) {},
-                  );
-                }
-                validImageTotal.value = true;
-              }
-            },
-            onCameraSelected: () async {
-              final image = await picker.pickImage(source: ImageSource.camera);
-              if (image != null) {
-                pickedImages.value?.add(image);
+      context: context,
+      builder: (_) {
+        return ChooseImageBottomSheet(
+          onGallarySelected: () async {
+            final images = await picker.pickMultiImage();
+            if (images != null) {
+              for (var i in images) {
+                pickedImages.value?.add(i);
                 pickedImages.update(
                   (val) {},
                 );
               }
               validImageTotal.value = true;
-            },
-            messageRequestPermission:
-                "Vui lòng cho phép Smart Rent truy cập tệp hình ảnh của bạn để tải lên ảnh.",
-          );
-        });
+            }
+          },
+          onCameraSelected: () async {
+            final image = await picker.pickImage(source: ImageSource.camera);
+            if (image != null) {
+              pickedImages.value?.add(image);
+              pickedImages.update(
+                (val) {},
+              );
+            }
+            validImageTotal.value = true;
+          },
+          messageRequestPermission:
+              "Vui lòng cho phép Smart Rent truy cập tệp hình ảnh của bạn để tải lên ảnh.",
+        );
+      },
+    );
   }
 
   Future<List<int>> compressImage(File imageFile, int quality) async {
@@ -297,5 +355,36 @@ class PostController extends GetxController
     });
 
     return urlImages;
+  }
+
+  Future<void> showDialogLoading(String message) async {
+    Get.dialog(
+      PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const CircularProgressIndicator(
+                  color: primary60,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  message,
+                  style: const TextStyle(color: primary60),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
   }
 }

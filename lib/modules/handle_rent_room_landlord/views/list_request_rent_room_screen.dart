@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/model/room/room.dart';
@@ -101,7 +99,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 Get.to(
-                                  DetailRequestRentRoomScreen(
+                                  () => DetailRequestRentRoomScreen(
                                     data: listRequestController
                                         .listTicket.value[index],
                                   ),

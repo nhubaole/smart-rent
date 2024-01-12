@@ -3,6 +3,6 @@ import 'package:get/get.dart';
 
 class HomeFeatureNavController extends GetxController {
   void jumpToScreen(Widget screen) {
-    Get.to(screen);
+    Get.to(() => screen);
   }
 }

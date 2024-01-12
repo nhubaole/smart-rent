@@ -20,54 +20,55 @@ class _InfoPageState extends State<InfoPage> {
     return Expanded(
         child: Container(
       width: double.infinity,
-      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: SingleChildScrollView(
           child: Form(
         key: controller.formInfoKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Thông tin phòng',
               style: TextStyle(
                   color: primary40, fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
             //---------------------Room type-------------------------
-            Text(
+            const Text(
               'LOẠI PHÒNG',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             typeOption(),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Capacity-------------------------
-            Text(
+            const Text(
               'SỨC CHỨA',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
               validator: (value) => controller.fieldValidator(value!),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: controller.capacityTextController,
-              decoration: InputDecoration(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Nhập số người/phòng',
                 suffixText: 'người/phòng',
@@ -75,42 +76,43 @@ class _InfoPageState extends State<InfoPage> {
                     borderSide: BorderSide(color: primary40, width: 2)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Gender-------------------------
-            Text(
+            const Text(
               'GIỚI TÍNH',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             genderOption(),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Area-------------------------
-            Text(
+            const Text(
               'DIỆN TÍCH',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
               validator: (value) => controller.fieldValidator(value!),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: controller.areaTextController,
-              decoration: InputDecoration(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Nhập diện tích phòng',
                 suffixText: 'm2',
@@ -118,35 +120,36 @@ class _InfoPageState extends State<InfoPage> {
                     borderSide: BorderSide(color: primary40, width: 2)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
-            Text(
+            const Text(
               'Chi phí',
               style: TextStyle(
                   color: primary40, fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
             //---------------------Price-------------------------
-            Text(
+            const Text(
               'GIÁ CHO THUÊ',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
               validator: (value) => controller.fieldValidator(value!),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: controller.priceTextController,
-              decoration: InputDecoration(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Nhập giá cho thuê',
                 suffixText: '₫/phòng',
@@ -154,26 +157,27 @@ class _InfoPageState extends State<InfoPage> {
                     borderSide: BorderSide(color: primary40, width: 2)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Deposit-------------------------
-            Text(
+            const Text(
               'ĐẶT CỌC',
               style: TextStyle(
                   color: secondary40,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
               validator: (value) => controller.fieldValidator(value!),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: controller.depositTextController,
-              decoration: InputDecoration(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Nhập số tiền đặt cọc',
                 suffixText: '₫',
@@ -181,14 +185,14 @@ class _InfoPageState extends State<InfoPage> {
                     borderSide: BorderSide(color: primary40, width: 2)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Electricity-------------------------
             Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Text(
                     'TIỀN ĐIỆN',
                     style: TextStyle(
@@ -235,7 +239,7 @@ class _InfoPageState extends State<InfoPage> {
                         },
                       ));
                 }),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Obx(() => Text(
@@ -249,7 +253,7 @@ class _InfoPageState extends State<InfoPage> {
                     ))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Obx(() => TextFormField(
@@ -257,7 +261,8 @@ class _InfoPageState extends State<InfoPage> {
                   validator: (value) => controller.fieldValidator(value!),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: controller.electricityCostTextController,
-                  decoration: InputDecoration(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Nhập số tiền',
                     suffixText: '₫',
@@ -265,14 +270,14 @@ class _InfoPageState extends State<InfoPage> {
                         borderSide: BorderSide(color: primary40, width: 2)),
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Water-------------------------
             Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Text(
                     'TIỀN NƯỚC',
                     style: TextStyle(
@@ -317,7 +322,7 @@ class _InfoPageState extends State<InfoPage> {
                         },
                       ));
                 }),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Obx(() => Text(
@@ -331,7 +336,7 @@ class _InfoPageState extends State<InfoPage> {
                     ))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Obx(() => TextFormField(
@@ -339,7 +344,8 @@ class _InfoPageState extends State<InfoPage> {
                   validator: (value) => controller.fieldValidator(value!),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: controller.waterCostTextController,
-                  decoration: InputDecoration(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Nhập số tiền',
                     suffixText: '₫',
@@ -347,14 +353,14 @@ class _InfoPageState extends State<InfoPage> {
                         borderSide: BorderSide(color: primary40, width: 2)),
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Internet-------------------------
             Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Text(
                     'TIỀN INTERNET/WIFI',
                     style: TextStyle(
@@ -398,21 +404,23 @@ class _InfoPageState extends State<InfoPage> {
                         },
                       ));
                 }),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Obx(() => Text(
-                      'Miễn phí',
-                      style: TextStyle(
-                          color: controller.isInternetFree.value
-                              ? primary40
-                              : secondary40,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ))
+                Obx(
+                  () => Text(
+                    'Miễn phí',
+                    style: TextStyle(
+                        color: controller.isInternetFree.value
+                            ? primary40
+                            : secondary40,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Obx(() => TextFormField(
@@ -420,7 +428,8 @@ class _InfoPageState extends State<InfoPage> {
                   validator: (value) => controller.fieldValidator(value!),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: controller.internetCostTextController,
-                  decoration: InputDecoration(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Nhập số tiền',
                     suffixText: '₫',
@@ -428,14 +437,14 @@ class _InfoPageState extends State<InfoPage> {
                         borderSide: BorderSide(color: primary40, width: 2)),
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
 
             //---------------------Parking-------------------------
             Obx(() => CheckboxListTile(
-                  contentPadding: EdgeInsets.all(0),
-                  title: Text('Có chỗ để xe'),
+                  contentPadding: const EdgeInsets.all(0),
+                  title: const Text('Có chỗ để xe'),
                   value: controller.hasParking.value,
                   onChanged: (bool? value) {
                     controller.hasParking.value = value!;
@@ -447,7 +456,7 @@ class _InfoPageState extends State<InfoPage> {
                   ),
                   activeColor: primary40,
                 )),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Obx(() => controller.hasParking.value
@@ -455,7 +464,7 @@ class _InfoPageState extends State<InfoPage> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
+                          const Expanded(
                             child: Text(
                               'PHÍ GIỮ XE',
                               style: TextStyle(
@@ -503,7 +512,7 @@ class _InfoPageState extends State<InfoPage> {
                                   },
                                 ));
                           }),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Obx(() => Text(
@@ -517,7 +526,7 @@ class _InfoPageState extends State<InfoPage> {
                               ))
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Obx(() => TextFormField(
@@ -527,7 +536,8 @@ class _InfoPageState extends State<InfoPage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             controller: controller.parkingFeeTextController,
-                            decoration: InputDecoration(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Nhập số tiền',
                               suffixText: '₫',
@@ -536,12 +546,12 @@ class _InfoPageState extends State<InfoPage> {
                                       BorderSide(color: primary40, width: 2)),
                             ),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                     ],
                   )
-                : SizedBox())
+                : const SizedBox())
           ],
         ),
       )),
@@ -552,19 +562,19 @@ class _InfoPageState extends State<InfoPage> {
     return Column(
       children: <Widget>[
         radioTypeItem(RoomType.DORMITORY_HOMESTAY),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
         radioTypeItem(RoomType.ROOM),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
         radioTypeItem(RoomType.WHOLE_HOUSE),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
         radioTypeItem(RoomType.APARTMENT),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
       ],
@@ -575,15 +585,15 @@ class _InfoPageState extends State<InfoPage> {
     return Column(
       children: <Widget>[
         radioGenderItem(Gender.ALL),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
         radioGenderItem(Gender.MALE),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
         radioGenderItem(Gender.FEMALE),
-        Divider(
+        const Divider(
           thickness: 0.7,
         ),
       ],
@@ -591,24 +601,26 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Obx radioTypeItem(RoomType type) {
-    return Obx(() => RadioListTile<RoomType>(
-          activeColor: primary40,
-          visualDensity: const VisualDensity(
-            horizontal: VisualDensity.minimumDensity,
-            vertical: VisualDensity.minimumDensity,
-          ),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          contentPadding: EdgeInsets.all(0),
-          title: Text(
-            type.getNameRoomType(),
-            style: TextStyle(color: secondary20, fontSize: 16),
-          ),
-          value: type,
-          groupValue: controller.room.value.roomType,
-          onChanged: (RoomType? value) {
-            controller.onSelectRoomType(value!);
-          },
-        ));
+    return Obx(
+      () => RadioListTile<RoomType>(
+        activeColor: primary40,
+        visualDensity: const VisualDensity(
+          horizontal: VisualDensity.minimumDensity,
+          vertical: VisualDensity.minimumDensity,
+        ),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        contentPadding: const EdgeInsets.all(0),
+        title: Text(
+          type.getNameRoomType(),
+          style: const TextStyle(color: secondary20, fontSize: 16),
+        ),
+        value: type,
+        groupValue: controller.room.value.roomType,
+        onChanged: (RoomType? value) {
+          controller.onSelectRoomType(value!);
+        },
+      ),
+    );
   }
 
   Obx radioGenderItem(Gender gender) {
@@ -619,10 +631,10 @@ class _InfoPageState extends State<InfoPage> {
             vertical: VisualDensity.minimumDensity,
           ),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           title: Text(
             gender.getNameGender(),
-            style: TextStyle(color: secondary20, fontSize: 16),
+            style: const TextStyle(color: secondary20, fontSize: 16),
           ),
           value: gender,
           groupValue: controller.room.value.gender,

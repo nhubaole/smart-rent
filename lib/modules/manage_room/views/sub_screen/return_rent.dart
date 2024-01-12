@@ -30,9 +30,13 @@ class ReturnRentScreen extends StatelessWidget {
           child: Center(
             child: Obx(
               () => returnRentController.isLoading.value
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: primary60,
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: primary60,
+                          backgroundColor: primary40,
+                        ),
                       ),
                     )
                   : returnRentController.listRoom.value.isEmpty

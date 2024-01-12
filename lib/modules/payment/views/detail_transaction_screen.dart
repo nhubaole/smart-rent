@@ -6,7 +6,6 @@ import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/detail_transaction_controller.dart';
 import 'package:smart_rent/modules/payment/controllers/reivew_room_controller.dart';
-import 'package:smart_rent/modules/payment/views/review_room.dart';
 import 'package:smart_rent/modules/payment/views/widgets/status_widget.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';

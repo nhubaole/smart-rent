@@ -21,6 +21,7 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
       electricityCost: json['electricityCost'] as int? ?? 0,
       waterCost: json['waterCost'] as int? ?? 0,
       internetCost: json['internetCost'] as int? ?? 0,
+      sumRating: (json['sumRating'] as num?)?.toDouble() ?? 0.0,
       hasParking: json['hasParking'] as bool? ?? true,
       parkingFee: json['parkingFee'] as int? ?? 0,
       location: json['location'] as String? ?? '',
@@ -46,6 +47,11 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
               .toList() ??
           const [],
       rentBy: json['rentBy'] as String? ?? 'UNKNOWN',
+      regulations: json['regulations'] as String? ?? '',
+      locationArray: (json['locationArray'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
@@ -62,6 +68,7 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'electricityCost': instance.electricityCost,
       'waterCost': instance.waterCost,
       'internetCost': instance.internetCost,
+      'sumRating': instance.sumRating,
       'hasParking': instance.hasParking,
       'parkingFee': instance.parkingFee,
       'location': instance.location,
@@ -75,6 +82,8 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'listComments': instance.listComments,
       'listLikes': instance.listLikes,
       'rentBy': instance.rentBy,
+      'regulations': instance.regulations,
+      'locationArray': instance.locationArray,
     };
 
 const _$RoomTypeEnumMap = {

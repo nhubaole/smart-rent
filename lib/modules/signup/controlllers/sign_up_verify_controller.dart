@@ -37,45 +37,6 @@ class SignUpVerifyController extends GetxController {
           }
         },
       );
-
-      // if (isVerified) {
-      //   try {
-      //     if (FirebaseAuth.instance.currentUser == null) {
-      //       Get.snackbar('Lỗi', 'Không thể đăng ký');
-      //       return 'not-success';
-      //     }
-
-      //     // Đăng ký => Thêm thông tin tài khoản vào FireStore
-
-      //     Account currentAccount = Account(
-      //       phoneNumber: account.phoneNumber,
-      //       uid: FirebaseAuth.instance.currentUser!.uid,
-      //       photoUrl: account.photoUrl,
-      //       username: account.username,
-      //       address: account.address,
-      //       sex: account.sex,
-      //       age: account.age,
-      //       dateOfBirth: account.dateOfBirth,
-      //       dateOfCreate: DateTime.now(),
-      //     );
-
-      //     String result =
-      //         await FireStoreMethods().signUpUserFireStore(currentAccount);
-
-      //     if (result != 'success') {
-      //       Get.snackbar('Lỗi', result);
-      //       return 'not-success';
-      //     }
-
-      //     // Đăng nhập => RootScreen
-      //     Get.offAll(() => const RootScreen());
-      //   } catch (e) {
-      //     Get.snackbar('Lỗi', e.toString());
-      //   }
-      //   res = 'success';
-      // } else {
-      //   Get.back();
-      // }
     } catch (error) {
       res = error.toString();
     }

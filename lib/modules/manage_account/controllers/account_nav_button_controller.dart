@@ -10,6 +10,6 @@ class AccountNavButtonController extends GetxController {
   }
 
   void goToScreen(Widget sreen) {
-    Get.to(sreen);
+    Get.to(() => sreen);
   }
 }

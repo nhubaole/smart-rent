@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -22,7 +21,7 @@ class DetailRequestRentRoomController extends GetxController {
 
   @override
   void onInit() {
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
+    getProfile(data['uidTenant']);
     getRoom(data['roomId']);
     super.onInit();
   }

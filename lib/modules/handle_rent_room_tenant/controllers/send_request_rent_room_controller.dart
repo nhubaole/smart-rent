@@ -29,9 +29,14 @@ class SendRequestRentRoomController extends GetxController {
   var isJoinNow = Rx<bool>(false);
   var isLeave = Rx<bool>(false);
   var account = Rx<Account?>(null);
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
+  // NumberFormat numberFormat =
+  //     NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   @override
   void onInit() {
+    priceSuggestTextController.addListener(formatCurrency);
     priceSuggestTextController.text =
         result != null ? result!['price'].toString() : '';
     quantityPeopleTextController.text =
@@ -40,7 +45,40 @@ class SendRequestRentRoomController extends GetxController {
     dateLeaveTextController.text = result != null ? result!['dateLeave'] : '';
     specialRequestTextController.text =
         result != null ? result!['specialRequest'] : '';
+
+    currencyFormat.format(room.price);
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    priceSuggestTextController.removeListener(formatCurrency);
+    priceSuggestTextController.dispose();
+    quantityPeopleTextController.dispose();
+    dateJoinTextController.dispose();
+    dateLeaveTextController.dispose();
+    specialRequestTextController.dispose();
+    super.onClose();
+  }
+
+  void formatCurrency() {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
+    if (priceSuggestTextController.text.isNotEmpty) {
+      final doubleAmount = double.tryParse(
+        priceSuggestTextController.text.replaceAll(RegExp(r'[^\d]'), ''),
+      );
+
+      if (doubleAmount != null) {
+        final formattedValue = formatter.format(doubleAmount);
+        priceSuggestTextController.value = TextEditingValue(
+          text: formattedValue,
+          selection: TextSelection.collapsed(offset: formattedValue.length - 1),
+        );
+      }
+    }
+
+    print(priceSuggestTextController.text);
   }
 
   bool isDate(String str) {
@@ -69,7 +107,8 @@ class SendRequestRentRoomController extends GetxController {
 
       data = {
         'id': result != null ? result!['id'] : id,
-        'price': int.parse(priceSuggestTextController.value.text),
+        'price': int.parse(
+            priceSuggestTextController.value.text.replaceAll('.', '')),
         'quantityPeople': int.parse(quantityPeopleTextController.value.text),
         'timeStamp': timeStamp,
       };

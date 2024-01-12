@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice/detail_invoice_controller.dart';
 
+// ignore: must_be_immutable
 class DetailInvoiceScreen extends StatelessWidget {
   DetailInvoiceScreen({
     super.key,

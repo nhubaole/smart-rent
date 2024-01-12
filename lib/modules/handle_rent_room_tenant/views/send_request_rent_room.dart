@@ -6,6 +6,7 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
 import 'package:smart_rent/modules/handle_rent_room_tenant/controllers/send_request_rent_room_controller.dart';
 
+// ignore: must_be_immutable
 class SendRequestRentRoom extends StatelessWidget {
   SendRequestRentRoom({
     super.key,
@@ -89,16 +90,18 @@ class SendRequestRentRoom extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return 'Vui lòng nhập số';
                         }
+                        return null;
                       },
                       keyboardType: TextInputType.number,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller:
                           sendRequestController.priceSuggestTextController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '5.000.000đ',
-                        suffixText: '| đ',
-                        focusedBorder: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText:
+                            '${sendRequestController.currencyFormat.format(room.price)} VNĐ',
+                        suffixText: '| VNĐ',
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: secondary60,
                             width: 2,
