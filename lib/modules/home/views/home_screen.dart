@@ -10,6 +10,7 @@ import 'package:smart_rent/modules/map/views/map_screen.dart';
 import 'package:smart_rent/modules/notification/views/notification_screen.dart';
 import 'package:smart_rent/modules/post/views/post_screen.dart';
 import 'package:smart_rent/modules/recently/views/recently_view.dart';
+import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/search_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -385,7 +386,9 @@ class HomeScreen extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               Get.closeAllSnackbars();
-                              Get.snackbar('Notify', 'message');
+                              Get.to(FilterScreen(
+                                  location: homeController.dataList[index]
+                                      ['address'] as String));
                             },
                             child: Stack(
                               children: [
@@ -437,7 +440,7 @@ class HomeScreen extends StatelessWidget {
                                                   color: Colors.black,
                                                 ),
                                               ],
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
                                             ),
@@ -567,81 +570,60 @@ class HomeScreen extends StatelessWidget {
                                       // mainAxisSpacing: 20,
                                     ),
                                     itemCount:
-                                        homeController.listRoom.value.length +
-                                            1,
+                                        homeController.listRoom.value.length,
                                     itemBuilder: (context, index) {
-                                      if (index <
-                                          homeController
-                                              .listRoom.value.length) {
-                                        return RoomItem(
-                                          isRenting: false,
-                                          isHandleRentRoom: false,
-                                          isHandleRequestReturnRoom: false,
-                                          isRequestReturnRent: false,
-                                          isRequestRented: false,
-                                          room: homeController
-                                              .listRoom.value[index],
-                                          isLiked: homeController
-                                              .listRoom.value[index].listLikes
-                                              .contains(
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                          ),
-                                        );
-                                      } else {
-                                        return Obx(
-                                          () => homeController.isLoadMore.value
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: primary95,
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                  ),
-                                                )
-                                              : Padding(
-                                                  padding: EdgeInsets.all(
-                                                      deviceWidth * 0.01),
-                                                  child: Center(
-                                                    child: OutlinedButton(
-                                                      onPressed: () {
-                                                        homeController
-                                                            .getListRoom(true);
-                                                      },
-                                                      style: ButtonStyle(
-                                                        side:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          const BorderSide(
-                                                            color: primary40,
-                                                          ),
-                                                        ),
-                                                        shape:
-                                                            MaterialStateProperty
-                                                                .all(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: const Text(
-                                                        'Xem thêm',
-                                                        style: TextStyle(
-                                                          color: primary40,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                        );
-                                      }
+                                      return RoomItem(
+                                        isRenting: false,
+                                        isHandleRentRoom: false,
+                                        isHandleRequestReturnRoom: false,
+                                        isRequestReturnRent: false,
+                                        isRequestRented: false,
+                                        room: homeController
+                                            .listRoom.value[index],
+                                        isLiked: homeController
+                                            .listRoom.value[index].listLikes
+                                            .contains(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
                     ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Obx(() => homeController.listRoom.value.isEmpty
+                        ? SizedBox()
+                        : homeController.isLoadMore.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: primary95,
+                                  backgroundColor: Colors.white,
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                width: double.infinity,
+                                child: FilledButton(
+                                  onPressed: () {
+                                    homeController.getListRoom(true);
+                                  },
+                                  style: FilledButton.styleFrom(
+                                      backgroundColor: primary60,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 12)),
+                                  child: const Text(
+                                    'Xem thêm',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ))
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -277,24 +278,23 @@ class DetailScreen extends StatelessWidget {
                             heroTag: UniqueKey(),
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(
-                                width: 2,
-                                color: primary60,
+                                width: 1,
+                                color: primary40,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [
                                 Text(
-                                  'Yêu cầu thuê phòng',
-                                  style: TextStyle(color: primary60),
+                                  'Yêu cầu thuê phòng ',
+                                  style: TextStyle(color: primary40),
                                 ),
                                 SizedBox(
                                   width: 2,
                                 ),
                                 Icon(
-                                  Icons.contact_emergency_sharp,
-                                  color: primary60,
+                                  CupertinoIcons.location_fill,
+                                  color: primary40,
                                 ),
                               ],
                             ),
@@ -1078,7 +1078,54 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                      : const SizedBox(),
+                      : Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(red90),
+                                foregroundColor:
+                                    MaterialStateProperty.all(red50),
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)))),
+                            onPressed: () async {
+                              Get.defaultDialog(
+                                title: 'Thông báo',
+                                middleText:
+                                    'Bạn có chắc chắn muốn xóa phòng trọ này?',
+                                textConfirm: 'Xóa',
+                                textCancel: 'Hủy',
+                                confirmTextColor: Colors.white,
+                                buttonColor: primary40,
+                                backgroundColor: primary98,
+                                cancelTextColor: primary40,
+                                onConfirm: () async {
+                                  FireStoreMethods()
+                                      .updateStatusRoom(room.id, 'DELETED');
+                                  Get.back();
+                                  Get.back();
+                                },
+                              );
+                            },
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.delete,
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Xóa'),
+                              ],
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     width: 8,
                   ),
@@ -1113,7 +1160,36 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                      : const SizedBox(),
+                      : Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(secondary90),
+                                foregroundColor:
+                                    MaterialStateProperty.all(secondary40),
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)))),
+                            onPressed: () {},
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Sửa'),
+                              ],
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ),
