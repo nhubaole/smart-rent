@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
@@ -19,6 +20,7 @@ class HomeScreenController extends GetxController {
   Location? crLocation;
   var isLoading = true.obs;
   var isLoadingMap = Rx<bool>(true);
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   @override
   void onInit() async {

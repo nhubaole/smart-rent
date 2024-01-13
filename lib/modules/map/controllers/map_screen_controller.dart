@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/google_map_services.dart';
+import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 
 class MapScreenController extends GetxController {
   final bool fromDetailRoom;
@@ -196,7 +197,6 @@ class MapScreenController extends GetxController {
 
   Future<void> getListMarkers(List<Room> listRoomInArea) async {
     if (listRoomInArea.isNotEmpty) {
-      print('listRoomInArea.length: ${listRoomInArea.length}');
       for (var i = 0; i < listRoomInArea.length; i++) {
         isLoading.value = true;
         LatLng latLng = await GoogleMapServices().getLatLngFromAddress(
@@ -205,18 +205,37 @@ class MapScreenController extends GetxController {
         );
         await getPolylinePointsInArea(latLng);
         isLoading.value = true;
+
         listMarkers.value.add(
           Marker(
-            markerId: MarkerId(listRoomInArea[i].title),
-            position: latLng,
-            infoWindow: InfoWindow(
-              title: listRoomInArea[i].location,
-              snippet: 'Khoảng cách: }',
-              onTap: () {},
-            ),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          ),
+              markerId: MarkerId(listRoomInArea[i].title),
+              position: latLng,
+              infoWindow: InfoWindow(
+                title: listRoomInArea[i].location,
+                snippet:
+                    '${listRoomInArea[i].title} Giá: ${listRoomInArea[i].price}',
+                onTap: () {
+                  Get.off(
+                    () => DetailScreen(
+                      room: listRoomInArea[i],
+                      isRequestRented: false,
+                      isRequestReturnRent: false,
+                      isHandleRequestReturnRoom: false,
+                      isHandleRentRoom: false,
+                      isRenting: false,
+                    ),
+                  );
+                },
+              ),
+              icon:
+                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)
+              // icon: await CustomMarker(
+              //   room: listRoomInArea[i],
+              // ).toBitmapDescriptor(
+              //   logicalSize: const Size(100, 100),
+              //   imageSize: const Size(500, 200),
+              // ),
+              ),
         );
       }
     }
