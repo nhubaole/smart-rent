@@ -27,25 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    //controller.navigatorHomeScreen(context);
-    checkStatusLogin();
-  }
-
-  void checkStatusLogin() async {
-    await Future.delayed(
-      const Duration(seconds: 3),
-    );
-    AuthMethods.isLoggedIn().then((value) {
-      if (value) {
-        Get.offAll(
-          const RootScreen(),
-        );
-      } else {
-        Get.offAll(
-          const LoginScreen(),
-        );
-      }
-    });
   }
 
   @override

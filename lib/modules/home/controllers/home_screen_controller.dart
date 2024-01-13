@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
@@ -17,14 +18,17 @@ class HomeScreenController extends GetxController {
   final currenLocation = ''.obs;
   final currenPhone = ''.obs;
   Location? crLocation;
+  var isLoading = true.obs;
+  var isLoadingMap = Rx<bool>(true);
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   @override
-  void onInit() {
+  void onInit() async {
     getSharedPreferences();
-    getCurrentLocation();
+
     fetchDataAndConvertToList();
     getListRoom(false);
-
+    await getCurrentLocation();
     super.onInit();
   }
 
@@ -89,47 +93,11 @@ class HomeScreenController extends GetxController {
     List<String> areas = currentLocationMap['results'][0]['formatted_address']
         .toString()
         .split(',');
-    getListRoomByListSplit(areas);
-    //getListRoomInArea(s.substring(s.indexOf(' ')).trim());
-
-    // final url = Uri.parse(
-    //     'https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationData.latitude},${locationData.longitude}&key=${KeyValue.API_GOOGLE_MAP}');
-    // final response = await http.get(url);
-    // final resData = json.decode(response.body);
-    // currenLocation.value = resData['results'][0]['formatted_address'];
-    // final url = Uri.parse(
-    //     '${dotenv.env['geoapify_url']}/geocode/reverse?lat=$lat&lon=$lon&apiKey=${dotenv.env['geoapify_url_api']}');
-
-    // final response = await http.get(url);
-
-    // if (response.statusCode == 200) {
-    //   final result = json.decode(response.body);
-
-    //   if (result["features"] != null && result["features"].isNotEmpty) {
-    //     final formattedValue = result['features'][0]['properties']['formatted'];
-    //     currenLocation.value = formattedValue;
-    //   } else {
-    //     Get.snackbar("Error", 'Can' 't get location');
-    //   }
-    // } else {
-    //   Get.snackbar("Error", 'Can' 't get location');
-    // }
-
-    // final Map<String, dynamic> locationMap =
-    //     await GeoApiFyServices().getCurrentLocation(lat, lon);
-    // if (locationMap.isNotEmpty) {
-    //   final formattedValue =
-    //       locationMap['features'][0]['properties']['formatted'];
-
-    //   currenLocation.value = formattedValue;
-    // } else {
-    //   Get.snackbar("Error", 'Can' 't get location');
-    // }
+    await getListRoomByListSplit(areas);
   }
 
   // POPULAR CONTROLLER
   RxList<Map<String, dynamic>> dataList = <Map<String, dynamic>>[].obs;
-  var isLoading = true.obs;
 
   void fetchDataAndConvertToList() {
     List<Map<String, dynamic>> fetchedData = [
@@ -188,9 +156,15 @@ class HomeScreenController extends GetxController {
   var listRoomInArea = Rx<List<Room>>([]);
 
   Future<void> getListRoomInArea(String area) async {
-    listRoomInArea.value = await FireStoreMethods().getRoomInArea(area, 10);
+    //listRoomInArea.value = await FireStoreMethods().getRoomInArea(area, 10);
+    List<Room> listFetch = await FireStoreMethods().getRoomInArea(area, 10);
+    if (listFetch.length > listRoomInArea.value.length) {
+      listRoomInArea.value = listFetch;
+    }
+    print('listRoomInArea.length: ${listRoomInArea.value.length}');
     if (listRoomInArea.value.isNotEmpty) {
       for (var room in listRoomInArea.value) {
+        isLoadingMap.value = true;
         print(room.location);
       }
     }
@@ -198,8 +172,10 @@ class HomeScreenController extends GetxController {
 
   Future<void> getListRoomByListSplit(List<String> areas) async {
     for (var i = 0; i < areas.length; i++) {
+      isLoadingMap.value = true;
       print(areas[i]);
-      getListRoomInArea(areas[i].trim());
+      await getListRoomInArea(areas[i].trim());
     }
+    isLoadingMap.value = false;
   }
 }

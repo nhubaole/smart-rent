@@ -35,7 +35,8 @@ class MapScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Obx(
-        () => mapController.currentPosition.value == null
+        () => mapController.currentPosition.value == null &&
+                mapController.isLoading.value == false
             ? const Center(
                 child: CircularProgressIndicator(
                   color: primary95,
