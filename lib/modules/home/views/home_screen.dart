@@ -258,7 +258,7 @@ class HomeScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   if (homeController.isLoadingMap.value ==
                                       false) {
                                     Get.to(

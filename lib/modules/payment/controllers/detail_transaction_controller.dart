@@ -172,6 +172,7 @@ class DetailTransactionController extends GetxController {
   Future<void> readResponse() async {
     // Read the current URL
     String? currentUrl = await webViewController.currentUrl();
+    print(currentUrl);
     if (currentUrl ==
         'https://pay.payos.vn/web/${rxInvoice.value!.paymentLinkId}/success') {
       await FireStoreMethods().addInvoice(rxInvoice.value!);

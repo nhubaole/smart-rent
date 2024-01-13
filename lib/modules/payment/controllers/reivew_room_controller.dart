@@ -53,6 +53,10 @@ class ReviewRoomController extends GetxController {
       createdAt: timeStamp,
     );
     await FireStoreMethods().addReviewTicket(reviewTicket);
+    await FireStoreMethods().updateRatingRoom(
+      room.value!.id,
+      room.value!.sumRating + reviewTicket.rating,
+    );
     Get.offAll(() => const RootScreen());
   }
 }

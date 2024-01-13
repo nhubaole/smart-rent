@@ -232,6 +232,8 @@ class DetailTransactionScreen extends StatelessWidget {
                                   height: 28,
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'Nội dung giao dịch',
@@ -242,14 +244,22 @@ class DetailTransactionScreen extends StatelessWidget {
                                       ),
                                     ),
                                     const Spacer(),
-                                    Obx(
-                                      () => Text(
-                                        detailTransactionController
-                                            .rxInvoice.value!.description
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        child: Obx(
+                                          () => Text(
+                                            '${detailTransactionController.rxInvoice.value!.description.toString()} ${detailTransactionController.rxInvoice.value!.roomId}',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            textAlign: TextAlign.right,
+                                            maxLines: 2,
+                                          ),
                                         ),
                                       ),
                                     ),

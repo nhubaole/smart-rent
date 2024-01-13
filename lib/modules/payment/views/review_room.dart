@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_rent/core/model/invoice/invoice.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/payment/controllers/reivew_room_controller.dart';
@@ -16,6 +17,7 @@ class ReviewRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
     final reviewController = Get.put(ReviewRoomController(invoice: invoice));
     reviewController.getRoom();
     return Scaffold(
@@ -61,7 +63,7 @@ class ReviewRoom extends StatelessWidget {
                           ),
                           Obx(
                             () => Text(
-                              '${reviewController.room.value!.price}đ/ tháng',
+                              '${currencyFormat.format(reviewController.room.value!.price)}đ/ tháng',
                               style: const TextStyle(
                                 color: primary40,
                                 fontWeight: FontWeight.w700,

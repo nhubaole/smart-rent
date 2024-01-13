@@ -90,6 +90,17 @@ class FireStoreMethods {
     }
   }
 
+  Future<void> updateRatingRoom(String uidRoom, num rating) async {
+    try {
+      await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ROOM)
+          .doc(uidRoom)
+          .update({'sumRating': rating});
+    } catch (e) {
+      print('error: ${e.toString()}');
+    }
+  }
+
   Future<void> updateRentedRoom(
       String uidRoom, String status, bool isRented, String rentBy) async {
     try {

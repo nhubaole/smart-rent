@@ -225,19 +225,15 @@ class PostController extends GetxController
       final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
       String postId =
           await FireStoreMethods().getDocumentId(KeyValue.KEY_COLLECTION_ROOM);
+      List<String> arrayFullLocation = room.value.location.split(', ');
+
       room.value = room.value.copyWith(
         id: postId,
         createdByUid: uid,
         dateTime: timeStamp,
         isRented: false,
         status: RoomStatus.APPROVED,
-        locationArray: [
-          selectedCity.value!.name,
-          selectedDistrict.value!.name,
-          selectedWard.value!.name,
-          streetTextController.text,
-          addressTextController.text,
-        ],
+        locationArray: arrayFullLocation,
         regulations: regulationsTextController.text,
       );
 
