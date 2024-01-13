@@ -757,6 +757,36 @@ class DetailScreen extends StatelessWidget {
                         height: 16,
                       ),
                       const Text(
+                        'Nội quy',
+                        style: TextStyle(
+                            color: secondary20,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: secondary60, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: ExpandableText(
+                          controller.room!.regulations,
+                          expandText: 'Xem thêm',
+                          collapseText: 'Rút gọn',
+                          maxLines: 3,
+                          linkColor: primary40,
+                          linkStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: secondary40),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
                         'Đánh giá',
                         style: TextStyle(
                             color: secondary20,
@@ -916,27 +946,6 @@ class DetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      // them listview o day
-                      const Text(
-                        'Nội quy phòng',
-                        style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      ExpandableText(
-                        controller.room!.regulations,
-                        expandText: 'Xem thêm',
-                        collapseText: 'Rút gọn',
-                        maxLines: 2,
-                        linkColor: primary40,
-                        linkStyle: const TextStyle(fontWeight: FontWeight.bold),
-                        style: const TextStyle(color: secondary40),
                       ),
                       const SizedBox(
                         height: 80,
