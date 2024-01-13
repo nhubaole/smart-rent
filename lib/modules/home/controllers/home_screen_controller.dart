@@ -102,65 +102,30 @@ class HomeScreenController extends GetxController {
   void fetchDataAndConvertToList() {
     List<Map<String, dynamic>> fetchedData = [
       {
-        'address': 'Quận 1',
+        'address': 'Thủ Đức',
         'photoUrl':
-            'https://images.unsplash.com/photo-1696986293936-d8d080a88f50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2671&q=80',
-      },
-      {
-        'address': 'Quận 2',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1695653422676-d9dd88400e21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
+            'https://upload.wikimedia.org/wikipedia/commons/1/15/Ch%E1%BB%A3_Th%E1%BB%A7_%C4%90%E1%BB%A9c.jpg',
       },
       {
         'address': 'Quận 3',
         'photoUrl':
-            'https://images.unsplash.com/photo-1697044504071-12d33cc757cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
+            'https://travelsgcc.com/wp-content/uploads/2020/03/ho-con-rua.jpg',
+      },
+      {
+        'address': 'Bình Thạnh',
+        'photoUrl':
+            'https://go2joy.s3.ap-southeast-1.amazonaws.com/blog/wp-content/uploads/2023/01/04154942/landmark-81-binh-thanh.jpg',
       },
       {
         'address': 'Quận 1',
         'photoUrl':
-            'https://images.unsplash.com/photo-1696986293936-d8d080a88f50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2671&q=80',
+            'https://images2.thanhnien.vn/528068263637045248/2023/3/16/base64-16789444054471877099818.png',
       },
       {
-        'address': 'Quận 2',
+        'address': 'Quận 7',
         'photoUrl':
-            'https://images.unsplash.com/photo-1695653422676-d9dd88400e21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
-      {
-        'address': 'Quận 3',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1697044504071-12d33cc757cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
-      {
-        'address': 'Quận 1',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1696986293936-d8d080a88f50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2671&q=80',
-      },
-      {
-        'address': 'Quận 2',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1695653422676-d9dd88400e21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
-      {
-        'address': 'Quận 3',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1697044504071-12d33cc757cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
-      {
-        'address': 'Quận 1',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1696986293936-d8d080a88f50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2671&q=80',
-      },
-      {
-        'address': 'Quận 2',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1695653422676-d9dd88400e21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
-      {
-        'address': 'Quận 3',
-        'photoUrl':
-            'https://images.unsplash.com/photo-1697044504071-12d33cc757cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2574&q=80',
-      },
+            'https://dulichkhampha24.com/wp-content/uploads/2020/01/cau-anh-sao-sai-gon-3.jpg',
+      }
     ];
 
     dataList.assignAll(fetchedData);

@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/widget/button_fill.dart';
 import 'package:smart_rent/core/widget/date_input_form_field.dart';
 import 'package:smart_rent/modules/handle_rent_room_tenant/controllers/send_request_rent_room_controller.dart';
 
@@ -35,7 +37,7 @@ class SendRequestRentRoom extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: primary98,
         title: const Text(
-          'Gửi yếu cầu thuê phòng',
+          'Gửi yêu cầu thuê phòng',
           style: TextStyle(
             color: primary40,
             fontSize: 22,
@@ -63,11 +65,14 @@ class SendRequestRentRoom extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    SizedBox(
+                      height: 20,
+                    ),
                     const Text(
                       'Yêu cầu thuê phòng',
                       style: TextStyle(
                         color: primary40,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -75,11 +80,11 @@ class SendRequestRentRoom extends StatelessWidget {
                       height: deviceHeight * 0.01,
                     ),
                     Text(
-                      'Giá đề xuất',
+                      'GIÁ ĐỀ XUẤT',
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.4),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        color: secondary40,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(
@@ -98,8 +103,7 @@ class SendRequestRentRoom extends StatelessWidget {
                           sendRequestController.priceSuggestTextController,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
-                        hintText:
-                            '${sendRequestController.currencyFormat.format(room.price)} VNĐ',
+                        hintText: 'Nhập giá đề xuất cho chủ phòng',
                         suffixText: '| VNĐ',
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -110,14 +114,14 @@ class SendRequestRentRoom extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: deviceHeight * 0.008,
+                      height: 20,
                     ),
                     Text(
                       'SỐ NGƯỜI DỰ ĐỊNH Ở CÙNG',
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.4),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        color: secondary40,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(
@@ -146,14 +150,14 @@ class SendRequestRentRoom extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: deviceHeight * 0.008,
+                      height: 20,
                     ),
                     Text(
                       'NGÀY BẮT ĐẦU THUÊ',
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.4),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        color: secondary40,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(
@@ -187,8 +191,8 @@ class SendRequestRentRoom extends StatelessWidget {
                               firstDate: DateTime.now().year,
                               lastDate: DateTime.now().year + 1,
                               borderRadius: BorderRadius.circular(8),
-                              borderWidth: 2,
-                              borderColor: primary60,
+                              borderWidth: 1,
+                              borderColor: secondary20,
                               textEditingController:
                                   sendRequestController.dateJoinTextController,
                               labelText: 'Ngày nhận phòng',
@@ -213,14 +217,14 @@ class SendRequestRentRoom extends StatelessWidget {
                           : const SizedBox(),
                     ),
                     SizedBox(
-                      height: deviceHeight * 0.008,
+                      height: 20,
                     ),
                     Text(
                       'NGÀY KẾT THÚC THUÊ',
                       style: TextStyle(
-                        color: Colors.black.withOpacity(0.4),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        color: secondary40,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(
@@ -239,7 +243,7 @@ class SendRequestRentRoom extends StatelessWidget {
                           sendRequestController.isLeave.value = value;
                         },
                         title: const Text(
-                          'Tôi muốn thuê dài hạn',
+                          'Chưa xác định ngày trả phòng',
                           style: TextStyle(
                             color: primary40,
                             fontSize: 16,
@@ -254,8 +258,8 @@ class SendRequestRentRoom extends StatelessWidget {
                               firstDate: DateTime.now().year,
                               lastDate: DateTime.now().year + 1,
                               borderRadius: BorderRadius.circular(8),
-                              borderWidth: 2,
-                              borderColor: primary60,
+                              borderWidth: 1,
+                              borderColor: secondary20,
                               textEditingController:
                                   sendRequestController.dateLeaveTextController,
                               labelText: 'Ngày trả phòng trong tương lai',
@@ -283,14 +287,14 @@ class SendRequestRentRoom extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: deviceHeight * 0.008,
+                height: 20,
               ),
               Text(
                 'YÊU CẦU ĐẶC BIỆT',
                 style: TextStyle(
-                  color: Colors.black.withOpacity(0.4),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  color: secondary40,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(
@@ -303,9 +307,7 @@ class SendRequestRentRoom extends StatelessWidget {
                       sendRequestController.specialRequestTextController,
                   onChanged: (value) {},
                   decoration: InputDecoration(
-                    hintText: 'Nhận xét về phòng trọ này',
-                    filled: true,
-                    fillColor: secondary90,
+                    hintText: 'Nhập yêu cầu đặc biệt của bạn',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(deviceWidth * 0.001),
@@ -318,15 +320,15 @@ class SendRequestRentRoom extends StatelessWidget {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
-                        color: primary95,
-                        width: 2,
+                        color: secondary20,
+                        width: 1,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
-                        color: primary95,
-                        width: 2,
+                        color: secondary20,
+                        width: 1,
                       ),
                     ),
                   ),
@@ -336,13 +338,13 @@ class SendRequestRentRoom extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: deviceHeight * 0.008,
+                height: 20,
               ),
               const Text(
                 'Thông tin cá nhân',
                 style: TextStyle(
                   color: primary40,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -357,30 +359,35 @@ class SendRequestRentRoom extends StatelessWidget {
                   'Bằng việc gửi yêu cầu thuê phòng, chủ phòng có thể nhìn thấy các thông tin cá nhân của bạn',
                   style: TextStyle(
                     color: secondary40,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
                     textBaseline: TextBaseline.alphabetic,
                   ),
                 ),
               ),
               SizedBox(
-                height: deviceHeight * 0.008,
+                height: 20,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    sendRequestController.sendRequest(room);
-                  },
-                  child: const Text(
-                    'Gửi yêu cầu',
-                    style: TextStyle(
-                      color: primary40,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+              Container(
+                width: double.infinity,
+                height: 60,
+                child: ButtonFill(
+                    onPressed: () {
+                      sendRequestController.sendRequest(room);
+                    },
+                    icon: const Icon(
+                      CupertinoIcons.location_fill,
+                      size: 20,
+                      color: Colors.white,
                     ),
-                  ),
-                ),
+                    text: const Text(
+                      'Gửi yêu cầu',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    backgroundColor: primary60,
+                    borderRadius: BorderRadius.circular(100)),
               ),
             ],
           ),

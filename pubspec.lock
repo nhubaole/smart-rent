@@ -353,6 +353,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  easy_image_viewer:
+    dependency: "direct main"
+    description:
+      name: easy_image_viewer
+      sha256: "6d765e9040a6e625796b387140b95f23318f25a448bf2647af30d17a77cea022"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   encrypt:
     dependency: transitive
     description:
@@ -1201,13 +1209,13 @@ packages:
     source: hosted
     version: "1.0.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
-      sha256: a1aa8aaa2542a6bc57e381f132af822420216c80d4781f7aa085ca3229208aaa
+      sha256: b27217933eeeba8ff24845c34003b003b2b22151de3c908d0e679e8fe1aa078b
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   path_provider_android:
     dependency: transitive
     description:
@@ -1248,6 +1256,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  pdf_render:
+    dependency: "direct main"
+    description:
+      name: pdf_render
+      sha256: "8d04e46e1db50a4fa502b6cd6d4dfe9eda8ec5f81a98ecfa78fe62b356bd515c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.5"
   permission_handler:
     dependency: transitive
     description:

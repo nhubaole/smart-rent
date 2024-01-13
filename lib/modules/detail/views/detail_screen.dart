@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,24 +108,23 @@ class DetailScreen extends StatelessWidget {
                             heroTag: UniqueKey(),
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(
-                                width: 2,
-                                color: primary60,
+                                width: 1,
+                                color: primary40,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [
                                 Text(
-                                  'Sửa yêu cầu',
-                                  style: TextStyle(color: primary60),
+                                  'Sửa yêu cầu ',
+                                  style: TextStyle(color: primary40),
                                 ),
                                 SizedBox(
-                                  width: 1,
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.wifi_protected_setup_rounded,
-                                  color: primary60,
+                                  CupertinoIcons.location_fill,
+                                  color: primary40,
                                 ),
                               ],
                             ),
@@ -188,8 +189,7 @@ class DetailScreen extends StatelessWidget {
                                 width: 1,
                                 color: Colors.red,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [
@@ -277,24 +277,23 @@ class DetailScreen extends StatelessWidget {
                             heroTag: UniqueKey(),
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(
-                                width: 2,
-                                color: primary60,
+                                width: 1,
+                                color: primary40,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [
                                 Text(
-                                  'Yêu cầu thuê phòng',
-                                  style: TextStyle(color: primary60),
+                                  'Yêu cầu thuê phòng ',
+                                  style: TextStyle(color: primary40),
                                 ),
                                 SizedBox(
                                   width: 2,
                                 ),
                                 Icon(
-                                  Icons.contact_emergency_sharp,
-                                  color: primary60,
+                                  CupertinoIcons.location_fill,
+                                  color: primary40,
                                 ),
                               ],
                             ),
@@ -756,6 +755,36 @@ class DetailScreen extends StatelessWidget {
                         height: 16,
                       ),
                       const Text(
+                        'Nội quy',
+                        style: TextStyle(
+                            color: secondary20,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: secondary60, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: ExpandableText(
+                          controller.room!.regulations,
+                          expandText: 'Xem thêm',
+                          collapseText: 'Rút gọn',
+                          maxLines: 3,
+                          linkColor: primary40,
+                          linkStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: secondary40),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
                         'Đánh giá',
                         style: TextStyle(
                             color: secondary20,
@@ -917,91 +946,8 @@ class DetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 4,
+                        height: 80,
                       ),
-                      // them listview o day
-                      const Text(
-                        'Nội quy phòng',
-                        style: TextStyle(
-                          color: secondary20,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: deviceHeight * 0.08),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => controller.isShowMore.value
-                                  ? Padding(
-                                      padding: EdgeInsets.only(
-                                        // bottom: deviceHeight * 0.1,
-                                        bottom: deviceHeight * 0.008,
-                                      ),
-                                      child: SizedBox(
-                                        width: deviceWidth * 0.9,
-                                        child: Text(
-                                          room.regulations,
-                                          style: const TextStyle(
-                                            color: secondary20,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 16,
-                                          ),
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: deviceHeight * 0.008,
-                                      ),
-                                      child: SizedBox(
-                                        width: deviceWidth * 0.9,
-                                        child: Text(
-                                          room.regulations,
-                                          style: const TextStyle(
-                                            color: secondary20,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.isShowMore.value =
-                                      !controller.isShowMore.value;
-                                },
-                                child: Obx(
-                                  () => !controller.isShowMore.value
-                                      ? const Text(
-                                          'Show less',
-                                          style: TextStyle(
-                                            color: Colors
-                                                .blue, // Màu của nút "Show more"
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Show more',
-                                          style: TextStyle(
-                                            color: Colors
-                                                .blue, // Màu của nút "Show more"
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -1078,7 +1024,54 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                      : const SizedBox(),
+                      : Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(red90),
+                                foregroundColor:
+                                    MaterialStateProperty.all(red50),
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)))),
+                            onPressed: () async {
+                              Get.defaultDialog(
+                                title: 'Thông báo',
+                                middleText:
+                                    'Bạn có chắc chắn muốn xóa phòng trọ này?',
+                                textConfirm: 'Xóa',
+                                textCancel: 'Hủy',
+                                confirmTextColor: Colors.white,
+                                buttonColor: primary40,
+                                backgroundColor: primary98,
+                                cancelTextColor: primary40,
+                                onConfirm: () async {
+                                  FireStoreMethods()
+                                      .updateStatusRoom(room.id, 'DELETED');
+                                  Get.back();
+                                  Get.back();
+                                },
+                              );
+                            },
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.delete,
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Xóa'),
+                              ],
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     width: 8,
                   ),
@@ -1113,7 +1106,36 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                         )
-                      : const SizedBox(),
+                      : Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(secondary90),
+                                foregroundColor:
+                                    MaterialStateProperty.all(secondary40),
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)))),
+                            onPressed: () {},
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Sửa'),
+                              ],
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -1129,12 +1151,27 @@ class DetailScreen extends StatelessWidget {
       child: Stack(
         children: [
           Obx(
-            () => CachedNetworkImage(
-              imageUrl:
-                  controller.room!.images[controller.activeImageIdx.value],
-              height: MediaQuery.sizeOf(context).width + 50,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            () => InkWell(
+              onTap: () {
+                MultiImageProvider multiImageProvider = MultiImageProvider(
+                    controller.room!.images
+                        .map((url) => NetworkImage(url))
+                        .toList(),
+                    initialIndex: controller.activeImageIdx.value);
+                showImageViewerPager(context, multiImageProvider,
+                    onPageChanged: (page) {
+                  print("page changed to $page");
+                }, onViewerDismissed: (page) {
+                  print("dismissed while on page $page");
+                });
+              },
+              child: CachedNetworkImage(
+                imageUrl:
+                    controller.room!.images[controller.activeImageIdx.value],
+                height: MediaQuery.sizeOf(context).width + 50,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(

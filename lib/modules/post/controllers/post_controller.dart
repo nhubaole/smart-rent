@@ -230,7 +230,7 @@ class PostController extends GetxController
         createdByUid: uid,
         dateTime: timeStamp,
         isRented: false,
-        status: RoomStatus.PENDING,
+        status: RoomStatus.APPROVED,
         locationArray: [
           selectedCity.value!.name,
           selectedDistrict.value!.name,

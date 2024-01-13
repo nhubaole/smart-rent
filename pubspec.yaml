@@ -83,6 +83,10 @@ dependencies:
   quantity_input: ^1.0.2
   zego_zim: ^2.6.0
   zego_zimkit: ^1.11.1
+  easy_image_viewer: ^1.4.0
+  path_provider: ^2.1.2
+  pdf_render: ^1.4.5
+
 
 dev_dependencies:
   build_runner: ^2.4.6
@@ -125,6 +129,7 @@ flutter:
     - assets/data/cities.json
     - assets/data/districts.json
     - assets/data/wards.json
+    - assets/data/policy.pdf
     - assets/lottie/empty.json
     - assets/lottie/empty_search.json
     - assets/lottie/empty_box.json
@@ -135,6 +140,17 @@ flutter:
     - assets/lottie/noti_payment.json
     - assets/images/ic_location.svg
     - assets/images/ic_money.svg
+
+    - assets/images/history.png
+    - assets/images/favorite.png
+    - assets/images/rent.png
+    - assets/images/request_rent.png
+    - assets/images/monthly_invoice.png
+    - assets/images/posted.png
+    - assets/images/invoice_deposit.png
+    - assets/images/request_return.png
+    - assets/images/payment.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
