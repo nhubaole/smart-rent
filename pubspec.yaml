@@ -136,6 +136,16 @@ flutter:
     - assets/lottie/noti_payment.json
     - assets/images/ic_location.svg
     - assets/images/ic_money.svg
+
+    - assets/images/history.png
+    - assets/images/favorite.png
+    - assets/images/rent.png
+    - assets/images/request_rent.png
+    - assets/images/monthly_invoice.png
+    - assets/images/posted.png
+    - assets/images/invoice_deposit.png
+    - assets/images/request_return.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
