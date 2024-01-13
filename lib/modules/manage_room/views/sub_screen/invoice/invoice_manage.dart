@@ -46,7 +46,7 @@ class _InvoiceManageState extends State<InvoiceManage>
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Quản lí hóa đơn',
+            'Hóa đơn tiền cọc',
             style: TextStyle(
               color: primary40,
               fontSize: 22,
@@ -63,14 +63,12 @@ class _InvoiceManageState extends State<InvoiceManage>
                 () => Tab(
                   text:
                       'Chưa thanh toán (${invoiceManageController.listInvoiceUnPaid.value.length})',
-                  icon: const Icon(Icons.receipt),
                 ),
               ),
               Obx(
                 () => Tab(
                   text:
                       'Đã thanh toán (${invoiceManageController.listInvoicePaid.value.length})',
-                  icon: const Icon(Icons.receipt_long_outlined),
                 ),
               ),
             ],

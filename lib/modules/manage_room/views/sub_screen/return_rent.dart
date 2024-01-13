@@ -54,7 +54,7 @@ class ReturnRentScreen extends StatelessWidget {
                                 width: double.infinity,
                               ),
                               Text(
-                                '${returnRentController.profileOwner.value!.username}\nchưa có ai trả phòng!!!',
+                                '${returnRentController.profileOwner.value!.username}\nchưa có yêu cầu trả phòng nào!!!',
                                 style: const TextStyle(
                                   color: secondary20,
                                   fontSize: 18,

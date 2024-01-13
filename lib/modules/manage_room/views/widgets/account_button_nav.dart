@@ -15,7 +15,8 @@ class AccountButtonNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
@@ -37,24 +38,26 @@ class AccountButtonNav extends StatelessWidget {
                 children: [
                   Image.asset(
                     firstIcon,
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                   ),
                   Expanded(child: SizedBox()),
-                  nameButton ==  "Hóa đơn hàng tháng" ? Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        color: primary40,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Text(
-                      "Sắp ra mắt",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.end,
-                    ),
-                  ) : SizedBox()
+                  nameButton == "Hóa đơn hàng tháng"
+                      ? Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: primary40,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: Text(
+                            "Sắp ra mắt",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.end,
+                          ),
+                        )
+                      : SizedBox()
                 ],
               ),
               SizedBox(

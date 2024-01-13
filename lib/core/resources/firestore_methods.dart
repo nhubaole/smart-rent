@@ -68,7 +68,10 @@ class FireStoreMethods {
           .orderBy('dateTime', descending: true)
           .get();
       print('querySnapshot.docs.length: ${querySnapshot.docs.length}');
-      result = querySnapshot.docs.map((e) => Room.fromJson(e.data())).where((element) => element.status != RoomStatus.DELETED).toList();
+      result = querySnapshot.docs
+          .map((e) => Room.fromJson(e.data()))
+          .where((element) => element.status != RoomStatus.DELETED)
+          .toList();
     } catch (e) {
       print(e.toString());
       Get.snackbar('Error', e.toString());
@@ -461,6 +464,7 @@ class FireStoreMethods {
     String statusInvoice,
     int page,
   ) async {
+    print("uid $uid");
     List<Map<String, dynamic>> listInvoice = [];
     try {
       QuerySnapshot querySnapshot = await _firestore

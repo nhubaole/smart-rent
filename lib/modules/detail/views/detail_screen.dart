@@ -929,80 +929,18 @@ class DetailScreen extends StatelessWidget {
                           fontSize: 16,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: deviceHeight * 0.08),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => controller.isShowMore.value
-                                  ? Padding(
-                                      padding: EdgeInsets.only(
-                                        // bottom: deviceHeight * 0.1,
-                                        bottom: deviceHeight * 0.008,
-                                      ),
-                                      child: SizedBox(
-                                        width: deviceWidth * 0.9,
-                                        child: Text(
-                                          room.regulations,
-                                          style: const TextStyle(
-                                            color: secondary20,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 16,
-                                          ),
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: deviceHeight * 0.008,
-                                      ),
-                                      child: SizedBox(
-                                        width: deviceWidth * 0.9,
-                                        child: Text(
-                                          room.regulations,
-                                          style: const TextStyle(
-                                            color: secondary20,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.isShowMore.value =
-                                      !controller.isShowMore.value;
-                                },
-                                child: Obx(
-                                  () => !controller.isShowMore.value
-                                      ? const Text(
-                                          'Show less',
-                                          style: TextStyle(
-                                            color: Colors
-                                                .blue, // Màu của nút "Show more"
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Show more',
-                                          style: TextStyle(
-                                            color: Colors
-                                                .blue, // Màu của nút "Show more"
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                      ExpandableText(
+                        controller.room!.regulations,
+                        expandText: 'Xem thêm',
+                        collapseText: 'Rút gọn',
+                        maxLines: 2,
+                        linkColor: primary40,
+                        linkStyle: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: secondary40),
+                      ),
+                      const SizedBox(
+                        height: 80,
+                      ),
                     ],
                   ),
                 ),

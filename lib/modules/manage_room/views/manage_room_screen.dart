@@ -7,6 +7,7 @@ import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice_water_el
 import 'package:smart_rent/modules/manage_room/views/sub_screen/liked_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/rented_room.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/renting_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/request_rent.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/return_rent.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
@@ -40,7 +41,7 @@ class ManageRoomScreen extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.only(
-                top: deviceHeight * 0.05,
+                top: deviceHeight * 0.06,
                 left: deviceWidth * 0.05,
                 right: deviceWidth * 0.08,
               ),
@@ -55,13 +56,13 @@ class ManageRoomScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: deviceHeight * 0.1,
+            top: deviceHeight * 0.12,
             left: 0,
             child: Container(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery.sizeOf(context).height - deviceHeight * 0.2,
               width: MediaQuery.sizeOf(context).width,
               padding: const EdgeInsets.symmetric(
-                horizontal: 24,
+                horizontal: 20,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -70,180 +71,181 @@ class ManageRoomScreen extends StatelessWidget {
                   topRight: Radius.circular(deviceWidth * 0.08),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Phòng của bạn",
-                    style: TextStyle(
-                        color: primary40,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng đã đăng',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const PostedRoomScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/posted.png',
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Phòng của bạn",
+                      style: TextStyle(
+                          color: primary40,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng đã đăng',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const PostedRoomScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/posted.png',
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng yêu thích',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const LikedRoomScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/favorite.png',
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Yêu cầu của bạn",
-                    style: TextStyle(
-                        color: primary40,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng yêu cầu thuê',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const RequestRentScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/request_rent.png',
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng yêu thích',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const LikedRoomScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/favorite.png',
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng yêu cầu trả',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const ReturnRentScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/request_return.png',
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Yêu cầu của bạn",
+                      style: TextStyle(
+                          color: primary40,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng yêu cầu thuê',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const RequestRentScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/request_rent.png',
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Lịch sử thuê phòng",
-                    style: TextStyle(
-                        color: primary40,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng đang thuê',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const RentedRoomScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/rent.png',
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Phòng đã thuê',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const RentedRoomScreen(),
-                            );
-                          },
-                          firstIcon: 'assets/images/history.png',
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng yêu cầu trả',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const ReturnRentScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/request_return.png',
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Hóa đơn của bạn",
-                    style: TextStyle(
-                        color: primary40,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Hóa đơn tiền cọc',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              const InvoiceManage(),
-                            );
-                          },
-                          firstIcon: 'assets/images/invoice_deposit.png',
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Lịch sử thuê phòng",
+                      style: TextStyle(
+                          color: primary40,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng đang thuê',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const RentingRoomScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/rent.png',
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: AccountButtonNav(
-                          nameButton: 'Hóa đơn hàng tháng',
-                          onPressed: () {
-                            manageRoomController.goToScreen(
-                              InvoiceWEManager(),
-                            );
-                          },
-                          firstIcon: 'assets/images/monthly_invoice.png',
+                        SizedBox(
+                          width: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Phòng đã thuê',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const RentedRoomScreen(),
+                              );
+                            },
+                            firstIcon: 'assets/images/history.png',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Hóa đơn của bạn",
+                      style: TextStyle(
+                          color: primary40,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Hóa đơn tiền cọc',
+                            onPressed: () {
+                              manageRoomController.goToScreen(
+                                const InvoiceManage(),
+                              );
+                            },
+                            firstIcon: 'assets/images/invoice_deposit.png',
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: AccountButtonNav(
+                            nameButton: 'Hóa đơn hàng tháng',
+                            onPressed: () {},
+                            firstIcon: 'assets/images/monthly_invoice.png',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

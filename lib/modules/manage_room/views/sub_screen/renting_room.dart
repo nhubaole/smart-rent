@@ -6,14 +6,14 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/rented_room_controller.dart';
 
-class RentedRoomScreen extends StatefulWidget {
-  const RentedRoomScreen({super.key});
+class RentingRoomScreen extends StatefulWidget {
+  const RentingRoomScreen({super.key});
 
   @override
-  State<RentedRoomScreen> createState() => _RentedRoomScreenState();
+  State<RentingRoomScreen> createState() => _RentingRoomScreenState();
 }
 
-class _RentedRoomScreenState extends State<RentedRoomScreen>
+class _RentingRoomScreenState extends State<RentingRoomScreen>
     with SingleTickerProviderStateMixin {
   final rentedRoomController = Get.put(RentedRoomController());
   late double deviceHeight;
@@ -21,7 +21,7 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
 
   @override
   void initState() {
-    rentedRoomController.getListHistoryRoom(false);
+    rentedRoomController.getListRentingRoom(false);
     super.initState();
   }
 
@@ -33,7 +33,7 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Phòng đã thuê',
+          'Phòng đang thuê',
           style: TextStyle(
             color: primary40,
             fontSize: 22,
@@ -43,14 +43,14 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
       ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: listHistoryRoom()),
+          child: listRentingRoom()),
     );
   }
 
-  Widget listHistoryRoom() {
+  Widget listRentingRoom() {
     return RefreshIndicator(
       onRefresh: () {
-        return rentedRoomController.getListHistoryRoom(false);
+        return rentedRoomController.getListRentingRoom(false);
       },
       child: Center(
         child: Obx(
@@ -64,7 +64,7 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
                     ),
                   ),
                 )
-              : rentedRoomController.listHistoryRoom.value.isEmpty
+              : rentedRoomController.listRentingRoom.value.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +93,7 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
                               child: OutlinedButton(
                                 onPressed: () {
                                   rentedRoomController
-                                      .getListHistoryRoom(false);
+                                      .getListRentingRoom(false);
                                 },
                                 style: ButtonStyle(
                                   side: MaterialStateProperty.all(
@@ -135,22 +135,22 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
                             // mainAxisSpacing: 20,
                           ),
                           itemCount: rentedRoomController
-                                  .listHistoryRoom.value.length +
+                                  .listRentingRoom.value.length +
                               1,
                           itemBuilder: (context, index) {
                             if (index <
                                 rentedRoomController
-                                    .listHistoryRoom.value.length) {
+                                    .listRentingRoom.value.length) {
                               return RoomItem(
-                                isRenting: false,
+                                isRenting: true,
                                 isHandleRentRoom: false,
                                 isHandleRequestReturnRoom: false,
                                 isRequestReturnRent: false,
                                 isRequestRented: false,
                                 room: rentedRoomController
-                                    .listHistoryRoom.value[index],
+                                    .listRentingRoom.value[index],
                                 isLiked: rentedRoomController
-                                    .listHistoryRoom.value[index].listLikes
+                                    .listRentingRoom.value[index].listLikes
                                     .contains(
                                   FirebaseAuth.instance.currentUser!.uid,
                                 ),
@@ -170,7 +170,7 @@ class _RentedRoomScreenState extends State<RentedRoomScreen>
                                           child: OutlinedButton(
                                             onPressed: () {
                                               rentedRoomController
-                                                  .getListHistoryRoom(true);
+                                                  .getListRentingRoom(true);
                                             },
                                             style: ButtonStyle(
                                               side: MaterialStateProperty.all(

@@ -84,6 +84,9 @@ dependencies:
   zego_zim: ^2.6.0
   zego_zimkit: ^1.11.1
   easy_image_viewer: ^1.4.0
+  path_provider: ^2.1.2
+  pdf_render: ^1.4.5
+
 
 dev_dependencies:
   build_runner: ^2.4.6
@@ -126,6 +129,7 @@ flutter:
     - assets/data/cities.json
     - assets/data/districts.json
     - assets/data/wards.json
+    - assets/data/policy.pdf
     - assets/lottie/empty.json
     - assets/lottie/empty_search.json
     - assets/lottie/empty_box.json
