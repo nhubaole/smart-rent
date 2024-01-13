@@ -207,7 +207,7 @@ class _RoomItemState extends State<RoomItem> {
                     Text(
                       widget.room.price >= 1000000
                           ? '${widget.room.price / 1000000} triệu VND/người'
-                          : '${widget.room.price} VND/người',
+                          : '${currencyFormat.format(widget.room.price)} VND/người',
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

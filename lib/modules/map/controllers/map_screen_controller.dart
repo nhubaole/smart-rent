@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/google_map_services.dart';
+import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 
 class MapScreenController extends GetxController {
   final bool fromDetailRoom;
@@ -34,6 +35,7 @@ class MapScreenController extends GetxController {
   @override
   void onInit() async {
     print(roomInArea);
+    isLoading.value = true;
     await getCurrentLocation();
     if (fromDetailRoom == true) {
       destination.value = LatLng(lat!, lon!);
@@ -41,7 +43,7 @@ class MapScreenController extends GetxController {
     } else {
       await getListMarkers(roomInArea!);
     }
-
+    isLoading.value = false;
     super.onInit();
   }
 
@@ -51,11 +53,10 @@ class MapScreenController extends GetxController {
   }
 
   Future<void> getCurrentLocation() async {
-    Location location = Location();
-
     bool serviceEnabled;
-    PermissionStatus permissionGranted;
     LocationData locationData;
+    Location location = Location();
+    PermissionStatus permissionGranted;
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
@@ -203,17 +204,49 @@ class MapScreenController extends GetxController {
           'vi',
         );
         await getPolylinePointsInArea(latLng);
+        isLoading.value = true;
+
         listMarkers.value.add(
           Marker(
-            markerId: MarkerId(listRoomInArea[i].title),
-            position: latLng,
-            infoWindow: const InfoWindow(title: 'Business 1'),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          ),
+              markerId: MarkerId(listRoomInArea[i].title),
+              position: latLng,
+              infoWindow: InfoWindow(
+                title: listRoomInArea[i].location,
+                snippet:
+                    '${listRoomInArea[i].title} Giá: ${listRoomInArea[i].price}',
+                onTap: () {
+                  Get.off(
+                    () => DetailScreen(
+                      room: listRoomInArea[i],
+                      isRequestRented: false,
+                      isRequestReturnRent: false,
+                      isHandleRequestReturnRoom: false,
+                      isHandleRentRoom: false,
+                      isRenting: false,
+                    ),
+                  );
+                },
+              ),
+              icon:
+                  BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)
+              // icon: await CustomMarker(
+              //   room: listRoomInArea[i],
+              // ).toBitmapDescriptor(
+              //   logicalSize: const Size(100, 100),
+              //   imageSize: const Size(500, 200),
+              // ),
+              ),
         );
       }
     }
     isLoading.value = false;
+  }
+
+  double coordinateDistance(lat1, lon1, lat2, lon2) {
+    const p = 0.017453292519943295;
+    final a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
   }
 }
