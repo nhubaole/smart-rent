@@ -108,24 +108,23 @@ class DetailScreen extends StatelessWidget {
                             heroTag: UniqueKey(),
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(
-                                width: 2,
-                                color: primary60,
+                                width: 1,
+                                color: primary40,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [
                                 Text(
-                                  'Sửa yêu cầu',
-                                  style: TextStyle(color: primary60),
+                                  'Sửa yêu cầu ',
+                                  style: TextStyle(color: primary40),
                                 ),
                                 SizedBox(
-                                  width: 1,
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.wifi_protected_setup_rounded,
-                                  color: primary60,
+                                  CupertinoIcons.location_fill,
+                                  color: primary40,
                                 ),
                               ],
                             ),
@@ -190,8 +189,7 @@ class DetailScreen extends StatelessWidget {
                                 width: 1,
                                 color: Colors.red,
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(deviceHeight * 0.1),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             label: const Row(
                               children: [

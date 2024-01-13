@@ -20,7 +20,7 @@ class DetailInvoiceScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: primary98,
         title: const Text(
-          'Gửi yếu cầu trả phòng',
+          'Gửi yêu cầu trả phòng',
           style: TextStyle(
             color: primary40,
             fontSize: 22,
