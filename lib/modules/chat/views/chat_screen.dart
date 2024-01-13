@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -13,6 +14,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smart_rent/core/model/account/Account.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/resources/firebase_fcm.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:uuid/uuid.dart';
 import 'package:zego_zim/zego_zim.dart';
@@ -30,6 +35,7 @@ class ChatScreen extends StatefulWidget {
   final String conversationID;
   final String conversationName;
   final String userId;
+
   String imgUrl = '';
 
   ScrollController scrollController = ScrollController();
@@ -48,6 +54,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late Account currentAccount;
   List<types.Message> _messages = [];
   List<String> suggest = [
     "Phòng này còn không ạ?",
@@ -55,10 +62,15 @@ class _ChatScreenState extends State<ChatScreen> {
     "Cảm ơn nhưng tôi không thích phòng này."
   ];
   var _user;
+  Future<void> getCurrentAccount() async {
+    currentAccount = await AuthMethods.getUserDetails(
+        FirebaseAuth.instance.currentUser!.uid);
+  }
 
   @override
   void initState() {
     super.initState();
+    getCurrentAccount();
     _user = types.User(
       id: widget.userId,
     );
@@ -149,7 +161,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 customBottomWidget: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       height: 40,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
@@ -467,7 +480,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _handleSendPressed(types.PartialText message) {
+  Future<void> _handleSendPressed(types.PartialText message) async {
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -475,6 +488,19 @@ class _ChatScreenState extends State<ChatScreen> {
       text: message.text,
     );
 
+    String fcmToken = await FireStoreMethods()
+        .getTokenDeviceByPhoneNumber(widget.conversationID);
+    await FirebaseFCM().sendNotificationHTTP(
+      FirebaseAuth.instance.currentUser!.uid,
+      'receiverId',
+      fcmToken,
+      'Tin nhắn mới từ ${currentAccount.username}',
+      message.text,
+      true,
+      'imgUrl',
+      'MESSAGE',
+      {},
+    );
     _addMessage(textMessage);
   }
 

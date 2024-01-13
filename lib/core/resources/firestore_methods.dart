@@ -431,6 +431,24 @@ class FireStoreMethods {
     return token;
   }
 
+  Future<String> getTokenDeviceByPhoneNumber(String phoneNumber) async {
+    String token = '';
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      token = await getTokenDevice(data['uid']);
+    } catch (err) {
+      Get.snackbar('Error', err.toString());
+    }
+    print(token);
+    return token;
+  }
+
   Future<void> setContentNotification(
     String uidOwner,
     Map<String, dynamic> data,
