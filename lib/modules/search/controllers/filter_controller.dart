@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_rent/core/enums/filter_type.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
@@ -28,6 +29,7 @@ class FilterController extends GetxController {
   var filterStringList = RxList<Map<String, dynamic>>([]);
   RxInt itemFilterCount = 0.obs;
   var selectedFilter = Rx<FilterType?>(FilterType.PRICE);
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   RxList<UtilItem> utilList = const [
     UtilItem(utility: Utilities.WC, isChecked: false),
@@ -55,7 +57,7 @@ class FilterController extends GetxController {
     FilterType.SORT,
   ];
 
-  Rx<RangeValues> currentRangeValues = const RangeValues(0, 100000000).obs;
+  Rx<RangeValues> currentRangeValues = const RangeValues(0, 50000000).obs;
   var fromPriceTextController = TextEditingController();
   var toPriceTextController = TextEditingController();
   var quantity = 0.obs;
@@ -71,8 +73,8 @@ class FilterController extends GetxController {
     currentRangeValues.value = values;
     int startValue = currentRangeValues.value.start.round();
     int endValue = currentRangeValues.value.end.round();
-    fromPriceTextController.text = startValue.toString();
-    toPriceTextController.text = endValue.toString();
+    fromPriceTextController.text = currencyFormat.format(startValue);
+    toPriceTextController.text = currencyFormat.format(endValue);
     filter.value = filter.value.copyWith(
         priceFilter: PriceFilter(fromPrice: startValue, toPrice: endValue));
     convertFilterToListString();
@@ -126,7 +128,7 @@ class FilterController extends GetxController {
     filterStringList.clear();
     if (filter.value.priceFilter != null) {
       filterStringList.add({
-        "${filter.value.priceFilter!.fromPrice.toString()} - ${filter.value.priceFilter!.toPrice.toString()}":
+        "${currencyFormat.format(filter.value.priceFilter!.fromPrice)} - ${currencyFormat.format(filter.value.priceFilter!.toPrice)}":
             filter.value.priceFilter
       });
     }
@@ -168,7 +170,7 @@ class FilterController extends GetxController {
     if (type == filter.value.priceFilter.runtimeType) {
       filter.value = filter.value.copyWith(priceFilter: null);
 
-      currentRangeValues.value = RangeValues(0, 100000000);
+      currentRangeValues.value = RangeValues(0, 50000000);
       int startValue = currentRangeValues.value.start.round();
       int endValue = currentRangeValues.value.end.round();
       fromPriceTextController.text = startValue.toString();
