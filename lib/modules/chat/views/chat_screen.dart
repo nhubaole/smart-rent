@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,6 +21,7 @@ import 'package:uuid/uuid.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
+// ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
   ChatScreen(
       {super.key,
@@ -100,16 +99,16 @@ class _ChatScreenState extends State<ChatScreen> {
           centerTitle: true,
           title: Text(
             widget.conversationName,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarBrightness: Brightness.light,
             statusBarIconBrightness: Brightness.light,
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: primary80,
@@ -161,8 +160,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 customBottomWidget: Column(
                   children: [
                     Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
                       height: 40,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
@@ -182,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             },
                             child: Text(
                               suggest[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
