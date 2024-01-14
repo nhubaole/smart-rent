@@ -15,7 +15,16 @@ class ResultItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(DetailScreen(room: room));
+        Get.to(
+          DetailScreen(
+            isRequestReturnRent: false,
+            isRequestRented: false,
+            isHandleRequestReturnRoom: false,
+            isHandleRentRoom: false,
+            isRenting: false,
+            room: room,
+          ),
+        );
       },
       child: Container(
         width: double.infinity,

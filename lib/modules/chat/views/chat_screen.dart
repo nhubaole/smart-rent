@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -9,15 +9,19 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smart_rent/core/model/account/Account.dart';
+import 'package:smart_rent/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/resources/firebase_fcm.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:uuid/uuid.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
+// ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
   ChatScreen(
       {super.key,
@@ -30,6 +34,7 @@ class ChatScreen extends StatefulWidget {
   final String conversationID;
   final String conversationName;
   final String userId;
+
   String imgUrl = '';
 
   ScrollController scrollController = ScrollController();
@@ -48,12 +53,23 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late Account currentAccount;
   List<types.Message> _messages = [];
+  List<String> suggest = [
+    "Phòng này còn không ạ?",
+    "Khi nào mình đi xem phòng được?",
+    "Cảm ơn nhưng tôi không thích phòng này."
+  ];
   var _user;
+  Future<void> getCurrentAccount() async {
+    currentAccount = await AuthMethods.getUserDetails(
+        FirebaseAuth.instance.currentUser!.uid);
+  }
 
   @override
   void initState() {
     super.initState();
+    getCurrentAccount();
     _user = types.User(
       id: widget.userId,
     );
@@ -78,72 +94,116 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 64.0,
-        centerTitle: true,
-        title: Text(
-          widget.conversationName,
-          style: TextStyle(
-              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: primary80,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                primary40,
-                primary80,
-              ],
+        appBar: AppBar(
+          toolbarHeight: 64.0,
+          centerTitle: true,
+          title: Text(
+            widget.conversationName,
+            style: const TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.light,
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: primary80,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  primary40,
+                  primary80,
+                ],
+              ),
             ),
           ),
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          titleSpacing: 0,
+          iconTheme: const IconThemeData(color: primary40),
         ),
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        titleSpacing: 0,
-        iconTheme: const IconThemeData(color: primary40),
-      ),
-      body: Scrollbar(
-        controller: widget.scrollController,
-        child: NotificationListener(
-          onNotification: (ScrollNotification notification) {
-            double progressMedian = notification.metrics.pixels /
-                notification.metrics.maxScrollExtent;
-            int progress = (progressMedian * 100).toInt();
+        body: Scrollbar(
+          controller: widget.scrollController,
+          child: NotificationListener(
+            onNotification: (ScrollNotification notification) {
+              double progressMedian = notification.metrics.pixels /
+                  notification.metrics.maxScrollExtent;
+              int progress = (progressMedian * 100).toInt();
 
-            if (progress >= 90) {
-              queryMoreHistoryMessageList();
-            }
-            return false;
-          },
-          child: Chat(
-            messages: _messages,
-            onAttachmentPressed: _handleAttachmentPressed,
-            onMessageTap: _handleMessageTap,
-            onPreviewDataFetched: _handlePreviewDataFetched,
-            onSendPressed: _handleSendPressed,
-            showUserAvatars: true,
-            showUserNames: true,
-            user: _user,
-            theme: const DefaultChatTheme(
-              inputBackgroundColor: primary40,
-              inputTextColor: Colors.white,
-              primaryColor: primary60,
-              secondaryColor: secondary90,
-            ),
+              if (progress >= 90) {
+                queryMoreHistoryMessageList();
+              }
+              return false;
+            },
+            child: Chat(
+                messages: _messages,
+                onAttachmentPressed: _handleAttachmentPressed,
+                onMessageTap: _handleMessageTap,
+                onPreviewDataFetched: _handlePreviewDataFetched,
+                onSendPressed: _handleSendPressed,
+                showUserAvatars: true,
+                showUserNames: true,
+                user: _user,
+                theme: const DefaultChatTheme(
+                  inputBackgroundColor: primary40,
+                  inputTextColor: Colors.white,
+                  primaryColor: primary60,
+                  secondaryColor: secondary90,
+                ),
+                customBottomWidget: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      height: 40,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return FilledButton(
+                            style: FilledButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              backgroundColor: primary40,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            onPressed: () {
+                              _handleSendPressed(
+                                  PartialText(text: suggest[index]));
+                            },
+                            child: Text(
+                              suggest[index],
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          );
+                        },
+                        itemCount: suggest.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(width: 8);
+                        },
+                      ),
+                    ),
+                    Input(
+                      isAttachmentUploading: false,
+                      onAttachmentPressed: _handleAttachmentPressed,
+                      onSendPressed: _handleSendPressed,
+                    ),
+                  ],
+                )),
           ),
         ),
-      ));
+      );
 
   queryMoreHistoryMessageList() async {
     //await getUser();
@@ -419,7 +479,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void _handleSendPressed(types.PartialText message) {
+  Future<void> _handleSendPressed(types.PartialText message) async {
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -427,6 +487,19 @@ class _ChatScreenState extends State<ChatScreen> {
       text: message.text,
     );
 
+    String fcmToken = await FireStoreMethods()
+        .getTokenDeviceByPhoneNumber(widget.conversationID);
+    await FirebaseFCM().sendNotificationHTTP(
+      FirebaseAuth.instance.currentUser!.uid,
+      'receiverId',
+      fcmToken,
+      'Tin nhắn mới từ ${currentAccount.username}',
+      message.text,
+      true,
+      'imgUrl',
+      'MESSAGE',
+      {},
+    );
     _addMessage(textMessage);
   }
 

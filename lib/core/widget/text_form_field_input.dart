@@ -16,7 +16,7 @@ class TextFormFieldInput extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final int? maxLength;
 
-  const TextFormFieldInput({
+  TextFormFieldInput({
     super.key,
     this.maxLength,
     required this.textEditingController,

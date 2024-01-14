@@ -24,17 +24,21 @@ class Room with _$Room {
     @Default(0) int electricityCost,
     @Default(0) int waterCost,
     @Default(0) int internetCost,
+    @Default(0.0) double sumRating,
     @Default(true) bool hasParking,
     @Default(0) int parkingFee,
     @Default('') String location,
     @Default([]) List<Utilities> utilities,
     @Default('') String createdByUid,
-    @Default('') String dateTime,
+    @Default(0) int dateTime,
     @Default(true) bool isRented,
     @Default(RoomStatus.PENDING) RoomStatus status,
     @Default([]) List<String> images,
     @Default([]) List<String> listComments,
     @Default([]) List<String> listLikes,
+    @Default('UNKNOWN') String rentBy,
+    @Default('') String regulations,
+    @Default([]) List<String> locationArray,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

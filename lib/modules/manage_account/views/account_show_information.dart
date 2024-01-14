@@ -4,18 +4,15 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
 
-class AccountShowInformation extends StatefulWidget {
-  const AccountShowInformation({super.key});
-
-  @override
-  State<AccountShowInformation> createState() => _AccountShowInformationState();
-}
-
-class _AccountShowInformationState extends State<AccountShowInformation> {
-  final mainController = Get.find<AccountDetailController>();
-
+class AccountShowInformation extends StatelessWidget {
+  AccountShowInformation({super.key});
+  late double deviceHeight;
+  late double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    final mainController = Get.find<AccountDetailController>();
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Center(
       child: Obx(
         () => mainController.isLoading.value
@@ -98,8 +95,8 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
+                  SizedBox(
+                    height: deviceHeight * 0.02,
                   ),
                   Obx(
                     () => mainController.profileOwner.value!.verified
@@ -131,33 +128,50 @@ class _AccountShowInformationState extends State<AccountShowInformation> {
                               ),
                             ),
                           )
-                        : Container(
-                            width: 160,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: red90,
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.close,
-                                  color: red60,
+                        : Column(
+                            children: [
+                              Container(
+                                width: deviceWidth * 0.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: red90,
                                 ),
-                                SizedBox(
-                                  width: 8,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.close,
+                                      color: red60,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'Chưa xác thực',
+                                      style: TextStyle(
+                                          color: red60,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Chưa xác thực',
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                ),
+                                child: Text(
+                                  'Xác thực ngay',
                                   style: TextStyle(
-                                    color: red60,
+                                    color: Colors.black.withOpacity(0.9),
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500
+                                    //decoration: TextDecoration.underline,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                   ),
                 ],

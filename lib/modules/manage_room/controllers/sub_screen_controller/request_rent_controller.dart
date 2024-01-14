@@ -4,50 +4,64 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/model/account/Account.dart';
 import 'package:smart_rent/core/model/room/room.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/values/key_value.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class RequestRentController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var isLoading = false.obs;
-  RxList<Room> listRoom = <Room>[].obs;
+  var isLoadMore = false.obs;
+  var listRoom = Rx<List<Room>>([]);
+  List<Map<String, dynamic>> listMap = [];
   var profileOwner = Rx<Account?>(null);
+  var page = Rx<int>(10);
 
   @override
   void onInit() {
-    super.onInit();
-    getListRoom();
+    getListRoom(false);
     getProfile(FirebaseAuth.instance.currentUser!.uid);
+    super.onInit();
   }
 
   Future<void> getProfile(String uid) async {
     isLoading.value = true;
     profileOwner.value = await AuthMethods.getUserDetails(uid);
-
     isLoading.value = false;
   }
 
-  Future<void> getListRoom() async {
-    isLoading.value = true;
-    update();
-    try {
-      final querySnapshot = await firestore
-          .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('createdByUid',
-              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('status', isEqualTo: 'REQUEST')
-          .get();
-      listRoom.value = querySnapshot.docs
-          .map(
-            (e) => Room.fromJson(
-              e.data(),
-            ),
-          )
-          .toList();
-      update();
+  Future<void> getListRoom(bool isPagination) async {
+    if (isPagination) {
+      isLoadMore.value = true;
+      listMap = await FireStoreMethods().getTicketsRequestRent(
+        FirebaseAuth.instance.currentUser!.uid,
+        page.value += 10,
+        'PENDING',
+      );
+
+      for (int i = 0; i < listMap.length; i++) {
+        isLoadMore.value = true;
+        listRoom.value.add(
+          await FireStoreMethods().getRoomById(listMap[i]['roomId']),
+        );
+      }
+
+      isLoadMore.value = false;
+    } else {
+      isLoading.value = true;
+      listRoom.value.clear();
+      listMap = await FireStoreMethods().getTicketsRequestRent(
+        FirebaseAuth.instance.currentUser!.uid,
+        page.value,
+        'PENDING',
+      );
+
+      for (int i = 0; i < listMap.length; i++) {
+        isLoading.value = true;
+        listRoom.value.add(
+          await FireStoreMethods().getRoomById(listMap[i]['roomId']),
+        );
+      }
       isLoading.value = false;
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
     }
   }
 }

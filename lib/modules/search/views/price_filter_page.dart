@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 
@@ -7,6 +8,7 @@ import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 class PriceFilterPage extends StatelessWidget {
   PriceFilterPage({super.key});
   FilterController controller = Get.find();
+  final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   @override
   Widget build(BuildContext context) {
@@ -87,11 +89,13 @@ class PriceFilterPage extends StatelessWidget {
             activeColor: primary40,
             inactiveColor: primary95,
             values: controller.currentRangeValues.value,
-            max: 100000000,
-            divisions: 100,
+            max: 50000000,
+            divisions: 50,
             labels: RangeLabels(
-              controller.currentRangeValues.value.start.round().toString(),
-              controller.currentRangeValues.value.end.round().toString(),
+              currencyFormat
+                  .format(controller.currentRangeValues.value.start.round()),
+              currencyFormat
+                  .format(controller.currentRangeValues.value.end.round()),
             ),
             onChanged: (RangeValues values) {
               controller.setPrice(values);

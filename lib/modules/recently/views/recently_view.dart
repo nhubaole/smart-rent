@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/dialog_otp.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/recently/controllers/recently_view_controller.dart';
 import 'package:smart_rent/modules/recently/views/widgets/recently_dialog_widget.dart';
@@ -51,7 +50,8 @@ class RecentlyViewScreen extends StatelessWidget {
                 if (recentlyViewController.isLoading.value) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: primary60,
+                      color: primary95,
+                      backgroundColor: Colors.white,
                     ),
                   );
                 } else if (recentlyViewController.listRoom.value.isEmpty) {
@@ -77,6 +77,34 @@ class RecentlyViewScreen extends StatelessWidget {
                           ),
                           textAlign: TextAlign.center,
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                recentlyViewController.getListRoom();
+                              },
+                              style: ButtonStyle(
+                                side: MaterialStateProperty.all(
+                                  const BorderSide(
+                                    color: primary40,
+                                  ),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                'Tải lại',
+                                style: TextStyle(
+                                  color: primary40,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -96,16 +124,54 @@ class RecentlyViewScreen extends StatelessWidget {
                         crossAxisSpacing: 5,
                         // mainAxisSpacing: 20,
                       ),
-                      itemCount: recentlyViewController.listRoom.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return RoomItem(
-                          room: recentlyViewController.listRoom[index],
-                          isLiked: recentlyViewController
-                              .listRoom[index].listLikes
-                              .contains(
-                            FirebaseAuth.instance.currentUser!.uid,
-                          ),
-                        );
+                      itemCount:
+                          recentlyViewController.listRoom.value.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index <
+                            recentlyViewController.listRoom.value.length) {
+                          return RoomItem(
+                            isRenting: false,
+                            isHandleRentRoom: false,
+                            isHandleRequestReturnRoom: false,
+                            isRequestReturnRent: false,
+                            isRequestRented: false,
+                            room: recentlyViewController.listRoom.value[index],
+                            isLiked: recentlyViewController
+                                .listRoom.value[index].listLikes
+                                .contains(
+                              FirebaseAuth.instance.currentUser!.uid,
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  recentlyViewController.getListRoom();
+                                },
+                                style: ButtonStyle(
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(
+                                      color: primary40,
+                                    ),
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Tải thêm',
+                                  style: TextStyle(
+                                    color: primary40,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],

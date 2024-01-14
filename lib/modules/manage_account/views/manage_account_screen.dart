@@ -3,19 +3,23 @@ import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/manage_account/views/account_nav_button.dart';
 import 'package:smart_rent/modules/manage_account/views/account_show_information.dart';
 
+// ignore: must_be_immutable
 class ManageAccountScreen extends StatelessWidget {
-  const ManageAccountScreen({super.key});
-
+  ManageAccountScreen({super.key});
+  late double deviceHeight;
+  late double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
           children: [
             Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
+              width: deviceWidth,
+              height: deviceHeight,
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     primary40,
@@ -25,9 +29,12 @@ class ManageAccountScreen extends StatelessWidget {
                   end: Alignment(0.0, -0.5),
                 ),
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 62, horizontal: 24),
-                child: Text(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: deviceHeight * 0.05,
+                  left: deviceWidth * 0.05,
+                ),
+                child: const Text(
                   'Tài khoản',
                   style: TextStyle(
                     fontSize: 22,
@@ -38,29 +45,29 @@ class ManageAccountScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 120,
+              top: deviceHeight * 0.1,
               left: 0,
               right: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 1,
-                width: double.infinity,
-                decoration: const BoxDecoration(
+                height: deviceHeight,
+                width: deviceWidth,
+                decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(deviceWidth * 0.1),
+                    topRight: Radius.circular(deviceWidth * 0.1),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     SizedBox(
-                      height: 30,
+                      height: deviceHeight * 0.01,
                     ),
                     AccountShowInformation(),
                     SizedBox(
-                      height: 30,
+                      height: deviceHeight * 0.01,
                     ),
-                    AccountNavButton(),
+                    const AccountNavButton(),
                   ],
                 ),
               ),

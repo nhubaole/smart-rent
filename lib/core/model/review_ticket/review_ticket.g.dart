@@ -15,7 +15,7 @@ _$ReviewTicketImpl _$$ReviewTicketImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       content: json['content'] as String,
       rating: (json['rating'] as num).toDouble(),
-      createdAt: json['createdAt'] as String,
+      createdAt: json['createdAt'] as num,
       image:
           (json['image'] as List<dynamic>?)?.map((e) => e as String).toList() ??
               const [],

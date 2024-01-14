@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_rent/blank.dart';
+import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class FirebaseFCM {
   final _fibaseMessaging = FirebaseMessaging.instance;
@@ -51,12 +51,6 @@ class FirebaseFCM {
           'id': message.data['id'],
         },
       ),
-      actionButtons: [
-        NotificationActionButton(
-            key: 'AGREED1', label: 'I agree', autoDismissible: true),
-        NotificationActionButton(
-            key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-      ],
     );
   }
 
@@ -69,15 +63,15 @@ class FirebaseFCM {
         title: message.notification!.title,
         body: message.notification!.body,
       ),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'AGREED1',
-          label: 'I agree',
-          autoDismissible: true,
-        ),
-        NotificationActionButton(
-            key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-      ],
+      // actionButtons: [
+      //   NotificationActionButton(
+      //     key: 'AGREED1',
+      //     label: 'I agree',
+      //     autoDismissible: true,
+      //   ),
+      //   NotificationActionButton(
+      //       key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+      // ],
     );
 
     // Get.to(() => NotificationScreen(
@@ -92,23 +86,39 @@ class FirebaseFCM {
   }
 
   Future<String> sendNotificationHTTP(
-    String senderUid,
-    String receiverUid,
+    String senderId,
+    String receiverId,
     String receiverTokenFCM,
-    String typeNoti,
     String title,
     String body,
+    bool sound,
+    String? imgUrl,
+    String contentType,
+    Map<String, dynamic>? dataOptions,
   ) async {
     String res = 'Something went wrong';
     try {
+      DateTime now = DateTime.now().add(const Duration(hours: 1)).toUtc();
+      final timeStamp = now.millisecondsSinceEpoch ~/ 1000;
       _fibaseMessaging.getToken().then((value) async {
         var data = {
           'to': receiverTokenFCM,
-          'priority': 'high',
           'notification': {
             'title': title,
             'body': body,
-          }
+            'sound': true,
+            'image': imgUrl,
+          },
+          'data': {
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'senderId': senderId,
+            'recieverId': receiverId,
+            'content_type': contentType
+          },
+          'room': dataOptions,
+          'priority': 'high',
+          'isRead': false,
+          'timeStamp': timeStamp
         };
         var response = await http.post(Uri.parse(dotenv.get('fcm_google_url')),
             body: jsonEncode(data),
@@ -116,7 +126,10 @@ class FirebaseFCM {
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'key=${dotenv.get('server_key')}',
             });
-        print(response.statusCode);
+        //print(response.statusCode);
+        if (response.statusCode == 200) {
+          FireStoreMethods().setContentNotification(receiverId, data);
+        }
       });
     } catch (e) {
       Get.snackbar('title', e.toString());

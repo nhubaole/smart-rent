@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
 
+// enum contentType {
+//   RENT_ROOM,
+//   NEW_ROOM,
+//   PAYMENT,
+//   REQUEST_RETURN_ROOM,
+// }
+
+// ignore: must_be_immutable
 class NotificationItemWidget extends StatelessWidget {
-  final String content;
-  final String time;
-  final String typeNotification;
-  const NotificationItemWidget(
-      {super.key,
-      required this.content,
-      required this.time,
-      required this.typeNotification});
+  final Map<String, dynamic> data;
+
+  NotificationItemWidget({
+    super.key,
+    required this.data,
+  });
+  late double deviceHeight;
+  late double deviceWidth;
 
   @override
   Widget build(BuildContext context) {
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
+    var date = DateTime.fromMillisecondsSinceEpoch(data['timeStamp'] * 1000);
+    String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
+      padding: EdgeInsets.symmetric(
+        horizontal: deviceWidth * 0.02,
       ),
       child: Card(
         elevation: 0,
-        color: primary98,
+        color: data['isRead'] ? Colors.black.withOpacity(0.1) : primary98,
         shape: RoundedRectangleBorder(
           side: const BorderSide(
             color: Colors.transparent,
@@ -29,53 +41,66 @@ class NotificationItemWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(
+            horizontal: deviceWidth * 0.02,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 60,
-                height: 60,
+                height: deviceHeight * 0.1,
+                width: deviceWidth * 0.2,
                 child: Lottie.asset(
-                  typeNotification == 'new_room'
-                      ? 'assets/lottie/home.json'
-                      : 'assets/lottie/like.json',
+                  data['data']['content_type'] == 'RENT_ROOM'
+                      ? 'assets/lottie/like.json'
+                      : data['data']['content_type'] == 'PAYMENT'
+                          ? 'assets/lottie/noti_payment.json'
+                          : 'assets/lottie/home.json',
                   repeat: true,
                   reverse: true,
-                  height: 50,
+                  height: deviceHeight * 0.2,
                   width: double.infinity,
                 ),
               ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        content,
-                        style: const TextStyle(
-                          color: secondary20,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data['notification']['title'],
+                      style: const TextStyle(
+                        color: secondary20,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Text(
-                        time,
-                        style: const TextStyle(
-                          color: secondary40,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      data['notification']['body'],
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.6),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ],
-                  ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        color: secondary40,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
                 ),
               )
             ],

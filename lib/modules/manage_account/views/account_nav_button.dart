@@ -6,6 +6,7 @@ import 'package:smart_rent/modules/login/views/login_screen.dart';
 import 'package:smart_rent/modules/manage_account/controllers/account_nav_button_controller.dart';
 import 'package:smart_rent/modules/manage_account/views/nav_screen/account_detail.dart';
 import 'package:smart_rent/modules/manage_account/views/nav_screen/notify_setting.dart';
+import 'package:smart_rent/modules/manage_account/views/nav_screen/policy.dart';
 
 class AccountNavButton extends StatelessWidget {
   const AccountNavButton({super.key});
@@ -35,7 +36,9 @@ class AccountNavButton extends StatelessWidget {
             ),
             AccountButtonNav(
               nameButton: 'Điều khoản và chính sách',
-              onPressed: () {},
+              onPressed: () {
+                Get.to(PolicyScreen());
+              },
               firstIcon: Icons.verified_user,
             ),
             const SizedBox(
