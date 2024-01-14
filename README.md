@@ -1,5 +1,9 @@
 # Ứng dụng thuê trọ
 
+## Công nghệ
+- Flutter
+- Firebase
+
 ## Các tính năng
 - Authentication
   - Đăng nhập bằng số điện thoại (OTP)
