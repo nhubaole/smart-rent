@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBC5XsEcx90TU2pWq2iTPCBN58dTKUmKSM',
-    appId: '1:306823952848:android:0a2d6acf677f01f8ef61d5',
+    appId: '1:306823952848:android:f5cb58576700c70cef61d5',
     messagingSenderId: '306823952848',
     projectId: 'flutter-rent-house-3f415',
     storageBucket: 'flutter-rent-house-3f415.appspot.com',
@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '306823952848',
     projectId: 'flutter-rent-house-3f415',
     storageBucket: 'flutter-rent-house-3f415.appspot.com',
-    androidClientId: '306823952848-nra1ioid5j78qispn86t72vfe77i6nq9.apps.googleusercontent.com',
-    iosBundleId: 'com.example.smartrent.smartRent',
+    androidClientId:
+        '306823952848-nra1ioid5j78qispn86t72vfe77i6nq9.apps.googleusercontent.com',
+    iosBundleId: 'com.example.smartrent',
   );
 }

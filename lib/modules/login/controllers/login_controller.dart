@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_rent/core/resources/auth_methods.dart';
 import 'package:smart_rent/core/values/key_value.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:smart_rent/core/widget/dialog_custom.dart';
+import 'package:smart_rent/modules/login/model/auth_response_model.dart';
 import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
 import 'package:smart_rent/modules/signup/views/sign_up_screen.dart';
+import 'package:http/http.dart' as http;
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -85,5 +92,54 @@ class LoginController extends GetxController {
       Get.snackbar('Error', error.toString());
     }
     isLoading.value = false;
+  }
+
+  Future<bool?> onLogin({required String phoneNumber}) async {
+    try {
+      String? accessToken = await getAcessToken(phoneNumber: phoneNumber);
+
+      if (accessToken != null) {
+        await saveAccessToken(accessToken: accessToken);
+      }
+      return true;
+    } catch (e) {
+      debugPrint('[LoginController][onLogin]: ${e.toString()}');
+      return null;
+    }
+  }
+
+  Future<String?> getAcessToken({required String phoneNumber}) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var data = json.encode({"userName": "0908069947", "password": "123456"});
+      var dio = Dio();
+      var response = await dio.request(
+        'https://${dotenv.get('localhost_wan_simulator')}:3001/api-gateway/v1/auth/',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        AuthResponseModel authResponseModel =
+            AuthResponseModel.fromJson(json.encode(response.data));
+        return authResponseModel.accessToken;
+      } else {
+        debugPrint('[LoginController][submit]: ${response.statusMessage}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('[LoginController][submit]: ${e.toString()}');
+      return null;
+    }
+  }
+
+  Future<void> saveAccessToken({required String accessToken}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('accessToken', accessToken);
+    print(prefs.getString('accessToken'));
   }
 }

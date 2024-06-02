@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/dialog_custom.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
+import 'package:smart_rent/modules/demo_microservices/views/demo_microservices.dart';
 import 'package:smart_rent/modules/login/controllers/login_controller.dart';
-import 'package:smart_rent/modules/login/views/login_verify_screen.dart';
 import 'package:smart_rent/modules/signup/views/sign_up_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -90,11 +89,19 @@ class LoginScreen extends StatelessWidget {
                               ),
                             )
                           : GestureDetector(
-                              onTap: () {
-                                if (loginController.formKey.currentState!
-                                    .validate()) {
-                                  loginController.formKey.currentState!.save();
-                                  loginController.submit();
+                              onTap: () async {
+                                // if (loginController.formKey.currentState!
+                                //     .validate()) {
+                                //   loginController.formKey.currentState!.save();
+                                //   loginController.submit();
+                                // }
+                                bool? result = await loginController.onLogin(
+                                  phoneNumber:
+                                      loginController.phoneNo.text.trim(),
+                                );
+
+                                if (result == true) {
+                                  Get.to(() => const DemoMicroservices());
                                 }
                               },
                               child: Container(

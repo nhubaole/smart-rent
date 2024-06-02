@@ -70,7 +70,7 @@ class LoginVerifyController extends GetxController {
         },
       );
 
-      isVerified ? Get.offAll(() => const RootScreen()) : Get.back();
+      isVerified ? Get.to(() => const RootScreen()) : Get.back();
       res = 'success';
     } catch (error) {
       //Get.snackbar('error', error.toString());

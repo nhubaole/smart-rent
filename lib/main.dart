@@ -10,6 +10,7 @@ import 'package:smart_rent/firebase_options.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 import 'core/resources/auth_methods.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(const MyApp()));
 
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -63,5 +65,14 @@ class MyApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

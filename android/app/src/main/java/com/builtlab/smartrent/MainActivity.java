@@ -1,4 +1,4 @@
-package com.example.smartrent.smart_rent;
+package com.builtlab.smartrent;
 
 import io.flutter.embedding.android.FlutterActivity;
 
