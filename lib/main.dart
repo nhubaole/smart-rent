@@ -12,18 +12,18 @@ import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 import 'core/resources/auth_methods.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FirebaseFCM().initNotifications();
-  Get.lazyPut(() => DetailController());
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // await FirebaseFCM().initNotifications();
+  // Get.lazyPut(() => DetailController());
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).then(
-    (value) => Get.put(AuthMethods()),
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // ).then(
+  //   (value) => Get.put(AuthMethods()),
+  // );
   AwesomeNotifications().initialize(
     null,
     [

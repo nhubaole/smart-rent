@@ -1,6 +1,5 @@
-import UIKit
 import Flutter
-import momo_vn
+import UIKit
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,14 +10,4 @@ import momo_vn
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
-  override func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        MoMoPayment.handleOpenUrl(url: url, sourceApp: sourceApplication!)
-        return true
-    }
-
-  override func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-        MoMoPayment.handleOpenUrl(url: url, sourceApp: "")
-        return true
-    }
 }

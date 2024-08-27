@@ -85,7 +85,7 @@ dependencies:
   zego_zimkit: ^1.11.1
   easy_image_viewer: ^1.4.0
   path_provider: ^2.1.2
-  pdf_render: ^1.4.5
+  pdf_render: ^1.4.12
 
 
 dev_dependencies:
