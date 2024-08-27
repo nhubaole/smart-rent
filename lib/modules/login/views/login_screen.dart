@@ -95,6 +95,7 @@ class LoginScreen extends StatelessWidget {
                                 //   loginController.formKey.currentState!.save();
                                 //   loginController.submit();
                                 // }
+
                                 bool? result = await loginController.onLogin(
                                   phoneNumber:
                                       loginController.phoneNo.text.trim(),

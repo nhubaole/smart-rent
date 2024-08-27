@@ -19,7 +19,7 @@ class DemoServices {
       var headers = {'Authorization': 'Bearer $token'};
       var dio = Dio();
       var response = await dio.request(
-        'https://${dotenv.get('localhost_wan_simulator')}:3001/api-gateway/v1/rooms?pageIndex=$pageIndex&pageCount=$pageCount',
+        'https://${dotenv.get('localhost_wan')}:3001/api-gateway/v1/rooms?pageIndex=$pageIndex&pageCount=$pageCount',
         options: Options(
           method: 'GET',
           headers: headers,

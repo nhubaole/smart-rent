@@ -8,7 +8,7 @@ class DemoMicroservicesController extends GetxController {
   late final SharedPreferences prefs;
   var listRoom = Rx<List<RoomResponseModel>>([]);
   var pageIndex = 0;
-  int pageCount = 100;
+  int pageCount = 10000;
   @override
   void onInit() async {
     isLoading.value = true;

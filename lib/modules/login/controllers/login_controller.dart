@@ -96,6 +96,7 @@ class LoginController extends GetxController {
 
   Future<bool?> onLogin({required String phoneNumber}) async {
     try {
+      print(phoneNumber);
       String? accessToken = await getAcessToken(phoneNumber: phoneNumber);
 
       if (accessToken != null) {
@@ -114,7 +115,7 @@ class LoginController extends GetxController {
       var data = json.encode({"userName": "0908069947", "password": "123456"});
       var dio = Dio();
       var response = await dio.request(
-        'https://${dotenv.get('localhost_wan_simulator')}:3001/api-gateway/v1/auth/',
+        'https://${dotenv.get('localhost_wan')}:3001/api-gateway/v1/auth/',
         options: Options(
           method: 'POST',
           headers: headers,
