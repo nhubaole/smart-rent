@@ -1,0 +1,109 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/enums/gender.dart';
+import '/core/model/room/room.dart';
+import '/modules/detail/views/detail_screen.dart';
+
+import '../../../core/values/app_colors.dart';
+
+class ResultItem extends StatelessWidget {
+  const ResultItem({super.key, required this.room});
+  final Room room;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(
+          AppRoutes.detail,
+          arguments: DetailAgrument(
+            isRequestReturnRent: false,
+            isRequestRented: false,
+            isHandleRequestReturnRoom: false,
+            isHandleRentRoom: false,
+            isRenting: false,
+            room: room,
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 180,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: CachedNetworkImage(
+                    height: 120,
+                    width: 120,
+                    fit: BoxFit.cover,
+                    imageUrl: room.roomImages![0])),
+            const SizedBox(
+              width: 16,
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    getCapacity(room),
+                    style: const TextStyle(
+                        fontSize: 10, color: AppColors.secondary60),
+                  ),
+                  Text(
+                    room.title!,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: AppColors.secondary20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                  ),
+                  Text(
+                    room.address![0],
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 10, color: AppColors.secondary20),
+                    maxLines: 2,
+                  ),
+                  Text(
+                    priceFormatterFull(room),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: AppColors.primary60,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  String getCapacity(Room room) {
+    return room.gender == Gender.ALL
+        ? "${room.capacity} NAM/NỮ"
+        : "${room.capacity} ${room.gender!.getNameGender().toUpperCase()}";
+  }
+
+  String priceFormatterFull(Room room) {
+    String formattedNumber = room.totalPrice.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match match) => '${match[1]}.',
+        );
+    return "$formattedNumber ₫/phòng";
+  }
+}

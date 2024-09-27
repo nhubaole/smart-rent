@@ -1,0 +1,63 @@
+import 'dart:convert';
+
+class ResponseModel<T> {
+  int? errCode;
+  String? message;
+  T? data;
+
+  ResponseModel({
+    this.errCode,
+    this.message,
+    this.data,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ResponseModel &&
+          runtimeType == other.runtimeType &&
+          errCode == other.errCode &&
+          message == other.message &&
+          data == other.data);
+
+  @override
+  int get hashCode => errCode.hashCode ^ message.hashCode ^ data.hashCode;
+
+  @override
+  String toString() {
+    return 'RequestModel{ errCode: $errCode, message: $message, data: $data,}';
+  }
+
+  ResponseModel copyWith({
+    int? errCode,
+    String? message,
+    T? data,
+  }) {
+    return ResponseModel(
+      errCode: errCode ?? this.errCode,
+      message: message ?? this.message,
+      data: data ?? this.data,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'errCode': this.errCode,
+      'message': this.message,
+      'data': this.data,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ResponseModel.fromJson(String source) =>
+      ResponseModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory ResponseModel.fromMap(Map<String, dynamic> map) {
+    return ResponseModel(
+      errCode: map['errCode'] as int,
+      message: map['message'] as String,
+      data: map['data'] as T,
+    );
+  }
+}

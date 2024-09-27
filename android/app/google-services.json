@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "306823952848",
+    "project_id": "flutter-rent-house-3f415",
+    "storage_bucket": "flutter-rent-house-3f415.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306823952848:android:0a2d6acf677f01f8ef61d5",
+        "android_client_info": {
+          "package_name": "com.example.smartrent.smart_rent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306823952848-nra1ioid5j78qispn86t72vfe77i6nq9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartrent.smart_rent",
+            "certificate_hash": "01d77ae5e5007b3478d7063461696f4f39167504"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC5XsEcx90TU2pWq2iTPCBN58dTKUmKSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
