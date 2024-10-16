@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_rent/modules/post/widgets/media_item_select.dart';
 
 import '../../../core/config/app_colors.dart';
 import '/core/enums/utilities.dart';
@@ -75,9 +76,15 @@ class _UtilitiesPageState extends State<UtilitiesPage> {
                                 itemCount:
                                     controller.pickedImages.value?.length,
                                 itemBuilder: (context, index) {
-                                  return ImageItem(controller
+                                  final XFile xFile = controller
                                       .pickedImages.value!
-                                      .elementAt(index));
+                                      .elementAt(index);
+
+                                  return MediaItemSelect(
+                                    index: index,
+                                    xFile: xFile,
+                                    onRemove: controller.onRemoveImage,
+                                  );
                                 },
                               ),
                               const SizedBox(
@@ -202,50 +209,6 @@ class _UtilitiesPageState extends State<UtilitiesPage> {
       ],
     );
   }
-
-  Widget ImageItem(XFile element) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          margin: const EdgeInsets.only(top: 4, right: 4),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.secondary80, width: 2)),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.file(
-              File(element.path),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: InkWell(
-            onTap: () {
-              controller.pickedImages.value
-                  ?.removeWhere((e) => e.path == element.path);
-              controller.pickedImages.update((val) {});
-            },
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: AppColors.secondary80,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.close,
-                color: AppColors.secondary40,
-                size: 16,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
 }
+
+

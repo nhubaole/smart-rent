@@ -20,4 +20,19 @@ extension InfoRoomType on RoomType {
         return "";
     }
   }
+
+  static RoomType fromString(String value) {
+    switch (value) {
+      case "Kí túc xá/Homestay":
+        return RoomType.DORMITORY_HOMESTAY;
+      case "Phòng cho thuê":
+        return RoomType.ROOM;
+      case "Nhà nguyên căn":
+        return RoomType.WHOLE_HOUSE;
+      case "Căn hộ":
+        return RoomType.APARTMENT;
+      default:
+        throw ArgumentError('Invalid room type: $value');
+    }
+  }
 }

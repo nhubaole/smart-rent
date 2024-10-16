@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import '../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import '/modules/search/controllers/search_room_controller.dart';
 import '/modules/search/views/filter_screen.dart';
 

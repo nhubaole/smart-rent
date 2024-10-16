@@ -92,6 +92,8 @@ dependencies:
   collection: ^1.18.0
   awesome_notifications: ^0.9.3+1
   awesome_notifications_core: ^0.9.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:

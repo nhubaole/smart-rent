@@ -1,44 +1,22 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/app/app_init.dart';
 import 'package:smart_rent/core/app_binding.dart';
 import 'package:smart_rent/core/routes/app_pages.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'core/config/app_colors.dart';
 import 'core/config/app_constant.dart';
-import 'core/di/getit_config.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../core/app/app_manager.dart';
 import 'core/lang/translate_service.dart';
 
 void main() async {
-  final appManager = AppManager();
-  AwesomeNotifications().initialize(
-    null,
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-        defaultColor: Colors.teal,
-        ledColor: Colors.teal,
-        playSound: true,
-        enableVibration: true,
-      )
-    ],
-    debug: true,
-  );
-  await configureDependencies();
-  await dotenv.load(fileName: ".env");
+  await AppInit.init();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(const MyApp()));
-
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -13,12 +13,14 @@ import '/core/widget/dialog_custom.dart';
 
 class SignUpController extends GetxController {
   var isShowPassword = false.obs;
-  final signUpFormKey = GlobalKey<FormState>();
-  final fullName = TextEditingController();
-  final phoneNumber = TextEditingController();
-  final password = TextEditingController();
-  final dateOfBirth = TextEditingController();
-  final address = TextEditingController();
+  final now = DateTime.now();
+  late final GlobalKey<FormState> signUpFormKey;
+  final fullName = TextEditingController(text: DateTime.now().toString());
+  final phoneNumber = TextEditingController(
+      text: DateTime.now().microsecondsSinceEpoch.toString());
+  final password = TextEditingController(text: DateTime.now().toString());
+  final dateOfBirth = TextEditingController(text: DateTime.now().toString());
+  final address = TextEditingController(text: DateTime.now().toString());
 
   late Log log;
   late Account account;
@@ -31,7 +33,18 @@ class SignUpController extends GetxController {
     log = getIt<Log>();
     dateOfBirth.text =
         DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+    signUpFormKey = GlobalKey<FormState>();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    fullName.dispose();
+    phoneNumber.dispose();
+    password.dispose();
+    dateOfBirth.dispose();
+    address.dispose();
+    super.onClose();
   }
 
   Future<String?> onRegister() async {
@@ -41,6 +54,8 @@ class SignUpController extends GetxController {
       address: address.text.trim(),
       password: password.text.trim(),
     );
+
+    print(result);
 
     if (result.errCode == null || result.errCode! >= 400) {
       return 'Xảy ra lỗi';
