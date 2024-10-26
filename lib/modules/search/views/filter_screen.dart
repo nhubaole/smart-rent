@@ -175,7 +175,7 @@ class FilterScreen extends StatelessWidget {
                 )),
             Obx(() => controller.selectedFilter.value == null
                 ? Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 20, bottom: 16),
                     child: Text(
                       controller.isLoaded.value
                           ? "${controller.results.value.length} Kết quả"
@@ -188,28 +188,29 @@ class FilterScreen extends StatelessWidget {
                   )
                 : const SizedBox()),
             Obx(() => controller.selectedFilter.value == null
-                ? const SizedBox(
-                    height: 16,
-                  )
-                : const SizedBox()),
-            Obx(() => controller.selectedFilter.value == null
                 ? Expanded(
                     child: Container(
-                        width: double.infinity,
-                        color: AppColors.primary95,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Obx(() => ListView.builder(
-                              itemCount: controller.results.value.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: ResultItem(
-                                    room: controller.results.value[index],
-                                  ),
-                                );
-                              },
-                            ))))
-                : const SizedBox()),
+                      width: double.infinity,
+                      color: AppColors.primary95,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Obx(
+                        () => ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: 16,
+                            );
+                          },
+                          itemCount: controller.results.value.length,
+                          itemBuilder: (context, index) {
+                            return ResultItem(
+                              room: controller.results.value[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink()),
             Obx(() => controller.selectedFilter.value == null
                 ? const SizedBox()
                 : Flexible(

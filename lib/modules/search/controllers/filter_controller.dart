@@ -74,7 +74,6 @@ class FilterController extends GetxController {
   }
 
   void setLocation(String location) {
-    print(location);
     this.location = location;
     selectedFilter.value = null;
   }
@@ -226,9 +225,12 @@ class FilterController extends GetxController {
   Future<void> queryRoomByLocation() async {
     try {
       isLoaded.value = false;
-      results.value =
-          (await RoomRepoImpl().getRoomsByAddress(address: location)).data ??
-              [] as List<Room>;
+      location = location.toLowerCase();
+      results.value = (await RoomRepoImpl().getRoomsByAddress(
+                  address: 'phường trường thọ, quận thủ đức, tp hcm'))
+              .data ??
+          [] as List<Room>;
+      results.value = [...results.value, ...results.value];
       isLoaded.value = true;
     } catch (e) {
       if (kDebugMode) {

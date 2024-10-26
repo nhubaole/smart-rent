@@ -1,9 +1,20 @@
 import 'package:intl/intl.dart';
+import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
 
 final moneyVNFormat = NumberFormat.currency(locale: "vi_VN", symbol: "");
 
 extension IntExt on int {
-  getNameGender() {}
+  getNameGender() {
+    switch (this) {
+      case 0:
+        return Gender.MALE;
+      case 1:
+        return Gender.FEMALE;
+      default:
+        return Gender.ALL;
+    }
+  }
 
   String get toStringRatingType {
     switch (this) {
