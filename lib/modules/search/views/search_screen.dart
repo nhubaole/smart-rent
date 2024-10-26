@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/modules/search/widgets/item_hint_address.dart';
 import '/modules/search/controllers/search_room_controller.dart';
 import '/modules/search/views/filter_screen.dart';
 
@@ -73,50 +74,19 @@ class _SearchScreenState extends State<SearchScreen> {
       builder: (context, value, _) => ListView.builder(
         itemCount: controller.searchRecently.value.length,
         itemBuilder: (context, index) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom:
-                        BorderSide(color: AppColors.secondary80, width: 1))),
-            child: InkWell(
-              onTap: () {
-                Get.to(
-                  () => FilterScreen(
-                    location: controller.searchRecently.value[index],
-                  ),
-                );
-              },
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    color: AppColors.secondary40,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Text(
-                      controller.searchRecently.value[index],
-                      style: const TextStyle(
-                          color: AppColors.secondary20, fontSize: 14),
-                      softWrap: true,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller
-                          .removeRecent(controller.searchRecently.value[index]);
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.secondary20,
-                    ),
-                  )
-                ],
-              ),
-            ),
+          final String address = controller.searchRecently.value[index];
+          return ItemHintAddress(
+            onPressed: () {
+              Get.to(
+                () => FilterScreen(
+                  location: controller.searchRecently.value[index],
+                ),
+              );
+            },
+            onRemove: () {
+              controller.removeRecent(controller.searchRecently.value[index]);
+            },
+            title: address,
           );
         },
       ),
