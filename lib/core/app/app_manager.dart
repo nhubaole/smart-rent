@@ -30,7 +30,7 @@ class AppManager {
     await HiveManager().put(
       AppConstant.hiveSessionKey,
       {
-        'currentUser:': newUser.toJson(),
+        'currentUser': newUser.toJson(),
         'accessToken': newAccessToken,
         'refreshToken': refreshToken,
       },

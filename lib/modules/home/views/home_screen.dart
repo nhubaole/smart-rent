@@ -296,7 +296,7 @@ class HomeScreen extends GetView<HomeScreenController> {
             ),
           ),
           TextSpan(
-            text: controller.currentName.value,
+            text: controller.fullName,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,

@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/app/app_hive.dart';
+import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/enums/room_fetch.dart';
+import 'package:smart_rent/core/model/user_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import '/core/model/room/room.dart';
 import '/core/resources/google_map_services.dart';
-import '/core/values/KEY_VALUE.dart';
 
 class HomeScreenController extends GetxController {
   var isScrollingUp = false.obs;
-  final currentName = ''.obs;
   final currenLocation = ''.obs;
   final currenPhone = ''.obs;
   Location? crLocation;
@@ -18,10 +18,13 @@ class HomeScreenController extends GetxController {
   var isFetchingRoom = RoomFetch.LOADING.obs;
   var isLoadingMap = Rx<bool>(true);
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+  final HiveManager hiveManager = HiveManager();
+  late UserModel currentUser;
 
+  String get fullName => currentUser.fullName ?? '--';
   @override
   void onInit() async {
-    getSharedPreferences();
+    getDataHive();
 
     fetchDataAndConvertToList();
     getListRoom(false);
@@ -29,11 +32,9 @@ class HomeScreenController extends GetxController {
     super.onInit();
   }
 
-  Future<void> getSharedPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    currentName.value =
-        prefs.getString(KeyValue.KEY_ACCOUNT_USERNAME) ?? 'default';
-    currenPhone.value = prefs.getString(KeyValue.KEY_ACCOUNT_PHONENUMBER) ?? '';
+  Future<void> getDataHive() async {
+    currentUser = UserModel.fromJson(
+        hiveManager.get(AppConstant.hiveSessionKey)['currentUser']);
   }
 
   Future<void> getCurrentLocation() async {
@@ -141,13 +142,6 @@ class HomeScreenController extends GetxController {
         (await RoomRepoImpl().getAllRooms()).data as List<Room>;
     if (listFetch.length > listRoomInArea.value.length) {
       listRoomInArea.value = listFetch;
-    }
-    print('listRoomInArea.length: ${listRoomInArea.value.length}');
-    if (listRoomInArea.value.isNotEmpty) {
-      for (var room in listRoomInArea.value) {
-        isLoadingMap.value = true;
-        print(room.address![0]);
-      }
     }
   }
 
