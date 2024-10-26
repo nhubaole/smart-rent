@@ -121,11 +121,13 @@ class HomeScreenController extends GetxController {
   Future<void> getListRoom(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listRoom.value = (await RoomRepoImpl().getAllRooms()).data as List<Room>;
+      listRoom.value =
+          (await RoomRepoImpl().getAllRooms()).data ?? [] as List<Room>;
       isLoadMore.value = false;
     } else {
       isFetchingRoom.value = RoomFetch.LOADING;
-      listRoom.value = (await RoomRepoImpl().getAllRooms()).data as List<Room>;
+      listRoom.value =
+          (await RoomRepoImpl().getAllRooms()).data ?? [] as List<Room>;
       isFetchingRoom.value = RoomFetch.LOADED;
     }
   }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 
@@ -26,16 +25,12 @@ class RoomRepoImpl implements RoomRepo {
 
   @override
   Future<ResponseModel<Room>> createRoom(Room room) async {
-    var headers = {
-      'Authorization':
-          'Bearer ${appManager.accressToken}'
-    };
+    var headers = {'Authorization': 'Bearer ${appManager.accressToken}'};
     var data = FormData.fromMap({
       'files': [
         room.roomImages!
             .mapIndexed(
-              (index, image) async => await MultipartFile.fromFile(
-                  image,
+              (index, image) async => await MultipartFile.fromFile(image,
                   filename:
                       '${index}_${DateTime.now().microsecondsSinceEpoch}'),
             )
@@ -122,5 +117,47 @@ class RoomRepoImpl implements RoomRepo {
   Future<ResponseModel<Room>> updateRoom() {
     // TODO: implement updateRoom
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ResponseModel<List<Room>>> getRoomsByAddress({
+    required String address,
+  }) async {
+    final String url = '$domain/rooms/search-by-address?search=$address';
+
+    if (appManager.accressToken == null) {
+      return ResponseModel(errCode: -1, message: 'Bạn chưa đăng nhập');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${appManager.accressToken}',
+    };
+
+    try {
+      final response = await dio.get(url, options: Options(headers: headers));
+
+      if (response.statusCode == 200 && response.data is Map) {
+        try {
+          return ResponseModel<List<Room>>(
+            errCode: response.data['errCode'],
+            message: response.data['message'],
+            data: List<Room>.from((response.data['data'] as List)
+                .map((room) => Room.fromMap(room))),
+          );
+        } catch (e) {
+          log.e('getRoomsByAddress: Lỗi parse JSON', e.toString());
+          return ResponseModel(errCode: -1, message: 'Lỗi parse JSON');
+        }
+      } else {
+        log.e('getRoomsByAddress: Lỗi server',
+            'Status code: ${response.statusCode}, Response data: ${response.data}');
+        return ResponseModel(
+            errCode: response.statusCode, message: 'Lỗi server');
+      }
+    } catch (e) {
+      log.e('getRoomsByAddress: Lỗi kết nối', e.toString());
+      return ResponseModel(errCode: -1, message: 'Lỗi kết nối');
+    }
   }
 }

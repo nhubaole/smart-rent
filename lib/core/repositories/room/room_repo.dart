@@ -7,4 +7,7 @@ abstract class RoomRepo {
   Future<ResponseModel<Room>> createRoom(Room room);
   Future<ResponseModel<Room>> updateRoom();
   Future<bool> deleteRoom();
+  Future<ResponseModel<List<Room>>> getRoomsByAddress({
+    required String address,
+  });
 }

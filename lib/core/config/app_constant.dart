@@ -12,4 +12,8 @@ abstract class AppConstant {
   // Hive
   static const hiveBoxName = 'smart_rent';
   static const hiveSessionKey = 'session';
+  static const hiveRecentSearchRoomKey = 'recent_search_room';
+
+  // Debound timer
+  static const debounceTime = 500;
 }

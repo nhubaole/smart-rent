@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/app/app_hive.dart';
+import 'package:smart_rent/core/config/app_constant.dart';
 import '/core/model/location/ward.dart';
 import 'package:tiengviet/tiengviet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchRoomController extends GetxController {
   final RxList<String> searchResult = <String>[].obs;
 
   final RxList<String> address = <String>[].obs;
-  final RxList<String> searchRecently = <String>[].obs;
+  final ValueNotifier<List<String>> searchRecently = ValueNotifier([]);
+  final label = ''.obs;
 
   TextEditingController textController = TextEditingController();
-  RxString textfieldString = ''.obs;
-  late SharedPreferences _prefs;
 
   Future<List<String>> loadAddress() async {
     var jsonString = await rootBundle.loadString('assets/data/wards.json');
@@ -28,12 +28,15 @@ class SearchRoomController extends GetxController {
     address.value = await loadAddress();
     await getRecent();
     super.onInit();
-    textController.addListener(() {
-      textfieldString.value = textController.text;
-    });
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
   }
 
   onSearchTextChanged(String text) {
+    label.value = text;
     searchResult.clear();
     getRecent();
     if (text.isEmpty) {
@@ -51,22 +54,22 @@ class SearchRoomController extends GetxController {
   }
 
   Future<void> saveRecent(String recent) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> recentList = prefs.getStringList('recentSearch') ?? [];
-    recentList.add(recent);
-    await prefs.setStringList('recentSearch', recentList);
+    List<String> recentList =
+        HiveManager().get(AppConstant.hiveRecentSearchRoomKey) ?? [];
+    recentList.insert(0, recent);
+    await HiveManager().put(AppConstant.hiveRecentSearchRoomKey, recentList);
   }
 
   Future<void> getRecent() async {
-    final prefs = await SharedPreferences.getInstance();
-    searchRecently.value = prefs.getStringList('recentSearch') ?? [];
+    searchRecently.value =
+        HiveManager().get(AppConstant.hiveRecentSearchRoomKey) ?? [];
   }
 
   Future<void> removeRecent(String recent) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> recentList = prefs.getStringList('recentSearch') ?? [];
-    recentList.remove(recent);
-    await prefs.setStringList('recentSearch', recentList);
-    searchRecently.value = recentList;
+    final updatedList = List<String>.from(searchRecently.value);
+    updatedList.remove(recent);
+    searchRecently.value = updatedList;
+
+    await HiveManager().put(AppConstant.hiveRecentSearchRoomKey, updatedList);
   }
 }

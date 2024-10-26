@@ -16,13 +16,12 @@ import '/modules/search/views/util_filter_page.dart';
 
 // ignore: must_be_immutable
 class FilterScreen extends StatelessWidget {
-  FilterScreen({super.key, required this.location});
+  const FilterScreen({super.key, required this.location});
   final String location;
-  FilterController controller = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
-    controller.setLocation(location);
+    FilterController controller = Get.put(FilterController(location: location));
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
@@ -42,53 +41,7 @@ class FilterScreen extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          width: MediaQuery.sizeOf(context).width - 80,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.primary60, width: 1),
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/images/ic_location.svg'),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  controller.location,
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.primary60),
-                                ),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: const Text(
-                          'Hủy',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.primary60,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  ),
+                  _buildSearchBar(context, controller),
                   const SizedBox(
                     height: 16,
                   ),
@@ -348,6 +301,54 @@ class FilterScreen extends StatelessWidget {
                   )),
           ],
         )));
+  }
+
+  Row _buildSearchBar(BuildContext context, FilterController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            width: MediaQuery.sizeOf(context).width - 80,
+            decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary60, width: 1),
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/images/ic_location.svg'),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Text(
+                    controller.location,
+                    style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary60),
+                  ),
+                ),
+              ],
+            )),
+        const SizedBox(
+          width: 16,
+        ),
+        InkWell(
+          onTap: () {
+            Get.back();
+          },
+          child: const Text(
+            'Hủy',
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.primary60,
+                fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
   }
 
   Widget loadPageContent(FilterType? value) {
