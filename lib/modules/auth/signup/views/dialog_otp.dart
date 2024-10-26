@@ -28,18 +28,39 @@ class _DialogOTPState extends State<DialogOTP> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer timer) {
-        setState(() {
-          if (duration.inSeconds > 0) {
-            duration = Duration(seconds: duration.inSeconds - 1);
-          } else {
-            timer.cancel();
-          }
-        });
-      },
-    );
+    // timer = Timer.periodic(
+    //   const Duration(seconds: 1),
+    //   (Timer timer) {
+    //     setState(() {
+    //       if (duration.inSeconds > 0) {
+    //         duration = Duration(seconds: duration.inSeconds - 1);
+    //       } else {
+    //         timer.cancel();
+    //       }
+    //     });
+    //   },
+    // );
+
+    if (mounted) {
+      timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (Timer timer) {
+          setState(() {
+            if (duration.inSeconds > 0) {
+              duration = Duration(seconds: duration.inSeconds - 1);
+            } else {
+              timer.cancel();
+            }
+          });
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override

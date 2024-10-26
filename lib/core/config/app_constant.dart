@@ -8,4 +8,8 @@ abstract class AppConstant {
 
   //locate
   static const appSupportLocale = [Locale('vi', "VN"), Locale('en', "US")];
+
+  // Hive
+  static const hiveBoxName = 'smart_rent';
+  static const hiveSessionKey = 'session';
 }

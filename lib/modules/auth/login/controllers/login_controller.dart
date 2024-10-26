@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/app/app_hive.dart';
+import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/modules/auth/controller/auth_controller.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
@@ -13,7 +16,7 @@ class LoginController extends GetxController {
 
   final AppManager appManager = AppManager();
 
-  final formKey = GlobalKey<FormState>();
+  late final GlobalKey<FormState> formKey;
   final phoneNo = TextEditingController(text: '0123456789');
   final password = TextEditingController(text: 'test');
   var isLoading = Rx<bool>(false);
@@ -21,11 +24,19 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     log = getIt<Log>();
+    formKey = GlobalKey<FormState>();
     super.onInit();
   }
 
   @override
   void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    phoneNo.dispose();
+    password.dispose();
     super.onClose();
   }
 
@@ -43,11 +54,18 @@ class LoginController extends GetxController {
         Get.snackbar('Thông báo', result.message ?? '');
         return 'Xảy ra lỗi';
       } else {
-        appManager.setSession(
-          newUserName: 'userName',
-          newAccessToken: result.data['accessToken'],
-          refreshToken: result.data['refreshToken'],
+        final userModel = await UserRepoIml(log).getCurrentUser(
+          accessToken: result.data['accessToken'],
         );
+        if (userModel.data != null) {
+          appManager.setSession(
+            newUser: userModel.data!,
+            newAccessToken: result.data['accessToken'],
+            refreshToken: result.data['refreshToken'],
+          );
+          print(HiveManager().get(AppConstant.hiveSessionKey));
+        }
+
         isLoading.value = false;
 
         Get.offAll(() => const RootScreen());

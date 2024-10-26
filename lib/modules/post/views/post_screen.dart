@@ -48,85 +48,93 @@ class _PostScreenState extends State<PostScreen> {
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
           child: nextButton(),
         ),
-        appBar: AppBar(
-          toolbarHeight: 64.0,
-          title: const Text(
-            'Đăng phòng',
-            style: TextStyle(
-                color: AppColors.primary40,
-                fontSize: 24,
-                fontWeight: FontWeight.bold),
-          ),
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primary40),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: primary80,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.primary95,
-                  Colors.white,
-                ],
-              ),
-            ),
-          ),
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          titleSpacing: 0,
-          iconTheme: const IconThemeData(color: AppColors.primary40),
-        ),
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconStepper(
-                activeStepBorderWidth: 1,
-                stepRadius: 16.0,
-                activeStepBorderPadding: 8.0,
-                stepColor: AppColors.secondary80,
-                activeStepColor: AppColors.primary60,
-                activeStepBorderColor: AppColors.primary60,
-                enableNextPreviousButtons: false,
-                lineLength: 50.0,
-                lineColor: AppColors.primary60,
-                icons: icons,
+        appBar: _buildAppbar(context),
+        body: _buildBody(),
+      ),
+    );
+  }
 
-                // activeStep property set to activeStep variable defined above.
-                activeStep: activeStep,
+  Container _buildBody() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconStepper(
+            stepReachedAnimationEffect: Curves.easeInOut,
+            activeStepBorderWidth: 1,
+            stepRadius: 16.0,
+            activeStepBorderPadding: 8.0,
+            stepColor: AppColors.secondary80,
+            activeStepColor: AppColors.primary60,
+            activeStepBorderColor: AppColors.primary60,
+            enableNextPreviousButtons: false,
+            lineLength: 50.0,
+            lineColor: AppColors.primary60,
+            icons: icons,
+            // activeStep property set to activeStep variable defined above.
+            activeStep: activeStep,
+            
+            // This ensures step-tapping updates the activeStep.
+            onStepReached: (index) {
+              setState(() {
+                activeStep = index;
+              });
+            },
+          ),
+          header(),
+          contentPage(),
+          //nextButton()
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     previousButton(),
+          //     nextButton(),
+          //   ],
+          // ),
+        ],
+      ),
+    );
+  }
 
-                // This ensures step-tapping updates the activeStep.
-                onStepReached: (index) {
-                  setState(() {
-                    activeStep = index;
-                  });
-                },
-              ),
-              header(),
-              contentPage(),
-              //nextButton()
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     previousButton(),
-              //     nextButton(),
-              //   ],
-              // ),
+  AppBar _buildAppbar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 64.0,
+      title: const Text(
+        'Đăng phòng',
+        style: TextStyle(
+            color: AppColors.primary40,
+            fontSize: 24,
+            fontWeight: FontWeight.bold),
+      ),
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppColors.primary40),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      backgroundColor: primary80,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.primary95,
+              Colors.white,
             ],
           ),
         ),
       ),
+      elevation: 0,
+      automaticallyImplyLeading: true,
+      titleSpacing: 0,
+      iconTheme: const IconThemeData(color: AppColors.primary40),
     );
   }
 
@@ -135,74 +143,81 @@ class _PostScreenState extends State<PostScreen> {
     return SizedBox(
       height: 50,
       child: activeStep == 3
-          ? ButtonFill(
-              onPressed: () {
-                if (controller.formInfoKey.currentState!.validate()) {
-                  controller.formInfoKey.currentState!.save();
-                  controller.postRoom();
-                }
-              },
-              icon: const Icon(
-                Icons.add_box_rounded,
-                size: 20,
-                color: Colors.white,
-              ),
-              text: const Text(
-                'Đăng bài',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500),
-              ),
-              backgroundColor: AppColors.primary60,
-              borderRadius: BorderRadius.circular(100))
-          : ButtonOutline(
-              borderWidth: 2,
-              onPressed: () {
-                bool allowNext = true;
-                if (activeStep == 2) {
-                  if (controller.pickedImages.value!.length >= 4 &&
-                      controller.pickedImages.value!.length <= 20) {
-                    controller.validImageTotal.value = true;
-                  } else {
-                    controller.validImageTotal.value = false;
-                    allowNext = false;
-                  }
-                } else if (!controller.formInfoKey.currentState!.validate()) {
-                  allowNext = false;
-                }
-
-                if (allowNext) {
-                  if (activeStep == 0) {
-                  } else if (activeStep == 1) {
-                    controller.updateLocationRoom();
-                  }
-                }
-
-                if (activeStep < upperBound - 2 && allowNext) {
-                  setState(() {
-                    activeStep++;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 20,
-                color: AppColors.primary60,
-              ),
-              text: const Text(
-                'Tiếp theo',
-                style: TextStyle(
-                    color: AppColors.primary60,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500),
-              ),
-              borderColor: AppColors.primary60,
-              borderRadius: BorderRadius.circular(100)),
+          ? _buildButtonPost()
+          : _buildButtonNext(),
     );
   }
 
-  /// Returns the header wrapping the header text.
+  ButtonOutline _buildButtonNext() {
+    return ButtonOutline(
+            borderWidth: 2,
+            onPressed: () {
+              bool allowNext = true;
+              if (activeStep == 2) {
+                if (controller.pickedImages.value!.length >= 4 &&
+                    controller.pickedImages.value!.length <= 20) {
+                  controller.validImageTotal.value = true;
+                } else {
+                  controller.validImageTotal.value = false;
+                  allowNext = false;
+                }
+              } else if (!controller.formInfoKey.currentState!.validate()) {
+                allowNext = false;
+              }
+
+              if (allowNext) {
+                if (activeStep == 0) {
+                } else if (activeStep == 1) {
+                  controller.updateLocationRoom();
+                }
+              }
+
+              if (activeStep < upperBound - 2 && allowNext) {
+                setState(() {
+                  activeStep++;
+                });
+              }
+            },
+            icon: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 20,
+              color: AppColors.primary60,
+            ),
+            text: const Text(
+              'Tiếp theo',
+              style: TextStyle(
+                  color: AppColors.primary60,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            borderColor: AppColors.primary60,
+            borderRadius: BorderRadius.circular(100));
+  }
+
+  ButtonFill _buildButtonPost() {
+    return ButtonFill(
+            onPressed: () {
+              if (controller.formInfoKey.currentState!.validate()) {
+                controller.formInfoKey.currentState!.save();
+                controller.postRoom();
+              }
+            },
+            icon: const Icon(
+              Icons.add_box_rounded,
+              size: 20,
+              color: Colors.white,
+            ),
+            text: const Text(
+              'Đăng bài',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            backgroundColor: AppColors.primary60,
+            borderRadius: BorderRadius.circular(100));
+  }
+
   Widget header() {
     return Container(
       width: double.infinity,
@@ -224,18 +239,14 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-  // Returns the header text based on the activeStep.
   String headerText() {
     switch (activeStep) {
       case 1:
         return 'Địa chỉ';
-
       case 2:
         return 'Tiện ích';
-
       case 3:
         return 'Xác nhận';
-
       default:
         return 'Thông tin';
     }
@@ -245,13 +256,10 @@ class _PostScreenState extends State<PostScreen> {
     switch (activeStep) {
       case 1:
         return locationPage;
-
       case 2:
         return utilitiesPage;
-
       case 3:
         return confirmPage;
-
       default:
         return infoPage;
     }

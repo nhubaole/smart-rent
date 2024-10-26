@@ -24,45 +24,43 @@ import '../../../core/values/KEY_VALUE.dart';
 
 class PostController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  var room = Rx<Room>(Room());
+  final room = Rx<Room>(Room());
 
-  var isElectricityFree = false.obs;
-  var isWaterFree = false.obs;
-  var isInternetFree = false.obs;
-  var hasParking = false.obs;
-  var isParkingFree = false.obs;
+  final isElectricityFree = false.obs;
+  final isWaterFree = false.obs;
+  final isInternetFree = false.obs;
+  final hasParking = false.obs;
+  final isParkingFree = false.obs;
 
   late List<City> cities;
-  var selectedCity = Rx<City?>(null);
-  var districts = Rx<List<District>>([]);
-  var selectedDistrict = Rx<District?>(null);
-  var wards = Rx<List<Ward>>([]);
-  var selectedWard = Rx<Ward?>(null);
+  final selectedCity = Rx<City?>(null);
+  final districts = Rx<List<District>>([]);
+  final selectedDistrict = Rx<District?>(null);
+  final wards = Rx<List<Ward>>([]);
+  final selectedWard = Rx<Ward?>(null);
 
   final GlobalKey<FormState> formInfoKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final FirebaseStorage storage = FirebaseStorage.instance;
+  final capacityTextController = TextEditingController(text: "5");
+  final areaTextController = TextEditingController(text: "5");
+  final priceTextController = TextEditingController(text: "5");
+  final depositTextController = TextEditingController(text: "5");
+  final electricityCostTextController = TextEditingController(text: "5");
+  final waterCostTextController = TextEditingController(text: "5");
+  final internetCostTextController = TextEditingController(text: "5");
+  final parkingFeeTextController = TextEditingController(text: "5");
 
-  var capacityTextController = TextEditingController();
-  var areaTextController = TextEditingController();
-  var priceTextController = TextEditingController();
-  var depositTextController = TextEditingController();
-  var electricityCostTextController = TextEditingController();
-  var waterCostTextController = TextEditingController();
-  var internetCostTextController = TextEditingController();
-  var parkingFeeTextController = TextEditingController();
+  final streetTextController = TextEditingController(text: "5");
+  final addressTextController = TextEditingController(text: "5");
 
-  var streetTextController = TextEditingController();
-  var addressTextController = TextEditingController();
-
-  var titleTextController = TextEditingController();
-  var descriptionTextController = TextEditingController();
-  var regulationsTextController = TextEditingController();
+  final titleTextController = TextEditingController(text: "5");
+  final descriptionTextController = TextEditingController(text: "5");
+  final regulationsTextController = TextEditingController(text: "5");
 
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   late ImagePicker picker;
-  var pickedImages = Rxn<List<XFile>>([]);
+  final pickedImages = Rxn<List<XFile>>([]);
   RxBool validImageTotal = true.obs;
   List<String> urlImages = [];
 
@@ -89,6 +87,11 @@ class PostController extends GetxController
   @override
   void onInit() async {
     super.onInit();
+
+    room.value = room.value.copyWith(
+      gender: Gender.ALL.getNameGenderInt(),
+      roomType: RoomType.DORMITORY_HOMESTAY.getNameRoomType(),
+    );
     cities = await loadCities();
     priceTextController.addListener(() => formatCurrency(priceTextController));
     depositTextController
@@ -128,40 +131,22 @@ class PostController extends GetxController
     return value.isEmpty ? 'Vui lòng nhập đầy đủ thông tin' : null;
   }
 
-  void onSelectRoomType(RoomType value) {}
+  void onSelectRoomType(RoomType value) {
+    room.value = room.value.copyWith(roomType: value.getNameRoomType());
+  }
 
-  void onSelectGender(Gender value) {}
-
-  // void updateInfoRoom() {
-  //   room.value = room.value.copyWith(
-  //     capacity: int.parse(capacityTextController.text),
-  //     area: double.parse(areaTextController.text),
-  //     price: int.parse(
-  //       priceTextController.text.replaceAll('.', ''),
-  //     ),
-  //     deposit: int.parse(
-  //       depositTextController.text.replaceAll('.', ''),
-  //     ),
-  //     electricityCost: int.parse(
-  //       electricityCostTextController.text.replaceAll('.', ''),
-  //     ),
-  //     waterCost: int.parse(
-  //       waterCostTextController.text.replaceAll('.', ''),
-  //     ),
-  //     internetCost: int.parse(
-  //       internetCostTextController.text.replaceAll('.', ''),
-  //     ),
-  //     parkingFee: int.parse(
-  //       parkingFeeTextController.text.replaceAll('.', ''),
-  //     ),
-  //   );
-  // }
+  void onSelectGender(Gender value) {
+    room.value = room.value.copyWith(gender: value.getNameGenderInt());
+    print(room.value.gender);
+  }
 
   void updateLocationRoom() {}
 
   Future<void> updateUtilitiesRoom() async {}
 
-  void updateConfirmRoom() {}
+  void updateConfirmRoom() {
+    print(room.value);
+  }
 
   Future<void> postRoom() async {
     showDialogLoading('Đang đăng bài...');
@@ -179,13 +164,14 @@ class PostController extends GetxController
   }
 
   Future<List<City>> loadCities() async {
-    var jsonString = await rootBundle.loadString('assets/data/cities.json');
+    final jsonString = await rootBundle.loadString('assets/data/cities.json');
     List<dynamic> jsonList = json.decode(jsonString);
     return jsonList.map((json) => City.fromJson(json)).toList();
   }
 
   Future<List<District>> loadDistricts(City parent) async {
-    var jsonString = await rootBundle.loadString('assets/data/districts.json');
+    final jsonString =
+        await rootBundle.loadString('assets/data/districts.json');
     List<dynamic> jsonList = json.decode(jsonString);
     return jsonList
         .map((json) => District.fromJson(json))
@@ -194,13 +180,20 @@ class PostController extends GetxController
   }
 
   Future<List<Ward>> loadWards(District parent) async {
-    var jsonString = await rootBundle.loadString('assets/data/wards.json');
+    final jsonString = await rootBundle.loadString('assets/data/wards.json');
     List<dynamic> jsonList = json.decode(jsonString);
     return jsonList
         .map((json) => Ward.fromJson(json))
         .where((element) => element.parent_code == parent.code)
         .toList();
   }
+
+  void onRemoveImage(XFile xFile, int index) {
+    final images = List<XFile>.from(pickedImages.value!);
+    images.removeAt(index);
+    pickedImages.value = images;
+  }
+
 
   Future<void> handleChooseImage(BuildContext context) async {
     showModalBottomSheet(
@@ -209,7 +202,7 @@ class PostController extends GetxController
         return ChooseImageBottomSheet(
           onGallarySelected: () async {
             final images = await picker.pickMultiImage();
-            for (var i in images) {
+            for (final i in images) {
               pickedImages.value?.add(i);
               pickedImages.update(
                 (val) {},
@@ -242,28 +235,13 @@ class PostController extends GetxController
   Future<List<String>> uploadImages(List<XFile> images) async {
     List<String> urlImages = [];
 
-    await Future.forEach(images, (XFile image) async {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference storageReference =
-          storage.ref().child('room_images/$fileName.jpg');
-
-      List<int> compressedImage = await compressImage(File(image.path), 30);
-
-      UploadTask uploadTask =
-          storageReference.putData(Uint8List.fromList(compressedImage));
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String downloadURL = await taskSnapshot.ref.getDownloadURL();
-      urlImages.add(downloadURL);
-      print('Image uploaded to Firebase Storage. Download URL: $downloadURL');
-    });
-
     return urlImages;
   }
 
   Future<void> showDialogLoading(String message) async {
     Get.dialog(
       PopScope(
-        canPop: false,
+        canPop: true,
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Center(

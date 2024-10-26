@@ -116,7 +116,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Get.to(
+                  Get.off(
                     () => const LoginScreen(),
                   );
                 },
