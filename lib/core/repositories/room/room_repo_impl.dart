@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'dart:ffi';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
@@ -24,7 +23,7 @@ class RoomRepoImpl implements RoomRepo {
         appManager = AppManager();
 
   @override
-  Future<ResponseModel<Room>> createRoom(Room room) async {
+  Future<ResponseModel<int>> createRoom(Room room) async {
     Response response;
     final String url = '$domain/rooms';
     Map<String, dynamic>? headers = {
@@ -78,8 +77,6 @@ class RoomRepoImpl implements RoomRepo {
       ..add(MapEntry('status', room.status?.toString() ?? ''))
       ..add(MapEntry('is_rent', room.isRent.toString()));
 
-    print(formData.fields);
-
     try {
       response = await dio.request(
         url,
@@ -92,12 +89,13 @@ class RoomRepoImpl implements RoomRepo {
 
       print(response.data);
 
-      return ResponseModel<Room>(
+      return ResponseModel<int>(
         errCode: response.data['errCode'],
         message: response.data['message'],
-        data: Room.fromMap(
-          response.data['data'],
-        ),
+        // data: Room.fromMap(
+        //   response.data['data'],
+        // ),
+        data: response.data['data'] as int?,
       );
     } catch (e) {
       log.e('createRoom', e.toString());

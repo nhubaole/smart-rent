@@ -26,6 +26,8 @@ abstract class AppColors {
   static const grey90 = Color(0xFFF2F2F2);
 
   static const like = Color(0xFFFF4567);
+  static const error = Color(0xFFFF4567);
+  static const success = Color(0xFF00B4D8);
 
   static const white = Colors.white;
   static const rating = Color(0xFFffd21d);
