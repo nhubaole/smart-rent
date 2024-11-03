@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import '../../../core/config/app_colors.dart';
 import '/core/enums/gender.dart';
 import '/core/enums/room_type.dart';
@@ -148,17 +149,55 @@ class PostController extends GetxController
     print(room.value);
   }
 
-  Future<void> postRoom() async {
-    showDialogLoading('Đang đăng bài...');
-    isLoading.value = true;
-    String uid = '';
-    try {
-      await updateUtilitiesRoom();
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      uid = prefs.getString(KeyValue.KEY_ACCOUNT_UID) ?? '';
-    } finally {
-      updateConfirmRoom();
+  void onSavedRoom() {
+    room.value = room.value.copyWith(
+      title: titleTextController.text,
+      description: descriptionTextController.text,
+      capacity: int.tryParse(capacityTextController.text) ?? 0,
+      area: double.tryParse(areaTextController.text) ?? 0,
+      totalPrice: int.tryParse(
+              priceTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      deposit: int.tryParse(
+              depositTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      electricityCost: double.tryParse(electricityCostTextController.text
+              .replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      waterCost: double.tryParse(
+              waterCostTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      internetCost: double.tryParse(internetCostTextController.text
+              .replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      parkingFee: int.tryParse(
+              parkingFeeTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      address: [addressTextController.text, streetTextController.text],
+      status: 0,
+      isParking: hasParking.value,
+      isRent: false,
+      utilities: getUtilities(),
+    );
+  }
 
+  List<String> getUtilities() {
+    return utilList
+        .where((element) => element.isChecked)
+        .map((e) => e.utility.getNameUtil())
+        .toList();
+  }
+
+  Future<void> postRoom() async {
+    // showDialogLoading('Đang đăng bài...');
+    // isLoading.value = true;
+    onSavedRoom();
+    print(room.value);
+    try {
+      await RoomRepoImpl().createRoom(room.value);
+    } finally {
+      // updateConfirmRoom();
+      // Get.back();
       isLoading.value = false;
     }
   }
@@ -194,7 +233,6 @@ class PostController extends GetxController
     pickedImages.value = images;
   }
 
-
   Future<void> handleChooseImage(BuildContext context) async {
     showModalBottomSheet(
       context: context,
@@ -202,12 +240,16 @@ class PostController extends GetxController
         return ChooseImageBottomSheet(
           onGallarySelected: () async {
             final images = await picker.pickMultiImage();
+            List<String> roomImages = [];
             for (final i in images) {
               pickedImages.value?.add(i);
               pickedImages.update(
                 (val) {},
               );
+              roomImages.add(i.path);
             }
+            room.value.roomImages = roomImages;
+
             validImageTotal.value = true;
           },
           onCameraSelected: () async {
@@ -217,6 +259,7 @@ class PostController extends GetxController
               pickedImages.update(
                 (val) {},
               );
+              room.value.roomImages?.add(image.path);
             }
             validImageTotal.value = true;
           },

@@ -43,6 +43,7 @@ abstract class AppPages {
       page: () => const DetailScreen(),
       binding: DetailBinding(),
     ),
+
     // GetPage(
     //   name: AppRoutes.detail,
     //   page: () => const DetailScreen(),

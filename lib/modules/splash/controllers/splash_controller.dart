@@ -43,7 +43,7 @@ class SplashController extends GetxController {
       await prefs.setBool('first_install', true);
       Get.offAll(const OnBoardingScreen());
     } else {
-      if (appManager.accressToken != null && appManager.refreshToken != null) {
+      if (appManager.accessToken != null && appManager.refreshToken != null) {
         Get.offAllNamed(AppRoutes.root);
       } else {
         Get.offAllNamed(AppRoutes.login);

@@ -58,7 +58,7 @@ class FilterScreen extends StatelessWidget {
                                     controller.selectedFilter.value ==
                                             controller.filterType[index]
                                         ? AppColors.primary40
-                                        : AppColors.secondary90,
+                                        : AppColors.primary98,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -77,6 +77,7 @@ class FilterScreen extends StatelessWidget {
                                         controller.filterType[index]
                                     ? Colors.white
                                     : AppColors.secondary40,
+                                weight: 2,
                               ),
                               label: Text(
                                 controller.filterType[index]
@@ -87,7 +88,7 @@ class FilterScreen extends StatelessWidget {
                                             controller.filterType[index]
                                         ? Colors.white
                                         : AppColors.secondary40,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.bold),
                               ),
                             ));
                       },
@@ -259,8 +260,11 @@ class FilterScreen extends StatelessWidget {
                                       Expanded(
                                         child: FilledButton(
                                           onPressed: () async {
-                                            await controller
-                                                .queryRoomByLocation();
+                                            // await controller
+                                            //     .queryRoomByLocation();
+                                            // controller.selectedFilter.value =
+                                            //     null;
+                                            controller.applyFilter();
                                             controller.selectedFilter.value =
                                                 null;
                                           },

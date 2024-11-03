@@ -1,8 +1,5 @@
 import 'package:get/get.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '/core/resources/auth_methods.dart';
 
 import '../../../core/model/account/Account.dart';
 import '../../../core/model/room/room.dart';
@@ -47,6 +44,8 @@ class DetailController extends GetxController {
   void onInit() async {
     if (arg is DetailAgrument) {
       room = (arg as DetailAgrument).room;
+
+      print(room);
       isRequestRented = (arg as DetailAgrument).isRequestRented;
       isRequestReturnRent = (arg as DetailAgrument).isRequestReturnRent;
       isHandleRequestReturnRoom =

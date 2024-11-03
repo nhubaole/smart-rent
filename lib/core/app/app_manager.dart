@@ -5,16 +5,17 @@ import 'package:smart_rent/core/model/user_model.dart';
 import 'package:smart_rent/modules/auth/login/views/login_screen.dart';
 
 class AppManager {
-  static final AppManager _instance = AppManager._internal();
-  factory AppManager() => _instance;
+  static final AppManager instance = AppManager._internal();
+  factory AppManager() => instance;
 
   AppManager._internal();
 
   UserModel? _currentUser;
   String? get fullName => _currentUser!.fullName;
+  int? get userId => _currentUser!.id;
   String? _accessToken;
   String? _refreshToken;
-  String? get accressToken => _accessToken;
+  String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
 
   bool get isLogged => _currentUser != null && _accessToken != null;
