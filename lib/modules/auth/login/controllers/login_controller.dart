@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
-import 'package:smart_rent/modules/auth/controller/auth_controller.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 
 import '../../../../core/app/app_manager.dart';
@@ -12,7 +12,7 @@ import '../../../../core/repositories/auth/auth_repo_impl.dart';
 import '../../../../core/repositories/log/log.dart';
 
 class LoginController extends GetxController {
-  late Log log;
+  late Log logger;
 
   final AppManager appManager = AppManager();
 
@@ -23,7 +23,7 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    log = getIt<Log>();
+    logger = getIt<Log>();
     formKey = GlobalKey<FormState>();
     super.onInit();
   }
@@ -43,18 +43,16 @@ class LoginController extends GetxController {
   Future<String?> submit() async {
     try {
       isLoading.value = true;
-      log.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');
-      final result = await AuthRepoImpl(log).login(
+      logger.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');
+      final result = await AuthRepoImpl(logger).login(
         phoneNumber: phoneNo.text.trim(),
         password: password.text.trim(),
       );
-      final authController = getIt<AuthController>();
       if (result.errCode == null || result.errCode! >= 400) {
-        authController.clearInfo();
         Get.snackbar('Thông báo', result.message ?? '');
         return 'Xảy ra lỗi';
       } else {
-        final userModel = await UserRepoIml(log).getCurrentUser(
+        final userModel = await UserRepoIml(logger).getCurrentUser(
           accessToken: result.data['accessToken'],
         );
         if (userModel.data != null) {
@@ -68,7 +66,7 @@ class LoginController extends GetxController {
 
         isLoading.value = false;
 
-        Get.offAll(() => const RootScreen());
+        Get.offAllNamed(AppRoutes.root);
         return result.message;
       }
     } catch (error) {

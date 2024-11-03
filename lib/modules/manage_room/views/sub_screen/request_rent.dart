@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/request_rent_controller.dart';
 
-import '../../../../core/config/app_colors.dart';
-import '../../../../core/config/app_colors.dart';
-import '../../../../core/widget/room_item.dart';
-import '/modules/manage_room/controllers/sub_screen_controller/request_rent_controller.dart';
-
-class RequestRentScreen extends StatelessWidget {
+class RequestRentScreen extends GetView<RequestRentController> {
   const RequestRentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final RequestRentController requestRentController =
-        Get.put(RequestRentController());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -27,14 +23,14 @@ class RequestRentScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () {
-          return requestRentController.getListRoom(false);
+          return controller.getListRoom(false);
         },
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Center(
               child: Obx(
-                () => requestRentController.isLoading.value
+                () => controller.isLoading.value
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height,
                         child: const Center(
@@ -44,7 +40,7 @@ class RequestRentScreen extends StatelessWidget {
                           ),
                         ),
                       )
-                    : requestRentController.listRoom.value.isEmpty
+                    : controller.listRoom.value.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +55,7 @@ class RequestRentScreen extends StatelessWidget {
                                   width: double.infinity,
                                 ),
                                 Text(
-                                  '${requestRentController.profileOwner.value!.username}\nvẫn chưa có người yêu cầu thuê phòng!!!',
+                                  '${controller.profileOwner.value!.username}\nvẫn chưa có người yêu cầu thuê phòng!!!',
                                   style: const TextStyle(
                                     color: AppColors.secondary20,
                                     fontSize: 18,
@@ -72,8 +68,7 @@ class RequestRentScreen extends StatelessWidget {
                                   child: Center(
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        requestRentController
-                                            .getListRoom(false);
+                                        controller.getListRoom(false);
                                       },
                                       style: ButtonStyle(
                                         side: WidgetStateProperty.all(
@@ -115,27 +110,22 @@ class RequestRentScreen extends StatelessWidget {
                                   crossAxisSpacing: 5,
                                   // mainAxisSpacing: 20,
                                 ),
-                                itemCount: requestRentController
-                                        .listRoom.value.length +
-                                    1,
+                                itemCount: controller.listRoom.value.length + 1,
                                 itemBuilder: (context, index) {
                                   if (index <
-                                      requestRentController
-                                          .listRoom.value.length) {
+                                      controller.listRoom.value.length) {
                                     return RoomItem(
                                       isRenting: false,
                                       isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
                                       isRequestReturnRent: false,
                                       isRequestRented: true,
-                                      room: requestRentController
-                                          .listRoom.value[index],
+                                      room: controller.listRoom.value[index],
                                       isLiked: false,
                                     );
                                   } else {
                                     return Obx(
-                                      () => requestRentController
-                                              .isLoadMore.value
+                                      () => controller.isLoadMore.value
                                           ? const Center(
                                               child: CircularProgressIndicator(
                                                 color: AppColors.primary95,
@@ -148,7 +138,7 @@ class RequestRentScreen extends StatelessWidget {
                                               child: Center(
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    requestRentController
+                                                    controller
                                                         .getListRoom(true);
                                                   },
                                                   style: ButtonStyle(

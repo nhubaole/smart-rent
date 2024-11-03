@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import '/core/widget/room_item.dart';
 import '/modules/manage_room/controllers/sub_screen_controller/wait_approve_room_controller.dart';
 
-class WaitApproveRoomScreen extends StatelessWidget {
+class WaitApproveRoomScreen extends GetView<WaitApproveRoomController> {
   const WaitApproveRoomScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final WaitApproveRoomController waitApproveRoomController =
-        Get.put(WaitApproveRoomController());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -27,20 +23,20 @@ class WaitApproveRoomScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () {
-          return waitApproveRoomController.getListRoom(false);
+          return controller.getListRoom(false);
         },
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Center(
               child: Obx(
-                () => waitApproveRoomController.isLoading.value
+                () => controller.isLoading.value
                     ? const Center(
                         child: CircularProgressIndicator(
                           color: AppColors.primary60,
                         ),
                       )
-                    : waitApproveRoomController.listRoom.value.isEmpty
+                    : controller.listRoom.value.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +51,7 @@ class WaitApproveRoomScreen extends StatelessWidget {
                                   width: double.infinity,
                                 ),
                                 Text(
-                                  '${waitApproveRoomController.profileOwner.value!.username}\nchưa đăng phòng!!!',
+                                  '${controller.fullName}\nchưa đăng phòng!!!',
                                   style: const TextStyle(
                                     color: AppColors.secondary20,
                                     fontSize: 18,
@@ -68,8 +64,7 @@ class WaitApproveRoomScreen extends StatelessWidget {
                                   child: Center(
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        waitApproveRoomController
-                                            .getListRoom(false);
+                                        controller.getListRoom(false);
                                       },
                                       style: ButtonStyle(
                                         side: WidgetStateProperty.all(
@@ -111,27 +106,22 @@ class WaitApproveRoomScreen extends StatelessWidget {
                                   crossAxisSpacing: 5,
                                   // mainAxisSpacing: 20,
                                 ),
-                                itemCount: waitApproveRoomController
-                                        .listRoom.value.length +
-                                    1,
+                                itemCount: controller.listRoom.value.length + 1,
                                 itemBuilder: (BuildContext context, int index) {
                                   if (index <
-                                      waitApproveRoomController
-                                          .listRoom.value.length) {
+                                      controller.listRoom.value.length) {
                                     return RoomItem(
                                       isRenting: false,
                                       isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
                                       isRequestReturnRent: false,
                                       isRequestRented: false,
-                                      room: waitApproveRoomController
-                                          .listRoom.value[index],
+                                      room: controller.listRoom.value[index],
                                       isLiked: false,
                                     );
                                   } else {
                                     return Obx(
-                                      () => waitApproveRoomController
-                                              .isLoadMore.value
+                                      () => controller.isLoadMore.value
                                           ? const Center(
                                               child: CircularProgressIndicator(
                                                 color: AppColors.primary95,
@@ -144,7 +134,7 @@ class WaitApproveRoomScreen extends StatelessWidget {
                                               child: Center(
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    waitApproveRoomController
+                                                    controller
                                                         .getListRoom(true);
                                                   },
                                                   style: ButtonStyle(

@@ -45,7 +45,6 @@ class DetailController extends GetxController {
     if (arg is DetailAgrument) {
       room = (arg as DetailAgrument).room;
 
-      print(room);
       isRequestRented = (arg as DetailAgrument).isRequestRented;
       isRequestReturnRent = (arg as DetailAgrument).isRequestReturnRent;
       isHandleRequestReturnRoom =

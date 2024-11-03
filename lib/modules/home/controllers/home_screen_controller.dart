@@ -3,13 +3,17 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/enums/room_fetch.dart';
 import 'package:smart_rent/core/model/user_model.dart';
+import 'package:smart_rent/core/repositories/log/log.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import '/core/model/room/room.dart';
 import '/core/resources/google_map_services.dart';
 
 class HomeScreenController extends GetxController {
+  late Log logger;
+
   var isScrollingUp = false.obs;
   final currenLocation = ''.obs;
   final currenPhone = ''.obs;
@@ -24,8 +28,8 @@ class HomeScreenController extends GetxController {
   String get fullName => currentUser.fullName ?? '--';
   @override
   void onInit() async {
+    logger = getIt<Log>();
     getDataHive();
-
     fetchDataAndConvertToList();
     getListRoom(false);
     await getCurrentLocation();
@@ -137,7 +141,6 @@ class HomeScreenController extends GetxController {
   var listRoomInArea = Rx<List<Room>>([]);
 
   Future<void> getListRoomInArea(String area) async {
-    //listRoomInArea.value = await FireStoreMethods().getRoomInArea(area, 10);
     List<Room> listFetch =
         (await RoomRepoImpl().getAllRooms()).data as List<Room>;
     if (listFetch.length > listRoomInArea.value.length) {
@@ -148,7 +151,6 @@ class HomeScreenController extends GetxController {
   Future<void> getListRoomByListSplit(List<String> areas) async {
     for (var i = 0; i < areas.length; i++) {
       isLoadingMap.value = true;
-      print(areas[i]);
       await getListRoomInArea(areas[i].trim());
     }
     isLoadingMap.value = false;

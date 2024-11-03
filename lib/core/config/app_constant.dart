@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 
 abstract class AppConstant {
   static const app_name = 'Smart rent';
@@ -16,4 +17,17 @@ abstract class AppConstant {
 
   // Debound timer
   static const debounceTime = 500;
+
+  // Material Room Management
+  static const gradientColor = [
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary40,
+    AppColors.primary60,
+    AppColors.primary95,
+  ];
 }
