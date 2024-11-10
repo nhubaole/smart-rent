@@ -52,7 +52,7 @@ class _CacheImageWidgetState extends State<CacheImageWidget> {
       fadeInCurve: Curves.bounceInOut,
       fadeInDuration: const Duration(milliseconds: 200),
       fit: widget.fit ?? BoxFit.cover,
-      cacheManager: cacheManager,
+      // cacheManager: cacheManager,
     );
 
     if (widget.borderRadius != null) {

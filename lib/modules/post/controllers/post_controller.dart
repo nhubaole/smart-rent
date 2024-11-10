@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/helper/helper.dart';
 import 'package:smart_rent/core/model/response/request_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
@@ -142,7 +143,6 @@ class PostController extends GetxController
 
   void onSelectGender(Gender value) {
     room.value = room.value.copyWith(gender: value.getNameGenderInt());
-    print(room.value.gender);
   }
 
   void updateLocationRoom() {}
@@ -272,8 +272,11 @@ class PostController extends GetxController
               pickedImages.update(
                 (val) {},
               );
-              roomImages.add(i.path);
+
+              final compressedImage = await Helper.compressImage(imageFile: i);
+              roomImages.add(compressedImage.path);
             }
+
             room.value.roomImages = roomImages;
 
             validImageTotal.value = true;
