@@ -7,6 +7,7 @@ import 'package:smart_rent/modules/auth/signup/views/sign_up_screen.dart';
 import 'package:smart_rent/modules/detail/bindings/detail_binding.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/manage_room/binding/detail_request_binding.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/bindings/liked_room_binding.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/bindings/posted_room_binding.dart';
@@ -20,6 +21,7 @@ import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart
 import 'package:smart_rent/modules/manage_room/views/sub_screen/renting_room.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/request_rent.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/return_rent.dart';
+import 'package:smart_rent/modules/manage_room/views/sub_screen/v2/detail_request_rent_room_v2.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/v2/request_rent_v2.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
 import 'package:smart_rent/modules/root_view/bindings/root_binding.dart';
@@ -103,6 +105,11 @@ abstract class AppPages {
       name: AppRoutes.map,
       page: () => const SignUpScreen(),
       binding: SignUpBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.requestRequestRoomV2,
+      page: () => const DetailRequestRentRoomV2(),
+      binding: DetailRequestBinding(),
     ),
   ];
 }

@@ -25,11 +25,16 @@ abstract class AppColors {
   static const grey80 = Color(0xFFDADADB);
   static const grey90 = Color(0xFFF2F2F2);
 
+  static const green = Colors.green;
+
   static const like = Color(0xFFFF4567);
   static const error = Color(0xFFFF4567);
+  static const errorBackground = Color(0xFFfff0f1);
   static const success = Color(0xFF00B4D8);
+  static const successBackground = Color(0xFFe8ffe8);
 
   static const white = Colors.white;
+  static const black = Colors.black;
   static const rating = Color(0xFFffd21d);
   static const transparent = Colors.transparent;
   static const splashColor = Color.fromARGB(0, 142, 142, 142);

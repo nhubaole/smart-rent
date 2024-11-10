@@ -94,6 +94,7 @@ dependencies:
   awesome_notifications_core: ^0.9.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  flutter_cache_manager: ^3.3.1
 
 
 dev_dependencies:

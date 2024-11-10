@@ -143,7 +143,7 @@ class _RoomItemState extends State<RoomItem> {
             ),
           ),
           TextSpan(
-            text: widget.room.totalPrice!.toFormattedPrice(),
+            text: widget.room.totalPrice?.toFormattedPrice(),
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,

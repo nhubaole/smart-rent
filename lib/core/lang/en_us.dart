@@ -23,16 +23,28 @@ final enUS = {
   'posted_room': 'Posted room',
   'pending_room': 'Pending room',
   'archive_storage': 'Archive storage',
-
-
-
-
-
-
-
-
-
-
-
-  
+  'you_have_sent': 'You have sent',
+  'rent_room': 'Rent room',
+  'not_processed': 'Not processed',
+  'sent_time': 'Sent time',
+  'pending': 'Pending',
+  'accepted': 'Accepted',
+  'rejected': 'Rejected',
+  'canceled': 'Canceled',
+  'completed': 'Completed',
+  'number_of_people': 'Number of people',
+  'address': 'Address',
+  'request': 'Request',
+  'price_offer': 'Price offer',
+  'lower_origin_price': 'Lower origin price',
+  'higher_origin_price': 'Higher origin price',
+  'suitable_for_room_capacity': 'Suitable for room capacity',
+  'rental_start_date': 'Rental start date',
+  'rental_end_date': 'Rental end date',
+  'special_request': 'Special request',
+  'reject': 'Reject',
+  'accept': 'Accept',
+  'landlord': 'Landlord',
+  'cancel_request': 'Cancel request',
+  'edit': 'Edit',
 };
