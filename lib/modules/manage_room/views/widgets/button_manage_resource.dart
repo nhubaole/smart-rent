@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../core/config/app_colors.dart';
-import '../../../../core/values/app_colors.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 
 class ButtonManageResource extends StatelessWidget {
   const ButtonManageResource({
@@ -10,10 +9,12 @@ class ButtonManageResource extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.counter,
   });
   final Function() onTap;
   final String icon;
   final String title;
+  final int? counter;
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +24,59 @@ class ButtonManageResource extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         splashColor: Colors.grey.withOpacity(0.5),
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            icon.contains('svg')
-                ? SvgPicture.asset(
-                    icon,
-                    width: 42,
-                    height: 42,
-                  )
-                : Image.asset(
-                    icon,
-                    width: 42,
-                    height: 42,
-                  ),
-            Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.secondary20,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+        child: Container(
+          padding: EdgeInsets.all(4.px),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  icon.contains('svg')
+                      ? SvgPicture.asset(
+                          icon,
+                          width: 42,
+                          height: 42,
+                        )
+                      : Image.asset(
+                          icon,
+                          width: 42,
+                          height: 42,
+                        ),
+                  if (counter != null && counter! > 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(counter! > 10 ? 1.px : 4.px),
+                        decoration: const BoxDecoration(
+                          color: AppColors.error,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          counter.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+                
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              Text(
+                title,
+                style: const TextStyle(
+                  color: AppColors.secondary20,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

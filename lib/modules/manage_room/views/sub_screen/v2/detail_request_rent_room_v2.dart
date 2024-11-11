@@ -5,6 +5,7 @@ import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/request_room_status.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
+import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/detail_request_controller.dart';
 import '/core/widget/custom_app_bar.dart';
@@ -26,6 +27,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             children: [
               SizedBox(height: 2.h),
               _buildStatus(),
+              _buildDraftContract(),
               SizedBox(height: 2.h),
               _buildInfoRoom(),
               SizedBox(height: 2.h),
@@ -43,6 +45,42 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
           ),
         ),
       ),
+    );
+  }
+
+  Column _buildDraftContract() {
+    return Column(
+      children: [
+        SizedBox(height: 2.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.px),
+          child: Row(
+            children: [
+              Expanded(
+                child: ButtonOutline(
+                  borderWidth: 1.5,
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.edit_note_outlined,
+                    size: 20,
+                    color: AppColors.primary60,
+                  ),
+                  text: Text(
+                    'draft_contract'.tr,
+                    style: const TextStyle(
+                      color: AppColors.primary60,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  borderColor: AppColors.primary60,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

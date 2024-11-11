@@ -94,11 +94,12 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'rental_contract'.tr,
                       icon: ImageAssets.icContract,
-                      onTap: () {},
+                      onTap: () => Get.toNamed(AppRoutes.contract),
                     ),
                   ),
                   Expanded(
                     child: ButtonManageResource(
+                      counter: 1,
                       title: 'rental_request'.tr,
                       icon: ImageAssets.icRequestRent,
                       onTap: () {
@@ -183,6 +184,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
           height: 160.px,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
             itemCount: 10,
             padding: EdgeInsets.symmetric(horizontal: 16.px),
             itemBuilder: (context, index) {
@@ -197,7 +199,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
   Container _buildTopComponent(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.sizeOf(context).height,
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: AppConstant.gradientColor,

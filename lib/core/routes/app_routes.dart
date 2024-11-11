@@ -17,5 +17,11 @@ abstract class AppRoutes {
   static const requestRequestRoomV2 = '/request_request_room_v2';
   static const returnRent = '/return_rent';
 
+  // 11.10.24
+  static const contract = '/contract';
+  static const contractInfo = '/contract_info';
+  static const contractDetail = '/contract_detail';
+  static const contractSign = '/contract_sign';
+
   static const map = '/map';
 }

@@ -4,8 +4,14 @@ import 'package:smart_rent/modules/auth/login/bindings/login_binding.dart';
 import 'package:smart_rent/modules/auth/login/views/login_screen.dart';
 import 'package:smart_rent/modules/auth/signup/bindings/signup_binding.dart';
 import 'package:smart_rent/modules/auth/signup/views/sign_up_screen.dart';
+import 'package:smart_rent/modules/contract/contract_binding.dart';
+import 'package:smart_rent/modules/contract/contract_page.dart';
+import 'package:smart_rent/modules/contract_info/contract_info_binding.dart';
+import 'package:smart_rent/modules/contract_info/contract_info_page.dart';
 import 'package:smart_rent/modules/detail/bindings/detail_binding.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
+import 'package:smart_rent/modules/detail_contract/detail_contract_binding.dart';
+import 'package:smart_rent/modules/detail_contract/detail_contract_page.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_room/binding/detail_request_binding.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
@@ -26,6 +32,8 @@ import 'package:smart_rent/modules/manage_room/views/sub_screen/v2/request_rent_
 import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
 import 'package:smart_rent/modules/root_view/bindings/root_binding.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
+import 'package:smart_rent/modules/sign_contract/sign_contract_binding.dart';
+import 'package:smart_rent/modules/sign_contract/sign_contract_page.dart';
 import 'package:smart_rent/modules/splash/bindings/splash_binding.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
@@ -111,5 +119,25 @@ abstract class AppPages {
       page: () => const DetailRequestRentRoomV2(),
       binding: DetailRequestBinding(),
     ),
+    GetPage(
+      name: AppRoutes.contract,
+      page: () => const ContractPage(),
+      binding: ContractBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contractInfo,
+      page: () => const ContractInfoPage(),
+      binding: ContractInfoBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contractDetail,
+      page: () => const DetailContractPage(),
+      binding: DetailContractBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contractSign,
+      page: () => const SignContractPage(),
+      binding: SignContractBinding(),
+    )
   ];
 }
