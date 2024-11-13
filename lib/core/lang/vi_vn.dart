@@ -113,5 +113,9 @@ final viVN = {
   'sign_in_box_below': 'Ký tại ô vuông dưới đây',
   'resign': 'Ký lại',
   'confirm': 'Xác nhận',
+  'contract_template': 'Mẫu hợp đồng',
+  'create_contract_template': 'Tạo mẫu hợp đồng',
+  'your_contract': 'Hợp đồng của bạn',
+  'last_updated': 'Cập nhật gần nhất',
 
 };

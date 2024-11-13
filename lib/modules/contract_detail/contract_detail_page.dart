@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
-import 'package:smart_rent/modules/detail_contract/detail_contract_controller.dart';
+import 'package:smart_rent/modules/contract_detail/contract_detail_controller.dart';
 
-class DetailContractPage extends GetView<DetailContractController> {
+class DetailContractPage extends GetView<ContractDetailController> {
   const DetailContractPage({super.key});
 
   static TextStyle childTextStyle = TextStyle(
@@ -30,52 +30,55 @@ class DetailContractPage extends GetView<DetailContractController> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-        child: Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20.px),
-                onTap: () {},
-                child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.px),
-                    border: Border.all(width: 1.5, color: AppColors.primary40),
-                  ),
-                  child: Text(
-                    'disagree'.tr,
-                    style: const TextStyle(
-                        color: AppColors.primary40,
-                        fontWeight: FontWeight.bold),
-                  ),
+      bottomNavigationBar: _buildButtonActions(),
+    );
+  }
+
+  Padding _buildButtonActions() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20.px),
+              onTap: () {},
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.px),
+                  border: Border.all(width: 1.5, color: AppColors.primary60),
+                ),
+                child: Text(
+                  'disagree'.tr,
+                  style: const TextStyle(
+                      color: AppColors.primary60, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            SizedBox(width: 16.px),
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20.px),
-                onTap: () => controller.onSignContract(),
-                child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.px),
-                    color: AppColors.primary40,
-                  ),
-                  child: Text(
-                    'sign_contract'.tr,
-                    style: const TextStyle(
-                        color: AppColors.white, fontWeight: FontWeight.bold),
-                  ),
+          ),
+          SizedBox(width: 16.px),
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20.px),
+              onTap: () => controller.onContractSign(),
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.px),
+                  color: AppColors.primary40,
+                ),
+                child: Text(
+                  'sign_contract'.tr,
+                  style: const TextStyle(
+                      color: AppColors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -97,6 +97,8 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   flutter_image_compress: ^2.3.0
   signature: ^5.5.0
+  docx_template: ^0.4.0
+  font_awesome_flutter: ^10.8.0
 
 
 dev_dependencies:

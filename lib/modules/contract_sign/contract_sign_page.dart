@@ -4,10 +4,10 @@ import 'package:signature/signature.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
-import 'package:smart_rent/modules/sign_contract/sign_contract_controller.dart';
+import 'package:smart_rent/modules/contract_sign/contract_sign_controller.dart';
 
-class SignContractPage extends GetView<SignContractController> {
-  const SignContractPage({super.key});
+class ContractSignPage extends GetView<ContractSignController> {
+  const ContractSignPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +54,12 @@ class SignContractPage extends GetView<SignContractController> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.px),
-                    border: Border.all(width: 1.5, color: AppColors.primary40),
+                    border: Border.all(width: 1.5, color: AppColors.primary60),
                   ),
                   child: Text(
                     'resign'.tr,
                     style: const TextStyle(
-                        color: AppColors.primary40,
+                        color: AppColors.primary60,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

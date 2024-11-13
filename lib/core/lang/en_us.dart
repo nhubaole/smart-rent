@@ -115,5 +115,9 @@ final enUS = {
   'sign_in_box_below': 'Sign in the box below',
   'resign': 'Resign',
   'confirm': 'Confirm',
+  'sample_contract': 'Sample Contract',
+  'create_sample_contract': 'Create Sample Contract',
+  'your_contract': 'Your Contract',
+  'last_updated': 'Last Updated',
 
 };

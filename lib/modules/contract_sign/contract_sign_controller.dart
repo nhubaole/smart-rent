@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 
-class SignContractController extends GetxController {
+class ContractSignController extends GetxController {
   late SignatureController signatureController;
   @override
   void onInit() {
@@ -26,7 +26,8 @@ class SignContractController extends GetxController {
 
   onConfirm() {
     if (signatureController.isNotEmpty) {
-      // Get.back(result: signatureController.toPngBytes());
+      Get.back(result: signatureController.toPngBytes());
+      signatureController.clear();
     } else {
       AlertSnackbar.show(
           title: 'Error', message: 'Please sign the contract', isError: true);

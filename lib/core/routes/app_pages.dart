@@ -10,8 +10,8 @@ import 'package:smart_rent/modules/contract_info/contract_info_binding.dart';
 import 'package:smart_rent/modules/contract_info/contract_info_page.dart';
 import 'package:smart_rent/modules/detail/bindings/detail_binding.dart';
 import 'package:smart_rent/modules/detail/views/detail_screen.dart';
-import 'package:smart_rent/modules/detail_contract/detail_contract_binding.dart';
-import 'package:smart_rent/modules/detail_contract/detail_contract_page.dart';
+import 'package:smart_rent/modules/contract_detail/contract_detail_binding.dart';
+import 'package:smart_rent/modules/contract_detail/contract_detail_page.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_room/binding/detail_request_binding.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
@@ -32,8 +32,8 @@ import 'package:smart_rent/modules/manage_room/views/sub_screen/v2/request_rent_
 import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
 import 'package:smart_rent/modules/root_view/bindings/root_binding.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
-import 'package:smart_rent/modules/sign_contract/sign_contract_binding.dart';
-import 'package:smart_rent/modules/sign_contract/sign_contract_page.dart';
+import 'package:smart_rent/modules/contract_sign/contract_sign_binding.dart';
+import 'package:smart_rent/modules/contract_sign/contract_sign_page.dart';
 import 'package:smart_rent/modules/splash/bindings/splash_binding.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
 
@@ -132,12 +132,12 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.contractDetail,
       page: () => const DetailContractPage(),
-      binding: DetailContractBinding(),
+      binding: ContractDetailBinding(),
     ),
     GetPage(
       name: AppRoutes.contractSign,
-      page: () => const SignContractPage(),
-      binding: SignContractBinding(),
+      page: () => const ContractSignPage(),
+      binding: ContractSignBinding(),
     )
   ];
 }
