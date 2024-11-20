@@ -13,6 +13,8 @@ import 'package:smart_rent/modules/detail/views/detail_screen.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_binding.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_page.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
+import 'package:smart_rent/modules/manage_electricity_water_index/manage_electricity_water_index_binding.dart';
+import 'package:smart_rent/modules/manage_electricity_water_index/manage_electricity_water_index_page.dart';
 import 'package:smart_rent/modules/manage_room/binding/detail_request_binding.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/sub_screen/bindings/liked_room_binding.dart';
@@ -138,6 +140,11 @@ abstract class AppPages {
       name: AppRoutes.contractSign,
       page: () => const ContractSignPage(),
       binding: ContractSignBinding(),
-    )
+    ),
+    GetPage(
+      name: AppRoutes.manageElectricityWaterIndex,
+      page: () => const ManageElectricityWaterIndexPage(),
+      binding: ManageElectricityWaterIndexBinding(),
+    ),
   ];
 }

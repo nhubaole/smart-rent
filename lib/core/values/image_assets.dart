@@ -14,4 +14,8 @@ class ImageAssets {
   static const icElectric = '$path/ic_electric.svg';
   static const icCustomer = '$path/ic_customer.svg';
   static const icScheduleReview = '$path/ic_schedule_review.svg';
+  static const icAddGallery = '$path/ic_add_gallery.png';
+  static const icAddFromCamera = '$path/ic_add_camera.ong';
+
+
 }

@@ -23,5 +23,7 @@ abstract class AppRoutes {
   static const contractDetail = '/contract_detail';
   static const contractSign = '/contract_sign';
 
+  // 11.20.24
+  static const manageElectricityWaterIndex = '/manage_electricity_water_index';
   static const map = '/map';
 }

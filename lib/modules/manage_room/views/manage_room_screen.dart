@@ -132,7 +132,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'utility_meter_reading'.tr,
                       icon: ImageAssets.icElectric,
-                      onTap: () {},
+                      onTap: () => Get.toNamed(AppRoutes.manageElectricityWaterIndex),
                     ),
                   ),
                   Expanded(
