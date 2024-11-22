@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/core/widget/text_form_field_input.dart';
 
 class WriteElectricityIndexSheet extends StatelessWidget {
@@ -51,7 +53,19 @@ class WriteElectricityIndexSheet extends StatelessWidget {
             SizedBox(height: 12.px),
             _buildUploadImage(),
             SizedBox(height: 12.px),
-            _buildButtonSubmit(),
+            // _buildButtonSubmit(),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlineButtonWidget(
+                    text: 'write'.tr,
+                    onTap: () {
+                      print('object');
+                    },
+                  ),
+                )
+              ],
+            ),
             SizedBox(height: 12.px),
           ],
         ),

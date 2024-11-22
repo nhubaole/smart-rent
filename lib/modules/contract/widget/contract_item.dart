@@ -124,11 +124,9 @@ class ContractItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Expanded(
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: AppColors.primary40,
-                  ),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: AppColors.primary40,
                 ),
               ],
             ),

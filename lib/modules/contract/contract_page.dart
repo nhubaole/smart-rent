@@ -95,24 +95,22 @@ class ContractPage extends GetView<ContractController> {
         SizedBox(height: 8.px),
         KeepAliveWrapper(
           wantKeepAlive: true,
-          child: RefreshIndicator(
-            onRefresh: () async {
-              return Future.delayed(const Duration(seconds: 1), () {});
-            },
-            child: SizedBox(
-              height: 150.px,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16.px),
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return ContractSampleItem(
-                    onCreateContract: () {},
-                  );
-                },
-              ),
+          child: SizedBox(
+            height: 150.px,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(width: 8.px),
+              shrinkWrap: true,
+              itemCount: 10,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 16.px),
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ContractSampleItem(
+                  onCreateContract: () =>
+                      Get.toNamed(AppRoutes.contractCreation),
+                  onTap: () {},
+                );
+              },
             ),
           ),
         ),
