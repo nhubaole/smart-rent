@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/request_rent_controller.dart';
 import 'package:smart_rent/modules/manage_room/widgets/item_request_rent.dart';
 
@@ -11,7 +12,7 @@ class RequestRentV2Screen extends GetView<RequestRentController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: CustomAppBar(
         title: 'rental_request'.tr,
       ),

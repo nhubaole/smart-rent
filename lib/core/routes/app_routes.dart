@@ -25,5 +25,14 @@ abstract class AppRoutes {
 
   // 11.20.24
   static const manageElectricityWaterIndex = '/manage_electricity_water_index';
+
+  // 11.21.24
+  static const billCollection = '/bill_collection';
+  static const billInfo = '/bill_info';
+
+  // 11.22.24
+  static const contractCreation = '/contract_creation';
+
+
   static const map = '/map';
 }

@@ -14,6 +14,7 @@ import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/extension/string_extension.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '../../../core/config/app_colors.dart';
 import '/core/values/KEY_VALUE.dart';
 import '/core/values/app_colors.dart';
@@ -34,7 +35,7 @@ class DetailScreen extends GetView<DetailController> {
     // var date = DateTime.fromMillisecondsSinceEpoch(1 * 1000);
     // String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     return SafeArea(
-      child: Scaffold(
+      child: ScaffoldWidget(
         floatingActionButton: Stack(
           children: [
             _buildFloatingButton(),

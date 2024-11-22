@@ -5,6 +5,7 @@ import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract/contract_controller.dart';
 import 'package:smart_rent/modules/contract/widget/contract_item.dart';
 import 'package:smart_rent/modules/contract/widget/contract_sample_item.dart';
@@ -14,7 +15,7 @@ class ContractPage extends GetView<ContractController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(
         title: 'rental_contract'.tr,
@@ -94,19 +95,24 @@ class ContractPage extends GetView<ContractController> {
         SizedBox(height: 8.px),
         KeepAliveWrapper(
           wantKeepAlive: true,
-          child: SizedBox(
-            height: 150.px,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.px),
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ContractSampleItem(
-                  onCreateContract: () {},
-                );
-              },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              return Future.delayed(const Duration(seconds: 1), () {});
+            },
+            child: SizedBox(
+              height: 150.px,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 10,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16.px),
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return ContractSampleItem(
+                    onCreateContract: () {},
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -149,7 +155,7 @@ class ContractPage extends GetView<ContractController> {
                     height: 0,
                   ),
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 100,
+                  itemCount: 10,
                   itemBuilder: (context, index) {
                     return ContractItem(
                       onTap: () => Get.toNamed(AppRoutes.contractInfo),

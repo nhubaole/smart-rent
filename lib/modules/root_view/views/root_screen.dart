@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '/modules/root_view/controllers/root_screen_controller.dart';
 
 class RootScreen extends GetView<RootScreenController> {
@@ -9,7 +10,7 @@ class RootScreen extends GetView<RootScreenController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       body: PageView(
         onPageChanged: controller.animateToTab,
         controller: controller.pageController,

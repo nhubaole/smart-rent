@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '../../../../core/config/app_colors.dart';
 import '../../signup/views/sign_up_screen.dart';
 import '../controllers/login_controller.dart';
@@ -14,7 +15,7 @@ class LoginScreen extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     final loginController = Get.put(LoginController());
-    return Scaffold(
+    return ScaffoldWidget(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

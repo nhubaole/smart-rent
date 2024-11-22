@@ -4,6 +4,7 @@ import 'package:signature/signature.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract_sign/contract_sign_controller.dart';
 
 class ContractSignPage extends GetView<ContractSignController> {
@@ -11,7 +12,7 @@ class ContractSignPage extends GetView<ContractSignController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(title: 'sign_contract'.tr),
       body: SingleChildScrollView(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '/modules/splash/controllers/splash_controller.dart';
 
 class SplashScreen extends GetView<SplashController> {
@@ -12,7 +13,7 @@ class SplashScreen extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       body: Container(
         alignment: Alignment.center,
         child: Container(

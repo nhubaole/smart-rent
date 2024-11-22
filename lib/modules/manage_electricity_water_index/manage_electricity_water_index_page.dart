@@ -7,6 +7,7 @@ import 'package:smart_rent/core/enums/type_faculty.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_electricity_water_index/manage_electricity_water_index_controller.dart';
 import 'package:smart_rent/modules/manage_electricity_water_index/widgets/write_electricity_index_sheet.dart';
 
@@ -16,7 +17,7 @@ class ManageElectricityWaterIndexPage
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(title: 'electricity_water_index'.tr),
       body: Column(
@@ -74,22 +75,26 @@ class ManageElectricityWaterIndexPage
           Expanded(
             child: KeepAliveWrapper(
               wantKeepAlive: true,
-              child: ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                padding: EdgeInsets.symmetric(vertical: 16.px),
-                itemBuilder: (context, index) =>
-                    Divider(color: AppColors.secondary80, height: 40.px),
-                separatorBuilder: (context, index) => _buildRowData(
-                  context,
-                  value: [1, 150, () {}, ''],
-                  textStyle: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.secondary20,
+              child: RefreshIndicator(
+                onRefresh: () => Future.delayed(const Duration(seconds: 1)),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.symmetric(vertical: 16.px),
+                  itemBuilder: (context, index) =>
+                      Divider(color: AppColors.secondary80, height: 40.px),
+                  separatorBuilder: (context, index) => _buildRowData(
+                    context,
+                    value: [1, 150, () {}, ''],
+                    textStyle: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.secondary20,
+                    ),
                   ),
+                  itemCount: 20,
                 ),
-                itemCount: 20,
               ),
             ),
           ),

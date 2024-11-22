@@ -5,6 +5,7 @@ import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract_info/contract_info_controller.dart';
 
 class ContractInfoPage extends GetView<ContractInfoController> {
@@ -12,7 +13,8 @@ class ContractInfoPage extends GetView<ContractInfoController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
+      backgroundColor: AppColors.white,
       appBar: CustomAppBar(
         title: 'contract_information'.tr,
       ),

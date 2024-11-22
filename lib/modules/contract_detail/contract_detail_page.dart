@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_controller.dart';
 
 class DetailContractPage extends GetView<ContractDetailController> {
@@ -16,7 +17,7 @@ class DetailContractPage extends GetView<ContractDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(title: 'detaul_contract'.tr),
       body: SingleChildScrollView(

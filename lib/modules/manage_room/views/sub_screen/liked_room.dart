@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/liked_room_controller.dart';
 
 class LikedRoomScreen extends GetView<LikedRoomController> {
@@ -10,7 +11,7 @@ class LikedRoomScreen extends GetView<LikedRoomController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng yêu thích',

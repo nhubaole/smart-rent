@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import '/core/values/image_assets.dart';
 import '/modules/manage_room/views/widgets/button_category_room.dart';
@@ -15,7 +16,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       body: Stack(
         children: [
           _buildTopComponent(context),
@@ -118,7 +119,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'billing_invoice'.tr,
                       icon: ImageAssets.icInvoice,
-                      onTap: () {},
+                      onTap: () => Get.toNamed(AppRoutes.billCollection),
                     ),
                   ),
                 ],

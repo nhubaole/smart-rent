@@ -40,4 +40,6 @@ abstract class AppColors {
   static const transparent = Colors.transparent;
   static const splashColor = Color.fromARGB(0, 142, 142, 142);
   static const loading = Color(0xFF0077B6);
+
+  static final splash = AppColors.secondary80.withOpacity(0.5);
 }

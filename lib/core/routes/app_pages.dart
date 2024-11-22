@@ -4,8 +4,14 @@ import 'package:smart_rent/modules/auth/login/bindings/login_binding.dart';
 import 'package:smart_rent/modules/auth/login/views/login_screen.dart';
 import 'package:smart_rent/modules/auth/signup/bindings/signup_binding.dart';
 import 'package:smart_rent/modules/auth/signup/views/sign_up_screen.dart';
+import 'package:smart_rent/modules/bill_collection/bill_collection_binding.dart';
+import 'package:smart_rent/modules/bill_collection/bill_collection_page.dart';
+import 'package:smart_rent/modules/bill_info/bill_info_binding.dart';
+import 'package:smart_rent/modules/bill_info/bill_info_page.dart';
 import 'package:smart_rent/modules/contract/contract_binding.dart';
 import 'package:smart_rent/modules/contract/contract_page.dart';
+import 'package:smart_rent/modules/contract_creation/contract_creation_binding.dart';
+import 'package:smart_rent/modules/contract_creation/contract_creation_page.dart';
 import 'package:smart_rent/modules/contract_info/contract_info_binding.dart';
 import 'package:smart_rent/modules/contract_info/contract_info_page.dart';
 import 'package:smart_rent/modules/detail/bindings/detail_binding.dart';
@@ -145,6 +151,21 @@ abstract class AppPages {
       name: AppRoutes.manageElectricityWaterIndex,
       page: () => const ManageElectricityWaterIndexPage(),
       binding: ManageElectricityWaterIndexBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.billCollection,
+      page: () => const BillCollectionPage(),
+      binding: BillCollectionBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.billInfo,
+      page: () => const BillInfoPage(),
+      binding: BillInfoBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contractCreation,
+      page: () => const ContractCreationPage(),
+      binding: ContractCreationBinding(),
     ),
   ];
 }

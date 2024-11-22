@@ -7,6 +7,7 @@ import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/detail_request_controller.dart';
 import '/core/widget/custom_app_bar.dart';
 
@@ -15,7 +16,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: const CustomAppBar(
         title: 'Thông tin yêu cầu',
       ),

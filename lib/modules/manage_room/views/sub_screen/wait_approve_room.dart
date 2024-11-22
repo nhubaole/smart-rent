@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '/core/widget/room_item.dart';
 import '/modules/manage_room/controllers/sub_screen_controller/wait_approve_room_controller.dart';
 
@@ -10,7 +11,7 @@ class WaitApproveRoomScreen extends GetView<WaitApproveRoomController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng đang chờ duyêt',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '../../../../core/config/app_colors.dart';
 import '../../login/views/login_screen.dart';
 import '../controllers/sign_up_controllers.dart';
@@ -19,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
     final signUpController = Get.put(SignUpController());
     return SafeArea(
       child: Obx(
-        () => Scaffold(
+        () => ScaffoldWidget(
           resizeToAvoidBottomInset: false,
           body: Center(
             child: SingleChildScrollView(
