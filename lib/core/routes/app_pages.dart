@@ -139,7 +139,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.contractDetail,
-      page: () => const DetailContractPage(),
+      page: () => const ContractDetailPage(),
       binding: ContractDetailBinding(),
     ),
     GetPage(

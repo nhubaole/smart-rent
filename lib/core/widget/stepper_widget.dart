@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 
 class StepperWidget<T> extends StatefulWidget {
   final List<T> tabs;
   final int initStep;
-  final Function(int) onStepTapped;
+  final Future<bool> Function(int) onStepTapped;
   final Color selectedColor;
   final Color unselectedColor;
 
@@ -85,25 +86,33 @@ class _StepperWidgetState extends State<StepperWidget> {
                           color: AppColors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(50),
-                            onTap: () {
+                            onTap: () async {
                               if (currentSelected == index) return;
-                              widget.onStepTapped(index);
-                              setState(() {
-                                currentSelected = index;
-                              });
+                              final shouldChange =
+                                  await widget.onStepTapped(index);
+                              if (shouldChange) {
+                                setState(() {
+                                  currentSelected = index;
+                                });
+                              }
                             },
                             child: CircleAvatar(
                               backgroundColor: currentSelected >= index
                                   ? widget.selectedColor
                                   : widget.unselectedColor,
-                              radius: 15,
-                              child: Text(
-                                '${widget.tabs[index]['counter'] as int}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              radius: 12.px,
+                              child: index < widget.initStep
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    )
+                                  : Text(
+                                      '${widget.tabs[index]['counter'] as int}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
                           ),
                         ),

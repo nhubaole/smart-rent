@@ -13,80 +13,82 @@ class ContractCreationPartRoomInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.only(
+      padding: EdgeInsets.only(
             right: 16.px,
             left: 16.px,
             bottom: MediaQuery.of(context).viewInsets.bottom + 10.px),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'rental_details'.tr,
-                style: TextStyle(
-                  color: AppColors.primary40,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'rental_address'.tr,
-              hintText: 'Nguyen Van A',
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'electricity_fee'.tr,
-              hintText: 'Nguyen Van A',
-              suffixUnit: '| ₫/kwh',
-              textInputType: TextInputType.number,
-              inputFormatters: [NumberFormatter()],
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'water_fee'.tr,
-              hintText: 'Nguyen Van A',
-              suffixUnit: '| ₫/người',
-              inputFormatters: [NumberFormatter()],
-              textInputType: TextInputType.number,
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'internet_fee'.tr,
-              hintText: 'Nguyen Van A',
-              suffixUnit: '| ₫',
-              inputFormatters: [NumberFormatter()],
-              textInputType: TextInputType.number,
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'parking_fee'.tr,
-              hintText: 'Nguyen Van A',
-              suffixUnit: '| ₫',
-              inputFormatters: [NumberFormatter()],
-              textInputType: TextInputType.number,
-            ),
-            SizedBox(height: 16.px),
-            OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
-              onValidateString: 'Enter',
-              textLabel: 'monthly_payment_date'.tr,
-              hintText: 'Nguyen Van A',
-              textInputType: TextInputType.number,
-            ),
-          ],
+      child: Column(
+        children: [
+          _buildHeader(),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'rental_address'.tr,
+            hintText: 'Nguyen Van A',
+          ),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'electricity_fee'.tr,
+            hintText: 'Nguyen Van A',
+            suffixUnit: '| ₫/kwh',
+            textInputType: TextInputType.number,
+            inputFormatters: [NumberFormatter()],
+          ),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'water_fee'.tr,
+            hintText: 'Nguyen Van A',
+            suffixUnit: '| ₫/người',
+            inputFormatters: [NumberFormatter()],
+            textInputType: TextInputType.number,
+          ),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'internet_fee'.tr,
+            hintText: 'Nguyen Van A',
+            suffixUnit: '| ₫',
+            inputFormatters: [NumberFormatter()],
+            textInputType: TextInputType.number,
+          ),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'parking_fee'.tr,
+            hintText: 'Nguyen Van A',
+            suffixUnit: '| ₫',
+            inputFormatters: [NumberFormatter()],
+            textInputType: TextInputType.number,
+          ),
+          SizedBox(height: 16.px),
+          OutlineTextFiledWidget(
+            textEditingController: TextEditingController(),
+            onValidateString: 'Enter',
+            textLabel: 'monthly_payment_date'.tr,
+            hintText: 'Nguyen Van A',
+            textInputType: TextInputType.number,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Align _buildHeader() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        'rental_details'.tr,
+        style: TextStyle(
+          color: AppColors.primary40,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

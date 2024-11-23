@@ -6,8 +6,8 @@ import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_controller.dart';
 
-class DetailContractPage extends GetView<ContractDetailController> {
-  const DetailContractPage({super.key});
+class ContractDetailPage extends GetView<ContractDetailController> {
+  const ContractDetailPage({super.key});
 
   static TextStyle childTextStyle = TextStyle(
     fontSize: 14.sp,

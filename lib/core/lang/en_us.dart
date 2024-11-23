@@ -187,5 +187,6 @@ final enUS = {
   'joint_responsibility': 'JOINT RESPONSIBILITY',
   'preview_contract_template': 'Preview contract template',
   'create_contract': 'Create contract',
-  'continue': 'Continue'
+  'continue': 'Continue',
+  'save': 'Save',
 };

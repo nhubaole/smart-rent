@@ -30,7 +30,10 @@ class ContractCreationPage extends GetView<ContractCreationController> {
                 child: StepperWidget<Map<String, dynamic>>(
                   tabs: controller.tabs.value,
                   initStep: controller.selectedTab.value,
-                  onStepTapped: controller.onStepTapped,
+                  onStepTapped: (p0) async {
+                    final result = await controller.onStepTapped(p0);
+                    return result;
+                  },
                   selectedColor: AppColors.primary40,
                   unselectedColor: AppColors.secondary60,
                 ),

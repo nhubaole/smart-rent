@@ -80,7 +80,7 @@ class CardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
+    Get.put(SignUpController());
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 32,

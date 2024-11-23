@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/helper/number_formatter.dart';
 
 class OutlineTextFiledWidget extends StatelessWidget {
   final Function()? onTap;
@@ -19,8 +17,10 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final TextEditingController textEditingController;
   final Widget? suffixIcon;
   final String? suffixUnit;
+  final Widget? suffix;
   final Widget? prefixIcon;
   final int? maxlines;
+  final int? minlines;
   final List<TextInputFormatter>? inputFormatters;
 
   const OutlineTextFiledWidget({
@@ -40,6 +40,8 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.maxlines,
     this.suffixUnit,
     this.inputFormatters,
+    this.suffix,
+    this.minlines,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -83,6 +85,8 @@ class OutlineTextFiledWidget extends StatelessWidget {
       inputFormatters: inputFormatters,
       controller: textEditingController,
       keyboardType: textInputType!,
+      minLines: minlines,
+      maxLines: maxlines,
       textInputAction: TextInputAction.done,
       style: defaultTextStyle,
       decoration: InputDecoration(
@@ -105,6 +109,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
             width: 1,
           ),
         ),
+        suffix: suffix,
         suffixIcon: suffixIcon ??
             (suffixUnit != null
                 ? Padding(
