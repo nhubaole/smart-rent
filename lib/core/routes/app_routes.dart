@@ -33,6 +33,20 @@ abstract class AppRoutes {
   // 11.22.24
   static const contractCreation = '/contract_creation';
 
+  // 11.23.24
+  static const paymentDeposit = '/payment_deposit';
+  static const paymentSuccess = '/payment_success';
+  static const paymentDetail = '/payment_detail';
+
+  // 11.26.24
+  static const paymentTransferInfo = '/payment_transfer_info';
+
+  // 1.12.24
+  static const landlordBillCollection = '/landlord_bill_collection';
+  static const landlordPaymentDetail = '/landlord_payment_detail';
+  static const landlordBillInfo = '/landlord_bill_info';
+  static const landlordBillEdit = '/landlord_bill_edit';
+
 
   static const map = '/map';
 }

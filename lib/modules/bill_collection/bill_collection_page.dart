@@ -23,7 +23,7 @@ class BillCollectionPage extends GetView<BillCollectionController> {
           _buildTabbar(),
           Expanded(
             child: _buildTabBarView(),
-          )
+          ),
         ],
       ),
     );

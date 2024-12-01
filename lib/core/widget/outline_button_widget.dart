@@ -7,10 +7,12 @@ class OutlineButtonWidget extends StatelessWidget {
   final Function()? onTap;
   final Color? backgroundColor;
   final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
   final double? height;
   final Widget? trailing;
   final Widget? child;
   final Widget? leading;
+  final BorderRadius? borderRadius;
   const OutlineButtonWidget({
     super.key,
     this.text,
@@ -21,6 +23,8 @@ class OutlineButtonWidget extends StatelessWidget {
     this.trailing,
     this.leading,
     this.child,
+    this.borderRadius,
+    this.padding = const EdgeInsets.all(16.0),
   }) : assert(text != null || child != null);
 
   @override
@@ -31,7 +35,7 @@ class OutlineButtonWidget extends StatelessWidget {
         color: onTap == null
             ? AppColors.secondary60
             : backgroundColor ?? AppColors.transparent,
-        borderRadius: BorderRadius.circular(20.px),
+        borderRadius: borderRadius ?? BorderRadius.circular(20.px),
         border: Border.all(
           width: 1,
           color: onTap == null ? AppColors.secondary40 : AppColors.primary60,
@@ -41,15 +45,22 @@ class OutlineButtonWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           splashColor: AppColors.primary60.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(20.px),
+          borderRadius: borderRadius ?? BorderRadius.circular(20.px),
           onTap: onTap,
           child: Container(
-            height: height ?? 50,
+            height: height,
+            padding: padding,
             alignment: Alignment.center,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (leading != null) leading!,
+                if (leading != null)
+                  Row(
+                    children: [
+                      leading!,
+                      SizedBox(width: 8.px),
+                    ],
+                  ),
                 child ??
                     Text(
                       text!,

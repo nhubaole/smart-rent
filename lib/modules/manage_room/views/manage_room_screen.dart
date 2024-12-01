@@ -119,7 +119,10 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'billing_invoice'.tr,
                       icon: ImageAssets.icInvoice,
-                      onTap: () => Get.toNamed(AppRoutes.billCollection),
+                      onTap: () {
+                        // Get.toNamed(AppRoutes.billCollection);
+                        Get.toNamed(AppRoutes.landlordBillCollection);
+                      },
                     ),
                   ),
                 ],

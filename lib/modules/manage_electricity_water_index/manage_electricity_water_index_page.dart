@@ -335,7 +335,7 @@ class ManageElectricityWaterIndexPage
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

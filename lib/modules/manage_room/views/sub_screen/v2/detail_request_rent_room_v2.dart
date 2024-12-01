@@ -218,7 +218,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.green.withOpacity(0.2),
+              color: AppColors.greenOrigin.withOpacity(0.2),
               borderRadius: BorderRadius.circular(10.px),
             ),
             child: Material(
@@ -236,12 +236,12 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                     children: [
                       const Icon(
                         Icons.check,
-                        color: AppColors.green,
+                        color: AppColors.greenOrigin,
                       ),
                       Text(
                         'accept'.tr,
                         style: const TextStyle(
-                          color: AppColors.green,
+                          color: AppColors.greenOrigin,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -403,13 +403,13 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
           children: [
             const Icon(
               Icons.check,
-              color: AppColors.green,
+              color: AppColors.greenOrigin,
             ),
             SizedBox(width: 3.px),
             Text(
               'suitable_for_room_capacity'.tr,
               style: const TextStyle(
-                color: AppColors.green,
+                color: AppColors.greenOrigin,
               ),
             ),
           ],

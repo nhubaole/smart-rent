@@ -161,6 +161,8 @@ class WriteElectricityIndexSheet extends StatelessWidget {
         color: AppColors.secondary60,
         padding: EdgeInsets.all(8.px),
         borderPadding: EdgeInsets.all(8.px),
+        borderType: BorderType.RRect,
+        radius: Radius.circular(10.px),
         child: Material(
           color: AppColors.transparent,
           child: InkWell(

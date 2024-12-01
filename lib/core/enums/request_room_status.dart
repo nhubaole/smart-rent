@@ -45,7 +45,7 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
     switch (this) {
       case RequestRoomStatus.accepted:
       case RequestRoomStatus.completed:
-        return AppColors.green;
+        return AppColors.greenOrigin;
       case RequestRoomStatus.rejected:
       case RequestRoomStatus.canceled:
         return Colors.red;

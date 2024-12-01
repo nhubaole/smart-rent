@@ -5,12 +5,12 @@ import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/request_room_status.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
-import 'package:smart_rent/core/widget/solid_button_widget.dart';
-import 'package:smart_rent/modules/bill_info/bill_info_controller.dart';
+import 'package:smart_rent/modules/landlord_bill_info/landlord_bill_info_controller.dart';
 
-class BillInfoPage extends GetView<BillInfoController> {
-  const BillInfoPage({super.key});
+class LandlordBillInfoPage extends GetView<LandlordBillInfoController> {
+  const LandlordBillInfoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,15 @@ class BillInfoPage extends GetView<BillInfoController> {
                     _buildTimeCreation(),
                     SizedBox(height: 16.px),
                     _buildStatus(),
+                    SizedBox(height: 16.px),
+                    OutlineButtonWidget(
+                      leading: const Icon(
+                        Icons.notifications,
+                        color: AppColors.primary60,
+                      ),
+                      text: 'reminder_payment'.tr,
+                      onTap: () {},
+                    ),
                     SizedBox(height: 16.px),
                   ],
                 ),
@@ -66,50 +75,18 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
         ),
       ),
-      bottomNavigationBar: SolidButtonWidget(
-          height: 50.px,
-          margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-          text: 'payment'.tr,
-          onTap: () => Get.toNamed(AppRoutes.paymentDeposit)
+      bottomNavigationBar: OutlineButtonWidget(
+        height: 50.px,
+        margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+        text: 'edit_invoice'.tr,
+        onTap: () => Get.toNamed(AppRoutes.landlordBillEdit),
+        leading: const Icon(
+          Icons.edit,
+          color: AppColors.primary60,
+        ),
       ),
     );
   }
-
-  // Row _buildButtonSubmit() {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //         child: Material(
-  //           color: Colors.transparent,
-  //           child: InkWell(
-  //             splashColor: AppColors.primary60.withOpacity(0.2),
-  //             borderRadius: BorderRadius.circular(20.px),
-  //             onTap: () {
-  //               print('object');
-  //             },
-  //             child: Container(
-  //               height: 50,
-  //               alignment: Alignment.center,
-  //               decoration: BoxDecoration(
-  //                 color: AppColors.primary60,
-  //                 borderRadius: BorderRadius.circular(20.px),
-  //                 border: Border.all(width: 1, color: AppColors.primary60),
-  //               ),
-  //               child: Text(
-  //                 'payment'.tr,
-  //                 style: TextStyle(
-  //                   fontSize: 16.sp,
-  //                   color: AppColors.white,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Container _buildBillPayment() {
     return Container(
@@ -354,7 +331,7 @@ class BillInfoPage extends GetView<BillInfoController> {
   }
 
   Container _buildStatus() {
-    const status = RequestRoomStatus.pending;
+    const status = RequestRoomStatus.completed;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -362,7 +339,7 @@ class BillInfoPage extends GetView<BillInfoController> {
         horizontal: 2.h,
       ),
       decoration: BoxDecoration(
-        color: RequestRoomStatus.pending.colorBackground,
+        color: status.colorBackground,
         borderRadius: BorderRadius.circular(8.px),
       ),
       child: Row(

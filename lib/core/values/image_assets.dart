@@ -16,6 +16,7 @@ class ImageAssets {
   static const icScheduleReview = '$path/ic_schedule_review.svg';
   static const icAddGallery = '$path/ic_add_gallery.png';
   static const icAddFromCamera = '$path/ic_add_camera.ong';
+  static const icPayment = '$path/payment.png';
 
 
 }

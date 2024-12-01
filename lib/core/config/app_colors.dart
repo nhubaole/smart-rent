@@ -18,6 +18,7 @@ abstract class AppColors {
   static const red40 = Color(0xFFB3261E);
   static const red50 = Color(0xFFFF424F);
   static const red60 = Color(0xFFFF4567);
+  static const red70 = Color(0xFFFF425E);
   static const red90 = Color(0xFFFFF0F1);
 
   static const grey20 = Color(0xFF49454F);
@@ -26,7 +27,8 @@ abstract class AppColors {
   static const grey80 = Color(0xFFDADADB);
   static const grey90 = Color(0xFFF2F2F2);
 
-  static const green = Colors.green;
+  static const greenOrigin = Colors.green;
+  static const green20 = Color(0XFF1BC675);
 
   static const like = Color(0xFFFF4567);
   static const error = Color(0xFFFF4567);

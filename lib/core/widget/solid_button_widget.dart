@@ -10,6 +10,11 @@ class SolidButtonWidget extends StatelessWidget {
   final double? height;
   final TextStyle? textStyle;
   final EdgeInsetsGeometry? padding;
+  final Widget? icon;
+  final Widget? trailing;
+  final Widget? child;
+  final Widget? leading;
+  final BorderRadius? borderRadius;
 
   const SolidButtonWidget({
     super.key,
@@ -20,18 +25,22 @@ class SolidButtonWidget extends StatelessWidget {
     this.height,
     this.textStyle,
     this.padding = const EdgeInsets.all(16.0),
+    this.icon,
+    this.borderRadius,
+    this.trailing,
+    this.leading,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       margin: margin ?? EdgeInsets.zero,
       decoration: BoxDecoration(
         color: onTap == null
             ? AppColors.secondary60
             : backgroundColor ?? AppColors.primary60,
-        borderRadius: BorderRadius.circular(20.px),
+        borderRadius: borderRadius ?? BorderRadius.circular(20.px),
         border: Border.all(
           width: 1,
           color: onTap == null
@@ -42,20 +51,34 @@ class SolidButtonWidget extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          splashColor: Colors.grey.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(20.px),
+          splashColor: AppColors.secondary20.withOpacity(0.2),
+          borderRadius: borderRadius ?? BorderRadius.circular(20.px),
           onTap: onTap,
           child: Container(
+            height: height,
             padding: padding,
             alignment: Alignment.center,
-            child: Text(
-              text,
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: 16.sp,
-                    color: AppColors.white,
-                    fontWeight: FontWeight.bold,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null)
+                  Row(
+                    children: [
+                      icon!,
+                      SizedBox(width: 8.px),
+                    ],
                   ),
+                Text(
+                  text,
+                  style: textStyle ??
+                      TextStyle(
+                        fontSize: 16.sp,
+                        color: AppColors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                if (trailing != null) trailing!,
+              ],
             ),
           ),
         ),
