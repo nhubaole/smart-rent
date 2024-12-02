@@ -232,5 +232,18 @@ final viVN = {
   'edit_invoice': 'Chỉnh sửa hóa đơn',
   'enter_amount': 'Nhập số tiền',
   'enter_note': 'Nhập ghi chú',
-
+  'track_rental_process': 'Theo dõi quá trình thuê trọ',
+  'status_details': 'Chi tiết trạng thái',
+  'rental_process_completed': 'Quá trình thuê trọ hoàn tất',
+  'you': 'Bạn',
+  'signed_contract_and_paid_deposit':
+      'Đã ký hợp đồng và thanh toán tiền đặt cọc',
+  'created_rental_contract': 'Đã tạo hợp đồng thuê trọ',
+  'processed_rental_request': 'Đã tiếp nhận yêu cầu thuê trọ của bạn',
+  'sent_rental_request': 'Đã gửi yêu cầu thuê trọ',
+  'paid_invoice': 'Đã thanh toán hóa đơn @month',
+  'sent_invoice': 'Đã gửi hóa đơn thanh toán @month',
+  'rental_contract_ready': 'Hợp đồng thuê trọ đã sẵn sàng',
+  'detail': 'Chi tiết',
+  'room': 'Phòng',
 };

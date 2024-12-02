@@ -47,6 +47,9 @@ abstract class AppRoutes {
   static const landlordBillInfo = '/landlord_bill_info';
   static const landlordBillEdit = '/landlord_bill_edit';
 
+  // 2.12.24
+  static const trackRentalProcess = '/track_rental_process';
+
 
   static const map = '/map';
 }

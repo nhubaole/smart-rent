@@ -60,6 +60,8 @@ import 'package:smart_rent/modules/contract_sign/contract_sign_binding.dart';
 import 'package:smart_rent/modules/contract_sign/contract_sign_page.dart';
 import 'package:smart_rent/modules/splash/bindings/splash_binding.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
+import 'package:smart_rent/modules/track_rental_process/track_rental_process_binding.dart';
+import 'package:smart_rent/modules/track_rental_process/track_rental_process_page.dart';
 
 abstract class AppPages {
   static final routes = [
@@ -222,6 +224,11 @@ abstract class AppPages {
       name: AppRoutes.paymentDetail,
       page: () => const PaymentDetailPage(),
       binding: PaymentDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.trackRentalProcess,
+      page: () => const TrackRentalProcessPage(),
+      binding: TrackRentalProcessBinding(),
     ),
   ];
 }

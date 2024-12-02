@@ -192,7 +192,9 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
             itemCount: 10,
             padding: EdgeInsets.symmetric(horizontal: 16.px),
             itemBuilder: (context, index) {
-              return const TrackingRoom();
+              return TrackingRoom(
+                onDetail: () => Get.toNamed(AppRoutes.trackRentalProcess),
+              );
             },
           ),
         ),

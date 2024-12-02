@@ -236,5 +236,17 @@ final enUS = {
   'edit_invoice': 'Edit Invoice',
   'enter_amount': 'Enter Amount',
   'enter_note': 'Enter Note',
-
+'track_rental_process': 'Track Rental Process',
+  'status_details': 'Status Details',
+  'rental_process_completed': 'Rental Process Completed',
+  'you': 'You',
+  'signed_contract_and_paid_deposit': 'Signed Contract and Paid Deposit',
+  'created_rental_contract': 'Created Rental Contract',
+  'processed_rental_request': 'Processed Your Rental Request',
+  'sent_rental_request': 'Sent Rental Request',
+  'paid_invoice': 'Paid Invoice for @month',
+  'sent_invoice': 'Sent Invoice for @month',
+  'rental_contract_ready': 'Rental Contract is Ready',
+  'detail': 'Detail',
+  'room': 'Room',
 };

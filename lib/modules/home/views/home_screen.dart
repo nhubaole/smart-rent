@@ -27,7 +27,7 @@ class HomeScreen extends GetView<HomeScreenController> {
     return Obx(
       () => ScaffoldWidget(
         floatingActionButton: _buildFloatingButton(),
-        body: _buildBody(),
+        body: _buildContent(),
       ),
     );
   }

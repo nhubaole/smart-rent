@@ -183,7 +183,7 @@ class _RoomItemState extends State<RoomItem> {
             children: [
               const Text(
                 'rating',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   color: AppColors.white,
                   fontWeight: FontWeight.w500,
