@@ -143,7 +143,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'tenant'.tr,
                       icon: ImageAssets.icCustomer,
-                      onTap: () {},
+                      onTap: () => Get.toNamed(AppRoutes.tenantRentReturn),
                     ),
                   ),
                   Expanded(

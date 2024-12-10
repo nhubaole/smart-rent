@@ -249,4 +249,40 @@ final enUS = {
   'rental_contract_ready': 'Rental Contract is Ready',
   'detail': 'Detail',
   'room': 'Room',
+
+
+  'rent_return': 'Room Return',
+  'return_steps':
+      'Complete the room rental process quickly and safely with the following steps:',
+  'send_return_request': 'Send Room Return Request',
+  'send_request_to_owner': 'Send your room return request to the landlord',
+  'check_room_confirm': 'Inspect the Room and Confirm',
+  'deposit_refund': 'Deposit Refund',
+  'refund_policy': 'Your deposit will be refunded to you',
+  'rate_owner': 'Rate the Landlord',
+  'rate_after_rent': 'Rate the landlord after the rental process',
+  'end_process': 'End',
+  'extend_contract': 'Renew',
+  'confirm_end_rent':
+      'Are you sure you want to end the contract and proceed with the room return?',
+  'confirmation_info': 'Confirmation Information',
+  'room': 'Room',
+  'address': 'Address',
+  'rent_price': 'Rental Price',
+  'start_date': 'Start Date',
+  'return_request': 'Room Return Request',
+  'return_date': 'RETURN DATE',
+  'per_contract_term': 'As per the contract term',
+  'reason': 'REASON',
+  'commitment_statement':
+      'By submitting the room return request, you agree to return the room on time as stated.',
+  'commitment_agree': 'I agree to comply with the contract terms',
+  'submit': 'Submit',
+  'request_success': 'Request Submitted Successfully',
+  'success_message': 'Your request has been sent to the landlord.',
+  'view_requests':
+      'You can review the request in the Request Management section of the app.',
+  'back': 'Back',
+  'owner_check_room': 'The landlord will inspect the room after you return it',
+
 };

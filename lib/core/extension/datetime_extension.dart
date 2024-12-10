@@ -13,7 +13,7 @@ extension DatetimeExt on DateTime {
   String get yyyymmddHHmmss => DateFormat('yyyy-MM-dd HH:mm:ss').format(this);
   String get ddMMyyyyHHmmss => DateFormat('dd-MM-yyyy HH:mm:ss').format(this);
   String get ddMMyyyyHHmm => DateFormat('dd-MM-yyyy HH:mm').format(this);
-  String get ddMMyyyy => DateFormat('dd-MM-yyyy').format(this);
+  String get ddMMyyyy => DateFormat('dd/MM/yyyy').format(this);
   String get hhmm => DateFormat('HH:mm').format(this);
   String get yyyymmdd => DateFormat('yyyy-MM-dd').format(this);
   String get mmss => DateFormat('mm:ss').format(this);

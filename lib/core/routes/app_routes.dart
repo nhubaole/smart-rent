@@ -50,6 +50,13 @@ abstract class AppRoutes {
   // 2.12.24
   static const trackRentalProcess = '/track_rental_process';
 
+  // 5.12.24
+  static const tenantRentReturn = '/tenant_rent_return';
+
+  // 6.12.24
+  static const tenantSentReturnRequest = '/tenant_sent_return_request';
+  static const tenantrequestSuccess = '/tenant_request_success';
+
 
   static const map = '/map';
 }

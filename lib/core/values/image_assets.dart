@@ -1,5 +1,7 @@
 class ImageAssets {
   static const path = 'assets/images';
+  static const pathPNG = '$path/png';
+  static const pathSVG = '$path/svg';
   static const demo =
       'https://images.unsplash.com/photo-1723843038784-ba892b252323?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
@@ -17,6 +19,11 @@ class ImageAssets {
   static const icAddGallery = '$path/ic_add_gallery.png';
   static const icAddFromCamera = '$path/ic_add_camera.ong';
   static const icPayment = '$path/payment.png';
+
+  static const icSend2 = '$path/ic_send_2.png';
+  static const icTerm = '$path/ic_term.png';
+  static const icRating1 = '$path/ic_rating_1.png';
+  static const icCreditCard = '$path/ic_credit_card.png';
 
 
 }

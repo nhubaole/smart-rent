@@ -60,6 +60,12 @@ import 'package:smart_rent/modules/contract_sign/contract_sign_binding.dart';
 import 'package:smart_rent/modules/contract_sign/contract_sign_page.dart';
 import 'package:smart_rent/modules/splash/bindings/splash_binding.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
+import 'package:smart_rent/modules/tenant_rent_return/tenant_rent_return_binding.dart';
+import 'package:smart_rent/modules/tenant_rent_return/tenant_rent_return_page.dart';
+import 'package:smart_rent/modules/tenant_request_success/tenant_request_success_binding.dart';
+import 'package:smart_rent/modules/tenant_request_success/tenant_request_success_page.dart';
+import 'package:smart_rent/modules/tenant_sent_return_request/tenant_sent_return_request_binding.dart';
+import 'package:smart_rent/modules/tenant_sent_return_request/tenant_sent_return_request_page.dart';
 import 'package:smart_rent/modules/track_rental_process/track_rental_process_binding.dart';
 import 'package:smart_rent/modules/track_rental_process/track_rental_process_page.dart';
 
@@ -229,6 +235,21 @@ abstract class AppPages {
       name: AppRoutes.trackRentalProcess,
       page: () => const TrackRentalProcessPage(),
       binding: TrackRentalProcessBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantRentReturn,
+      page: () => const TenantRentReturnPage(),
+      binding: TenantRentReturnBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantSentReturnRequest,
+      page: () => const TenantSentReturnRequestPage(),
+      binding: TenantSentReturnRequestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantrequestSuccess,
+      page: () => const TenantRequestSuccessPage(),
+      binding: TenantRequestSuccessBinding(),
     ),
   ];
 }

@@ -51,6 +51,16 @@ class OutlineTextFiledWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget textFormFiled;
+    if (onTap == null) {
+      textFormFiled = _buildTextFormField();
+    } else {
+      textFormFiled = GestureDetector(
+        onTap: onTap!,
+        child: _buildTextFormField(),
+      );
+    }
+
     return textLabel != null
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,10 +78,10 @@ class OutlineTextFiledWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.px),
-              _buildTextFormField(),
+              textFormFiled,
             ],
           )
-        : _buildTextFormField();
+        : textFormFiled;
   }
 
   Widget _buildTextFormField() {
@@ -82,6 +92,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
         );
     return TextFormField(
+      enabled: !readOnly!,
       inputFormatters: inputFormatters,
       controller: textEditingController,
       keyboardType: textInputType!,

@@ -10,20 +10,31 @@ class ScaffoldWidget extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final bool enabelSafeArea;
   const ScaffoldWidget({
     super.key,
     this.appBar,
     this.body,
     this.backgroundColor = AppColors.white,
-    this.resizeToAvoidBottomInset = false,
+    this.resizeToAvoidBottomInset = true,
     this.extendBodyBehindAppBar = false,
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.enabelSafeArea = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (enabelSafeArea) {
+      return SafeArea(
+        child: _buildScaffold(),
+      );
+    }
+    return _buildScaffold();
+  }
+
+  Scaffold _buildScaffold() {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBar,

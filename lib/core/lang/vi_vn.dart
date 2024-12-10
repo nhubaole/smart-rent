@@ -246,4 +246,40 @@ final viVN = {
   'rental_contract_ready': 'Hợp đồng thuê trọ đã sẵn sàng',
   'detail': 'Chi tiết',
   'room': 'Phòng',
+
+
+  'rent_return': 'Trả phòng trọ',
+  'return_steps':
+      'Hoàn tất quá trình thuê phòng trọ nhanh chóng và an toàn với các bước sau:',
+  'send_return_request': 'Gửi yêu cầu trả phòng',
+  'send_request_to_owner': 'Gửi yêu cầu trả phòng của bạn đến chủ nhà',
+  'check_room_confirm': 'Kiểm tra phòng và xác nhận',
+  'deposit_refund': 'Hoàn tiền đặt cọc',
+  'refund_policy': 'Tiền đặt cọc sẽ được hoàn trả cho bạn',
+  'rate_owner': 'Đánh giá chủ nhà',
+  'rate_after_rent': 'Đánh giá chủ nhà sau quá trình thuê',
+  'end_process': 'Kết thúc',
+  'extend_contract': 'Gia hạn',
+  'confirm_end_rent':
+      'Bạn có chắc chắn muốn kết thúc hợp đồng và tiến hành trả phòng?',
+  'confirmation_info': 'Thông tin xác nhận',
+  'room': 'Phòng',
+  'address': 'Địa chỉ',
+  'rent_price': 'Giá thuê',
+  'start_date': 'Ngày bắt đầu thuê',
+  'return_request': 'Yêu cầu trả phòng',
+  'return_date': 'NGÀY TRẢ PHÒNG',
+  'per_contract_term': 'Theo thời hạn hợp đồng',
+  'reason': 'LÝ DO',
+  'commitment_statement':
+      'Bằng việc gửi yêu cầu trả phòng, bạn cam kết trả phòng đúng thời gian quy định',
+  'commitment_agree': 'Tôi cam kết thực hiện đúng như hợp đồng',
+  'submit': 'Gửi',
+  'request_success': 'Gửi yêu cầu thành công',
+  'success_message': 'Yêu cầu của bạn đã được gửi đến chủ nhà.',
+  'view_requests':
+      'Bạn có thể xem lại yêu cầu trong phần Quản lý yêu cầu của ứng dụng.',
+  'back': 'Quay lại',
+  'owner_check_room': 'Chủ nhà sẽ kiểm tra phòng sau khi bạn trả',
+
 };
