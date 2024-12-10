@@ -55,7 +55,12 @@ abstract class AppRoutes {
 
   // 6.12.24
   static const tenantSentReturnRequest = '/tenant_sent_return_request';
-  static const tenantrequestSuccess = '/tenant_request_success';
+  static const tenantRequestSuccess = '/tenant_request_success';
+
+  // 10.12.24
+  static const tenantReturnRating = '/tenant_return_rating';
+  static const tenantReturnRatingSuccess = '/tenant_return_rating_success';
+  static const tenantReturnSuccess = '/tenant_return_success';
 
 
   static const map = '/map';

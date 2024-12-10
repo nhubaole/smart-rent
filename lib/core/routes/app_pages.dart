@@ -64,6 +64,12 @@ import 'package:smart_rent/modules/tenant_rent_return/tenant_rent_return_binding
 import 'package:smart_rent/modules/tenant_rent_return/tenant_rent_return_page.dart';
 import 'package:smart_rent/modules/tenant_request_success/tenant_request_success_binding.dart';
 import 'package:smart_rent/modules/tenant_request_success/tenant_request_success_page.dart';
+import 'package:smart_rent/modules/tenant_return_rating/tenant_return_rating_binding.dart';
+import 'package:smart_rent/modules/tenant_return_rating/tenant_return_rating_page.dart';
+import 'package:smart_rent/modules/tenant_return_rating_success/tenant_return_rating_success_binding.dart';
+import 'package:smart_rent/modules/tenant_return_rating_success/tenant_return_rating_success_page.dart';
+import 'package:smart_rent/modules/tenant_return_success/tenant_return_success_binding.dart';
+import 'package:smart_rent/modules/tenant_return_success/tenant_return_success_page.dart';
 import 'package:smart_rent/modules/tenant_sent_return_request/tenant_sent_return_request_binding.dart';
 import 'package:smart_rent/modules/tenant_sent_return_request/tenant_sent_return_request_page.dart';
 import 'package:smart_rent/modules/track_rental_process/track_rental_process_binding.dart';
@@ -247,9 +253,24 @@ abstract class AppPages {
       binding: TenantSentReturnRequestBinding(),
     ),
     GetPage(
-      name: AppRoutes.tenantrequestSuccess,
+      name: AppRoutes.tenantRequestSuccess,
       page: () => const TenantRequestSuccessPage(),
       binding: TenantRequestSuccessBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantReturnRating,
+      page: () => const TenantReturnRatingPage(),
+      binding: TenantReturnRatingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantReturnSuccess,
+      page: () => const TenantReturnSuccessPage(),
+      binding: TenantReturnSuccessBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenantReturnRatingSuccess,
+      page: () => const TenantReturnRatingSuccessPage(),
+      binding: TenantReturnRatingSuccessBinding(),
     ),
   ];
 }

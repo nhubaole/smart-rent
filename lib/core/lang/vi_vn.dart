@@ -282,4 +282,45 @@ final viVN = {
   'back': 'Quay lại',
   'owner_check_room': 'Chủ nhà sẽ kiểm tra phòng sau khi bạn trả',
 
+'room_return_success': 'Trả phòng thành công',
+  'room_return_message':
+      'Chúc mừng bạn! Quá trình trả phòng trọ của bạn đã hoàn tất thành công.',
+  'deposit_refund_message':
+      'Tiền hoàn cọc sẽ được chuyển đến chủ nhà trong vòng 07 ngày làm việc.',
+  'let': 'Hãy',
+  'review_the_room': 'đánh giá phòng trọ',
+  'review_prompt':
+      'giúp người thuê sau có cái nhìn tổng quan và lựa chọn phù hợp hơn.',
+  'do_it_later': 'Để sau',
+  'remind_later_message':
+      'Bạn có thể quay lại và thực hiện điều này bất cứ lúc nào trong tương lai.',
+  'review': 'Đánh giá',
+  'review_room': 'Đánh giá phòng trọ',
+  'review_this_room': 'Đánh giá phòng trọ này',
+  'terrible': 'Cực kỳ tệ',
+  'excellent': 'Xuất sắc',
+  'amenities_question': 'Tiện nghi như thế nào?',
+  'bad': 'Tệ',
+  'average': 'Bình thường',
+  'good': 'Tốt',
+  'location_services_question': 'Vị trí và dịch vụ xung quanh như thế nào?',
+  'cleanliness_question': 'Phòng trọ có sạch không?',
+  'price_question': 'Giá tiền có hợp lý không?',
+  'review_comment_prompt': 'Nhận xét về phòng trọ này',
+  'write_experience': 'Viết vài câu để tóm tắt trải nghiệm của bạn',
+  'share_images': 'Chia sẻ hình ảnh phòng trọ',
+  'upload_images': 'Bấm vào đây để đăng hình ảnh từ thư viện nhé!',
+  'review_landlord': 'Đánh giá chủ nhà',
+  'landlord_friendliness_question': 'Chủ nhà có thân thiện không?',
+  'landlord_professionalism_question': 'Chủ nhà có cư xử chuyên nghiệp không?',
+  'landlord_support_question': 'Mức độ hỗ trợ của chủ nhà như thế nào?',
+  'landlord_transparency_question':
+      'Chủ nhà có minh bạch trong việc trao đổi thông tin không?',
+  'landlord_comment_prompt': 'Nhận xét về chủ nhà',
+  'successful_review': 'Đánh giá thành công',
+  'thank_sent_review': 'Cảm ơn bạn đã gửi đánh giá!',
+  'thank_review_message':
+      'Đánh giá của bạn sẽ giúp chúng tôi cải thiện chất lượng dịch vụ và hỗ trợ những người thuê khác có thông tin tốt hơn',
+  'back_home': 'Về trang chủ',
+
 };

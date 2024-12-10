@@ -284,5 +284,45 @@ final enUS = {
       'You can review the request in the Request Management section of the app.',
   'back': 'Back',
   'owner_check_room': 'The landlord will inspect the room after you return it',
+'room_return_success': 'Successful Room Return',
+  'room_return_message':
+      'Congratulations! Your room return process has been successfully completed.',
+  'deposit_refund_message':
+      'The deposit will be transferred to the landlord within 07 working days.',
+  'let': 'Let\'s',
+  'review_the_room': 'Review the Room',
+  'review_prompt':
+      'to help future tenants get an overview and make a better choice.',
+  'do_it_later': 'Do it later',
+  'remind_later_message':
+      'You can review the room and the landlord in the Room Management section of the app.',
+  'review': 'Review',
+  'review_room': 'Room Review',
+  'review_this_room': 'Review this room',
+  'terrible': 'Terrible',
+  'excellent': 'Excellent',
+  'amenities_question': 'How are the amenities?',
+  'bad': 'Bad',
+  'average': 'Average',
+  'good': 'Good',
+  'location_services_question': 'How is the location and nearby services?',
+  'cleanliness_question': 'Is the room clean?',
+  'price_question': 'Is the price reasonable?',
+  'review_comment_prompt': 'Comments about this room',
+  'write_experience': 'Write a few sentences summarizing your experience',
+  'share_images': 'Share images of the room',
+  'upload_images': 'Click here to upload images from your library!',
+  'review_landlord': 'Landlord Review',
+  'landlord_friendliness_question': 'Is the landlord friendly?',
+  'landlord_professionalism_question': 'Is the landlord professional?',
+  'landlord_support_question': 'How supportive is the landlord?',
+  'landlord_transparency_question':
+      'Is the landlord transparent in communication?',
+  'landlord_comment_prompt': 'Comments about the landlord',
+  'successful_review': 'Successful Review',
+  'thank_sent_review': 'Thank you for submitting your review!',
+  'thank_review_message':
+      'Your feedback will help us improve our service quality and provide better information to other tenants.',
+  'back_home': 'Back to Home',
 
 };

@@ -36,11 +36,9 @@ class PaymentSuccessPage extends GetView<PaymentSuccessController> {
                     (route) => route.settings.name == AppRoutes.root,
                   ),
                   onNavTransactionDetails: () {
-                    Get.until(
-                      (route) => route.settings.name == AppRoutes.root,
-                    );
-                    Get.toNamed(
+                    Get.offNamedUntil(
                       AppRoutes.paymentDetail,
+                      (route) => route.settings.name == AppRoutes.root,
                     );
                   },
                 ),

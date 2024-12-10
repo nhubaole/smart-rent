@@ -55,7 +55,7 @@ class TenantSentReturnRequestPage
                     color: AppColors.white,
                   ),
                 ),
-                onTap: () => Get.toNamed(AppRoutes.tenantrequestSuccess),
+                onTap: () => Get.toNamed(AppRoutes.tenantRequestSuccess),
               ),
             ],
           ),

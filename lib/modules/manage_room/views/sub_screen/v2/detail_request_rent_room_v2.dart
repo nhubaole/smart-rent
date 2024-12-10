@@ -586,7 +586,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         Flexible(
           child: CacheImageWidget(
             imageUrl: ImageAssets.demo,
-            borderRadius: 20.px,
+            borderRadius: BorderRadius.circular(20.px),
             height: 120.px,
             width: 120.px,
           ),

@@ -8,7 +8,8 @@ class CacheImageWidget extends StatefulWidget {
   final BoxFit? fit;
   final double? height;
   final double? width;
-  final double? borderRadius;
+  final BorderRadiusGeometry? borderRadius;
+  final Color? overlay;
   const CacheImageWidget({
     super.key,
     required this.imageUrl,
@@ -16,6 +17,7 @@ class CacheImageWidget extends StatefulWidget {
     this.height,
     this.width,
     this.borderRadius,
+    this.overlay,
   });
 
   @override
@@ -36,14 +38,29 @@ class _CacheImageWidgetState extends State<CacheImageWidget> {
         fileService: HttpFileService(),
       ),
     );
-
+    if (widget.overlay != null) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          _buildCacheImage(customCacheManager),
+          Container(
+            height: widget.height,
+            width: widget.width,
+            decoration: BoxDecoration(
+              color: widget.overlay,
+              borderRadius: widget.borderRadius,
+            ),
+          ),
+        ],
+      );
+    }
     return _buildCacheImage(customCacheManager);
   }
 
   Widget _buildCacheImage(BaseCacheManager? cacheManager) {
     final cacheImage = CachedNetworkImage(
-      height: widget.height ?? 90,
-      width: widget.width ?? 90,
+      height: widget.height,
+      width: widget.width,
       imageUrl: widget.imageUrl,
       alignment: Alignment.center,
       progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -57,7 +74,7 @@ class _CacheImageWidgetState extends State<CacheImageWidget> {
 
     if (widget.borderRadius != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(widget.borderRadius!),
+        borderRadius: widget.borderRadius!,
         child: cacheImage,
       );
     }

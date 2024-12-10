@@ -56,6 +56,7 @@ class OutlineButtonWidget extends StatelessWidget {
               children: [
                 if (leading != null)
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       leading!,
                       SizedBox(width: 8.px),
@@ -72,7 +73,14 @@ class OutlineButtonWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                if (trailing != null) trailing!,
+                if (trailing != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 8.px),
+                      trailing!,
+                    ],
+                  ),
               ],
             ),
           ),

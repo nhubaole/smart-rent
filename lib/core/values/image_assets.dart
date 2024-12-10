@@ -25,5 +25,10 @@ class ImageAssets {
   static const icRating1 = '$path/ic_rating_1.png';
   static const icCreditCard = '$path/ic_credit_card.png';
 
+  static const icTerrible = '$path/ic_terrible.png';
+  static const icBad = '$path/ic_bad.png';
+  static const icAverage = '$path/ic_average.png';
+  static const icGood = '$path/ic_good.png';
+  static const icExcellent = '$path/ic_excellent.png';
 
 }

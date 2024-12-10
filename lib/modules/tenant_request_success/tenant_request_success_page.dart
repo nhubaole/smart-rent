@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/tenant_request_success/tenant_request_success_controller.dart';
@@ -34,7 +35,7 @@ class TenantRequestSuccessPage extends GetView<TenantRequestSuccessController> {
                   text: 'back'.tr,
                   onTap: () {
                     Get.until(
-                      (route) => route.settings.name == '/root',
+                      (route) => route.settings.name == AppRoutes.root,
                     );
                   },
                 ),
