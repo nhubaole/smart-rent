@@ -69,30 +69,34 @@ class _RoomItemState extends State<RoomItem> {
               ),
             );
           },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 2.w,
-              vertical: 1.h,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    _buildImage(),
-                    _buildButtonLike(),
-                  ],
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                _buildContent()
-              ],
-            ),
-          ),
+          child: _buildBody(),
         ),
+      ),
+    );
+  }
+
+  Container _buildBody() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 2.w,
+        vertical: 1.h,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              _buildImage(),
+              _buildButtonLike(),
+            ],
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          _buildContent()
+        ],
       ),
     );
   }
@@ -126,16 +130,27 @@ class _RoomItemState extends State<RoomItem> {
     );
   }
 
-  Text _buildTotalPrice() {
-    return Text(
-      widget.room.totalPrice!.toFormattedPrice(),
-      textAlign: TextAlign.start,
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primary40,
+  Widget _buildTotalPrice() {
+    return RichText(
+      text: TextSpan(
+        children: [
+          const TextSpan(
+            text: 'Giá chỉ từ: ',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.primary40,
+            ),
+          ),
+          TextSpan(
+            text: widget.room.totalPrice?.toFormattedPrice(),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary40,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -166,7 +181,7 @@ class _RoomItemState extends State<RoomItem> {
           padding: EdgeInsets.all(0.5.w),
           child: Row(
             children: [
-              Text(
+              const Text(
                 'rating',
                 style: TextStyle(
                   fontSize: 12,
@@ -232,6 +247,18 @@ class _RoomItemState extends State<RoomItem> {
   }
 
   Positioned _buildButtonLike() {
+    Widget? icon;
+    if (isLiked) {
+      icon = const Icon(
+        Icons.favorite,
+        color: AppColors.like,
+      );
+    } else {
+      icon = const Icon(
+        Icons.favorite_outline,
+        color: AppColors.like,
+      );
+    }
     return Positioned(
       top: 0,
       right: 0,
@@ -243,29 +270,24 @@ class _RoomItemState extends State<RoomItem> {
             isLiked = !isLiked;
           });
         },
-        icon: isLiked
-            ? const Icon(
-                Icons.favorite,
-                color: AppColors.like,
-              )
-            : const Icon(
-                Icons.favorite_outline,
-                color: AppColors.like,
-              ),
+        icon: icon,
       ),
     );
   }
 
   Widget _buildImage() {
-    return Container(
-      height: 120,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 1, color: AppColors.like),
-      ),
-      child: CacheImageWidget(
-        imageUrl: widget.room.roomImages![0],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        height: 120,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 1, color: AppColors.like),
+        ),
+        child: CacheImageWidget(
+          imageUrl: widget.room.roomImages![0],
+        ),
       ),
     );
   }

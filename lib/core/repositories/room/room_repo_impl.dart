@@ -1,9 +1,7 @@
-import 'dart:convert';
+import 'dart:ffi';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 
@@ -25,63 +23,84 @@ class RoomRepoImpl implements RoomRepo {
         appManager = AppManager();
 
   @override
-  Future<ResponseModel<Room>> createRoom(Room room) async {
-    var headers = {
-      'Authorization':
-          'Bearer ${appManager.accressToken}'
+  Future<ResponseModel<int>> createRoom(Room room) async {
+    Response response;
+    final String url = '$domain/rooms';
+    Map<String, dynamic>? headers = {
+      'Authorization': 'Bearer ${appManager.accessToken}'
     };
-    var data = FormData.fromMap({
-      'files': [
-        room.roomImages!
-            .mapIndexed(
-              (index, image) async => await MultipartFile.fromFile(
-                  image,
-                  filename:
-                      '${index}_${DateTime.now().microsecondsSinceEpoch}'),
-            )
-            .toList(),
-      ],
-      'title': room.title,
-      'address': room.address,
-      'room_number': room.roomNumber,
-      'utilities': room.utilities,
-      'description': 'A spacious room with modern amenities.',
-      'room_type': 'single',
-      'owner': '1',
-      'capacity': '2',
-      'gender': '1',
-      'area': '500',
-      'total_price': '500',
-      'deposit': '100',
-      'electricity_cost': '0.5',
-      'water_cost': '0.3',
-      'internet_cost': '0.1',
-      'is_parking': 'true',
-      'parking_fee': '50',
-      'status': '1',
-      'is_rent': 'true',
-      'address': 'phường Trường Thọ',
-      'address': 'quận Thủ Đức',
-      'address': 'TP HCM'
-    });
 
-    var dio = Dio();
-    var response = await dio.request(
-      'localhost:8080/api/v1/rooms',
-      options: Options(
-        method: 'POST',
-        headers: headers,
-      ),
-      data: data,
-    );
+    FormData formData = FormData();
 
-    if (response.statusCode == 200) {
-      print(json.encode(response.data));
-    } else {
-      print(response.statusMessage);
+    if (room.roomImages != null) {
+      for (var imagePath in room.roomImages!) {
+        formData.files.add(
+          MapEntry(
+            'room_images',
+            await MultipartFile.fromFile(
+              imagePath,
+              filename: imagePath.split('/').last,
+            ),
+          ),
+        );
+      }
     }
 
-    throw UnimplementedError();
+    if (room.address != null) {
+      for (var addressPart in room.address!) {
+        formData.fields.add(MapEntry('address', addressPart));
+      }
+    }
+
+    if (room.utilities != null) {
+      for (var utility in room.utilities!) {
+        formData.fields.add(MapEntry('utilities', utility));
+      }
+    }
+
+    formData.fields
+      ..add(MapEntry('title', room.title ?? ''))
+      ..add(MapEntry('description', room.description ?? ''))
+      ..add(MapEntry('room_type', room.roomType ?? ''))
+      ..add(MapEntry('owner', appManager.userId.toString()))
+      ..add(MapEntry('capacity', room.capacity?.toString() ?? ''))
+      ..add(MapEntry('gender', room.gender?.toString() ?? ''))
+      ..add(MapEntry('area', room.area?.toString() ?? ''))
+      ..add(MapEntry('total_price', room.totalPrice?.toString() ?? ''))
+      ..add(MapEntry('deposit', room.deposit?.toString() ?? ''))
+      ..add(
+          MapEntry('electricity_cost', room.electricityCost?.toString() ?? ''))
+      ..add(MapEntry('water_cost', room.waterCost?.toString() ?? ''))
+      ..add(MapEntry('internet_cost', room.internetCost?.toString() ?? ''))
+      ..add(MapEntry('is_parking', room.isParking!.toString()))
+      ..add(MapEntry('parking_fee', room.parkingFee?.toString() ?? ''))
+      ..add(MapEntry('status', room.status?.toString() ?? ''))
+      ..add(MapEntry('is_rent', room.isRent.toString()));
+
+    try {
+      response = await dio.request(
+        url,
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: formData,
+      );
+
+      print(response.data);
+
+      return ResponseModel<int>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        // data: Room.fromMap(
+        //   response.data['data'],
+        // ),
+        data: response.data['data'] as int?,
+      );
+    } catch (e) {
+      log.e('createRoom', e.toString());
+      return ResponseModel();
+    }
   }
 
   @override
@@ -95,7 +114,7 @@ class RoomRepoImpl implements RoomRepo {
     Response response;
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${appManager.accressToken}',
+      'Authorization': 'Bearer ${appManager.accessToken}',
     };
 
     try {
@@ -122,5 +141,47 @@ class RoomRepoImpl implements RoomRepo {
   Future<ResponseModel<Room>> updateRoom() {
     // TODO: implement updateRoom
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ResponseModel<List<Room>>> getRoomsByAddress({
+    required String address,
+  }) async {
+    final String url = '$domain/rooms/search-by-address?search=$address';
+
+    if (appManager.accessToken == null) {
+      return ResponseModel(errCode: -1, message: 'Bạn chưa đăng nhập');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${appManager.accessToken}',
+    };
+
+    try {
+      final response = await dio.get(url, options: Options(headers: headers));
+
+      if (response.statusCode == 200 && response.data is Map) {
+        try {
+          return ResponseModel<List<Room>>(
+            errCode: response.data['errCode'],
+            message: response.data['message'],
+            data: List<Room>.from((response.data['data'] as List)
+                .map((room) => Room.fromMap(room))),
+          );
+        } catch (e) {
+          log.e('getRoomsByAddress: Lỗi parse JSON', e.toString());
+          return ResponseModel(errCode: -1, message: 'Lỗi parse JSON');
+        }
+      } else {
+        log.e('getRoomsByAddress: Lỗi server',
+            'Status code: ${response.statusCode}, Response data: ${response.data}');
+        return ResponseModel(
+            errCode: response.statusCode, message: 'Lỗi server');
+      }
+    } catch (e) {
+      log.e('getRoomsByAddress: Lỗi kết nối', e.toString());
+      return ResponseModel(errCode: -1, message: 'Lỗi kết nối');
+    }
   }
 }

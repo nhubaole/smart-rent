@@ -22,7 +22,7 @@ class UserRepoIml implements UserRepo {
       response = await dio.get(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
-            'Authorization': AppManager().accressToken,
+            'Authorization': AppManager().accessToken,
           }));
 
       return ResponseModel<List<UserModel>>(
@@ -71,7 +71,7 @@ class UserRepoIml implements UserRepo {
       response = await dio.get(url,
           options: Options(headers: {
             'Content-Type': 'application/json',
-            'Authorization': AppManager().accressToken,
+            'Authorization': AppManager().accessToken,
           }));
 
       return ResponseModel<UserModel>(

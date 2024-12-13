@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import '/core/enums/filter_type.dart';
 import '/core/enums/gender.dart';
 import '/core/enums/room_type.dart';
@@ -15,14 +16,13 @@ import '/core/model/filter/sort_filter.dart';
 import '/core/model/filter/util_filter.dart';
 import '/core/model/room/room.dart';
 import '/core/model/room/util_item.dart';
-import '/core/values/KEY_VALUE.dart';
-import 'package:tiengviet/tiengviet.dart';
 
 class FilterController extends GetxController {
   late String location;
+  FilterController({required this.location});
+
   var results = Rx<List<Room>>([]);
   RxBool isLoaded = false.obs;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var filter = const Filter().obs;
   var filterStringList = RxList<Map<String, dynamic>>([]);
   RxInt itemFilterCount = 0.obs;
@@ -61,10 +61,21 @@ class FilterController extends GetxController {
   var quantity = 0.obs;
   var genderIdx = 0.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    setLocation(location);
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+    queryRoomByLocation();
+  }
+
   void setLocation(String location) {
     this.location = location;
     selectedFilter.value = null;
-    queryRoomByLocation();
   }
 
   void setPrice(RangeValues values) {
@@ -213,22 +224,18 @@ class FilterController extends GetxController {
 
   Future<void> queryRoomByLocation() async {
     try {
-      final querySnapshot =
-          await firestore.collection(KeyValue.KEY_COLLECTION_ROOM).get();
-      results.value = querySnapshot.docs
-          .map(
-            (e) => Room.fromJson(
-              e.data() as String,
-            ),
-          )
-          .where((element) => TiengViet.parse(element.address![0].toLowerCase())
-              .contains(TiengViet.parse(location.toLowerCase())))
-          .toList();
+      isLoaded.value = false;
+      location = location.toLowerCase();
+      results.value = (await RoomRepoImpl().getRoomsByAddress(
+                  address: 'phường trường thọ, quận thủ đức, tp hcm'))
+              .data ??
+          [] as List<Room>;
+      results.value = [...results.value, ...results.value];
       isLoaded.value = true;
-      applyFilter();
-      print(results.value.length);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      if (kDebugMode) {
+        Get.snackbar('Error', e.toString());
+      }
     }
   }
 

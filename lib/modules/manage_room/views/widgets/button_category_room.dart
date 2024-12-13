@@ -21,8 +21,8 @@ class ButtonCategoryRoom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 46,
-      width: height ?? 46,
+      // height: height ?? 46,
+      // width: height ?? 46,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -30,7 +30,7 @@ class ButtonCategoryRoom extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          splashColor: Colors.black.withOpacity(0.3),
+          splashColor: AppColors.primary40.withOpacity(0.1),
           onTap: onTap,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4),

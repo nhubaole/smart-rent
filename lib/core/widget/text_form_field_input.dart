@@ -3,35 +3,40 @@ import 'package:flutter/material.dart';
 class TextFormFieldInput extends StatefulWidget {
   final TextEditingController textEditingController;
   final bool? isPassword;
-  final String labelText;
-  final String hintText;
+  final String? labelText;
+  final String? hintText;
   final TextInputType textInputType;
   final BorderRadius borderRadius;
   final double borderWidth;
   final Color borderColor;
-  final Icon icon;
+  final Icon? icon;
   final void Function(String?) onSaved;
   final String? Function(String?) onValidate;
   final bool autoCorrect;
   final TextCapitalization textCapitalization;
   final int? maxLength;
-
+  final TextInputAction? textInputAction;
+  final TextStyle? textStyle;
+  final InputDecoration? decoration;
   const TextFormFieldInput({
     super.key,
     this.maxLength,
     required this.textEditingController,
     this.isPassword,
-    required this.labelText,
-    required this.hintText,
+    this.labelText,
+    this.hintText,
     required this.textInputType,
     required this.borderRadius,
-    required this.borderWidth,
+    this.borderWidth = 1,
     required this.borderColor,
-    required this.icon,
+    this.icon,
     required this.onSaved,
     required this.onValidate,
     required this.autoCorrect,
     required this.textCapitalization,
+    this.textInputAction = TextInputAction.done,
+    this.textStyle,
+    this.decoration,
   });
 
   @override
@@ -53,9 +58,12 @@ class _TextFormFieldInputState extends State<TextFormFieldInput> {
       maxLength: widget.maxLength,
       onSaved: widget.onSaved,
       validator: widget.onValidate,
+      style: widget.textStyle,  
       controller: widget.textEditingController,
+      textInputAction: widget.textInputAction,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
+      decoration: widget.decoration ??
+          InputDecoration(
         counterText: '',
         focusColor: widget.borderColor,
         fillColor: widget.borderColor,

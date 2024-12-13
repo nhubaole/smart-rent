@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../modules/auth/signup/controllers/sign_up_controllers.dart';
-import '../config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/modules/auth/signup/controllers/sign_up_controllers.dart';
 
 class DialogCustom extends StatelessWidget {
   final String iconPath;
@@ -81,7 +80,7 @@ class CardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
+    Get.put(SignUpController());
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 32,

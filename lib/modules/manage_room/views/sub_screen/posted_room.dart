@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
-import '/core/widget/room_item.dart';
-import '/modules/manage_room/controllers/sub_screen_controller/posted_room_controller.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/posted_room_controller.dart';
 
-class PostedRoomScreen extends StatelessWidget {
+class PostedRoomScreen extends GetView<PostedRoomController> {
   const PostedRoomScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final PostedRoomController postedRoomController =
-        Get.put(PostedRoomController());
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng đã đăng',
@@ -26,20 +24,20 @@ class PostedRoomScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () {
-          return postedRoomController.getListRoom(false);
+          return controller.getListRoom(false);
         },
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Center(
               child: Obx(
-                () => postedRoomController.isLoading.value
+                () => controller.isLoading.value
                     ? const Center(
                         child: CircularProgressIndicator(
                           color: AppColors.primary60,
                         ),
                       )
-                    : postedRoomController.listRoom.value.isEmpty
+                    : controller.listRoom.value.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +52,7 @@ class PostedRoomScreen extends StatelessWidget {
                                   width: double.infinity,
                                 ),
                                 Text(
-                                  '${postedRoomController.profileOwner.value!.username}\nchưa đăng phòng!!!',
+                                  '${controller.fullName}\nchưa đăng phòng!!!',
                                   style: const TextStyle(
                                     color: AppColors.secondary20,
                                     fontSize: 18,
@@ -67,7 +65,7 @@ class PostedRoomScreen extends StatelessWidget {
                                   child: Center(
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        postedRoomController.getListRoom(false);
+                                        controller.getListRoom(false);
                                       },
                                       style: ButtonStyle(
                                         side: WidgetStateProperty.all(
@@ -100,8 +98,7 @@ class PostedRoomScreen extends StatelessWidget {
                             children: [
                               RefreshIndicator(
                                 onRefresh: () {
-                                  return postedRoomController
-                                      .getListRoom(false);
+                                  return controller.getListRoom(false);
                                 },
                                 child: GridView.builder(
                                   scrollDirection: Axis.vertical,
@@ -114,27 +111,23 @@ class PostedRoomScreen extends StatelessWidget {
                                     crossAxisSpacing: 5,
                                     // mainAxisSpacing: 20,
                                   ),
-                                  itemCount: postedRoomController
-                                          .listRoom.value.length +
-                                      1,
+                                  itemCount:
+                                      controller.listRoom.value.length + 1,
                                   itemBuilder: (context, index) {
                                     if (index <
-                                        postedRoomController
-                                            .listRoom.value.length) {
+                                        controller.listRoom.value.length) {
                                       return RoomItem(
                                         isRenting: false,
                                         isHandleRentRoom: false,
                                         isHandleRequestReturnRoom: false,
                                         isRequestReturnRent: false,
                                         isRequestRented: false,
-                                        room: postedRoomController
-                                            .listRoom.value[index],
+                                        room: controller.listRoom.value[index],
                                         isLiked: false,
                                       );
                                     } else {
                                       return Obx(
-                                        () => postedRoomController
-                                                .isLoadMore.value
+                                        () => controller.isLoadMore.value
                                             ? const Center(
                                                 child:
                                                     CircularProgressIndicator(
@@ -148,7 +141,7 @@ class PostedRoomScreen extends StatelessWidget {
                                                 child: Center(
                                                   child: OutlinedButton(
                                                     onPressed: () {
-                                                      postedRoomController
+                                                      controller
                                                           .getListRoom(true);
                                                     },
                                                     style: ButtonStyle(

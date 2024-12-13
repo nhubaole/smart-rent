@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 
 class ButtonOutline extends StatelessWidget {
   const ButtonOutline({

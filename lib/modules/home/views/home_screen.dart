@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/enums/room_fetch.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import '../../../core/config/app_colors.dart';
 import '../../../core/widget/room_item_skeleton.dart';
 import '/core/values/app_colors.dart';
@@ -24,9 +25,9 @@ class HomeScreen extends GetView<HomeScreenController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
+      () => ScaffoldWidget(
         floatingActionButton: _buildFloatingButton(),
-        body: _buildBody(),
+        body: _buildContent(),
       ),
     );
   }
@@ -296,7 +297,7 @@ class HomeScreen extends GetView<HomeScreenController> {
             ),
           ),
           TextSpan(
-            text: controller.currentName.value,
+            text: controller.fullName,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,

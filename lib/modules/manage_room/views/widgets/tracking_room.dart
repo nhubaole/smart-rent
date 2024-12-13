@@ -7,8 +7,10 @@ import '/core/values/image_assets.dart';
 import '/modules/manage_room/views/widgets/button_detail_tracking_room.dart';
 
 class TrackingRoom extends StatelessWidget {
+  final Function() onDetail;
   const TrackingRoom({
     super.key,
+    required this.onDetail,
   });
 
   @override
@@ -38,7 +40,7 @@ class TrackingRoom extends StatelessWidget {
   }
 
   Column _buildBottomComponent() {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -47,8 +49,8 @@ class TrackingRoom extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Trạng thái',
-                style: TextStyle(
+                'status'.tr,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
@@ -58,7 +60,7 @@ class TrackingRoom extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -82,8 +84,8 @@ class TrackingRoom extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              'Hợp đồng thuê trọ đã sẵn sàng',
-              style: TextStyle(
+              'rental_contract_ready'.tr,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -148,8 +150,8 @@ class TrackingRoom extends StatelessWidget {
                   ),
                   Expanded(
                     child: ButtonDetailTrackingRoom(
-                      onTap: () {},
-                      title: 'Chi Tiết',
+                      onTap: onDetail,
+                      title: 'detail'.tr,
                     ),
                   )
                 ],

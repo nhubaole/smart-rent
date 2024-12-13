@@ -16,13 +16,12 @@ import '/modules/search/views/util_filter_page.dart';
 
 // ignore: must_be_immutable
 class FilterScreen extends StatelessWidget {
-  FilterScreen({super.key, required this.location});
+  const FilterScreen({super.key, required this.location});
   final String location;
-  FilterController controller = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
-    controller.setLocation(location);
+    FilterController controller = Get.put(FilterController(location: location));
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
@@ -42,53 +41,7 @@ class FilterScreen extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          width: MediaQuery.sizeOf(context).width - 80,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.primary60, width: 1),
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/images/ic_location.svg'),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  controller.location,
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.primary60),
-                                ),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: const Text(
-                          'Hủy',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.primary60,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  ),
+                  _buildSearchBar(context, controller),
                   const SizedBox(
                     height: 16,
                   ),
@@ -105,7 +58,7 @@ class FilterScreen extends StatelessWidget {
                                     controller.selectedFilter.value ==
                                             controller.filterType[index]
                                         ? AppColors.primary40
-                                        : AppColors.secondary90,
+                                        : AppColors.primary98,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -124,6 +77,7 @@ class FilterScreen extends StatelessWidget {
                                         controller.filterType[index]
                                     ? Colors.white
                                     : AppColors.secondary40,
+                                weight: 2,
                               ),
                               label: Text(
                                 controller.filterType[index]
@@ -134,7 +88,7 @@ class FilterScreen extends StatelessWidget {
                                             controller.filterType[index]
                                         ? Colors.white
                                         : AppColors.secondary40,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.bold),
                               ),
                             ));
                       },
@@ -222,7 +176,7 @@ class FilterScreen extends StatelessWidget {
                 )),
             Obx(() => controller.selectedFilter.value == null
                 ? Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 20, bottom: 16),
                     child: Text(
                       controller.isLoaded.value
                           ? "${controller.results.value.length} Kết quả"
@@ -235,28 +189,29 @@ class FilterScreen extends StatelessWidget {
                   )
                 : const SizedBox()),
             Obx(() => controller.selectedFilter.value == null
-                ? const SizedBox(
-                    height: 16,
-                  )
-                : const SizedBox()),
-            Obx(() => controller.selectedFilter.value == null
                 ? Expanded(
                     child: Container(
-                        width: double.infinity,
-                        color: AppColors.primary95,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Obx(() => ListView.builder(
-                              itemCount: controller.results.value.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: ResultItem(
-                                    room: controller.results.value[index],
-                                  ),
-                                );
-                              },
-                            ))))
-                : const SizedBox()),
+                      width: double.infinity,
+                      color: AppColors.primary95,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Obx(
+                        () => ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: 16,
+                            );
+                          },
+                          itemCount: controller.results.value.length,
+                          itemBuilder: (context, index) {
+                            return ResultItem(
+                              room: controller.results.value[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink()),
             Obx(() => controller.selectedFilter.value == null
                 ? const SizedBox()
                 : Flexible(
@@ -305,8 +260,11 @@ class FilterScreen extends StatelessWidget {
                                       Expanded(
                                         child: FilledButton(
                                           onPressed: () async {
-                                            await controller
-                                                .queryRoomByLocation();
+                                            // await controller
+                                            //     .queryRoomByLocation();
+                                            // controller.selectedFilter.value =
+                                            //     null;
+                                            controller.applyFilter();
                                             controller.selectedFilter.value =
                                                 null;
                                           },
@@ -348,6 +306,54 @@ class FilterScreen extends StatelessWidget {
                   )),
           ],
         )));
+  }
+
+  Row _buildSearchBar(BuildContext context, FilterController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            width: MediaQuery.sizeOf(context).width - 80,
+            decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary60, width: 1),
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/images/ic_location.svg'),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Text(
+                    controller.location,
+                    style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary60),
+                  ),
+                ),
+              ],
+            )),
+        const SizedBox(
+          width: 16,
+        ),
+        InkWell(
+          onTap: () {
+            Get.back();
+          },
+          child: const Text(
+            'Hủy',
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.primary60,
+                fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
   }
 
   Widget loadPageContent(FilterType? value) {

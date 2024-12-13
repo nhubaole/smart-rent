@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/core/model/account/Account.dart';
@@ -19,9 +18,7 @@ class RentedRoomController extends GetxController {
 
   @override
   void onInit() {
-    // getListRentingRoom(false);
-    // getListHistoryRoom(false);
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
+    getListHistoryRoom(false);
     super.onInit();
   }
 

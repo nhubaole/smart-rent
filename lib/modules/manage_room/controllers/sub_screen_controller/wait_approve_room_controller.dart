@@ -1,29 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '/core/model/account/Account.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import '/core/model/room/room.dart';
-import '/core/resources/auth_methods.dart';
 
 class WaitApproveRoomController extends GetxController {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var isLoading = false.obs;
   var isLoadMore = false.obs;
   var listTicket = Rx<List<Map<String, dynamic>>>([]);
   var listRoom = Rx<List<Room>>([]);
-  var profileOwner = Rx<Account?>(null);
   var page = Rx<int>(10);
+
+  String get fullName => AppManager.instance.fullName ?? '--';
 
   @override
   void onInit() {
     super.onInit();
-    getListRoom(false);
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
   }
 
   Future<void> getProfile(String uid) async {
     isLoading.value = true;
-    profileOwner.value = await AuthMethods.getUserDetails(uid);
     isLoading.value = false;
   }
 

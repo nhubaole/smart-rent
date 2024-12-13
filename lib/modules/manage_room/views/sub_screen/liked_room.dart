@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
-import '/core/widget/room_item.dart';
-import '/modules/manage_room/controllers/sub_screen_controller/liked_room_controller.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/liked_room_controller.dart';
 
-class LikedRoomScreen extends StatelessWidget {
+class LikedRoomScreen extends GetView<LikedRoomController> {
   const LikedRoomScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LikedRoomController likedRoomController =
-        Get.put(LikedRoomController());
-
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng yêu thích',
@@ -27,20 +24,20 @@ class LikedRoomScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () {
-          return likedRoomController.getListRoom(false);
+          return controller.getListRoom(false);
         },
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Center(
               child: Obx(
-                () => likedRoomController.isLoading.value
+                () => controller.isLoading.value
                     ? const Center(
                         child: CircularProgressIndicator(
                           color: AppColors.primary60,
                         ),
                       )
-                    : likedRoomController.listRoom.value.isEmpty
+                    : controller.listRoom.value.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +52,7 @@ class LikedRoomScreen extends StatelessWidget {
                                   width: double.infinity,
                                 ),
                                 Text(
-                                  '${likedRoomController.profileOwner.value!.username}\nchưa thích phòng nào hết!!!',
+                                  '${controller.useName}\nchưa thích phòng nào hết!!!',
                                   style: const TextStyle(
                                     color: AppColors.secondary20,
                                     fontSize: 18,
@@ -68,7 +65,7 @@ class LikedRoomScreen extends StatelessWidget {
                                   child: Center(
                                     child: OutlinedButton(
                                       onPressed: () {
-                                        likedRoomController.getListRoom(false);
+                                        controller.getListRoom(false);
                                       },
                                       style: ButtonStyle(
                                         side: WidgetStateProperty.all(
@@ -109,26 +106,22 @@ class LikedRoomScreen extends StatelessWidget {
                                   childAspectRatio: 0.71,
                                   crossAxisSpacing: 5,
                                 ),
-                                itemCount:
-                                    likedRoomController.listRoom.value.length +
-                                        1,
+                                itemCount: controller.listRoom.value.length + 1,
                                 itemBuilder: (context, index) {
                                   if (index <
-                                      likedRoomController
-                                          .listRoom.value.length) {
+                                      controller.listRoom.value.length) {
                                     return RoomItem(
                                       isRenting: false,
                                       isHandleRentRoom: false,
                                       isHandleRequestReturnRoom: false,
                                       isRequestReturnRent: false,
                                       isRequestRented: false,
-                                      room: likedRoomController
-                                          .listRoom.value[index],
+                                      room: controller.listRoom.value[index],
                                       isLiked: false,
                                     );
                                   } else {
                                     return Obx(
-                                      () => likedRoomController.isLoadMore.value
+                                      () => controller.isLoadMore.value
                                           ? const Center(
                                               child: CircularProgressIndicator(
                                                 color: AppColors.primary95,
@@ -141,7 +134,7 @@ class LikedRoomScreen extends StatelessWidget {
                                               child: Center(
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    likedRoomController
+                                                    controller
                                                         .getListRoom(true);
                                                   },
                                                   style: ButtonStyle(

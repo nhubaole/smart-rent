@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
             DefaultWidgetsLocalizations.delegate
           ],
+          
           initialRoute: AppRoutes.splash,
           defaultTransition: Transition.fade,
           transitionDuration: const Duration(milliseconds: 200),

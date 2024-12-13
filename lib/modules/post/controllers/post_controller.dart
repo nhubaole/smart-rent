@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/helper/helper.dart';
+import 'package:smart_rent/core/model/response/request_model.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
+import 'package:smart_rent/core/widget/overlay_dialog.dart';
 import '../../../core/config/app_colors.dart';
 import '/core/enums/gender.dart';
 import '/core/enums/room_type.dart';
@@ -137,7 +143,6 @@ class PostController extends GetxController
 
   void onSelectGender(Gender value) {
     room.value = room.value.copyWith(gender: value.getNameGenderInt());
-    print(room.value.gender);
   }
 
   void updateLocationRoom() {}
@@ -148,17 +153,77 @@ class PostController extends GetxController
     print(room.value);
   }
 
-  Future<void> postRoom() async {
-    showDialogLoading('Đang đăng bài...');
-    isLoading.value = true;
-    String uid = '';
-    try {
-      await updateUtilitiesRoom();
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      uid = prefs.getString(KeyValue.KEY_ACCOUNT_UID) ?? '';
-    } finally {
-      updateConfirmRoom();
+  void onSavedRoom() {
+    room.value = room.value.copyWith(
+      title: titleTextController.text,
+      description: descriptionTextController.text,
+      capacity: int.tryParse(capacityTextController.text) ?? 0,
+      area: double.tryParse(areaTextController.text) ?? 0,
+      totalPrice: int.tryParse(
+              priceTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      deposit: int.tryParse(
+              depositTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      electricityCost: double.tryParse(electricityCostTextController.text
+              .replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      waterCost: double.tryParse(
+              waterCostTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      internetCost: double.tryParse(internetCostTextController.text
+              .replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      parkingFee: int.tryParse(
+              parkingFeeTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+          0,
+      address: [addressTextController.text, streetTextController.text],
+      status: 0,
+      isParking: hasParking.value,
+      isRent: false,
+      utilities: getUtilities(),
+    );
+  }
 
+  List<String> getUtilities() {
+    return utilList
+        .where((element) => element.isChecked)
+        .map((e) => e.utility.getNameUtil())
+        .toList();
+  }
+
+  Future<void> postRoom() async {
+    OverlayDialog.show(message: 'Đang đăng bài...');
+    isLoading.value = true;
+    onSavedRoom();
+    try {
+      final ResponseModel<int> result =
+          await RoomRepoImpl().createRoom(room.value);
+      final isSuccess = result.errCode == 201;
+
+      if (isSuccess) {
+        AlertSnackbar.show(
+          title: 'Thành công',
+          message: 'Đăng bài thành công',
+          isError: false,
+        );
+        Get.close(2);
+      } else {
+        AlertSnackbar.show(
+          title: 'Thất bại',
+          message: 'Đăng bài thất bại',
+          isError: true,
+        );
+      }
+    } catch (e) {
+      AlertSnackbar.show(
+        title: 'Thất bại',
+        message: 'Đăng bài thất bại',
+        isError: true,
+      );
+      print(e.toString());
+    } finally {
+      OverlayDialog.hide();
       isLoading.value = false;
     }
   }
@@ -194,7 +259,6 @@ class PostController extends GetxController
     pickedImages.value = images;
   }
 
-
   Future<void> handleChooseImage(BuildContext context) async {
     showModalBottomSheet(
       context: context,
@@ -202,12 +266,19 @@ class PostController extends GetxController
         return ChooseImageBottomSheet(
           onGallarySelected: () async {
             final images = await picker.pickMultiImage();
+            List<String> roomImages = [];
             for (final i in images) {
               pickedImages.value?.add(i);
               pickedImages.update(
                 (val) {},
               );
+
+              final compressedImage = await Helper.compressImage(imageFile: i);
+              roomImages.add(compressedImage.path);
             }
+
+            room.value.roomImages = roomImages;
+
             validImageTotal.value = true;
           },
           onCameraSelected: () async {
@@ -217,6 +288,7 @@ class PostController extends GetxController
               pickedImages.update(
                 (val) {},
               );
+              room.value.roomImages?.add(image.path);
             }
             validImageTotal.value = true;
           },
@@ -236,36 +308,5 @@ class PostController extends GetxController
     List<String> urlImages = [];
 
     return urlImages;
-  }
-
-  Future<void> showDialogLoading(String message) async {
-    Get.dialog(
-      PopScope(
-        canPop: true,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                const CircularProgressIndicator(
-                  color: AppColors.primary60,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  message,
-                  style: const TextStyle(color: AppColors.primary60),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
   }
 }
