@@ -7,4 +7,6 @@ abstract class UserRepo {
   Future<ResponseModel<UserModel>> updateUser();
   Future<ResponseModel<UserModel>> getCurrentUser(
       {required String accessToken});
+  Future<ResponseModel> updateDeviceToken(
+      {required String accessToken, required String deviceToken});
 }
