@@ -1,18 +1,24 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/enums/room_fetch.dart';
+import 'package:smart_rent/core/model/response/request_model.dart';
 import 'package:smart_rent/core/model/user_model.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
+import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import '/core/model/room/room.dart';
 import '/core/resources/google_map_services.dart';
 
 class HomeScreenController extends GetxController {
   late Log logger;
+  late AppManager appManager;
 
   var isScrollingUp = false.obs;
   final currenLocation = ''.obs;
@@ -29,6 +35,8 @@ class HomeScreenController extends GetxController {
   @override
   void onInit() async {
     logger = getIt<Log>();
+    appManager = AppManager();
+    setupFirebaseMessaging();
     getDataHive();
     fetchDataAndConvertToList();
     getListRoom(false);
@@ -154,5 +162,36 @@ class HomeScreenController extends GetxController {
       await getListRoomInArea(areas[i].trim());
     }
     isLoadingMap.value = false;
+  }
+
+  Future<void> setupFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    String? token = await messaging.getToken();
+    print("Device Token: $token");
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+            channelKey: 'basic_channel',
+            title: message.notification!.title ?? 'Thông báo mới',
+            body: message.notification!.body ?? 'Bạn có một thông báo mới!',
+            notificationLayout: NotificationLayout.Default,
+          ),
+        );
+      }
+    });
+
+    if (token != null) {
+      await saveDeviceToken(token);
+    }
+  }
+
+  Future<void> saveDeviceToken(String token) async {
+    final ResponseModel result = await UserRepoIml(logger).updateDeviceToken(
+        accessToken: appManager.accessToken ?? "", deviceToken: token);
+    return;
   }
 }

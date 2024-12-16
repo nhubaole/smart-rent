@@ -93,4 +93,40 @@ class UserRepoIml implements UserRepo {
     }
     throw UnsupportedError('Type $T is not supported');
   }
+
+  @override
+  Future<ResponseModel> updateDeviceToken({
+    required String accessToken,
+    required String deviceToken,
+  }) async {
+    final String url = '$domain/users/device-token';
+    Response response;
+
+    try {
+      response = await dio.put(
+        url,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+        data: {
+          'device_token': deviceToken,
+        },
+      );
+
+      return ResponseModel<UserModel>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: _handleResponse<UserModel>(response.data['data']),
+      );
+    } catch (e) {
+      log.e('updateDeviceToken', e.toString());
+      return ResponseModel(
+        errCode: 500,
+        message: 'Failed to update device token',
+      );
+    }
+  }
 }
