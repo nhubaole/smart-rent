@@ -25,14 +25,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(
+    return Sizer(
       builder: (buildContext, orientation, screenType) {
         return GetMaterialApp(
-          title: 'Smart Rent House',
+          title: AppConstant.app_name,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary98),
             primaryColor: AppColors.primary40,
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: AppColors.primary40,
+              selectionColor: AppColors.primary95,
+              selectionHandleColor: AppColors.primary40,
+            ),
             useMaterial3: true,
           ),
           locale: TranslationService.locale,

@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/enums/payment_method.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_controller.dart';
 
 class ContractDetailPage extends GetView<ContractDetailController> {
@@ -20,63 +28,119 @@ class ContractDetailPage extends GetView<ContractDetailController> {
     return ScaffoldWidget(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(title: 'detaul_contract'.tr),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            _buildFirstPage(),
-            SizedBox(height: 32.px),
-            _buildSecondPage(),
-            SizedBox(height: 32.px),
-          ],
+      body: Obx(() => _buildContractByStatus()),
+      bottomNavigationBar: Obx(
+        () => Visibility(
+          visible: controller.isLoading.value == LoadingType.LOADED,
+          child: controller.notiArgument != null
+              ? _buildButtonFromNoti()
+              : _buildButtonActions(),
         ),
       ),
-      bottomNavigationBar: _buildButtonActions(),
     );
   }
 
-  Padding _buildButtonActions() {
+  SingleChildScrollView _buildContractDetail() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      child: Column(
+        children: [
+          _buildFirstPage(),
+          SizedBox(height: 32.px),
+          _buildSecondPage(),
+          SizedBox(height: 32.px),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContractByStatus() {
+    switch (controller.isLoading.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildContractDetail();
+      case LoadingType.ERROR:
+        return RefreshIndicator(
+          onRefresh: () async {
+            await controller.fetchContractById();
+          },
+          child: const ErrorCustomWidget(
+            expandToCanPullToRefresh: true,
+          ),
+        );
+    }
+  }
+
+  Widget _buildButtonActions() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+      padding: EdgeInsets.only(
+        left: 16.px,
+        right: 16.px,
+        bottom: 16.px,
+        top: 8.px,
+      ),
       child: Row(
         children: [
           Expanded(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20.px),
-              onTap: () {},
-              child: Container(
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.px),
-                  border: Border.all(width: 1.5, color: AppColors.primary60),
-                ),
-                child: Text(
-                  'disagree'.tr,
-                  style: const TextStyle(
-                      color: AppColors.primary60, fontWeight: FontWeight.bold),
-                ),
-              ),
+            child: OutlineButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              onTap: controller.isLoading.value == LoadingType.LOADING
+                  ? null
+                  : controller.onLeftButtonClick,
+              text: 'disagree'.tr,
             ),
           ),
           SizedBox(width: 16.px),
           Expanded(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20.px),
-              onTap: () => controller.onContractSign(),
-              child: Container(
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.px),
-                  color: AppColors.primary40,
-                ),
-                child: Text(
-                  'sign_contract'.tr,
-                  style: const TextStyle(
-                      color: AppColors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
+            child: SolidButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              text: 'sign_contract'.tr,
+              onTap: controller.isLoading.value == LoadingType.LOADING
+                  ? null
+                  : controller.onRightButtonClick,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtonFromNoti() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16.px,
+        right: 16.px,
+        bottom: 16.px,
+        top: 8.px,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlineButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              onTap: controller.isLoading.value == LoadingType.LOADING
+                  ? null
+                  : controller.onLeftButtonClick,
+              text: 'Kết thúc'.tr,
+              borderColor: AppColors.error,
+              textColor: AppColors.error,
+            ),
+          ),
+          SizedBox(width: 16.px),
+          Expanded(
+            child: SolidButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              text: 'Gia hạn'.tr,
+              onTap: controller.isLoading.value == LoadingType.LOADING
+                  ? null
+                  : controller.onRightButtonClick,
             ),
           ),
         ],
@@ -87,7 +151,6 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Container _buildSecondPage() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 8.px),
       padding: EdgeInsets.only(
         right: 8.px,
         left: 8.px,
@@ -131,6 +194,13 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           Text.rich(
             textAlign: TextAlign.start,
             TextSpan(
+                text: '- ${controller.contractByIdModel?.responsibilityA}',
+                style: childTextStyle),
+          ),
+          SizedBox(height: 8.px),
+          Text.rich(
+            textAlign: TextAlign.start,
+            TextSpan(
               text: 'tenant_responsibilities'.tr,
               style: childTextStyle.copyWith(fontWeight: FontWeight.bold),
             ),
@@ -154,6 +224,13 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           Text.rich(
             textAlign: TextAlign.start,
             TextSpan(text: 'tenant_duty_4'.tr, style: childTextStyle),
+          ),
+          SizedBox(height: 8.px),
+          Text.rich(
+            textAlign: TextAlign.start,
+            TextSpan(
+                text: '- ${controller.contractByIdModel?.responsibilityB}',
+                style: childTextStyle),
           ),
         ],
       ),
@@ -183,7 +260,16 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildContractDuration() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'contract_duration'.tr, style: childTextStyle),
+      TextSpan(
+          text: 'contract_duration'.trParams({
+            's_day': '${controller.contractByIdModel?.startDate?.day}',
+            's_month': '${controller.contractByIdModel?.startDate?.month}',
+            's_year': '${controller.contractByIdModel?.startDate?.year}',
+            'e_day': '${controller.contractByIdModel?.endDate?.day}',
+            'e_month': '${controller.contractByIdModel?.endDate?.month}',
+            'e_year': '${controller.contractByIdModel?.endDate?.year}',
+          }),
+          style: childTextStyle),
     );
   }
 
@@ -194,7 +280,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'internet_fee'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '______________________', style: childTextStyle)
+          TextSpan(
+              text:
+                  '${controller.contractByIdModel?.electricCost?.toStringTotalPrice ?? '--'} VND/ ${'month'.tr}',
+              style: childTextStyle)
         ],
       ),
     );
@@ -203,14 +292,28 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildWaterFee() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'water_fee'.tr, style: childTextStyle),
+      TextSpan(
+          text: 'water_fee'.trParams({
+            'price':
+                controller.contractByIdModel?.waterCost?.toFormatCurrency ??
+                '--',
+            'unit': 'VND'
+          }),
+          style: childTextStyle),
     );
   }
 
   Text _buildElectrictyFee() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'electricity_fee'.tr, style: childTextStyle),
+      TextSpan(
+          text: 'electricity_fee'.trParams({
+            'price': controller
+                    .contractByIdModel?.electricCost?.toFormatCurrency ??
+                '--',
+            'unit': 'VND'
+          }),
+          style: childTextStyle),
     );
   }
 
@@ -221,7 +324,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'payment_method'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '______________________', style: childTextStyle)
+          TextSpan(
+              text:
+                  ' ${controller.contractByIdModel?.method?.name ?? PaymentMethod.no.name} ',
+              style: childTextStyle)
         ],
       ),
     );
@@ -230,14 +336,19 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildRentPrice() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'rent_price'.tr, style: childTextStyle),
+      TextSpan(
+          text: 'rent_price'.trParams({
+            'price':
+                controller.contractByIdModel?.roomPrice?.toFormatCurrency ??
+                    '--'
+          }),
+          style: childTextStyle),
     );
   }
 
   Container _buildFirstPage() {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 8.px),
       padding: EdgeInsets.only(
         right: 8.px,
         left: 8.px,
@@ -299,7 +410,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         style: childTextStyle,
         children: [
           TextSpan(
-            text: '______________________',
+            text: ' ${controller.contractByStatusModel?.roomAddress ?? '--'}',
             style: childTextStyle,
           ),
         ],
@@ -324,7 +435,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         style: childTextStyle,
         children: [
           TextSpan(
-            text: '______________________',
+            text: ' ${controller.partyB?.phone ?? '--'}',
             style: childTextStyle,
           ),
         ],
@@ -339,11 +450,18 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'id_renter'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '________', style: childTextStyle),
-          TextSpan(text: 'issued_date_renter'.tr, style: childTextStyle),
-          TextSpan(text: '_________', style: childTextStyle),
+          TextSpan(text: ' ${controller.partyB?.cccd} ', style: childTextStyle),
+          TextSpan(
+              text: 'issued_date_renter'.tr.trParams({
+                'day': controller.partyB?.issueDate?.day.toString() ?? '--',
+                'month': controller.partyB?.issueDate?.month.toString() ?? '--',
+                'year': controller.partyB?.issueDate?.year.toString() ?? '--',
+              }),
+              style: childTextStyle),
+          TextSpan(text: ' '),
           TextSpan(text: 'issued_place_renter'.tr, style: childTextStyle),
-          TextSpan(text: '_________', style: childTextStyle),
+          TextSpan(
+              text: ' ${controller.partyB?.issueBy} ', style: childTextStyle),
         ],
       ),
     );
@@ -352,7 +470,9 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildAddressTenant() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'address_renter'.tr, style: childTextStyle),
+      TextSpan(
+          text: '${'address_renter'.tr} ${controller.partyB?.registeredPlace}',
+          style: childTextStyle),
     );
   }
 
@@ -363,9 +483,13 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'name_renter'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '______________________', style: childTextStyle),
+          TextSpan(
+              text: ' ${controller.partyB?.name ?? '--'} ',
+              style: childTextStyle),
           TextSpan(text: 'birth_renter'.tr, style: childTextStyle),
-          TextSpan(text: '______________________', style: childTextStyle),
+          TextSpan(
+              text: ' ${controller.partyB?.dob?.ddMMyyyy ?? '--'}',
+              style: childTextStyle),
         ],
       ),
     );
@@ -386,7 +510,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         style: childTextStyle,
         children: [
           TextSpan(
-            text: '______________________',
+            text: ' ${controller.partyA?.phone ?? '--'}',
             style: childTextStyle,
           ),
         ],
@@ -401,11 +525,19 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'id_landlord'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '________', style: childTextStyle),
-          TextSpan(text: 'issued_date_landlord'.tr, style: childTextStyle),
-          TextSpan(text: '_________', style: childTextStyle),
+          TextSpan(text: ' ${controller.partyA?.cccd} ', style: childTextStyle),
+          TextSpan(
+              text: 'issued_date_landlord'.tr.trParams({
+                'day': controller.partyA?.issueDate?.day.toString() ?? '--',
+                'month': controller.partyA?.issueDate?.month.toString() ?? '--',
+                'year': controller.partyA?.issueDate?.year.toString() ?? '--',
+              }),
+              style: childTextStyle),
+          TextSpan(text: ' '),
           TextSpan(text: 'issued_place_landlord'.tr, style: childTextStyle),
-          TextSpan(text: '_________', style: childTextStyle),
+          TextSpan(
+              text: controller.partyA?.issueBy?.toString() ?? '--',
+              style: childTextStyle),
         ],
       ),
     );
@@ -414,7 +546,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildAddressLandLord() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'address_landlord'.tr, style: childTextStyle),
+      TextSpan(
+          text:
+              '${'address_landlord'.tr} ${controller.partyA?.registeredPlace}',
+          style: childTextStyle),
     );
   }
 
@@ -425,9 +560,14 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         text: 'name_landlord'.tr,
         style: childTextStyle,
         children: [
-          TextSpan(text: '______________________', style: childTextStyle),
+          TextSpan(
+              text: ' ${controller.partyA?.name ?? '--'} ',
+              style: childTextStyle),
           TextSpan(text: 'birth_landlord'.tr, style: childTextStyle),
-          TextSpan(text: '______________________', style: childTextStyle),
+          TextSpan(
+              text:
+                  ' ${controller.partyA?.dob?.ddMMyyyy ?? ''} ',
+              style: childTextStyle),
         ],
       ),
     );
@@ -453,7 +593,20 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Text _buildDateLocation() {
     return Text.rich(
       textAlign: TextAlign.start,
-      TextSpan(text: 'date_location'.tr, style: childTextStyle),
+      TextSpan(
+          text: 'date_location'.trParams({
+            'day':
+                controller.contractByStatusModel?.createdAt?.day.toString() ??
+                '--',
+            'month':
+                controller.contractByStatusModel?.createdAt?.month.toString() ??
+                    '--',
+            'year':
+                controller.contractByStatusModel?.createdAt?.year.toString() ??
+                    '--',
+            'address': controller.contractByStatusModel?.roomAddress ?? '--',
+          }),
+          style: childTextStyle),
     );
   }
 

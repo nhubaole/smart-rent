@@ -1,15 +1,24 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
 import 'package:smart_rent/modules/manage_room/views/widgets/status_request_rent.dart';
 
 class ItemRequestRent extends StatelessWidget {
-  final VoidCallback onNav;
-
-  const ItemRequestRent({super.key, required this.onNav});
+  final Function(RequestInfo) onNav;
+  final RentalRequestAllModel rentalRequest;
+  final bool isLandlord;
+  const ItemRequestRent({
+    super.key,
+    required this.onNav,
+    required this.rentalRequest,
+    required this.isLandlord,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +38,13 @@ class ItemRequestRent extends StatelessWidget {
           SizedBox(height: 1.2.h),
           _buildDescription(),
           SizedBox(height: 1.2.h),
-          ...[
-            StatusRequestRent(
-              sumQuantityRequest: 2,
-              onTap: onNav,
-              isLandlord: true,
-            ),
-          ],
+          ...rentalRequest.requestInfo!
+              .mapIndexed((index, requestInfo) => StatusRequestRent(
+                    requestInfo: requestInfo,
+                    onTap: () => onNav(requestInfo),
+                    isLandlord: isLandlord,
+                    isLast: index == rentalRequest.requestInfo!.length - 1,
+                  )),
         ],
       ),
     );
@@ -53,18 +62,19 @@ class ItemRequestRent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.px),
-            child: CacheImageWidget(
-              imageUrl: ImageAssets.demo,
-              width: 6.h,
-              height: 6.h,
-              fit: BoxFit.cover,
+            borderRadius: BorderRadius.circular(6.px),
+            child: Container(
+              color: AppColors.white,
+              child: CacheImageWidget(
+                imageUrl: rentalRequest.room!.images?.first ?? ImageAssets.demo,
+                width: 6.h,
+                height: 6.h,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          SizedBox(
-            width: 2.w,
-          ),
-          const Expanded(
+          SizedBox(width: 2.w),
+          Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -73,9 +83,9 @@ class ItemRequestRent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'HOMESTAY DOOM MẶT TIỀN HÀNG...',
-                        style: TextStyle(
-                          fontSize: 11,
+                        rentalRequest.room!.title ?? '',
+                        style: const TextStyle(
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: AppColors.secondary20,
                         ),
@@ -89,9 +99,12 @@ class ItemRequestRent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '1.6 triệu VND/người',
-                        style: TextStyle(
-                          fontSize: 10,
+                        rentalRequest.room!.price != null
+                            ? (rentalRequest.room!.price! as int)
+                                .toStringTotalthis(symbol: 'VND/người')
+                            : '--',
+                        style: const TextStyle(
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary40,
                         ),
@@ -105,9 +118,9 @@ class ItemRequestRent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Khối 5, thị trấn Đức Thọ',
-                        style: TextStyle(
-                          fontSize: 8,
+                        rentalRequest.room!.addresses?.join(', ') ?? '',
+                        style: const TextStyle(
+                          fontSize: 10,
                           fontWeight: FontWeight.w400,
                           color: AppColors.secondary20,
                         ),
@@ -128,29 +141,27 @@ class ItemRequestRent extends StatelessWidget {
   RichText _buildSumQuantity() {
     return RichText(
       text: TextSpan(
+        style: const TextStyle(
+          color: AppColors.secondary20,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
         children: [
           TextSpan(
             text: 'you_have_sent'.tr,
-            style: const TextStyle(
-              color: AppColors.secondary20,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
           ),
-          const TextSpan(
-            text: ' 2 ',
+          TextSpan(
+            text: ' ${rentalRequest.requestCount} ',
             style: TextStyle(
-              color: AppColors.secondary20,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+              color: AppColors.primary40,
+              fontWeight: FontWeight.bold,
             ),
           ),
           TextSpan(
             text: 'rental_request'.tr.toLowerCase(),
             style: const TextStyle(
               color: AppColors.primary40,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const TextSpan(text: ' '),

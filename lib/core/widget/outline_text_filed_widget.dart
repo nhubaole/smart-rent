@@ -8,6 +8,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final Function()? onTap;
   final bool? readOnly;
   final String? Function(String?)? onValidate;
+  final String? Function(String? value)? onSubmit;
   final String? onValidateString;
   final String? textLabel;
   final TextStyle? textLabelStyle;
@@ -19,9 +20,21 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final String? suffixUnit;
   final Widget? suffix;
   final Widget? prefixIcon;
+  final Widget? prefix;
   final int? maxlines;
   final int? minlines;
   final List<TextInputFormatter>? inputFormatters;
+  final bool? inSideContainer;
+  final InputBorder? enabledBorder;
+  final InputBorder? focusedBorder;
+  final InputBorder? border;
+  final bool? obscureText;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final AutovalidateMode autovalidateMode;
+  final TextAlign textAlign;
+  final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -42,6 +55,19 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.inputFormatters,
     this.suffix,
     this.minlines,
+    this.prefix,
+    this.onSubmit,
+    this.inSideContainer = false,
+    this.enabledBorder,
+    this.focusedBorder,
+    this.border,
+    this.obscureText = false,
+    this.focusNode,
+    this.textInputAction,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.textAlign = TextAlign.start,
+    this.maxLength,
+    this.maxLengthEnforcement,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -61,27 +87,46 @@ class OutlineTextFiledWidget extends StatelessWidget {
       );
     }
 
+    if (inSideContainer!) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 8.px),
+        decoration: BoxDecoration(
+          color: AppColors.secondary90,
+          borderRadius: BorderRadius.circular(8.px),
+        ),
+        child: textLabel != null
+            ? _buildWithTextLabel(textFormFiled)
+            : textFormFiled,
+      );
+    }
+
     return textLabel != null
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  textLabel!,
-                  style: textLabelStyle ??
-                      TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColors.secondary40,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              SizedBox(height: 8.px),
-              textFormFiled,
-            ],
-          )
+        ? _buildWithTextLabel(textFormFiled)
         : textFormFiled;
+  }
+
+  Column _buildWithTextLabel(Widget textFormFiled) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            textLabel!,
+            style: textLabelStyle ??
+                TextStyle(
+                  fontSize: 16.sp,
+                  color: AppColors.secondary40,
+                  fontWeight:
+                      !inSideContainer! ? FontWeight.w600 : FontWeight.w400,
+                ),
+          ),
+        ),
+        if (!inSideContainer!)
+        SizedBox(height: 8.px),
+        textFormFiled,
+      ],
+    );
   }
 
   Widget _buildTextFormField() {
@@ -92,29 +137,42 @@ class OutlineTextFiledWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
         );
     return TextFormField(
+      maxLengthEnforcement: maxLengthEnforcement,
+      maxLength: maxLength,
+      focusNode: focusNode,
+      onFieldSubmitted: onSubmit,
       enabled: !readOnly!,
       inputFormatters: inputFormatters,
       controller: textEditingController,
       keyboardType: textInputType!,
       minLines: minlines,
       maxLines: maxlines,
-      textInputAction: TextInputAction.done,
+      autovalidateMode: autovalidateMode,
+      textInputAction: textInputAction ?? TextInputAction.done,
       style: defaultTextStyle,
+      textAlign: textAlign,
+      cursorColor: AppColors.primary40,
+      cursorErrorColor: AppColors.error,
+      mouseCursor: MouseCursor.defer,
+      obscureText: obscureText!,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
+        border: border ??
+            OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.px),
           borderSide: const BorderSide(
             color: AppColors.secondary80,
           ),
         ),
         hintText: hintText,
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: focusedBorder ??
+            OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.primary40,
             width: 1,
           ),
         ),
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: enabledBorder ??
+            const OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.secondary80,
             width: 1,
@@ -133,6 +191,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
                   )
                 : null),
         prefixIcon: prefixIcon,
+        prefix: prefix,
       ),
       onSaved: (newValue) {},
       validator: onValidate ??

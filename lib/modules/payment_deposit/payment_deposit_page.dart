@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/payment_deposit/payment_deposit_controller.dart';
@@ -16,22 +19,47 @@ class PaymentDepositPage extends GetView<PaymentDepositController> {
   Widget build(BuildContext context) {
     return ScaffoldWidget(
       appBar: CustomAppBar(title: 'deposit_payment'.tr),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-        child: Column(
-          children: [
-            _buildIllustration(),
-            SizedBox(height: 16.px),
-            _buildInfomationCard(),
-          ],
+      body: Obx(() => _buildListByStatus()),
+      bottomNavigationBar: Obx(
+        () => Visibility(
+          visible: controller.isLoadingData.value == LoadingType.LOADED,
+          child: SolidButtonWidget(
+            height: 55.px,
+            margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+            text: 'confirm'.tr,
+            onTap: controller.onNavPaymentTransferInfo,
+          ),
         ),
       ),
-      bottomNavigationBar: SolidButtonWidget(
-        height: 55.px,
-        margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-        text: 'confirm'.tr,
-        onTap: () => Get.toNamed(AppRoutes.paymentTransferInfo),
+    );
+  }
+
+  Widget _buildListByStatus() {
+    switch (controller.isLoadingData.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildBody();
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget(
+          expandToCanPullToRefresh: true,
+        );
+    }
+  }
+
+  
+
+  SingleChildScrollView _buildBody() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+      child: Column(
+        children: [
+          _buildIllustration(),
+          SizedBox(height: 16.px),
+          _buildInfomationCard(),
+        ],
       ),
     );
   }
@@ -59,7 +87,7 @@ class PaymentDepositPage extends GetView<PaymentDepositController> {
         children: [
           _buildItemRow(
             key: 'bill_code'.tr,
-            value: 'HD2220',
+            value: controller.billByIdModel?.code ?? '--',
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -68,7 +96,9 @@ class PaymentDepositPage extends GetView<PaymentDepositController> {
           ),
           _buildItemRow(
             key: 'payment_amount'.tr,
-            value: '2,500,000đ',
+            value: controller.billByIdModel?.totalAmount
+                    ?.toStringTotalthis(symbol: 'đ') ??
+                '--',
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -86,7 +116,7 @@ class PaymentDepositPage extends GetView<PaymentDepositController> {
           ),
           _buildItemRow(
             key: 'recipient'.tr,
-            value: 'Lê Bảo Như',
+            value: controller.paymentDetailInfoModel?.accountName ?? '--',
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -180,7 +210,7 @@ class PaymentDepositPage extends GetView<PaymentDepositController> {
               ),
               TextSpan(
                 text:
-                    '97 đường số 11, phường Trường Thọ, TP Thủ Đức, TP.HCM '.tr,
+                  controller.billByIdModel?.info?.address ?? '--',
               ),
             ),
           ),

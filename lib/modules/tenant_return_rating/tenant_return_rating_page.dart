@@ -19,33 +19,6 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
   Widget build(BuildContext context) {
     return ScaffoldWidget(
       enabelSafeArea: true,
-      // appBar: CustomAppBar(title: 'review_room'.tr),
-      // body: CustomScrollView(
-      //   controller: controller.scrollController,
-      //   slivers: [
-      //     _buildSilverAppBar(context),
-      //     SliverList(
-      //       delegate: SliverChildListDelegate.fixed(
-      //         addRepaintBoundaries: true,
-      //         addAutomaticKeepAlives: true,
-      //         [
-      //           Column(
-      //             mainAxisSize: MainAxisSize.max,
-      //             children: [
-      //               TabBarView(
-      //                 controller: controller.tabController,
-      //                 children: [
-      //                   _buildSliverListReviewRoom(),
-      //                   _buildSliverListReviewLandlord(),
-      //                 ],
-      //               ),
-      //             ],
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
       body: NestedScrollView(
         controller: controller.scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -61,16 +34,6 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
           ],
         ),
       ),
-      // bottomNavigationBar: OutlineButtonWidget(
-      //   height: 50.px,
-      //   margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-      //   text: 'continue'.tr,
-      //   onTap: () {},
-      //   leading: const Icon(
-      //     Icons.edit,
-      //     color: AppColors.primary60,
-      //   ),
-      // ),
     );
   }
 

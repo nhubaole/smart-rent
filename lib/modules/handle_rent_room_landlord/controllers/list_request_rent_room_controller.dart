@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/model/account/Account.dart';
-import '/core/model/room/room.dart';
 import '/core/resources/auth_methods.dart';
 
 class ListRequestRentRoomController extends GetxController {
-  final Room room;
+  final RoomModel room;
   ListRequestRentRoomController({required this.room});
 
   var isLoading = false.obs;

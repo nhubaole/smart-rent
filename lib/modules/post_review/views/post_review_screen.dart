@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rating_summary/rating_summary.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 
 import '../../../core/config/app_colors.dart';
-import '/core/model/room/room.dart';
-import '/core/values/app_colors.dart';
 import '/modules/post_review/controllers/post_review_screen_controller.dart';
 import '/modules/post_review/views/widgets/card_review_widget.dart';
 
@@ -17,7 +16,7 @@ class PostReviewScreen extends StatelessWidget {
     required this.room,
   });
   final String roomId;
-  final Room room;
+  final RoomModel room;
   late double deviceHeight;
   late double deviceWidth;
 

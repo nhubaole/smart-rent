@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 
 class OverlayDialog extends StatelessWidget {
-  final String message;
+  final String? message;
   const OverlayDialog({
     super.key,
-    required this.message,
+    this.message,
   });
 
   @override
@@ -26,7 +26,7 @@ class OverlayDialog extends StatelessWidget {
               height: 16,
             ),
             Text(
-              message,
+              message ?? 'please_wait_process'.tr,
               style: const TextStyle(color: AppColors.primary60),
             ),
           ],
@@ -41,7 +41,7 @@ class OverlayDialog extends StatelessWidget {
   }
 
   static Future<void> show({
-    required String message,
+    String? message,
   }) async {
     if (Get.isDialogOpen == true) Get.back();
     Get.dialog(

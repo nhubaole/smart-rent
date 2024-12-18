@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../../../core/config/app_colors.dart';
-import '/core/model/room/room.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/modules/handle_rent_room_landlord/controllers/list_request_rent_room_controller.dart';
 import '/modules/handle_rent_room_landlord/views/detail_request_rent_room_screen.dart';
 import '/modules/handle_rent_room_landlord/views/widgets/item_request_rent_room.dart';
 
 class ListRequestRentRoomScreen extends StatelessWidget {
   const ListRequestRentRoomScreen({super.key, required this.room});
-  final Room room;
+  final RoomModel room;
 
   @override
   Widget build(BuildContext context) {

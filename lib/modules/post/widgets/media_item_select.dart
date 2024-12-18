@@ -16,14 +16,14 @@ class MediaItemSelect extends StatelessWidget {
   final XFile xFile;
   final int index;
   final Function(XFile xFile, int index) onRemove;
-  final Function()? onReview;
+  final Function(XFile xFile)? onReview;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         InkWell(
-          onTap: onReview,
+          onTap: () => onReview?.call(xFile),
           child: Container(
             width: double.infinity,
             height: double.infinity,

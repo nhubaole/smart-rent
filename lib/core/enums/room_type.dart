@@ -6,7 +6,7 @@ enum RoomType {
 }
 
 extension InfoRoomType on RoomType {
-  String getNameRoomType() {
+  String get value {
     switch (this) {
       case RoomType.DORMITORY_HOMESTAY:
         return "Kí túc xá/Homestay";
@@ -17,12 +17,12 @@ extension InfoRoomType on RoomType {
       case RoomType.APARTMENT:
         return "Căn hộ";
       default:
-        return "";
+        return "Chua dinh nghia";
     }
   }
 
   static RoomType fromString(String value) {
-    switch (value) {
+    switch (value.toUpperCase()) {
       case "Kí túc xá/Homestay":
         return RoomType.DORMITORY_HOMESTAY;
       case "Phòng cho thuê":
@@ -32,7 +32,7 @@ extension InfoRoomType on RoomType {
       case "Căn hộ":
         return RoomType.APARTMENT;
       default:
-        throw ArgumentError('Invalid room type: $value');
+        return RoomType.APARTMENT;
     }
   }
 }

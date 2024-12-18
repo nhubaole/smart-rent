@@ -2,11 +2,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '../../../core/config/app_colors.dart';
 import '/blank.dart';
 import '/core/model/account/Account.dart';
 import '/core/model/invoice/invoice.dart';
-import '/core/model/room/room.dart';
 import '/core/resources/auth_methods.dart';
 import '/modules/root_view/views/root_screen.dart';
 
@@ -15,7 +15,7 @@ class DetailRequestRentRoomController extends GetxController {
   DetailRequestRentRoomController({required this.data});
   var profileOwner = Rx<Account?>(null);
   var isLoading = Rx<bool>(false);
-  var room = Rx<Room?>(null);
+  var room = Rx<RoomModel?>(null);
 
   @override
   void onInit() {

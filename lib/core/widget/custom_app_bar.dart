@@ -7,6 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final Color? backgroundColor;
   final List<Widget>? actions;
+  final Function()? onBack;
 
   const CustomAppBar({
     super.key,
@@ -14,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.backgroundColor,
     this.actions,
+    this.onBack,
   });
 
   @override
@@ -31,7 +33,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                Navigator.of(context).pop();
+                if (onBack != null) {
+                  onBack!();
+                } else {
+                  Navigator.of(context).pop();
+                }
               },
               icon: const Icon(Icons.arrow_back_ios_new_rounded),
             )

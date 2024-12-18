@@ -1,8 +1,8 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/enums/gender.dart';
-import 'package:smart_rent/core/widget/room_item.dart';
 
-final moneyVNFormat = NumberFormat.currency(locale: "vi_VN", symbol: "");
+final moneyVNFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
 extension IntExt on int {
   getNameGender() {
@@ -27,23 +27,35 @@ extension IntExt on int {
     }
   }
 
-  String toStringTotalthis(String? symbol) {
-    return '${moneyVNFormat.format(this)} ${symbol ?? ''}';
+  String toStringTotalthis({String? symbol}) {
+    return '${moneyVNFormat.format(this)} ${symbol ?? 'VND/ ${'room'.tr}'}';
   }
 
-  String toFormattedPrice() {
+  String get toFormattedPrice {
     if (this <= 0) {
-      return "Miễn phí";
+      return 'Miễn phí';
     } else if (this < 1000) {
-      return "$this ₫";
+      return '$this ₫';
     } else if (this >= 1000 && this < 1000000) {
-      return "${this / 1000} k";
+      return '${this / 1000} k';
     } else {
-      return "${this / 1000000} tr";
+      return '${this / 1000000} tr';
     }
   }
 
   String get getStatusRoom {
     return this == 1 ? 'available' : 'unavailable';
+  }
+
+  int get getAcreage {
+    return this * 10;
+  }
+
+  DateTime get toDateTime {
+    return DateTime.fromMillisecondsSinceEpoch(this);
+  }
+
+  String get toFormatCurrency {
+    return moneyVNFormat.format(this);
   }
 }

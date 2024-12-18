@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/config/app_constant.dart';
 
 class CacheImageWidget extends StatefulWidget {
   final String imageUrl;
@@ -10,6 +11,7 @@ class CacheImageWidget extends StatefulWidget {
   final double? width;
   final BorderRadiusGeometry? borderRadius;
   final Color? overlay;
+  final bool? shouldExtendCache;
   const CacheImageWidget({
     super.key,
     required this.imageUrl,
@@ -18,15 +20,27 @@ class CacheImageWidget extends StatefulWidget {
     this.width,
     this.borderRadius,
     this.overlay,
+    this.shouldExtendCache = true,
   });
 
   @override
   State<CacheImageWidget> createState() => _CacheImageWidgetState();
 }
 
-class _CacheImageWidgetState extends State<CacheImageWidget> {
+class _CacheImageWidgetState extends State<CacheImageWidget>
+    with AutomaticKeepAliveClientMixin {
+
+  @override
+  void didUpdateWidget(covariant CacheImageWidget oldWidget) {
+    if (oldWidget.imageUrl != widget.imageUrl) {
+      super.didUpdateWidget(oldWidget);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+      
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     const key = "customKeyCache";
 
     final customCacheManager = CacheManager(
@@ -59,15 +73,26 @@ class _CacheImageWidgetState extends State<CacheImageWidget> {
 
   Widget _buildCacheImage(BaseCacheManager? cacheManager) {
     final cacheImage = CachedNetworkImage(
+      maxHeightDiskCache: widget.shouldExtendCache == true
+          ? AppConstant.maxHeightDiskCache
+          : null,
+      maxWidthDiskCache: widget.shouldExtendCache == true
+          ? AppConstant.maxWidthDiskCache
+          : null,
+      memCacheHeight:
+          widget.shouldExtendCache == true ? AppConstant.memCacheHeight : null,
+      memCacheWidth:
+          widget.shouldExtendCache == true ? AppConstant.memCacheWidth : null,
       height: widget.height,
       width: widget.width,
       imageUrl: widget.imageUrl,
       alignment: Alignment.center,
+      // useOldImageOnUrlChange: true,
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           _buildLoadingProgress(downloadProgress),
       errorWidget: (context, url, error) => _buildErrorImage(),
       fadeInCurve: Curves.bounceInOut,
-      fadeInDuration: const Duration(milliseconds: 200),
+      fadeInDuration: const Duration(milliseconds: 100),
       fit: widget.fit ?? BoxFit.cover,
       // cacheManager: cacheManager,
     );
@@ -110,4 +135,7 @@ class _CacheImageWidgetState extends State<CacheImageWidget> {
       ],
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

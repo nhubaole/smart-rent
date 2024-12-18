@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/helper/helper.dart';
+import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
 
 class StatusRequestRent extends StatelessWidget {
+  final RequestInfo requestInfo;
   final bool isLandlord;
-  final int sumQuantityRequest;
   final Function() onTap;
+  final bool isLast;
 
   const StatusRequestRent({
     super.key,
-    required this.sumQuantityRequest,
     required this.onTap,
     required this.isLandlord,
+    required this.requestInfo,
+    this.isLast = false,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +29,12 @@ class StatusRequestRent extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         splashColor: Colors.grey.withOpacity(0.5),
-        borderRadius: BorderRadius.only(
+        borderRadius: isLast
+            ? BorderRadius.only(
           bottomLeft: Radius.circular(16.px),
           bottomRight: Radius.circular(16.px),
-        ),
+              )
+            : null,
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.only(
@@ -51,7 +59,8 @@ class StatusRequestRent extends StatelessWidget {
                     SizedBox(width: 8.px),
                     ClipOval(
                       child: CacheImageWidget(
-                        imageUrl: ImageAssets.demo,
+                        imageUrl:
+                            requestInfo.avatar ?? ImageAssets.demo,
                         width: 6.h,
                         height: 6.h,
                       ),
@@ -70,9 +79,11 @@ class StatusRequestRent extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'not_processed'.tr,
-                          style: const TextStyle(
-                            color: AppColors.primary40,
+                          Helper.getRequestRentStatus(requestInfo.status!),
+                          style: TextStyle(
+                            color: Helper.getRequestRentColor(
+                              requestInfo.status!,
+                            ),
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                           ),
@@ -82,34 +93,30 @@ class StatusRequestRent extends StatelessWidget {
                     ),
                     if (isLandlord)
                       Text(
-                        'data',
+                        requestInfo.name ?? '',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'sent_time'.tr,
-                          style: const TextStyle(
-                            color: AppColors.secondary20,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
+                    Text.rich(
+                      style: TextStyle(
+                        color: AppColors.secondary20,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14.sp,
+                      ),
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'sent_time'.tr,
                           ),
-                        ),
-                        const Text(' '),
-                        const Text(
-                          '8:30 04/12/2023',
-                          style: TextStyle(
-                            color: AppColors.secondary20,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
+                          const TextSpan(text: ' '),
+                          TextSpan(
+                            text: requestInfo.createdAt?.ddMMyyyyHHmm ?? '',
                           ),
-                        ),
-                      ],
-                    )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

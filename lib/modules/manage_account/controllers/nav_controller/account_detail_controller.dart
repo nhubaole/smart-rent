@@ -16,7 +16,6 @@ import '/core/model/values/utils.dart';
 import '/core/resources/auth_methods.dart';
 import '/core/resources/storage_methobs.dart';
 import '/core/values/key_value.dart';
-import '/core/values/app_colors.dart';
 
 class AccountDetailController extends GetxController {
   var profileOwner = Rx<Account?>(null);

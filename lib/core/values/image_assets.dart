@@ -2,6 +2,7 @@ class ImageAssets {
   static const path = 'assets/images';
   static const pathPNG = '$path/png';
   static const pathSVG = '$path/svg';
+  static const logo = '$path/logo/sm_logo.png';
   static const demo =
       'https://images.unsplash.com/photo-1723843038784-ba892b252323?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
@@ -30,5 +31,12 @@ class ImageAssets {
   static const icAverage = '$path/ic_average.png';
   static const icGood = '$path/ic_good.png';
   static const icExcellent = '$path/ic_excellent.png';
+
+  // Lottie
+  static const lottieEmpty = 'assets/lottie/empty.json';
+  static const lottiePayment = 'assets/lottie/noti_payment.json';
+  static const lottieHamster = 'assets/lottie/hamster.json';
+  static const lottieBell = 'assets/lottie/bell.json';
+  static const lottieLoading = 'assets/lottie/loading.json';
 
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/model/invoice/invoice.dart';
 import '/core/model/review_ticket/review_ticket.dart';
-import '/core/model/room/room.dart';
 
 class ReviewRoomController extends GetxController {
   ReviewRoomController({
     required this.invoice,
   });
   final Invoice invoice;
-  var room = Rx<Room?>(null);
+  var room = Rx<RoomModel?>(null);
   late ReviewTicket reviewTicket;
   late TextEditingController titleController;
 
