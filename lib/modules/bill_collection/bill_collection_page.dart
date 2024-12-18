@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/bill_collection/bill_collection_controller.dart';
 import 'package:smart_rent/modules/bill_collection/widgets/bill_collection_item.dart';
@@ -22,11 +25,26 @@ class BillCollectionPage extends GetView<BillCollectionController> {
         children: [
           _buildTabbar(),
           Expanded(
-            child: _buildTabBarView(),
+            child: Obx(() => _buildListByStatus()),
           ),
         ],
       ),
     );
+  }
+
+
+  Widget _buildListByStatus() {
+    switch (controller.isLoadingData.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildTabBarView();
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget(
+          expandToCanPullToRefresh: true,
+        );
+    }
   }
 
   Widget _buildTabBarView() {
@@ -36,30 +54,104 @@ class BillCollectionPage extends GetView<BillCollectionController> {
         controller: controller.tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          KeepAliveWrapper(
-            wantKeepAlive: true,
-            child: RefreshIndicator(
-              onRefresh: () => Future.delayed(Duration(seconds: 1)),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 16.px),
-                  itemCount: 10,
-                  padding: EdgeInsets.symmetric(vertical: 16.px),
-                  scrollDirection: Axis.vertical,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return BillCollectionItem(
-                      onTap: () => Get.toNamed(AppRoutes.billInfo),
-                    );
-                  },
-                ),
-              ),
+          _buildBillingUnPaid(),
+          _buildBillingPaid(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBillingPaid() {
+    if (controller.billingPaided.isEmpty) {
+      return _buildButtonReloadData(
+        onTap: () => controller.fetchBillings(),
+      );
+    }
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await controller.fetchBillings();
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            alignment: Alignment.topCenter,
+            constraints: BoxConstraints(minHeight: Get.height + 100.px),
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(height: 16.px),
+              itemCount: controller.billingPaided.length,
+              padding: EdgeInsets.symmetric(vertical: 16.px),
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final item = controller.billingPaided[index];
+                return BillCollectionItem(
+                  // onTap: () => Get.toNamed(AppRoutes.billInfo),
+                  onTap: () => controller.onNavBillInfo(item),
+                  billByStatusModel: item,
+                );
+              },
             ),
           ),
-          Container(),
+        ),
+      ),
+    );
+  }
+
+  Center _buildButtonReloadData({
+    required Function() onTap,
+  }) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text('Không có hóa đơn'),
+          SizedBox(height: 4.h),
+          OutlineButtonWidget(
+            padding: EdgeInsets.all(2.w),
+            margin: EdgeInsets.symmetric(horizontal: Get.width / 4),
+            onTap: onTap,
+            text: 'Tải lại dữ liệu',
+          )
         ],
+      ),
+    );
+  }
+
+  Widget _buildBillingUnPaid() {
+    if (controller.billingUnpaid.isEmpty) {
+      return _buildButtonReloadData(
+        onTap: () => controller.fetchBillings(),
+      );
+    }
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await controller.fetchBillings();
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(height: 16.px),
+            itemCount: controller.billingUnpaid.length,
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = controller.billingUnpaid[index];
+              return BillCollectionItem(
+                // onTap: () => Get.toNamed(AppRoutes.billInfo),
+                onTap: () => controller.onNavBillInfo(item),
+                billByStatusModel: item,
+              );
+            },
+          ),
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
@@ -112,7 +112,9 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'transaction_history'.tr,
                       icon: ImageAssets.icHistoryTransaction,
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppRoutes.transactionHistory);
+                      },
                     ),
                   ),
                   Expanded(
@@ -121,7 +123,12 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                       icon: ImageAssets.icInvoice,
                       onTap: () {
                         // Get.toNamed(AppRoutes.billCollection);
+                        if (controller.user.role == 0) {
+                          Get.toNamed(AppRoutes.billCollection);
+                        } else {
                         Get.toNamed(AppRoutes.landlordBillCollection);
+
+                        }
                       },
                     ),
                   ),
@@ -206,11 +213,14 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
     return Container(
       width: double.infinity,
       height: Get.height,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: AppConstant.gradientColor,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            AppColors.primary40,
+            AppColors.primary80,
+          ],
           begin: Alignment.topCenter,
-          end: Alignment(0.0, -0.45),
+          end: Alignment.bottomCenter,
         ),
       ),
       child: Padding(

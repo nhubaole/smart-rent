@@ -41,7 +41,7 @@ class ReviewRoom extends StatelessWidget {
                       CircleAvatar(
                         radius: 64,
                         backgroundImage: CachedNetworkImageProvider(
-                          reviewController.room.value!.roomImages![0],
+                          reviewController.room.value!.images![0],
                         ),
                       ),
                       const SizedBox(

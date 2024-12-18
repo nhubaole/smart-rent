@@ -1,35 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
-import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/enums/gender.dart';
-import '/core/model/room/room.dart';
+
 
 class ResultItem extends StatelessWidget {
-  const ResultItem({super.key, required this.room});
-  final Room room;
+  final RoomModel room;
+  final Function(RoomModel) onTap;
+  const ResultItem({
+    super.key,
+    required this.room,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          AppRoutes.detail,
-          arguments: DetailAgrument(
-            isRequestReturnRent: false,
-            isRequestRented: false,
-            isHandleRequestReturnRoom: false,
-            isHandleRentRoom: false,
-            isRenting: false,
-            room: room,
-          ),
-        );
-      },
+      onTap: () => onTap(room),
       child: Stack(
         children: [
           _buildMainContent(),
+          if (room.status == 0)
           _buildLabel(),
         ],
       ),
@@ -71,15 +65,9 @@ class ResultItem extends StatelessWidget {
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildImage(),
-              const SizedBox(
-                width: 16,
-              ),
-              _buildInfo()
-            ],
+            children: [_buildImage(), SizedBox(width: 16.px), _buildInfo()],
           ),
-          _buildRating()
+          // _buildRating()
         ],
       ),
     );
@@ -159,9 +147,9 @@ class ResultItem extends StatelessWidget {
 
   Text _buildPrice() {
     return Text(
-      'từ ${priceFormatterFull(room)}',
-      style: const TextStyle(
-        fontSize: 18,
+      'từ ${room.totalPrice?.toStringTotalthis()}',
+      style: TextStyle(
+        fontSize: 16.sp,
         color: AppColors.primary60,
         fontWeight: FontWeight.bold,
       ),
@@ -170,9 +158,7 @@ class ResultItem extends StatelessWidget {
 
   Text _buildAddress() {
     return Text(
-      room.address!.isEmpty
-          ? "Chưa cập nhật"
-          : room.address!.map((e) => e).join(", "),
+      room.addresses?.join(", ") ?? "Chưa cập nhật",
       overflow: TextOverflow.ellipsis,
       style: const TextStyle(fontSize: 10, color: AppColors.secondary20),
       maxLines: 2,
@@ -194,7 +180,7 @@ class ResultItem extends StatelessWidget {
 
   Text _buildCapacity() {
     return Text(
-      'Số người ở: ${getCapacity(room)}',
+      'Số người ở: ${room.capacity}',
       style: const TextStyle(fontSize: 10, color: AppColors.secondary60),
     );
   }
@@ -212,19 +198,19 @@ class ResultItem extends StatelessWidget {
           height: 120,
           width: 120,
           fit: BoxFit.cover,
-          imageUrl: room.roomImages![0],
+          imageUrl: room.images![0],
         ),
       ),
     );
   }
 
-  String getCapacity(Room room) {
+  String getCapacity(RoomModel room) {
     return room.gender == Gender.ALL
         ? "${room.capacity} NAM/NỮ"
-        : "${room.capacity} ${InfoGender.fromInt(room.gender!).getNameGender()}";
+        : "${room.capacity} ${InfoGender.fromInt(room.gender!).getNameGender}";
   }
 
-  String priceFormatterFull(Room room) {
+  String priceFormatterFull(RoomModel room) {
     String formattedNumber = room.totalPrice.toString().replaceAllMapped(
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
           (Match match) => '${match[1]}.',

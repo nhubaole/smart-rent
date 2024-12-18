@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/model/account/Account.dart';
-import '/core/model/room/room.dart';
 import '/core/resources/auth_methods.dart';
 
 class RentedRoomController extends GetxController {
-  var listRentingRoom = Rx<List<Room>>([]);
-  var listHistoryRoom = Rx<List<Room>>([]);
+  var listRentingRoom = Rx<List<RoomModel>>([]);
+  var listHistoryRoom = Rx<List<RoomModel>>([]);
   var listHistoryRoomString = Rx<List<String>>([]);
 
   late TabController tabController;

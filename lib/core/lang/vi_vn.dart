@@ -68,14 +68,15 @@ final viVN = {
   'national_title': 'Cộng Hòa Xã Hội Chủ Nghĩa Việt Nam',
   'motto': 'Độc lập – Tự do – Hạnh phúc',
   'title': 'Hợp đồng thuê phòng trọ',
-  'date_location': 'Hôm nay ngày ___ tháng ___ năm ___, tại địa chỉ:',
+  'date_location':
+      'Hôm nay ngày @day tháng @month năm @year, tại địa chỉ: @address',
   'parties_involved': 'Chúng tôi gồm:',
   'landlord_info': '1. Đại diện bên cho thuê phòng trọ (Bên A):',
   'name_landlord': 'Ông/bà:',
   'birth_landlord': 'Sinh ngày:',
   'address_landlord': 'Địa chỉ đăng ký HK:',
   'id_landlord': 'CMND số:',
-  'issued_date_landlord': 'cấp ngày ___/___/___',
+  'issued_date_landlord': 'cấp ngày @day/@month/@year',
   'issued_place_landlord': 'tại:',
   'phone_landlord': 'Số điện thoại:',
   'renter_info': '2. Bên thuê phòng trọ (Bên B):',
@@ -83,20 +84,20 @@ final viVN = {
   'birth_renter': 'Sinh ngày:',
   'address_renter': 'Nơi đăng ký HK thường trú:',
   'id_renter': 'Số CMND:',
-  'issued_date_renter': 'cấp ngày ___/___/___',
+  'issued_date_renter': 'cấp ngày @day/@month/@year',
   'issued_place_renter': 'tại:',
   'phone_renter': 'Số điện thoại:',
   'agreement_intro':
       'Sau khi bàn bạc trên tinh thần dân chủ, hai bên cùng có lợi, cùng thống nhất như sau:',
   'rental_agreement': 'Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ:',
-  'rent_price': 'Giá thuê: _______ đồng/tháng',
+  'rent_price': 'Giá thuê: @price đồng/tháng',
   'payment_method': 'Hình thức thanh toán:',
   'electricity_fee':
-      'Tiền điện: _______ được tính theo chỉ số công tơ, thanh toán vào cuối các tháng.',
-  'water_fee': 'Tiền nước: _______ người thanh toán vào đầu các tháng.',
+      'Tiền điện: @price @unit được tính theo chỉ số công tơ, thanh toán vào cuối các tháng.',
+  'water_fee': 'Tiền nước: @price @unit người thanh toán vào đầu các tháng.',
   'internet_fee': 'Tiền đặt cọc:',
   'contract_duration':
-      'Hợp đồng có giá trị kể từ ngày ___ tháng ___ năm 20__ đến ngày ___ tháng ___ năm 20__.',
+      'Hợp đồng có giá trị kể từ ngày @s_day tháng @s_month năm @s_year đến ngày @e_day tháng @e_month năm @e_year.',
   'responsibilities': 'TRÁCH NHIỆM CỦA CÁC BÊN',
   'landlord_responsibilities': '* Trách nhiệm của bên A:',
   'landlord_duty_1':
@@ -198,7 +199,8 @@ final viVN = {
   'success_image': 'HÌNH ẢNH CHUYỂN KHOẢN THÀNH CÔNG',
   'payment_success': 'Thanh toán thành công',
   'thank_you': 'Cảm ơn bạn! Hóa đơn của bạn đã được thanh toán thành công.',
-  'please_wait': 'Vui lòng chờ chủ nhà xác nhận để hoàn tất thủ tục.',
+  'please_wait_process': 'Vui lòng chờ chúng tôi xác nhận...',
+  'please_wait_landlord': 'Vui lòng chờ chủ nhà xác nhận để hoàn tất thủ tục.',
   'reminder':
       'Đừng quên thanh toán các hóa đơn tiếp theo đúng hạn để đảm bảo quyền lợi thuê trọ của bạn.',
   'view_details': 'Bạn có thể xem lại chi tiết hóa đơn trong phần',
@@ -246,8 +248,6 @@ final viVN = {
   'rental_contract_ready': 'Hợp đồng thuê trọ đã sẵn sàng',
   'detail': 'Chi tiết',
   'room': 'Phòng',
-
-
   'rent_return': 'Trả phòng trọ',
   'return_steps':
       'Hoàn tất quá trình thuê phòng trọ nhanh chóng và an toàn với các bước sau:',
@@ -263,9 +263,6 @@ final viVN = {
   'confirm_end_rent':
       'Bạn có chắc chắn muốn kết thúc hợp đồng và tiến hành trả phòng?',
   'confirmation_info': 'Thông tin xác nhận',
-  'room': 'Phòng',
-  'address': 'Địa chỉ',
-  'rent_price': 'Giá thuê',
   'start_date': 'Ngày bắt đầu thuê',
   'return_request': 'Yêu cầu trả phòng',
   'return_date': 'NGÀY TRẢ PHÒNG',
@@ -281,8 +278,7 @@ final viVN = {
       'Bạn có thể xem lại yêu cầu trong phần Quản lý yêu cầu của ứng dụng.',
   'back': 'Quay lại',
   'owner_check_room': 'Chủ nhà sẽ kiểm tra phòng sau khi bạn trả',
-
-'room_return_success': 'Trả phòng thành công',
+  'room_return_success': 'Trả phòng thành công',
   'room_return_message':
       'Chúc mừng bạn! Quá trình trả phòng trọ của bạn đã hoàn tất thành công.',
   'deposit_refund_message':
@@ -322,5 +318,13 @@ final viVN = {
   'thank_review_message':
       'Đánh giá của bạn sẽ giúp chúng tôi cải thiện chất lượng dịch vụ và hỗ trợ những người thuê khác có thông tin tốt hơn',
   'back_home': 'Về trang chủ',
-
+  'month': 'Tháng',
+  'sent_request_failed': 'Gửi yêu cầu thất bại',
+  'tenant_payment_on_time':
+      'Khách thuê có thanh toán tiền thuê đúng hạn không?',
+  'tenant_protects_property':
+      'Khách thuê có bảo vệ tài sản phòng trọ tốt không?',
+  'tenant_no_disturbance': 'Khách thuê có gây phiền toái cho hàng xóm không?',
+  'tenant_follows_rules':
+      'Khách thuê có tuân thủ các điều khoản và nội quy trong hợp đồng hay không?'
 };

@@ -38,14 +38,14 @@ class UtilFilterPage extends StatelessWidget {
                 controller.setUtil();
               },
               icon: Icon(
-                controller.utilList[index].utility.getIconUtil(),
+                controller.utilList[index].utility.getIconUtil,
                 size: 20,
                 color: controller.utilList[index].isChecked
                     ? AppColors.primary40
                     : AppColors.secondary40,
               ),
               label: Text(
-                controller.utilList[index].utility.getNameUtil(),
+                controller.utilList[index].utility.getNameUtil,
                 style: TextStyle(
                     fontSize: 12,
                     color: controller.utilList[index].isChecked

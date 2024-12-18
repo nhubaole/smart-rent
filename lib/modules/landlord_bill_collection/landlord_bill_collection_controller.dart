@@ -1,20 +1,26 @@
 import 'package:get/get.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/model/billing/bill_by_month_and_user_model.dart';
+import 'package:smart_rent/core/repositories/billing/billing_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/modules/landlord_bill_collection/widgets/confirm_create_multi_bill_sheet.dart';
 
 class LandlordBillCollectionController extends GetxController {
-  final periodSelected = DateTime.now().toPediod.obs;
+  final periodSelected = DateTime.now().obs;
 
   List<DateTime> get periods => generatePeriods();
 
   final RxBool isMultipleSelectionMode = false.obs;
   final RxBool isSelectAllMode = false.obs;
-  final selectedBills = [].obs;
+  final selectedBills = <BillByMonthAndUserItemModel>[].obs;
+  final billings = Rxn<BillByMonthAndUserModel>();
+  final isLoadingData = LoadingType.INIT.obs;
+
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    fetchBilling();
     super.onInit();
   }
 
@@ -22,6 +28,20 @@ class LandlordBillCollectionController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+  }
+
+  fetchBilling() async {
+    isLoadingData.value = LoadingType.INIT;
+    final rq = await BillingRepoImpl().getBillByMonthAndUser(
+      month: periodSelected.value.month,
+      year: periodSelected.value.year,
+    );
+    if (rq.isSuccess()) {
+      billings.value = rq.data;
+      isLoadingData.value = LoadingType.LOADED;
+    } else {
+      isLoadingData.value = LoadingType.ERROR;
+    }
   }
 
   onChangeSelectionMode(bool? value) {
@@ -37,28 +57,25 @@ class LandlordBillCollectionController extends GetxController {
     if (isSelectAllMode.value) {
       selectedBills.clear();
       selectedBills.assignAll(
-        [
-          Object(),
-          Object(),
-          Object(),
-        ],
+                 billings.value!.listBill!.toList()
+
       );
     } else {
       selectedBills.clear();
     }
   }
 
-  onAddSelectedBill(Object object) {
-    final index = selectedBills.indexWhere((item) => item == object);
+  onAddSelectedBill(BillByMonthAndUserItemModel item) {
+    final index = selectedBills.indexWhere((item) => item == item);
 
     if (index == -1) {
-      return _tryAddBill(Object());
+      return _tryAddBill(item);
     } else {
       _removeBillAtIndex(index);
     }
   }
 
-  void _tryAddBill(Object object) {
+  void _tryAddBill(BillByMonthAndUserItemModel object) {
     selectedBills.add(object);
   }
 
@@ -66,13 +83,21 @@ class LandlordBillCollectionController extends GetxController {
     selectedBills.removeAt(index);
   }
 
-  onSelectItem(Object object) {
+  onSelectItem(BillByMonthAndUserItemModel object) {
+    // if (!isMultipleSelectionMode.value) {
+    //   Get.toNamed(AppRoutes.landlordPaymentDetail);
+    //   return;
+    // }
+
     if (!isMultipleSelectionMode.value) {
-      Get.toNamed(AppRoutes.landlordPaymentDetail);
-      return;
+      Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
+        'selected_bill': object,
+        'period': periodSelected.value,
+      });
+    } else {
+      onAddSelectedBill(object);
     }
 
-    onAddSelectedBill(object);
   }
 
   onCreateMultiBills() {
@@ -81,10 +106,14 @@ class LandlordBillCollectionController extends GetxController {
       isDismissible: true,
       ConfirmCreateMultiBillSheet(
         billCounter: selectedBills.length,
-        period: periodSelected.value,
+        period: periodSelected.value.toPediod,
         onConfirm: () {
           Get.back();
-          Get.toNamed(AppRoutes.landlordBillInfo);
+          // Get.toNamed(AppRoutes.landlordBillInfo);
+          Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
+            'selected_bill': selectedBills,
+            'period': periodSelected.value,
+          });
         },
       ),
     );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 
 import '../../../core/config/app_colors.dart';
-import '/core/model/room/room.dart';
-import '/core/values/app_colors.dart';
 import '/core/widget/date_input_form_field.dart';
 import '/core/widget/text_form_field_input.dart';
 import '/modules/handle_return_room_tenant/controllers/send_request_return_room_controller.dart';
@@ -17,7 +16,7 @@ class SendRequestReturnRoom extends StatelessWidget {
     this.result,
   });
   Map<String, dynamic>? result;
-  final Room room;
+  final RoomModel room;
   late double deviceHeight;
   late double deviceWidth;
 

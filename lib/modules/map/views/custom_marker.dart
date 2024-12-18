@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '/core/model/room/room.dart';
-
+import 'package:smart_rent/core/model/room/room_model.dart';
 // ignore: must_be_immutable
 class CustomMarker extends StatelessWidget {
   const CustomMarker({
@@ -8,7 +7,7 @@ class CustomMarker extends StatelessWidget {
     required this.room,
   });
 
-  final Room room;
+  final RoomModel room;
 
   @override
   Widget build(BuildContext context) {

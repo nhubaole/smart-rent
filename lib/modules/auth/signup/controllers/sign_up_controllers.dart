@@ -1,15 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/di/getit_config.dart';
-import '../../login/views/login_screen.dart';
-import '/core/model/account/Account.dart';
-import '/core/repositories/auth/auth_repo_impl.dart';
-import '/core/repositories/log/log.dart';
-import '/core/resources/auth_methods.dart';
-import '/core/values/key_value.dart';
-import '/core/widget/dialog_custom.dart';
+import 'package:smart_rent/core/di/getit_config.dart';
+import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
+import 'package:smart_rent/core/repositories/log/log.dart';
 
 class SignUpController extends GetxController {
   var isShowPassword = false.obs;
@@ -23,7 +17,6 @@ class SignUpController extends GetxController {
   final address = TextEditingController(text: DateTime.now().toString());
 
   late Log log;
-  late Account account;
 
   var dateOfBirthCheck = Rx<DateTime?>(null);
   var isVerifying = Rx<bool>(false);
@@ -55,55 +48,11 @@ class SignUpController extends GetxController {
       password: password.text.trim(),
     );
 
-    print(result);
-
     if (result.errCode == null || result.errCode! >= 400) {
       return 'Xảy ra lỗi';
     } else {
       return result.message;
     }
-  }
-
-  void submit(Account account) async {
-    try {
-      isVerifying.value = true;
-      String resQuery = await checkExistPhoneNumber(account.phoneNumber);
-
-      if (resQuery != 'success') {
-        Get.dialog(
-          DialogCustom(
-            onPressed: () {
-              Get.to(() => const LoginScreen());
-            },
-            backgroundColor: Colors.white,
-            iconPath: 'assets/images/ic_notify.png',
-            title: 'Thông báo',
-            subTitle:
-                'Đã tồn tại tài khoản với số điện thoại này, đăng nhập ngay',
-          ),
-        );
-      } else {
-        // Tiến hành đăng kí tài khoản
-        phoneAuthentication(account.phoneNumber, account);
-      }
-    } catch (e) {
-      Get.snackbar('Lỗi', e.toString());
-    }
-    isVerifying.value = false;
-  }
-
-  void phoneAuthentication(String phoneNo, Account account) async {
-    isVerifying.value = true;
-    AuthMethods.sentOtp(
-      phone: phoneNo,
-      errorStep: () => Get.snackbar('Thông báo', 'Lỗi gửi OTP'),
-      nextStep: () {
-        // Get.dialog(
-        //   DialogOTP(),
-        // );
-      },
-    );
-    isVerifying.value = false;
   }
 
   bool isDate(String str) {
@@ -113,29 +62,6 @@ class SignUpController extends GetxController {
     } catch (e) {
       return false;
     }
-  }
-
-  Future<String> checkExistPhoneNumber(String phoneNumber) async {
-    String res = 'Something went wrong';
-    try {
-      await FirebaseFirestore.instance
-          .collection(KeyValue.KEY_COLLECTION_ACCOUNT)
-          .where('phoneNumber', isEqualTo: phoneNumber)
-          .get()
-          .then(
-        (value) {
-          //is not empty -> co tai khoan
-          if (value.docs.isEmpty) {
-            res = 'success';
-          } else {
-            res = 'Số điện thoại đã được sử dụng';
-          }
-        },
-      );
-    } catch (e) {
-      res = e.toString();
-    }
-    return res;
   }
 
   bool is18OrOlder(DateTime selectedDate) {

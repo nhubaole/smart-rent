@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/modules/auth/login/controllers/login_controller.dart';
 import '../../../../core/config/app_colors.dart';
 import '../../signup/views/sign_up_screen.dart';
-import '../controllers/login_controller.dart';
 import '/core/values/app_colors.dart';
 import '/core/widget/text_form_field_input.dart';
 
@@ -14,7 +15,6 @@ class LoginScreen extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    final loginController = Get.put(LoginController());
     return ScaffoldWidget(
       body: Center(
         child: Column(
@@ -23,7 +23,7 @@ class LoginScreen extends GetView<LoginController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildHeader(),
-            _buildForm(loginController),
+            _buildForm(),
             _buildNavigateSignUp(),
           ],
         ),
@@ -31,9 +31,9 @@ class LoginScreen extends GetView<LoginController> {
     );
   }
 
-  Form _buildForm(LoginController loginController) {
+  Form _buildForm() {
     return Form(
-      key: loginController.formKey,
+      key: controller.formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -43,7 +43,7 @@ class LoginScreen extends GetView<LoginController> {
           children: [
             TextFormFieldInput(
               maxLength: 10,
-              textEditingController: loginController.phoneNo,
+              textEditingController: controller.phoneNo,
               labelText: 'Số điện thoại',
               hintText: 'Nhập số điện thoại',
               textInputType: TextInputType.phone,
@@ -53,8 +53,12 @@ class LoginScreen extends GetView<LoginController> {
               icon: const Icon(Icons.phone_android),
               onSaved: (newValue) {},
               onValidate: (value) {
-                if (value!.isEmpty || value.length < 10) {
+                if (value == null || value.isEmpty) {
                   return 'Vui lòng nhập số điện thoại';
+                }
+
+                if (HelpRegex.isNumber(value)) {
+                  return 'Vui lòng nhập đúng định dạng số';
                 }
                 return null;
               },
@@ -66,7 +70,7 @@ class LoginScreen extends GetView<LoginController> {
             ),
             TextFormFieldInput(
               maxLength: 10,
-              textEditingController: loginController.password,
+              textEditingController: controller.password,
               labelText: 'Mật khẩu',
               hintText: 'Mật khẩu (*)',
               textInputType: TextInputType.text,
@@ -89,9 +93,9 @@ class LoginScreen extends GetView<LoginController> {
               height: 16,
             ),
             Obx(
-              () => loginController.isLoading.value
+              () => controller.isLoading.value
                   ? _buildLoadingWidget()
-                  : _buildButtonLogin(loginController),
+                  : _buildButtonLogin(),
             ),
           ],
         ),
@@ -99,12 +103,13 @@ class LoginScreen extends GetView<LoginController> {
     );
   }
 
-  GestureDetector _buildButtonLogin(LoginController loginController) {
+  GestureDetector _buildButtonLogin() {
     return GestureDetector(
       onTap: () async {
-        if (loginController.formKey.currentState!.validate()) {
-          loginController.formKey.currentState!.save();
-          await loginController.submit();
+        await controller.submit();
+
+        if (controller.formKey.currentState!.validate()) {
+          controller.formKey.currentState!.save();
         }
       },
       child: Container(

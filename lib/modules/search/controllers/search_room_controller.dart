@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
-import '/core/model/location/ward.dart';
+import 'package:smart_rent/core/model/location/ward.dart';
 import 'package:tiengviet/tiengviet.dart';
 
 class SearchRoomController extends GetxController {
@@ -35,6 +35,12 @@ class SearchRoomController extends GetxController {
     super.onReady();
   }
 
+  @override
+  void onClose() {
+    textController.dispose();
+    super.onClose();
+  }
+
   onSearchTextChanged(String text) {
     label.value = text;
     searchResult.clear();
@@ -55,14 +61,14 @@ class SearchRoomController extends GetxController {
 
   Future<void> saveRecent(String recent) async {
     List<String> recentList =
-        HiveManager().get(AppConstant.hiveRecentSearchRoomKey) ?? [];
+        HiveManager.get(AppConstant.hiveRecentSearchRoomKey) ?? [];
     recentList.insert(0, recent);
-    await HiveManager().put(AppConstant.hiveRecentSearchRoomKey, recentList);
+    await HiveManager.put(AppConstant.hiveRecentSearchRoomKey, recentList);
   }
 
   Future<void> getRecent() async {
     searchRecently.value =
-        HiveManager().get(AppConstant.hiveRecentSearchRoomKey) ?? [];
+        HiveManager.get(AppConstant.hiveRecentSearchRoomKey) ?? [];
   }
 
   Future<void> removeRecent(String recent) async {
@@ -70,6 +76,6 @@ class SearchRoomController extends GetxController {
     updatedList.remove(recent);
     searchRecently.value = updatedList;
 
-    await HiveManager().put(AppConstant.hiveRecentSearchRoomKey, updatedList);
+    await HiveManager.put(AppConstant.hiveRecentSearchRoomKey, updatedList);
   }
 }

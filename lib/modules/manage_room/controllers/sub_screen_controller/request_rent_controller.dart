@@ -1,43 +1,44 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '/core/model/account/Account.dart';
-import '/core/model/room/room.dart';
-import '/core/resources/auth_methods.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
+import 'package:smart_rent/core/model/user/user_model.dart';
+import 'package:smart_rent/core/repositories/rental_request/rental_request_repo_impl.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+
 
 class RequestRentController extends GetxController {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<RentalRequestAllModel>? rentalRequests;
 
-  var isLoading = false.obs;
-  var isLoadMore = false.obs;
-  var listRoom = Rx<List<Room>>([]);
-  List<Map<String, dynamic>> listMap = [];
-  var profileOwner = Rx<Account?>(null);
-  var page = Rx<int>(10);
+  final AppManager appManager = AppManager.instance;
+
+  final isLoadingData = LoadingType.INIT.obs;
+
+  UserModel get userModel => appManager.currentUser!;
+
+  bool get isLandlord => userModel.role == 1;
 
   @override
   void onInit() {
-    getListRoom(false);
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
+    fetchRequestRent();
     super.onInit();
   }
 
-  Future<void> getProfile(String uid) async {
-    isLoading.value = true;
-    profileOwner.value = await AuthMethods.getUserDetails(uid);
-    isLoading.value = false;
+  fetchRequestRent() async {
+    isLoadingData.value = LoadingType.LOADING;
+    final rq = await RentalRequestRepoImpl().getAllRentalRequest();
+    if (rq.isSuccess()) {
+      rentalRequests = rq.data!;
+      isLoadingData.value = LoadingType.LOADED;
+
+    } else {
+      isLoadingData.value = LoadingType.ERROR;
+    }
   }
 
-  Future<void> getListRoom(bool isPagination) async {
-    if (isPagination) {
-      isLoadMore.value = true;
-
-      isLoadMore.value = false;
-    } else {
-      isLoading.value = true;
-      listRoom.value.clear();
-
-      isLoading.value = false;
-    }
+  onDetailRequestRoomV2(RentalRequestAllModel rentalRequest) {
+    Get.toNamed(AppRoutes.detailRequestRoomV2, arguments: {
+      'rental_request': rentalRequest,
+    });
   }
 }

@@ -8,6 +8,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final Function()? onTap;
   final bool? readOnly;
   final String? Function(String?)? onValidate;
+  final String? Function(String? value)? onSubmit;
   final String? onValidateString;
   final String? textLabel;
   final TextStyle? textLabelStyle;
@@ -19,9 +20,11 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final String? suffixUnit;
   final Widget? suffix;
   final Widget? prefixIcon;
+  final Widget? prefix;
   final int? maxlines;
   final int? minlines;
   final List<TextInputFormatter>? inputFormatters;
+  final bool? inSideContainer;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -42,6 +45,9 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.inputFormatters,
     this.suffix,
     this.minlines,
+    this.prefix,
+    this.onSubmit,
+    this.inSideContainer = false,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -61,27 +67,46 @@ class OutlineTextFiledWidget extends StatelessWidget {
       );
     }
 
+    if (inSideContainer!) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 8.px),
+        decoration: BoxDecoration(
+          color: AppColors.secondary90,
+          borderRadius: BorderRadius.circular(8.px),
+        ),
+        child: textLabel != null
+            ? _buildWithTextLabel(textFormFiled)
+            : textFormFiled,
+      );
+    }
+
     return textLabel != null
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  textLabel!,
-                  style: textLabelStyle ??
-                      TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColors.secondary40,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-              SizedBox(height: 8.px),
-              textFormFiled,
-            ],
-          )
+        ? _buildWithTextLabel(textFormFiled)
         : textFormFiled;
+  }
+
+  Column _buildWithTextLabel(Widget textFormFiled) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            textLabel!,
+            style: textLabelStyle ??
+                TextStyle(
+                  fontSize: 16.sp,
+                  color: AppColors.secondary40,
+                  fontWeight:
+                      !inSideContainer! ? FontWeight.w600 : FontWeight.w400,
+                ),
+          ),
+        ),
+        if (!inSideContainer!)
+        SizedBox(height: 8.px),
+        textFormFiled,
+      ],
+    );
   }
 
   Widget _buildTextFormField() {
@@ -92,6 +117,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
         );
     return TextFormField(
+      onFieldSubmitted: onSubmit,
       enabled: !readOnly!,
       inputFormatters: inputFormatters,
       controller: textEditingController,
@@ -108,7 +134,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
           ),
         ),
         hintText: hintText,
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.primary40,
             width: 1,
@@ -133,6 +159,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
                   )
                 : null),
         prefixIcon: prefixIcon,
+        prefix: prefix,
       ),
       onSaved: (newValue) {},
       validator: onValidate ??

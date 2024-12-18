@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '/core/model/room/room.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/values/KEY_VALUE.dart';
 
 class RecentlyViewController extends GetxController {
@@ -9,7 +9,7 @@ class RecentlyViewController extends GetxController {
   late SharedPreferences prefs;
 
   var isLoading = false.obs;
-  var listRoom = Rx<List<Room>>([]);
+  var listRoom = Rx<List<RoomModel>>([]);
   @override
   void onInit() {
     getListRoom();

@@ -31,4 +31,10 @@ class ImageAssets {
   static const icGood = '$path/ic_good.png';
   static const icExcellent = '$path/ic_excellent.png';
 
+  // Lottie
+  static const lottieEmpty = 'assets/lottie/empty.json';
+  static const lottiePayment = 'assets/lottie/noti_payment.json';
+  static const lottieHamster = 'assets/lottie/hamster.json';
+  static const lottieBell = 'assets/lottie/bell.json';
+
 }

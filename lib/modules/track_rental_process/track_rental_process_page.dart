@@ -126,7 +126,7 @@ class TrackRentalProcessPage extends GetView<TrackRentalProcessController> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                2000000.toStringTotalthis('đ/${'room'.tr}'),
+                2000000.toStringTotalthis(symbol: 'đ/${'room'.tr}'),
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,

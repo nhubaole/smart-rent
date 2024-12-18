@@ -7,6 +7,7 @@ abstract class AppRoutes {
   static const detail = '/detail';
   static const search = '/search';
   static const manageRoom = '/manage_room';
+  static const notification = '/notification';
   // 11.03.24
   static const waitApprove = '/wait_approve';
   static const likedRoom = '/liked_room';
@@ -14,7 +15,7 @@ abstract class AppRoutes {
   static const rentingRoom = '/renting_room';
   static const requestRent = '/request_rent';
   static const requestRentV2 = '/request_rent_v2';
-  static const requestRequestRoomV2 = '/request_request_room_v2';
+  static const detailRequestRoomV2 = '/detail_request_room_v2';
   static const returnRent = '/return_rent';
 
   // 11.10.24
@@ -45,6 +46,7 @@ abstract class AppRoutes {
   static const landlordBillCollection = '/landlord_bill_collection';
   static const landlordPaymentDetail = '/landlord_payment_detail';
   static const landlordBillInfo = '/landlord_bill_info';
+  static const landlordBillCreate = '/landlord_bill_create';
   static const landlordBillEdit = '/landlord_bill_edit';
 
   // 2.12.24
@@ -62,6 +64,30 @@ abstract class AppRoutes {
   static const tenantReturnRatingSuccess = '/tenant_return_rating_success';
   static const tenantReturnSuccess = '/tenant_return_success';
 
+  static const transactionHistory = '/transaction_history';
+
 
   static const map = '/map';
+  static const rating = '/rating';
+  static const postRoom = '/post_room';
+  static const tenantRentRequest = '/tenant_rent_request';
+  static const tenantSentRentRequest = '/tenant_sent_rent_request';
+  static const tenantRentRequestSuccess = '/tenant_rent_request_success';
+  static const tenantRequestRenewContract = '/tenant_request_renew_contract';
+  static const tenantRequestRenewContractSuccess =
+      '/tenant_request_renew_contract_success';
+  static const tenantRequestRenewContractDetail =
+      '/tenant_request_renew_contract_detail';
+  static const ratingUser = '/rating_user';
+  static const onBoarding = '/onBoarding';
+  static const landlordDetailReturnRequest = '/landlord_detail_return_request';
+  static const landlordPaymentDeposit = '/landlord_payment_deposit';
+  static const searchRoom = '/search_room';
+  static const filter = '/filter';
+  static const landlordReturnSuccess = '/landlord_return_success';
+  static const landlordReturnRating = '/landlord_return_rating';
+  static const landlordReturnRatingSuccess = '/landlord_return_rating_success';
+  static const landlordContractCreate = '/landlord_contract_create';
+  static const useProfile = '/use_profile';
+  static const userProfileDetail = '/user_profile_detail';
 }

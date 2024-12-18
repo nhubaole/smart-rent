@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:smart_rent/core/app/app_manager.dart';
+import 'package:smart_rent/core/repositories/log/log_impl.dart';
+
+
 class ResponseModel<T> {
   int? errCode;
   String? message;
@@ -10,6 +14,23 @@ class ResponseModel<T> {
     this.message,
     this.data,
   });
+
+  ResponseModel.failed(dynamic error) {
+    LogImpl().e('ResponseModel', error.toString());
+    if (error.toString().contains('404') || error.toString().contains('401')) {
+      AppManager().forceLogOut();
+    }
+    if (error is Map) {
+      errCode = 1000;
+      message = error['message'];
+      data = error['data'];
+    } else {
+      errCode = 1000;
+      message = error.toString();
+    }
+  }
+
+  bool isSuccess() => (errCode != null && errCode! < 400);
 
   @override
   bool operator ==(Object other) =>

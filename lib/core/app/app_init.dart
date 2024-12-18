@@ -14,7 +14,7 @@ class AppInit {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
 
-    await HiveManager().init(AppConstant.hiveBoxName);
+    await HiveManager.init(AppConstant.hiveBoxName);
     AwesomeNotifications().initialize(
       null,
       [

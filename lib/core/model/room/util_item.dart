@@ -12,4 +12,6 @@ class UtilItem with _$UtilItem {
 
   factory UtilItem.fromJson(Map<String, dynamic> json) =>
       _$UtilItemFromJson(json);
+
+  toMap() {}
 }

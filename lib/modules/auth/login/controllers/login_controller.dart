@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
+import 'package:smart_rent/core/repositories/log/log.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
-
-import '../../../../core/app/app_manager.dart';
-import '../../../../core/repositories/auth/auth_repo_impl.dart';
-import '../../../../core/repositories/log/log.dart';
+import 'package:smart_rent/core/widget/overlay_loading.dart';
 
 class LoginController extends GetxController {
   late Log logger;
-
   final AppManager appManager = AppManager();
 
   late final GlobalKey<FormState> formKey;
@@ -43,6 +41,7 @@ class LoginController extends GetxController {
   Future<String?> submit() async {
     try {
       isLoading.value = true;
+      OverlayLoading.show(title: 'Đang đăng nhập...');
       logger.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');
       final result = await AuthRepoImpl(logger).login(
         phoneNumber: phoneNo.text.trim(),
@@ -50,26 +49,38 @@ class LoginController extends GetxController {
       );
       if (result.errCode == null || result.errCode! >= 400) {
         Get.snackbar('Thông báo', result.message ?? '');
+        OverlayLoading.hide();
+
         return 'Xảy ra lỗi';
       } else {
-        final userModel = await UserRepoIml(logger).getCurrentUser(
+        appManager.setSession(
+          newAccessToken: result.data['accessToken'],
+          refreshToken: result.data['refreshToken'],
+        );
+        final userModel = await UserRepoIml().getCurrentUser(
           accessToken: result.data['accessToken'],
         );
-        if (userModel.data != null) {
+        if (userModel.isSuccess()) {
           appManager.setSession(
             newUser: userModel.data!,
-            newAccessToken: result.data['accessToken'],
-            refreshToken: result.data['refreshToken'],
           );
-          print(HiveManager().get(AppConstant.hiveSessionKey));
+          print(HiveManager.get(AppConstant.hiveSessionKey));
+          print('accessToken: ${appManager.accessToken}');
+          print('refreshToken: ${appManager.refreshToken}');
+        } else {
+          Get.snackbar('Thông báo', result.message ?? '');
+          return 'Xảy ra lỗi';
         }
 
         isLoading.value = false;
+        OverlayLoading.hide();
 
         Get.offAllNamed(AppRoutes.root);
         return result.message;
       }
     } catch (error) {
+      OverlayLoading.hide();
+
       isLoading.value = false;
       Get.snackbar('Error', error.toString());
     }

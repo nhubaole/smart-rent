@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
-import '../../../core/config/app_colors.dart';
-import '/modules/post/controllers/post_controller.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/modules/post/post_controller.dart';
 
 class ConfirmPage extends StatefulWidget {
   const ConfirmPage({super.key});
@@ -13,18 +12,19 @@ class ConfirmPage extends StatefulWidget {
 }
 
 class _ConfirmPageState extends State<ConfirmPage> {
-  final PostController controller = Get.find<PostController>();
+  final PostRoomController controller = Get.find<PostRoomController>();
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        width: double.infinity,
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      width: double.infinity,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Form(
-          key: controller.formInfoKey,
-          child: ListView(
-            shrinkWrap: true,
+          key: controller.formKeyConfirm,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Xác nhận',
@@ -64,7 +64,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
               const SizedBox(
                 height: 16,
               ),
-
+        
               //---------------------Title-------------------------
               const Text(
                 'MÔ TẢ',

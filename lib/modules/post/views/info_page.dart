@@ -1,82 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/enums/room_type.dart';
+import 'package:smart_rent/modules/post/post_controller.dart';
 
-import '../../../core/config/app_colors.dart';
-import '/core/enums/gender.dart';
-import '/core/enums/room_type.dart';
-import '/modules/post/controllers/post_controller.dart';
 
-class InfoPage extends StatefulWidget {
+class InfoPage extends GetView<PostRoomController> {
   const InfoPage({super.key});
 
   @override
-  State<InfoPage> createState() => _InfoPageState();
-}
-
-class _InfoPageState extends State<InfoPage> {
-  final PostController controller = Get.find<PostController>();
-
-  @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.fromLTRB(4.w, 2.w, 4.w, 2.w),
-        child: SingleChildScrollView(
-          child: Form(
-            key: controller.formInfoKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Thông tin phòng',
-                  style: TextStyle(
-                      color: AppColors.primary40,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                _buildTypeRoom(),
-                SizedBox(
-                  height: 3.h,
-                ),
-                _buildCapacity(),
-                SizedBox(
-                  height: 4.h,
-                ),
-                _buildGender(),
-                SizedBox(
-                  height: 3.h,
-                ),
-                _buildArea(),
-                SizedBox(
-                  height: 4.h,
-                ),
-                const Text(
-                  'Chi phí',
-                  style: TextStyle(
-                      color: AppColors.primary40,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 2.h),
-                _buildPrice(),
-                SizedBox(height: 2.h),
-                _buildDeposit(),
-                SizedBox(height: 2.h),
-                _buildElectricityPrice(),
-                SizedBox(height: 2.h),
-                _buildWaterPrice(),
-                SizedBox(height: 2.h),
-                _buildInternetPrice(),
-                SizedBox(height: 2.h),
-                _buildParkingPrice(),
-                SizedBox(height: 2.h),
-              ],
-            ),
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.fromLTRB(4.w, 2.w, 4.w, 2.w),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: controller.formKeyInfo,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Thông tin phòng',
+                style: TextStyle(
+                    color: AppColors.primary40,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 4.h),
+              _buildTypeRoom(),
+              SizedBox(
+                height: 3.h),
+              _buildCapacity(),
+              SizedBox(
+                height: 4.h),
+              _buildGender(),
+              SizedBox(
+                height: 3.h),
+              _buildArea(),
+              SizedBox(
+                height: 4.h),
+              const Text(
+                'Chi phí',
+                style: TextStyle(
+                    color: AppColors.primary40,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 2.h),
+              _buildPrice(),
+              SizedBox(height: 2.h),
+              _buildDeposit(),
+              SizedBox(height: 2.h),
+              _buildElectricityPrice(),
+              SizedBox(height: 2.h),
+              _buildWaterPrice(),
+              SizedBox(height: 2.h),
+              _buildInternetPrice(),
+              SizedBox(height: 2.h),
+              _buildParkingPrice(),
+              SizedBox(height: 2.h),
+            ],
           ),
         ),
       ),
@@ -681,7 +668,7 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-  Obx radioTypeItem(RoomType type) {
+  Widget radioTypeItem(RoomType type) {
     return Obx(
       () => RadioListTile<RoomType>(
         activeColor: AppColors.primary40,
@@ -692,11 +679,11 @@ class _InfoPageState extends State<InfoPage> {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         contentPadding: const EdgeInsets.all(0),
         title: Text(
-          type.getNameRoomType(),
+          type.value,
           style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
         ),
         value: type,
-        groupValue: InfoRoomType.fromString(controller.room.value.roomType!),
+        groupValue: controller.roomCreateModel.value.roomType!,
         onChanged: (RoomType? value) {
           controller.onSelectRoomType(value!);
         },
@@ -715,11 +702,11 @@ class _InfoPageState extends State<InfoPage> {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         contentPadding: const EdgeInsets.all(0),
         title: Text(
-          gender.getNameGender(),
+          gender.getNameGender,
           style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
         ),
         value: gender,
-        groupValue: InfoGender.fromInt(controller.room.value.gender!),
+        groupValue: controller.roomCreateModel.value!.gender!,
         onChanged: (Gender? value) {
           controller.onSelectGender(value!);
         },

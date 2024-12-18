@@ -22,6 +22,19 @@ extension ElectricityPaymentMethodExtension on ElectricityPaymentMethod {
     }
   }
 
+  String get value {
+    switch (this) {
+      case ElectricityPaymentMethod.noPaid:
+        return 'no_collection';
+      case ElectricityPaymentMethod.byMeter:
+        return 'by_meter';
+      case ElectricityPaymentMethod.byMonth:
+        return 'by_month';
+      case ElectricityPaymentMethod.byPerson:
+        return 'by_person';
+    }
+  }
+
   IconData get icon {
     switch (this) {
       case ElectricityPaymentMethod.noPaid:
@@ -32,6 +45,24 @@ extension ElectricityPaymentMethodExtension on ElectricityPaymentMethod {
         return Icons.calendar_today;
       case ElectricityPaymentMethod.byPerson:
         return Icons.person;
+    }
+  }
+
+static ElectricityPaymentMethod fromString(String value) {
+    switch (value) {
+      case 'no_collection':
+        return ElectricityPaymentMethod.noPaid;
+      case 'by_meter':
+      case 'meter':
+        return ElectricityPaymentMethod.byMeter;
+      case 'by_month':
+      case 'month':
+        return ElectricityPaymentMethod.byMonth;
+      case 'by_person':
+      case 'person':
+        return ElectricityPaymentMethod.byPerson;
+      default:
+        return ElectricityPaymentMethod.noPaid;
     }
   }
 }

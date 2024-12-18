@@ -2,32 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
-import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-import '../config/app_colors.dart';
-import '/core/model/room/room.dart';
-import '/core/values/app_colors.dart';
 
 class RoomItem extends StatefulWidget {
-  final Room room;
-  final bool isLiked;
-  final bool isRequestRented;
-  final bool isRequestReturnRent;
-  final bool isHandleRequestReturnRoom;
-  final bool isHandleRentRoom;
-  final bool isRenting;
-
+  final RoomModel room;
+  final Function()? onTap;
+  final double? width;
+  final double? minHeight;
+ 
   const RoomItem({
     super.key,
     required this.room,
-    required this.isLiked,
-    required this.isRequestRented,
-    required this.isRequestReturnRent,
-    required this.isHandleRequestReturnRoom,
-    required this.isHandleRentRoom,
-    required this.isRenting,
+      this.onTap,
+      this.width,
+      this.minHeight
   });
 
   @override
@@ -40,34 +34,55 @@ class _RoomItemState extends State<RoomItem> {
   @override
   void initState() {
     super.initState();
-    isLiked = widget.isLiked;
+    isLiked = widget.room.isLike ?? false;
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   final response = await RoomRepoImpl().getLikedRoom(widget.room.id);
+    //   if (response.isSuccess()) {
+    //     setState(() {
+    //       isLiked = !response.data!;
+    //     });
+    //   }
+    // });
+  }
+
+  @override
+  void didUpdateWidget(covariant RoomItem oldWidget) {
+    
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 45.w,
+      // width: widget.width ?? 45.w,
+      // constraints: BoxConstraints(minHeight: widget.minHeight ?? 300.px),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.px),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.secondary60.withOpacity(0.6),
+            blurRadius: 5.px,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Material(
         color: AppColors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.px),
           splashColor: AppColors.splashColor,
           onTap: () async {
-            Get.toNamed(
-              AppRoutes.detail,
-              arguments: DetailAgrument(
-                isRequestReturnRent: widget.isRequestReturnRent,
-                isRequestRented: widget.isRequestRented,
-                room: widget.room,
-                isHandleRequestReturnRoom: widget.isHandleRequestReturnRoom,
-                isHandleRentRoom: widget.isHandleRentRoom,
-                isRenting: widget.isRenting,
-              ),
-            );
+            if (widget.onTap != null) {
+              widget.onTap!();
+            } else {
+              Get.toNamed(
+                AppRoutes.detail,
+                arguments: {
+                  'id': widget.room.id,
+                },
+              );
+            }
           },
           child: _buildBody(),
         ),
@@ -77,10 +92,8 @@ class _RoomItemState extends State<RoomItem> {
 
   Container _buildBody() {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 2.w,
-        vertical: 1.h,
-      ),
+      padding:
+          EdgeInsets.only(top: 6.px, left: 6.px, right: 6.px, bottom: 6.px),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,9 +105,7 @@ class _RoomItemState extends State<RoomItem> {
               _buildButtonLike(),
             ],
           ),
-          SizedBox(
-            height: 1.h,
-          ),
+          SizedBox(height: 8.px),
           _buildContent()
         ],
       ),
@@ -108,7 +119,7 @@ class _RoomItemState extends State<RoomItem> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildRatingComponent(),
-        SizedBox(height: 1.h),
+        SizedBox(height: 8.px),
         _buildTitle(),
         _buildTotalPrice(),
         _buildAddress(),
@@ -118,12 +129,12 @@ class _RoomItemState extends State<RoomItem> {
 
   Text _buildAddress() {
     return Text(
-      widget.room.address!.join(' '),
+      widget.room.address ?? widget.room.addresses?.join(', ') ?? '--',
       textAlign: TextAlign.start,
       overflow: TextOverflow.ellipsis,
       maxLines: 3,
-      style: const TextStyle(
-        fontSize: 10,
+      style: TextStyle(
+        fontSize: 14.sp,
         fontWeight: FontWeight.w500,
         color: AppColors.secondary40,
       ),
@@ -134,18 +145,18 @@ class _RoomItemState extends State<RoomItem> {
     return RichText(
       text: TextSpan(
         children: [
-          const TextSpan(
+          TextSpan(
             text: 'Giá chỉ từ: ',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.primary40,
             ),
           ),
           TextSpan(
-            text: widget.room.totalPrice?.toFormattedPrice(),
-            style: const TextStyle(
-              fontSize: 14,
+            text: widget.room.totalPrice?.toStringTotalthis() ?? '',
+            style: TextStyle(
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primary40,
             ),
@@ -161,8 +172,8 @@ class _RoomItemState extends State<RoomItem> {
       textAlign: TextAlign.start,
       overflow: TextOverflow.ellipsis,
       maxLines: 2,
-      style: const TextStyle(
-        fontSize: 14,
+      style: TextStyle(
+        fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.secondary20,
       ),
@@ -178,11 +189,11 @@ class _RoomItemState extends State<RoomItem> {
             color: AppColors.primary40,
             borderRadius: BorderRadius.circular(1.w),
           ),
-          padding: EdgeInsets.all(0.5.w),
+          padding: EdgeInsets.symmetric(vertical: .5.w, horizontal: 1.w),
           child: Row(
             children: [
-              const Text(
-                'rating',
+              Text(
+                widget.room.avgRating?.toStringAsFixed(1) ?? '0.0',
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.white,
@@ -203,6 +214,7 @@ class _RoomItemState extends State<RoomItem> {
         const SizedBox(
           width: 5.0,
         ),
+        if (widget.room.totalRating != null && widget.room.totalRating! > 0)
         Text(
           0.toStringRatingType,
           style: const TextStyle(
@@ -224,10 +236,10 @@ class _RoomItemState extends State<RoomItem> {
         const SizedBox(
           width: 5.0,
         ),
-        const Text.rich(
+        Text.rich(
           TextSpan(children: [
             TextSpan(
-                text: '5',
+                text: widget.room.totalRating?.toString() ?? '0',
                 style: TextStyle(
                     fontSize: 12,
                     color: AppColors.secondary40,
@@ -264,11 +276,14 @@ class _RoomItemState extends State<RoomItem> {
       right: 0,
       child: IconButton(
         iconSize: 30,
-        color: isLiked ? red60 : Colors.white,
-        onPressed: () {
-          setState(() {
-            isLiked = !isLiked;
-          });
+        color: isLiked ? AppColors.red60 : Colors.white,
+        onPressed: () async {
+          final response = await RoomRepoImpl().getLikedRoom(widget.room.id);
+          if (response.isSuccess()) {
+            setState(() {
+              isLiked = response.data!;
+            });
+          }
         },
         icon: icon,
       ),
@@ -276,17 +291,19 @@ class _RoomItemState extends State<RoomItem> {
   }
 
   Widget _buildImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        height: 120,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(width: 1, color: AppColors.like),
-        ),
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: 120.px,
+      ),
+      // height: 120,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: AppColors.transparent),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4.px),
         child: CacheImageWidget(
-          imageUrl: widget.room.roomImages![0],
+          imageUrl: widget.room.images![0],
         ),
       ),
     );

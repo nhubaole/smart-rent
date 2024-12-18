@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/model/account/Account.dart';
-import '/core/model/room/room.dart';
 
 class SendRequestRentRoomController extends GetxController {
-  final Room room;
+  final RoomModel room;
   Map<String, dynamic>? result;
   SendRequestRentRoomController({
     required this.room,
@@ -83,7 +83,7 @@ class SendRequestRentRoomController extends GetxController {
     }
   }
 
-  Future<void> sendRequest(Room room) async {
+  Future<void> sendRequest(RoomModel room) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       DateTime now = DateTime.now().add(const Duration(hours: 1)).toUtc();

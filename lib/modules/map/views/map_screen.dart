@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 
 import '../../../core/config/app_colors.dart';
-import '/core/model/room/room.dart';
-import '/core/values/app_colors.dart';
+
 import '/modules/map/controllers/map_screen_controller.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +19,7 @@ class MapScreen extends StatelessWidget {
   final bool fromDetailRoom;
   double? lat = 0;
   double? lon = 0;
-  List<Room>? roomInArea;
+  List<RoomModel>? roomInArea;
 
   @override
   Widget build(BuildContext context) {

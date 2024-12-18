@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/model/billing/bill_by_status_model.dart';
+import 'package:smart_rent/modules/landlord_bill_collection/landlord_bill_collection_controller.dart';
 
 class BillCollectionItem extends StatelessWidget {
   final Function() onTap;
+  final BillByStatusModel billByStatusModel;
   const BillCollectionItem({
     super.key,
     required this.onTap,
+    required this.billByStatusModel,
   });
 
   @override
@@ -35,7 +41,7 @@ class BillCollectionItem extends StatelessWidget {
               children: [
                 _buildRowInfo(
                   icon: Icons.location_on_outlined,
-                  title: 'Số 9 Nguyễn Văn Huyên, Dịch Vọng, Cầu Giấy, Hà Nội',
+                  title: billByStatusModel.address?.join(', ') ?? '--',
                 ),
                 Divider(
                   color: AppColors.secondary80.withOpacity(0.5),
@@ -44,7 +50,8 @@ class BillCollectionItem extends StatelessWidget {
                 ),
                 _buildRowInfo(
                   icon: Icons.add_home_outlined,
-                  title: 'Phòng số 3.11',
+                  title:
+                      'Phòng số: ${billByStatusModel.roomNumber?.toString() ?? '--'}',
                 ),
                 Divider(
                   color: AppColors.secondary80.withOpacity(0.5),
@@ -53,7 +60,9 @@ class BillCollectionItem extends StatelessWidget {
                 ),
                 _buildRowInfo(
                   icon: Icons.attach_money_outlined,
-                  title: '3,560,000đ',
+                  title: billByStatusModel.totalAmount
+                          ?.toStringTotalthis(symbol: 'đ') ??
+                      '--',
                 ),
               ],
             ),
@@ -106,7 +115,9 @@ class BillCollectionItem extends StatelessWidget {
                 children: [
                   TextSpan(text: 'bill_collection_for_month'.tr),
                   const TextSpan(text: ' '),
-                  const TextSpan(text: '7/2024')
+                  TextSpan(
+                      text:
+                          '${billByStatusModel.month}/${billByStatusModel.year}')
                 ],
               ),
             ),
@@ -127,9 +138,9 @@ class BillCollectionItem extends StatelessWidget {
                     ),
                   ),
                   const TextSpan(text: ' '),
-                  const TextSpan(
-                    text: '13:49 17/09/2023',
-                    style: TextStyle(
+                  TextSpan(
+                    text: billByStatusModel.createdAt?.hhmmDDMMyyyy ?? '',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -153,9 +164,9 @@ class BillCollectionItem extends StatelessWidget {
                     ),
                   ),
                   const TextSpan(text: ' '),
-                  const TextSpan(
-                    text: '13:49 17/09/2023',
-                    style: TextStyle(
+                  TextSpan(
+                    text: billByStatusModel.deadline?.hhmmDDMMyyyy ?? '',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   )

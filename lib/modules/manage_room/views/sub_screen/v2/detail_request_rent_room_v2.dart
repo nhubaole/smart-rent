@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/request_room_status.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/button_outline.dart';
@@ -28,19 +30,28 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             children: [
               SizedBox(height: 2.h),
               _buildStatus(),
-              _buildDraftContract(),
+              if (RequestRoomStatusExtension.fromInt(
+                      controller.rentalRequest.status ?? 0) ==
+                  RequestRoomStatus.accepted)
+                _buildDraftContract(),
               SizedBox(height: 2.h),
               _buildInfoRoom(),
               SizedBox(height: 2.h),
               _buildTimeSend(),
-              SizedBox(height: 2.h),
-              _buildButtonActionForTenant(),
+              if (!controller.isLandlord)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 2.h),
+                    _buildButtonActionForTenant(),
+                  ],
+                ),
               SizedBox(height: 2.h),
               _buildContact(),
               SizedBox(height: 2.h),
               _buildInfo(),
               SizedBox(height: 3.h),
-              _buildButtonActionForLandlord(),
+              if (controller.isLandlord) _buildButtonActionForLandlord(),
               SizedBox(height: 3.h),
             ],
           ),
@@ -60,7 +71,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               Expanded(
                 child: ButtonOutline(
                   borderWidth: 1.5,
-                  onPressed: () {},
+                  onPressed: controller.onNavLandlordContractCreate,
                   icon: const Icon(
                     Icons.edit_note_outlined,
                     size: 20,
@@ -185,7 +196,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(10.px),
-                onTap: () {},
+                onTap: controller.onRejectRequest,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 12.px,
@@ -225,7 +236,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(10.px),
-                onTap: () {},
+                onTap: controller.onApproveRequest,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 12.px,
@@ -287,13 +298,13 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         ),
         SizedBox(height: 5.px),
         Text.rich(
+          style: TextStyle(
+            fontSize: 16.sp,
+            color: AppColors.secondary40,
+            fontWeight: FontWeight.w400,
+          ),
           TextSpan(
-            text: '25/09/2023',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: AppColors.secondary40,
-              fontWeight: FontWeight.w400,
-            ),
+            text: controller.rentalRequest.additionRequest ?? '--',
           ),
         ),
       ],
@@ -321,7 +332,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             ),
             SizedBox(width: 5.px),
             Text(
-              '25/09/2023',
+              controller.rentalRequest.endDate?.ddMMyyyy ?? 'Dài hạn',
               style: TextStyle(
                 fontSize: 16.sp,
                 color: AppColors.secondary40,
@@ -355,7 +366,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             ),
             SizedBox(width: 5.px),
             Text(
-              '25/09/2023',
+              controller.rentalRequest.beginDate?.ddMMyyyy ?? '--',
               style: TextStyle(
                 fontSize: 16.sp,
                 color: AppColors.secondary40,
@@ -387,33 +398,66 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             color: AppColors.secondary40,
             fontWeight: FontWeight.w400,
           ),
-          const TextSpan(
+          TextSpan(
             children: [
               TextSpan(
-                text: '2',
+                text: '${controller.rentalRequest.numOfPerson ?? '0'} ',
               ),
-              TextSpan(
+              const TextSpan(
                 text: ' người',
               ),
             ],
           ),
         ),
         SizedBox(height: 5.px),
-        Row(
-          children: [
-            const Icon(
-              Icons.check,
-              color: AppColors.greenOrigin,
-            ),
-            SizedBox(width: 3.px),
-            Text(
-              'suitable_for_room_capacity'.tr,
-              style: const TextStyle(
-                color: AppColors.greenOrigin,
+        controller.rentalRequest.numOfPerson != null &&
+                controller.rentalRequest.numOfPerson! <=
+                    controller.rentalRequest.room!.capacity!
+            ? Row(
+                children: [
+                  const Icon(
+                    Icons.check,
+                    color: AppColors.greenOrigin,
+                  ),
+                  SizedBox(width: 3.px),
+                  Text(
+                    'suitable_for_room_capacity'.tr,
+                    style: const TextStyle(
+                      color: AppColors.greenOrigin,
+                    ),
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Icon(
+                    Icons.close,
+                    color: AppColors.error,
+                  ),
+                  SizedBox(width: 3.px),
+                  Expanded(
+                    child: Text.rich(
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: AppColors.error,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Không phù hợp với sức chứa phòng trọ '.tr,
+                          ),
+                          TextSpan(
+                            text:
+                                'quá ${controller.rentalRequest.numOfPerson! - controller.rentalRequest.room!.capacity!} người',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -432,7 +476,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         ),
         SizedBox(height: 5.px),
         Text(
-          '2.000.000',
+          controller.rentalRequest.suggestedPrice?.toStringTotalthis() ?? '--',
           style: TextStyle(
             fontSize: 16.sp,
             color: AppColors.black,
@@ -444,26 +488,61 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         ),
         Row(
           children: [
-            const Icon(
-              Icons.arrow_downward,
-              color: AppColors.error,
-            ),
+            controller.rentalRequest.suggestedPrice != null &&
+                    controller.rentalRequest.suggestedPrice! >
+                        controller.rentalRequest.room!.totalPrice!
+                ? const Icon(
+                    Icons.arrow_upward,
+                    color: AppColors.greenOrigin,
+                  )
+                : const Icon(
+                    Icons.arrow_downward,
+                    color: AppColors.error,
+                  ),
             SizedBox(width: 3.px),
-            Text.rich(
-              TextSpan(
-                style: const TextStyle(
-                  color: AppColors.error,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'lower_origin_price'.tr,
+            controller.rentalRequest.suggestedPrice != null &&
+                    controller.rentalRequest.suggestedPrice! >
+                        controller.rentalRequest.room!.totalPrice!
+                ? Text.rich(
+                    TextSpan(
+                      style: const TextStyle(
+                        color: AppColors.greenOrigin,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'higher_origin_price'.tr,
+                        ),
+                        const TextSpan(
+                          text: ' ',
+                        ),
+                        TextSpan(
+                          text: (controller.rentalRequest.suggestedPrice! -
+                                  controller.rentalRequest.room!.totalPrice!)
+                              .toStringTotalthis(),
+                        ),
+                      ],
+                    ),
+                  )
+                : Text.rich(
+                    TextSpan(
+                      style: const TextStyle(
+                        color: AppColors.error,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'lower_origin_price'.tr,
+                        ),
+                        const TextSpan(
+                          text: ' ',
+                        ),
+                        TextSpan(
+                          text: (controller.rentalRequest.room!.totalPrice! -
+                                  controller.rentalRequest.suggestedPrice!)
+                              .toStringTotalthis(),
+                        ),
+                      ],
+                    ),
                   ),
-                  const TextSpan(
-                    text: '1.500.000',
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ],
@@ -494,7 +573,12 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('data', style: textStyle.copyWith(fontSize: 22.px)),
+                Text(
+                  controller.rentalRequest.sender?.fullName ?? '--',
+                  style: textStyle.copyWith(
+                    fontSize: 22.px,
+                  ),
+                ),
                 SizedBox(height: 12.px),
                 Row(
                   children: [
@@ -504,7 +588,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                     ),
                     SizedBox(width: 12.px),
                     Text(
-                      'datadasda',
+                      controller.rentalRequest.sender?.phoneNumber ?? '--',
                       style: textStyle.copyWith(
                         decoration: TextDecoration.underline,
                         decorationColor: AppColors.white,
@@ -520,8 +604,9 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               height: 70.px,
               width: 70.px,
               color: AppColors.grey20,
-              child: const CacheImageWidget(
-                imageUrl: ImageAssets.demo,
+              child: CacheImageWidget(
+                imageUrl: controller.rentalRequest.sender?.avatarUrl ??
+                    ImageAssets.demo,
               ),
             ),
           ),
@@ -534,11 +619,11 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
     final TextStyle textStyleLeft = TextStyle(
       fontSize: 17.sp,
       color: AppColors.secondary20,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
     final TextStyle textStyleRight = TextStyle(
       fontSize: 16.sp,
-      color: AppColors.secondary20,
+      color: AppColors.secondary40,
       fontWeight: FontWeight.w400,
     );
     return Row(
@@ -551,7 +636,9 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             children: [
               TextSpan(text: 'request'.tr),
               const TextSpan(text: ' #'),
-              const TextSpan(text: '1234'),
+              TextSpan(
+                text: controller.rentalRequest.id.toString(),
+              ),
             ],
           ),
         ),
@@ -563,11 +650,11 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             ),
             Text.rich(
               style: textStyleRight,
-              const TextSpan(
+              TextSpan(
                 children: [
-                  TextSpan(text: '13:49'),
-                  TextSpan(text: ' #'),
-                  TextSpan(text: '17/09/2023'),
+                  TextSpan(
+                    text: controller.rentalRequest.createdAt?.hhmmDDMMyyyy,
+                  ),
                 ],
               ),
             ),
@@ -580,9 +667,8 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
   Row _buildInfoRoom() {
     return Row(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(width: 2.w),
         Flexible(
           child: CacheImageWidget(
             imageUrl: ImageAssets.demo,
@@ -591,7 +677,6 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             width: 120.px,
           ),
         ),
-        SizedBox(width: 5.w),
         Expanded(
           flex: 1,
           child: Column(
@@ -608,7 +693,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                 ),
               ),
               Text(
-                'name of room'.tr,
+                controller.rentalRequest.room!.title ?? '',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
@@ -617,7 +702,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                'address'.tr,
+                controller.rentalRequest.room!.addresses?.join(', ') ?? '',
                 style: TextStyle(
                   color: AppColors.secondary20,
                   fontSize: 15.sp,
@@ -627,7 +712,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                2000000.toStringTotalthis('đ'),
+                controller.rentalRequest.room!.totalPrice!.toStringTotalthis(),
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
@@ -641,8 +726,10 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
     );
   }
 
-  Container _buildStatus() {
-    const status = RequestRoomStatus.pending;
+  Widget _buildStatus() {
+    final status = RequestRoomStatusExtension.fromInt(
+      controller.rentalRequest.status ?? 0,
+    );
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -650,7 +737,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         horizontal: 2.h,
       ),
       decoration: BoxDecoration(
-        color: RequestRoomStatus.pending.colorBackground,
+        color: status.colorBackground,
         borderRadius: BorderRadius.circular(8.px),
       ),
       child: Row(
@@ -663,7 +750,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             style: TextStyle(
               color: status.colorContent,
               fontSize: 16.sp,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

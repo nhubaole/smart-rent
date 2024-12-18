@@ -4,7 +4,9 @@ import 'package:signature/signature.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/contract_sign/contract_sign_controller.dart';
 
 class ContractSignPage extends GetView<ContractSignController> {
@@ -42,52 +44,33 @@ class ContractSignPage extends GetView<ContractSignController> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-        child: Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20.px),
-                onTap: () => controller.onSignAgain(),
-                child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.px),
-                    border: Border.all(width: 1.5, color: AppColors.primary60),
-                  ),
-                  child: Text(
-                    'resign'.tr,
-                    style: const TextStyle(
-                        color: AppColors.primary60,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+      bottomNavigationBar: _buildButtonActions(),
+    );
+  }
+
+  Widget _buildButtonActions() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlineButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              onTap: controller.onSignAgain,
+              text: 'resign'.tr,
             ),
-            SizedBox(width: 16.px),
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20.px),
-                onTap: () => controller.onConfirm(),
-                child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.px),
-                    color: AppColors.primary40,
-                  ),
-                  child: Text(
-                    'confirm'.tr,
-                    style: const TextStyle(
-                        color: AppColors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+          ),
+          SizedBox(width: 16.px),
+          Expanded(
+            child: SolidButtonWidget(
+              padding: EdgeInsets.zero,
+              height: 50.px,
+              text: 'confirm'.tr,
+              onTap: controller.onConfirm,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -2,25 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/modules/search/widgets/item_hint_address.dart';
 import '/modules/search/controllers/search_room_controller.dart';
-import '/modules/search/views/filter_screen.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
-
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
-  SearchRoomController controller = Get.put(SearchRoomController());
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class SearchPage extends GetView<SearchRoomController> {
+  const SearchPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +31,9 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(
-            height: 24,
-          ),
+          SizedBox(height: 24.px),
           _buildSearchBar(context),
-          const SizedBox(
-            height: 8,
+          SizedBox(height: 8.px
           ),
           Text(
             controller.label.isEmpty ? "Tìm kiếm gần đây" : "Gợi ý",
@@ -77,11 +63,14 @@ class _SearchScreenState extends State<SearchScreen> {
           final String address = controller.searchRecently.value[index];
           return ItemHintAddress(
             onPressed: () {
-              Get.to(
-                () => FilterScreen(
-                  location: controller.searchRecently.value[index],
-                ),
-              );
+              // Get.to(
+              //   () => FilterScreen(
+              //     location: controller.searchRecently.value[index],
+              //   ),
+              // );
+              Get.toNamed(AppRoutes.filter, arguments: {
+                'location': controller.searchRecently.value[index],
+              });
             },
             onRemove: () {
               controller.removeRecent(controller.searchRecently.value[index]);
@@ -120,11 +109,14 @@ class _SearchScreenState extends State<SearchScreen> {
               child: InkWell(
                 onTap: () {
                   controller.saveRecent(controller.searchResult[index]);
-                  Get.to(
-                    () => FilterScreen(
-                      location: controller.searchResult[index],
-                    ),
-                  );
+                  // Get.to(
+                  //   () => FilterScreen(
+                  //     location: controller.searchResult[index],
+                  //   ),
+                  // );
+                  Get.toNamed(AppRoutes.filter, arguments: {
+                    'location': controller.searchResult[index],
+                  });
                 },
                 child: Row(
                   children: [

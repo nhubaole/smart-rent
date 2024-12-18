@@ -32,15 +32,8 @@ class PaymentSuccessPage extends GetView<PaymentSuccessController> {
                 _buildSuggesstNavManageInvoice(),
                 SizedBox(height: 32.px),
                 _buildButtons(
-                  onNavHome: () => Get.until(
-                    (route) => route.settings.name == AppRoutes.root,
-                  ),
-                  onNavTransactionDetails: () {
-                    Get.offNamedUntil(
-                      AppRoutes.paymentDetail,
-                      (route) => route.settings.name == AppRoutes.root,
-                    );
-                  },
+                  onNavHome: controller.onBackHome,
+                  onNavTransactionDetails: controller.onNavPaymentDetail,
                 ),
               ],
             ),
@@ -58,6 +51,7 @@ class PaymentSuccessPage extends GetView<PaymentSuccessController> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         OutlineButtonWidget(
+          height: 50.px,
           padding: EdgeInsets.symmetric(
             horizontal: 32.px,
             vertical: 2.px,
@@ -124,7 +118,7 @@ class PaymentSuccessPage extends GetView<PaymentSuccessController> {
           Text.rich(
             style: defaultTextStyle,
             textAlign: TextAlign.center,
-            TextSpan(text: 'please_wait'.tr),
+            TextSpan(text: 'please_wait_landlord'.tr),
           ),
           SizedBox(height: 16.px),
           Text.rich(
