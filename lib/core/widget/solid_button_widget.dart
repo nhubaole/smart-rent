@@ -68,7 +68,8 @@ class SolidButtonWidget extends StatelessWidget {
                       SizedBox(width: 8.px),
                     ],
                   ),
-                Text(
+                child ??
+                    Text(
                   text,
                   style: textStyle ??
                       TextStyle(

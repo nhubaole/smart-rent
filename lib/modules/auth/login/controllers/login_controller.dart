@@ -8,50 +8,55 @@ import 'package:smart_rent/core/repositories/log/log.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
 
 class LoginController extends GetxController {
   late Log logger;
   final AppManager appManager = AppManager();
 
-  late final GlobalKey<FormState> formKey;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final phoneNo = TextEditingController(text: '0123456789');
   final password = TextEditingController(text: 'test');
-  var isLoading = Rx<bool>(false);
+  final isLoading = Rx<bool>(false);
+  final obscureText = Rx<bool>(false);
+  final phoneNoFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
 
   @override
   void onInit() {
     logger = getIt<Log>();
-    formKey = GlobalKey<FormState>();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override
   void onClose() {
     phoneNo.dispose();
     password.dispose();
+    phoneNoFocusNode.dispose();
+    passwordFocusNode.dispose();
     super.onClose();
   }
 
-  Future<String?> submit() async {
+  Future<void> submit() async {
     try {
       isLoading.value = true;
-      OverlayLoading.show(title: 'Đang đăng nhập...');
+      OverlayLoading.show(title: 'Đang đăng nhập...', canPop: true);
       logger.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');
-      final result = await AuthRepoImpl(logger).login(
+      final result = await AuthRepoImpl().login(
         phoneNumber: phoneNo.text.trim(),
         password: password.text.trim(),
       );
-      if (result.errCode == null || result.errCode! >= 400) {
-        Get.snackbar('Thông báo', result.message ?? '');
+      if (!result.isSuccess()) {
         OverlayLoading.hide();
+        AlertSnackbar.show(
+          title: 'Thông báo',
+          message: result.message ?? '',
+          isError: true,
+        );
+        isLoading.value = false;
 
-        return 'Xảy ra lỗi';
+        return;
       } else {
         appManager.setSession(
           newAccessToken: result.data['accessToken'],
@@ -68,22 +73,32 @@ class LoginController extends GetxController {
           print('accessToken: ${appManager.accessToken}');
           print('refreshToken: ${appManager.refreshToken}');
         } else {
-          Get.snackbar('Thông báo', result.message ?? '');
-          return 'Xảy ra lỗi';
+          OverlayLoading.hide();
+          AlertSnackbar.show(
+            title: 'Thông báo',
+            message: result.message ?? '',
+            isError: true,
+          );
+          isLoading.value = false;
+
         }
 
-        isLoading.value = false;
-        OverlayLoading.hide();
-
         Get.offAllNamed(AppRoutes.root);
-        return result.message;
       }
+
+      // TODO: Testing
+      // await Future.delayed(const Duration(seconds: 2));
+      // isLoading.value = false;
+      // OverlayLoading.hide();
     } catch (error) {
       OverlayLoading.hide();
-
       isLoading.value = false;
-      Get.snackbar('Error', error.toString());
+      AlertSnackbar.show(
+        title: 'Thông báo',
+        message: error.toString(),
+        isError: true,
+      );
     }
-    return null;
+    
   }
 }

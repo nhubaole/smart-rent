@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/room/util_item.dart';
+import 'package:smart_rent/modules/onboarding/widgets/on_boarding_content_widget.dart';
 
 abstract class AppConstant {
   static const app_name = 'Smart rent';
@@ -17,6 +18,9 @@ abstract class AppConstant {
   static const hiveSessionKey = 'session';
   static const hiveRecentSearchRoomKey = 'recent_search_room';
   static const hiveFirstTimeInstall = 'first_time_install';
+  static const hiveAccessToken = 'access_token';
+  static const hiveSession = 'session';
+
 
 
   // Debound timer
@@ -116,6 +120,31 @@ abstract class AppConstant {
   static const int maxWidthDiskCache = 200;
   static const int memCacheHeight = 200;
   static const int memCacheWidth = 200;  
+
+
+  // Onboarding Content
+  static const List<OnBoardingContentWidget> onBoardingContent = [
+    OnBoardingContentWidget(
+      image: 'assets/images/ic_onboarding1.png',
+      title: 'Chào mừng bạn đến với ứng dụng',
+      subTitle: 'Smart Rent House',
+      description:
+          'Nền tảng tuyệt vời để bạn tìm kiếm và thuê phòng trọ dễ dàng và nhanh chóng ',
+    ),
+    OnBoardingContentWidget(
+      image: 'assets/images/ic_onboarding2.png',
+      title: 'Khám phá các lựa chọn phòng trọ đa dạng',
+      description:
+          ' Với công cụ tìm kiếm tiện lợi, bạn có thể dễ dàng tìm kiếm phòng trọ theo như mong muốn và khám phá các lựa chọn phòng trọ tuyệt vời.',
+    ),
+    OnBoardingContentWidget(
+      image: 'assets/images/ic_onboarding3.png',
+      title: 'Thuận tiện đăng bài cho thuê phòng trọ',
+      description:
+          'Dễ dàng đăng bài cho thuê chỉ trong vài bước đơn giản. Cung cấp thông tin chi tiết về phòng, hình ảnh hấp dẫn và tiện ích để thu hút người thuê tiềm năng.',
+    ),
+  ];
+
 
 
 }

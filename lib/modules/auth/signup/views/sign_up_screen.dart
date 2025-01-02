@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/common_button.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
-import '../../../../core/config/app_colors.dart';
-import '../../login/views/login_screen.dart';
-import '../controllers/sign_up_controllers.dart';
-import '/core/model/values/listProvinceVietNam.dart';
-import '/core/values/app_colors.dart';
-import '/core/widget/common_button.dart';
-import '/core/widget/text_form_field_input.dart';
-import 'dialog_otp.dart';
+import 'package:smart_rent/core/widget/text_form_field_input.dart';
+import 'package:smart_rent/modules/auth/signup/controllers/sign_up_controllers.dart';
+import 'package:smart_rent/modules/auth/signup/views/dialog_otp.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({
+class SignUpPage extends GetView<SignUpController> {
+  const SignUpPage({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    final signUpController = Get.put(SignUpController());
     return SafeArea(
       child: Obx(
         () => ScaffoldWidget(
@@ -30,8 +29,8 @@ class SignUpScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildTitle(),
-                  _buildForm(signUpController, context),
-                  _buildButtons(signUpController),
+                  _buildForm(context),
+                  _buildButtons(),
                 ],
               ),
             ),
@@ -41,39 +40,35 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(SignUpController controller) {
+  Widget _buildButtons() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16.px),
       child: Column(
         children: [
-          const SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30.px),
           RichText(
             textAlign: TextAlign.center,
-            text: const TextSpan(
+            text: TextSpan(
               children: [
                 TextSpan(
                   text: 'Bằng việc nhấn nút đăng ký, bạn đã đồng ý với các',
                   style: TextStyle(
                     color: AppColors.secondary20,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                   ),
                 ),
                 TextSpan(
                   text: 'Điều khoản dịch vụ và chính sách bảo mật',
                   style: TextStyle(
                     color: AppColors.primary60,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30.sp),
           controller.isVerifying.value
               ? const Center(
                   child: CircularProgressIndicator(
@@ -103,9 +98,7 @@ class SignUpScreen extends StatelessWidget {
                     }
                   },
                 ),
-          const SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30.sp),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -117,9 +110,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Get.off(
-                    () => const LoginScreen(),
-                  );
+                  Get.offNamed(AppRoutes.login, preventDuplicates: true);
                 },
                 child: const Text(
                   'Đăng nhập ngay',
@@ -133,18 +124,16 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Form _buildForm(SignUpController signUpController, BuildContext context) {
+  Form _buildForm(BuildContext context) {
     return Form(
-      key: signUpController.signUpFormKey,
+      key: controller.signUpFormKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 20.px),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormFieldInput(
-              textEditingController: signUpController.fullName,
+              textEditingController: controller.fullName,
               labelText: 'Họ và tên',
               hintText: 'Họ và tên (*)',
               textInputType: TextInputType.text,
@@ -162,12 +151,10 @@ class SignUpScreen extends StatelessWidget {
               autoCorrect: false,
               textCapitalization: TextCapitalization.none,
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 16.px),
             TextFormFieldInput(
               maxLength: 10,
-              textEditingController: signUpController.phoneNumber,
+              textEditingController: controller.phoneNumber,
               labelText: 'Số điện thoại',
               hintText: 'Số điện thoại (*)',
               textInputType: TextInputType.phone,
@@ -185,12 +172,10 @@ class SignUpScreen extends StatelessWidget {
               autoCorrect: false,
               textCapitalization: TextCapitalization.none,
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 16.px),
             TextFormFieldInput(
               maxLength: 10,
-              textEditingController: signUpController.password,
+              textEditingController: controller.password,
               labelText: 'Mật khẩu',
               hintText: 'Mật khẩu (*)',
               textInputType: TextInputType.text,
@@ -209,9 +194,7 @@ class SignUpScreen extends StatelessWidget {
               autoCorrect: false,
               textCapitalization: TextCapitalization.none,
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 16.px),
             DropdownButtonFormField(
               items: provinces
                   .map(
@@ -222,7 +205,7 @@ class SignUpScreen extends StatelessWidget {
                   )
                   .toList(),
               onChanged: (value) {
-                signUpController.address.text = value.toString();
+                controller.address.text = value.toString();
               },
               menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
               decoration: InputDecoration(
@@ -262,31 +245,27 @@ class SignUpScreen extends StatelessWidget {
   }
 
   Column _buildTitle() {
-    return const Column(
+    return Column(
       children: [
         Text(
           'Tạo tài khoản mới',
           style: TextStyle(
-            color: primary10,
-            fontSize: 20,
+            color: AppColors.primary10,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          height: 8,
-        ),
+        SizedBox(height: 8.px),
         Text(
           'Đăng ký ngay hôm nay để tìm được\n phòng trọ ưng ý',
           style: TextStyle(
             color: AppColors.secondary40,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(
-          height: 16,
-        ),
+        SizedBox(height: 16.px),
       ],
     );
   }

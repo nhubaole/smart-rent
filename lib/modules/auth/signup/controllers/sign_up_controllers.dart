@@ -6,9 +6,9 @@ import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
 
 class SignUpController extends GetxController {
-  var isShowPassword = false.obs;
+  final isShowPassword = false.obs;
   final now = DateTime.now();
-  late final GlobalKey<FormState> signUpFormKey;
+  final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
   final fullName = TextEditingController(text: DateTime.now().toString());
   final phoneNumber = TextEditingController(
       text: DateTime.now().microsecondsSinceEpoch.toString());
@@ -18,15 +18,15 @@ class SignUpController extends GetxController {
 
   late Log log;
 
-  var dateOfBirthCheck = Rx<DateTime?>(null);
-  var isVerifying = Rx<bool>(false);
+  final dateOfBirthCheck = Rx<DateTime?>(null);
+  final isVerifying = Rx<bool>(false);
 
   @override
   void onInit() {
     log = getIt<Log>();
     dateOfBirth.text =
         DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
-    signUpFormKey = GlobalKey<FormState>();
+    
     super.onInit();
   }
 
@@ -41,14 +41,14 @@ class SignUpController extends GetxController {
   }
 
   Future<String?> onRegister() async {
-    final result = await AuthRepoImpl(log).register(
+    final result = await AuthRepoImpl().register(
       phoneNumber: phoneNumber.text.trim(),
       fullName: fullName.text.trim(),
       address: address.text.trim(),
       password: password.text.trim(),
     );
 
-    if (result.errCode == null || result.errCode! >= 400) {
+    if (!result.isSuccess()) {
       return 'Xảy ra lỗi';
     } else {
       return result.message;
@@ -66,7 +66,7 @@ class SignUpController extends GetxController {
 
   bool is18OrOlder(DateTime selectedDate) {
     final currentDate = DateTime.now();
-    var age = currentDate.year - selectedDate.year;
+    int age = currentDate.year - selectedDate.year;
     if (currentDate.month < selectedDate.month ||
         (currentDate.month == selectedDate.month &&
             currentDate.day < selectedDate.day)) {

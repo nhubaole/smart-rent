@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
-import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/app/app_storage.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 
 class SplashController extends GetxController {
@@ -39,13 +38,13 @@ class SplashController extends GetxController {
   }
 
   Future<void> checkStatusLogin() async {
-    final bool? repeat = HiveManager.get(AppConstant.hiveFirstTimeInstall);
+    final bool? repeat = AppStorage.getFistTimeInstall();
     await Future.delayed(
       const Duration(seconds: 3),
     );
 
     if (repeat == null) {
-      await HiveManager.put(AppConstant.hiveFirstTimeInstall, true);
+      await AppStorage.putFirstTimeInstall(value: true);
       Get.offAllNamed(AppRoutes.onBoarding);
     } else {
       if (appManager.accessToken != null && appManager.refreshToken != null) {

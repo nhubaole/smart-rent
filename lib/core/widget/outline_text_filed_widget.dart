@@ -25,6 +25,12 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final int? minlines;
   final List<TextInputFormatter>? inputFormatters;
   final bool? inSideContainer;
+  final InputBorder? enabledBorder;
+  final InputBorder? focusedBorder;
+  final InputBorder? border;
+  final bool? obscureText;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -48,6 +54,12 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.prefix,
     this.onSubmit,
     this.inSideContainer = false,
+    this.enabledBorder,
+    this.focusedBorder,
+    this.border,
+    this.obscureText = false,
+    this.focusNode,
+    this.textInputAction,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -117,6 +129,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
         );
     return TextFormField(
+      focusNode: focusNode,
       onFieldSubmitted: onSubmit,
       enabled: !readOnly!,
       inputFormatters: inputFormatters,
@@ -124,23 +137,30 @@ class OutlineTextFiledWidget extends StatelessWidget {
       keyboardType: textInputType!,
       minLines: minlines,
       maxLines: maxlines,
-      textInputAction: TextInputAction.done,
+      textInputAction: textInputAction ?? TextInputAction.done,
       style: defaultTextStyle,
+      cursorColor: AppColors.primary40,
+      cursorErrorColor: AppColors.error,
+      mouseCursor: MouseCursor.defer,
+      obscureText: obscureText!,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
+        border: border ??
+            OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.px),
           borderSide: const BorderSide(
             color: AppColors.secondary80,
           ),
         ),
         hintText: hintText,
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: focusedBorder ??
+            OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.primary40,
             width: 1,
           ),
         ),
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: enabledBorder ??
+            const OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.secondary80,
             width: 1,

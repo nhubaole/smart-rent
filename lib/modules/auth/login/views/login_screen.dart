@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/helper/help_regex.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/values/image_assets.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/auth/login/controllers/login_controller.dart';
-import '../../../../core/config/app_colors.dart';
-import '../../signup/views/sign_up_screen.dart';
-import '/core/values/app_colors.dart';
-import '/core/widget/text_form_field_input.dart';
 
 class LoginScreen extends GetView<LoginController> {
   const LoginScreen({
@@ -23,6 +25,7 @@ class LoginScreen extends GetView<LoginController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildHeader(),
+            SizedBox(height: 32.px),
             _buildForm(),
             _buildNavigateSignUp(),
           ],
@@ -35,67 +38,113 @@ class LoginScreen extends GetView<LoginController> {
     return Form(
       key: controller.formKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16.px),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormFieldInput(
-              maxLength: 10,
+            OutlineTextFiledWidget(
+              focusNode: controller.phoneNoFocusNode,
               textEditingController: controller.phoneNo,
-              labelText: 'Số điện thoại',
-              hintText: 'Nhập số điện thoại',
               textInputType: TextInputType.phone,
-              borderRadius: BorderRadius.circular(8),
-              borderWidth: 2,
-              borderColor: AppColors.primary60,
-              icon: const Icon(Icons.phone_android),
-              onSaved: (newValue) {},
+              textInputAction: TextInputAction.next,
+              hintText: 'Nhập số điện thoại',
+              prefixIcon: Icon(
+                Icons.phone_android,
+                color: AppColors.primary60,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary60,
+                  width: 1.px,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary80,
+                  width: 1.px,
+                ),
+              ),
               onValidate: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Vui lòng nhập số điện thoại';
                 }
 
-                if (HelpRegex.isNumber(value)) {
+                if (!HelpRegex.isNumber(value)) {
                   return 'Vui lòng nhập đúng định dạng số';
                 }
                 return null;
               },
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            TextFormFieldInput(
-              maxLength: 10,
-              textEditingController: controller.password,
-              labelText: 'Mật khẩu',
-              hintText: 'Mật khẩu (*)',
-              textInputType: TextInputType.text,
-              isPassword: true,
-              borderRadius: BorderRadius.circular(8),
-              borderWidth: 2,
-              borderColor: AppColors.primary60,
-              icon: const Icon(Icons.lock_outline),
-              onSaved: (newValue) {},
-              onValidate: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Vui lòng nhập mật khẩu';
-                }
-                return null;
-              },
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 16.px),
             Obx(
-              () => controller.isLoading.value
-                  ? _buildLoadingWidget()
-                  : _buildButtonLogin(),
+              () => OutlineTextFiledWidget(
+                focusNode: controller.passwordFocusNode,
+                textEditingController: controller.password,
+                textInputType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+                obscureText: controller.obscureText.value,
+                hintText: 'Mật khẩu (*)',
+                prefixIcon: Icon(
+                  Icons.lock_outline,
+                  color: AppColors.primary60,
+                ),
+                maxlines: 1,
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    controller.obscureText.value =
+                        !controller.obscureText.value;
+                  },
+                  child: Icon(
+                    controller.obscureText.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.primary60,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: AppColors.primary60,
+                    width: 1.px,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: AppColors.primary80,
+                    width: 1.px,
+                  ),
+                ),
+                onValidate: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập mật khẩu';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            SizedBox(height: 16.px),
+            Obx(
+              () => SolidButtonWidget(
+                text: 'Đăng nhập ngay',
+                onTap: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  if (controller.isLoading.value) return;
+                  if (controller.formKey.currentState!.validate()) {
+                    controller.formKey.currentState!.save();
+                    await controller.submit();
+                  }
+                },
+                child: controller.isLoading.value
+                    ? SizedBox(
+                        height: 20.px,
+                        width: 20.px,
+                        child: _buildLoadingWidget(),
+                      )
+                    : null,
+              ),
             ),
           ],
         ),
@@ -103,38 +152,14 @@ class LoginScreen extends GetView<LoginController> {
     );
   }
 
-  GestureDetector _buildButtonLogin() {
-    return GestureDetector(
-      onTap: () async {
-        await controller.submit();
-
-        if (controller.formKey.currentState!.validate()) {
-          controller.formKey.currentState!.save();
-        }
-      },
-      child: Container(
-        alignment: Alignment.center,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: AppColors.primary60),
-        child: const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Đăng nhập ngay',
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
-          ),
-        ),
-      ),
-    );
-  }
-
   Center _buildLoadingWidget() {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(
         color: AppColors.primary95,
-        backgroundColor: AppColors.primary40,
+        backgroundColor: AppColors.primary80,
+        strokeCap: StrokeCap.round,
+        strokeWidth: 2.px,
+        
       ),
     );
   }
@@ -142,9 +167,7 @@ class LoginScreen extends GetView<LoginController> {
   Column _buildNavigateSignUp() {
     return Column(
       children: [
-        const SizedBox(
-          height: 8,
-        ),
+        SizedBox(height: 8.px),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -156,9 +179,7 @@ class LoginScreen extends GetView<LoginController> {
             ),
             TextButton(
               onPressed: () {
-                Get.off(
-                  () => const SignUpScreen(),
-                );
+                Get.offNamed(AppRoutes.signUp, preventDuplicates: true);
               },
               child: const Text(
                 'Đăng ký ngay',
@@ -174,33 +195,27 @@ class LoginScreen extends GetView<LoginController> {
   Column _buildHeader() {
     return Column(
       children: [
-        Image.asset('assets/images/ic_logo_login.png'),
-        const SizedBox(
-          height: 8,
-        ),
-        const Text(
+        Image.asset(ImageAssets.logo, width: 100.px),
+        SizedBox(height: 16.px),
+        Text(
           'Chào mừng bạn đã trở lại',
           style: TextStyle(
-            color: primary10,
-            fontSize: 20,
+            color: AppColors.primary10,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(
-          height: 8,
-        ),
-        const Text(
+        SizedBox(height: 8.px),
+        Text(
           'Đăng nhập để khám phá các phòng trọ\n tuyệt vời đang chờ đón bạn.',
           style: TextStyle(
             color: AppColors.secondary40,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400,
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(
-          height: 8,
-        ),
+        SizedBox(height: 8.px),
       ],
     );
   }

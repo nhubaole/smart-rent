@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
+import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/repositories/dio/dio_provider.dart';
 import '/core/repositories/auth/auth_repo.dart';
 import '/core/repositories/log/log.dart';
@@ -9,11 +10,12 @@ import '/core/repositories/log/log.dart';
 import '../../model/response/request_model.dart';
 
 class AuthRepoImpl implements AuthRepo {
-  Log log;
+  final Log log;
   final DioProvider dio;
 
-  AuthRepoImpl(this.log)
-      : dio = DioProvider();
+  AuthRepoImpl()
+      : log = getIt<Log>(),
+        dio = DioProvider();
 
   @override
   Future<ResponseModel> login({
@@ -21,14 +23,13 @@ class AuthRepoImpl implements AuthRepo {
     required String password,
   }) async {
     const String url = AppConstant.authenLogin;
-    Response response;
     final dataMapper = {
       "phone_number": phoneNumber,
       "password": password,
     };
 
     try {
-      response = await dio.post(url, data: dataMapper);
+      final response = await dio.post(url, data: dataMapper);
       return ResponseModel.fromJson(json.encode(response.data));
     } catch (e) {
       return ResponseModel.failed(e);

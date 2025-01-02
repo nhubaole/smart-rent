@@ -4,8 +4,8 @@ import 'package:smart_rent/core/config/app_colors.dart';
 
 class AlertSnackbar {
   static void hideSnackbar() {
-    if (Get.isDialogOpen == false) return;
-    if (Get.isDialogOpen == true) Get.back();
+    if (Get.isSnackbarOpen == false) return;
+    if (Get.isSnackbarOpen == true) Get.closeAllSnackbars();
   }
 
   static Future<void> show({
@@ -18,7 +18,7 @@ class AlertSnackbar {
     VoidCallback? onRetry,
     String? textBtn,
   }) async {
-    if (Get.isSnackbarOpen == true) Get.back();
+    hideSnackbar();
     Get.snackbar(
       mainButton: onRetry != null ? _buildRetryButton(onRetry, textBtn) : null,
       duration: duration,

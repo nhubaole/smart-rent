@@ -113,7 +113,6 @@ import 'package:smart_rent/modules/track_rental_process/track_rental_process_pag
 import 'package:smart_rent/modules/transaction_history/transaction_history_binding.dart';
 import 'package:smart_rent/modules/transaction_history/transaction_history_page.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_binding.dart';
-import 'package:smart_rent/modules/user_profile/user_profile_controller.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_page.dart';
 import 'package:smart_rent/modules/user_profile_detail/user_profile_detail_page.dart';
 
@@ -136,7 +135,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.signUp,
-      page: () => const SignUpScreen(),
+      page: () => const SignUpPage(),
       binding: SignUpBinding(),
     ),
     GetPage(
@@ -184,11 +183,6 @@ abstract class AppPages {
       page: () => const RentingRoomScreen(),
       binding: RentingRoomBinding(),
     ),
-    // GetPage(
-    //   name: AppRoutes.requestRent,
-    //   page: () => const RequestRentScreen(),
-    //   binding: RequestRentBinding(),
-    // ),
     GetPage(
       name: AppRoutes.returnRent,
       page: () => const ReturnRentScreen(),
@@ -201,7 +195,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.map,
-      page: () => const SignUpScreen(),
+      page: () => const SignUpPage(),
       binding: SignUpBinding(),
     ),
     GetPage(
