@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
+import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
 
@@ -15,6 +16,7 @@ class SignUpController extends GetxController {
   final password = TextEditingController(text: DateTime.now().toString());
   final dateOfBirth = TextEditingController(text: DateTime.now().toString());
   final address = TextEditingController(text: DateTime.now().toString());
+  final obscureText = Rx<bool>(false);
 
   late Log log;
 
@@ -26,8 +28,14 @@ class SignUpController extends GetxController {
     log = getIt<Log>();
     dateOfBirth.text =
         DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
-    
+    address.text = provinces[0];
+
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
   }
 
   @override

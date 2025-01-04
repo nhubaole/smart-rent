@@ -4,11 +4,11 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
-import 'package:smart_rent/core/widget/common_button.dart';
+import 'package:smart_rent/core/values/image_assets.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
-import 'package:smart_rent/core/widget/text_form_field_input.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/auth/signup/controllers/sign_up_controllers.dart';
-import 'package:smart_rent/modules/auth/signup/views/dialog_otp.dart';
 
 class SignUpPage extends GetView<SignUpController> {
   const SignUpPage({
@@ -29,6 +29,7 @@ class SignUpPage extends GetView<SignUpController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildTitle(),
+                  SizedBox(height: 16.px),
                   _buildForm(context),
                   _buildButtons(),
                 ],
@@ -54,72 +55,99 @@ class SignUpPage extends GetView<SignUpController> {
                   text: 'Bằng việc nhấn nút đăng ký, bạn đã đồng ý với các',
                   style: TextStyle(
                     color: AppColors.secondary20,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                   ),
                 ),
                 TextSpan(
-                  text: 'Điều khoản dịch vụ và chính sách bảo mật',
+                  text: ' Điều khoản dịch vụ và chính sách bảo mật',
                   style: TextStyle(
                     color: AppColors.primary60,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 30.sp),
-          controller.isVerifying.value
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: AppColors.primary40,
-                    color: AppColors.primary95,
-                  ),
-                )
-              : CommonButton(
-                  title: 'Đăng ký ngay',
-                  onClick: () async {
-                    if (controller.signUpFormKey.currentState!.validate()) {
-                      controller.signUpFormKey.currentState!.save();
-                      String? result = await controller.onRegister();
-                      if (result != null) {
-                        Get.dialog(
-                          barrierDismissible: false,
-                          transitionCurve: Curves.decelerate,
-                          transitionDuration: const Duration(milliseconds: 450),
-                          DialogOTP(
-                            phoneNumber: controller.phoneNumber.text.trim(),
-                            callBack: (otp) {
-                              print(otp);
-                            },
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-          SizedBox(height: 30.sp),
+          SizedBox(height: 30.px),
+          // controller.isVerifying.value
+          //     ? const Center(
+          //         child: CircularProgressIndicator(
+          //           backgroundColor: AppColors.primary40,
+          //           color: AppColors.primary95,
+          //         ),
+          //       )
+          //     : CommonButton(
+          //         title: 'Đăng ký ngay',
+          //         onClick: () async {
+          //           if (controller.signUpFormKey.currentState!.validate()) {
+          //             controller.signUpFormKey.currentState!.save();
+          //             String? result = await controller.onRegister();
+          //             if (result != null) {
+          //               Get.dialog(
+          //                 barrierDismissible: false,
+          //                 transitionCurve: Curves.decelerate,
+          //                 transitionDuration: const Duration(milliseconds: 450),
+          //                 DialogOTP(
+          //                   phoneNumber: controller.phoneNumber.text.trim(),
+          //                   callBack: (otp) {
+          //                     print(otp);
+          //                   },
+          //                 ),
+          //               );
+          //             }
+          //           }
+          //         },
+          //       ),
+          SolidButtonWidget(
+            text: 'Đăng ký ngay',
+            onTap: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: controller.isVerifying.value
+                ? SizedBox(
+                    height: 20.px,
+                    width: 20.px,
+                    child: _buildLoadingWidget(),
+                  )
+                : null,
+          ),
+          SizedBox(height: 30.px),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Bạn đã có tài khoản?',
                 style: TextStyle(
                   color: AppColors.secondary40,
+                  fontSize: 16.sp,
                 ),
               ),
               TextButton(
                 onPressed: () {
                   Get.offNamed(AppRoutes.login, preventDuplicates: true);
                 },
-                child: const Text(
+                child: Text(
                   'Đăng nhập ngay',
-                  style: TextStyle(color: AppColors.primary60),
+                  style: TextStyle(
+                    color: AppColors.primary60,
+                    fontSize: 16.sp,
+                  ),
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+  Center _buildLoadingWidget() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: AppColors.primary95,
+        backgroundColor: AppColors.primary80,
+        strokeCap: StrokeCap.round,
+        strokeWidth: 2.px,
       ),
     );
   }
@@ -132,67 +160,110 @@ class SignUpPage extends GetView<SignUpController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormFieldInput(
+            OutlineTextFiledWidget(
               textEditingController: controller.fullName,
-              labelText: 'Họ và tên',
-              hintText: 'Họ và tên (*)',
-              textInputType: TextInputType.text,
-              borderRadius: BorderRadius.circular(8),
-              borderWidth: 2,
-              borderColor: AppColors.primary60,
-              icon: const Icon(Icons.person_outline),
-              onSaved: (newValue) {},
               onValidate: (value) {
                 if (value == null || value.isEmpty || value.length < 6) {
                   return 'Vui lòng nhập họ và tên';
                 }
                 return null;
               },
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
+              hintText: 'Họ và tên (*)',
+              prefixIcon: const Icon(
+                Icons.person_outline,
+                color: AppColors.primary60,
+              ),
+              textInputType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary60,
+                  width: 1.px,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary80,
+                  width: 1.px,
+                ),
+              ),
             ),
             SizedBox(height: 16.px),
-            TextFormFieldInput(
-              maxLength: 10,
+            OutlineTextFiledWidget(
               textEditingController: controller.phoneNumber,
-              labelText: 'Số điện thoại',
-              hintText: 'Số điện thoại (*)',
-              textInputType: TextInputType.phone,
-              borderRadius: BorderRadius.circular(8),
-              borderWidth: 2,
-              borderColor: AppColors.primary60,
-              icon: const Icon(Icons.phone_android),
-              onSaved: (newValue) {},
               onValidate: (value) {
                 if (value == null || value.isEmpty || value.length < 10) {
                   return 'Vui lòng nhập số điện thoại';
                 }
                 return null;
               },
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
+              hintText: 'Số điện thoại (*)',
+              prefixIcon: const Icon(
+                Icons.phone_android,
+                color: AppColors.primary60,
+              ),
+              textInputType: TextInputType.phone,
+              textInputAction: TextInputAction.next,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary60,
+                  width: 1.px,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary80,
+                  width: 1.px,
+                ),
+              ),
             ),
             SizedBox(height: 16.px),
-            TextFormFieldInput(
-              maxLength: 10,
+            OutlineTextFiledWidget(
               textEditingController: controller.password,
-              labelText: 'Mật khẩu',
-              hintText: 'Mật khẩu (*)',
-              textInputType: TextInputType.text,
-              isPassword: true,
-              borderRadius: BorderRadius.circular(8),
-              borderWidth: 2,
-              borderColor: AppColors.primary60,
-              icon: const Icon(Icons.lock_outline),
-              onSaved: (newValue) {},
               onValidate: (value) {
                 if (value == null || value.isEmpty || value.length < 10) {
                   return 'Vui lòng nhập mật khẩu';
                 }
                 return null;
               },
-              autoCorrect: false,
-              textCapitalization: TextCapitalization.none,
+              hintText: 'Mật khẩu (*)',
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+                color: AppColors.primary60,
+              ),
+              maxlines: 1,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  controller.obscureText.value = !controller.obscureText.value;
+                },
+                child: Icon(
+                  controller.obscureText.value
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: AppColors.primary60,
+                ),
+              ),
+              obscureText: controller.obscureText.value,
+              textInputType: TextInputType.phone,
+              textInputAction: TextInputAction.next,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary60,
+                  width: 1.px,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: AppColors.primary80,
+                  width: 1.px,
+                ),
+              ),
             ),
             SizedBox(height: 16.px),
             DropdownButtonFormField(
@@ -200,7 +271,14 @@ class SignUpPage extends GetView<SignUpController> {
                   .map(
                     (e) => DropdownMenuItem(
                       value: e,
-                      child: Text(e),
+                      child: Text(
+                        e,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.secondary20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   )
                   .toList(),
@@ -208,28 +286,27 @@ class SignUpPage extends GetView<SignUpController> {
                 controller.address.text = value.toString();
               },
               menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
+              value: controller.address.text,
               decoration: InputDecoration(
-                labelText: 'Tỉnh/Thành phố',
                 hintText: 'Tỉnh/Thành phố (*)',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.px),
                   borderSide: const BorderSide(
-                    color: AppColors.primary60,
-                    width: 2,
+                    color: AppColors.secondary80,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
+                  borderSide: BorderSide(
                     color: AppColors.primary60,
-                    width: 2,
+                    width: 1.px,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary60,
-                    width: 2,
+                  borderSide: BorderSide(
+                    color: AppColors.primary80,
+                    width: 1.px,
                   ),
                 ),
                 prefixIcon: const Icon(
@@ -244,9 +321,11 @@ class SignUpPage extends GetView<SignUpController> {
     );
   }
 
-  Column _buildTitle() {
+  Widget _buildTitle() {
     return Column(
       children: [
+        Image.asset(ImageAssets.logo, width: 70.px),
+        SizedBox(height: 8.px),
         Text(
           'Tạo tài khoản mới',
           style: TextStyle(
@@ -255,7 +334,7 @@ class SignUpPage extends GetView<SignUpController> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8.px),
+        SizedBox(height: 4.px),
         Text(
           'Đăng ký ngay hôm nay để tìm được\n phòng trọ ưng ý',
           style: TextStyle(
@@ -265,7 +344,6 @@ class SignUpPage extends GetView<SignUpController> {
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 16.px),
       ],
     );
   }
