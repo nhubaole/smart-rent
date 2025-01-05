@@ -18,7 +18,7 @@ class AppStorage {
     return HiveManager.get(AppConstant.hiveSession);
   }
 
-  static Future<void> putSession(Map<String, dynamic> value) async {
+  static Future<void> putSession(Map<String, dynamic>? value) async {
     await HiveManager.put(AppConstant.hiveSession, value);
   }
 

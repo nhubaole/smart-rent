@@ -1,7 +1,7 @@
 enum FilterType { PRICE, UTIL, ROOM_TYPE, CAPACITY, SORT }
 
 extension InfoFilterType on FilterType {
-  String getNameFilterType() {
+  String get getNameFilterType {
     switch (this) {
       case FilterType.PRICE:
         return "Giá cả";

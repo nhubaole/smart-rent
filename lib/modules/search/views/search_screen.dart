@@ -63,11 +63,6 @@ class SearchPage extends GetView<SearchRoomController> {
           final String address = controller.searchRecently.value[index];
           return ItemHintAddress(
             onPressed: () {
-              // Get.to(
-              //   () => FilterScreen(
-              //     location: controller.searchRecently.value[index],
-              //   ),
-              // );
               Get.toNamed(AppRoutes.filter, arguments: {
                 'location': controller.searchRecently.value[index],
               });
@@ -109,11 +104,6 @@ class SearchPage extends GetView<SearchRoomController> {
               child: InkWell(
                 onTap: () {
                   controller.saveRecent(controller.searchResult[index]);
-                  // Get.to(
-                  //   () => FilterScreen(
-                  //     location: controller.searchResult[index],
-                  //   ),
-                  // );
                   Get.toNamed(AppRoutes.filter, arguments: {
                     'location': controller.searchResult[index],
                   });
@@ -172,6 +162,12 @@ class SearchPage extends GetView<SearchRoomController> {
                         hintText: 'Tìm theo phường/xã, địa điểm,...',
                         border: InputBorder.none),
                     onChanged: controller.onSearchTextChanged,
+                    onSubmitted: (value) {
+                      controller.saveRecent(value);
+                      Get.toNamed(AppRoutes.filter, arguments: {
+                        'location': value,
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(

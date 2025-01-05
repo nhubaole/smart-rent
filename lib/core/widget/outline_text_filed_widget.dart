@@ -31,6 +31,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final bool? obscureText;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
+  final AutovalidateMode autovalidateMode;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -60,6 +61,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.obscureText = false,
     this.focusNode,
     this.textInputAction,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -137,6 +139,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
       keyboardType: textInputType!,
       minLines: minlines,
       maxLines: maxlines,
+      autovalidateMode: autovalidateMode,
       textInputAction: textInputAction ?? TextInputAction.done,
       style: defaultTextStyle,
       cursorColor: AppColors.primary40,

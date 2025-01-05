@@ -67,18 +67,24 @@ class FilterScreen extends GetView<FilterController> {
             ],
           ),
         ),
-        Obx(() => controller.filterStringList.isNotEmpty
-            ? _buildListFilter()
-            : const SizedBox()),
-        Obx(() => _buildHeaderTotalRoom()),
-        Obx(() => controller.selectedFilter.value == null
-            ? controller.results.value.isNotEmpty
+        // Obx(() => controller.filterStringList.isNotEmpty
+        //     ? _buildListFilter()
+        //     : const SizedBox()),
+        if (controller.filterStringList.isNotEmpty) _buildListFilter(),
+        _buildHeaderTotalRoom(),
+        // TODO: OLD CODE
+        // Obx(() => controller.selectedFilter.value == null
+        //     ? controller.results.value.isNotEmpty
+        //         ? _buildWidgetStatus(context)
+        //         : _buildListResultEmpty()
+        //     : const SizedBox.shrink()),
+        controller.results.value.isNotEmpty
                 ? _buildWidgetStatus(context)
                 : _buildListResultEmpty()
-            : const SizedBox.shrink()),
-        Obx(() => controller.selectedFilter.value == null
-            ? const SizedBox()
-            : _buildPageFilter()),
+        // TODO: OLD CODE
+        // Obx(() => controller.selectedFilter.value == null
+        //     ? const SizedBox()
+        //     : _buildPageFilter()),
       ],
     );
   }
@@ -92,7 +98,7 @@ class FilterScreen extends GetView<FilterController> {
             height: Get.height * 0.6,
             child: Column(
               children: [
-                Obx(() => loadPageContent(controller.selectedFilter.value)),
+                // Obx(() => loadPageContent(controller.selectedFilter.value)),
                 const SizedBox(
                   height: 30,
                 ),
@@ -186,7 +192,8 @@ class FilterScreen extends GetView<FilterController> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: AppColors.secondary20),
+                color: AppColors.secondary20,
+              ),
             ),
             const SizedBox(
               width: 10,
@@ -310,37 +317,33 @@ class FilterScreen extends GetView<FilterController> {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          final item = controller.filterType[index];
           return FilledButton.icon(
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              backgroundColor: controller.selectedFilter.value ==
-                      controller.filterType[index]
+              backgroundColor: controller.selectedFilter.value == item
                   ? AppColors.primary40
                   : AppColors.primary98,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            onPressed: () {
-              controller.selectedFilter.value = controller.filterType[index];
-            },
+            onPressed: () => controller.onSelectedFilterItem(item),
             icon: Icon(
-              controller.selectedFilter.value == controller.filterType[index]
+              controller.selectedFilter.value == item
                   ? Icons.keyboard_arrow_up
                   : Icons.keyboard_arrow_down,
               size: 20,
-              color: controller.selectedFilter.value ==
-                      controller.filterType[index]
+              color: controller.selectedFilter.value == item
                   ? Colors.white
                   : AppColors.secondary40,
               weight: 2,
             ),
             label: Text(
-              controller.filterType[index].getNameFilterType(),
+              controller.filterType[index].getNameFilterType,
               style: TextStyle(
                   fontSize: 12,
-                  color: controller.selectedFilter.value ==
-                          controller.filterType[index]
+                  color: controller.selectedFilter.value == item
                       ? Colors.white
                       : AppColors.secondary40,
                   fontWeight: FontWeight.bold),
@@ -426,20 +429,5 @@ class FilterScreen extends GetView<FilterController> {
     );
   }
 
-  Widget loadPageContent(FilterType? value) {
-    switch (value) {
-      case FilterType.PRICE:
-        return PriceFilterPage();
-      case FilterType.UTIL:
-        return UtilFilterPage();
-      case FilterType.ROOM_TYPE:
-        return RoomTypeFilterPage();
-      case FilterType.CAPACITY:
-        return CapacityFilterPage();
-      case FilterType.SORT:
-        return SortFilterPage();
-      default:
-        return const SizedBox();
-    }
-  }
+  
 }

@@ -5,6 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/model/room/room_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
+import 'package:smart_rent/modules/search/views/capacity_filter_page.dart';
+import 'package:smart_rent/modules/search/views/price_filter_page.dart';
+import 'package:smart_rent/modules/search/views/room_type_filter_page.dart';
+import 'package:smart_rent/modules/search/views/sort_filter_page.dart';
+import 'package:smart_rent/modules/search/views/util_filter_page.dart';
+import 'package:smart_rent/modules/search/widgets/filter_sheet.dart';
 import '/core/enums/filter_type.dart';
 import '/core/enums/gender.dart';
 import '/core/enums/room_type.dart';
@@ -151,7 +157,7 @@ class FilterController extends GetxController {
     }
     if (filter.value.roomTypeFilter != null) {
       filterStringList.add({
-        filter.value.roomTypeFilter!.roomType.name:
+        filter.value.roomTypeFilter!.roomType.value:
             filter.value.roomTypeFilter
       });
     }
@@ -222,6 +228,7 @@ class FilterController extends GetxController {
     for (final e in copyList) {
       removeFilter(e);
     }
+    selectedFilter.value = null;
   }
 
   Future<void> queryRoomByLocation() async {
@@ -301,6 +308,39 @@ class FilterController extends GetxController {
         default:
           break;
       }
+    }
+  }
+
+  onSelectedFilterItem(FilterType type) {
+    selectedFilter.value = type;
+    Get.bottomSheet(
+      FilterSheet(
+        child: loadPageContent(type),
+        onClose: () {
+          selectedFilter.value = null;
+        },
+        onApply: () {},
+        onReset: () {
+          removeAllFilter();
+        },
+      ),
+    );
+  }
+
+  Widget loadPageContent(FilterType? value) {
+    switch (value) {
+      case FilterType.PRICE:
+        return PriceFilterPage();
+      case FilterType.UTIL:
+        return UtilFilterPage();
+      case FilterType.ROOM_TYPE:
+        return RoomTypeFilterPage();
+      case FilterType.CAPACITY:
+        return CapacityFilterPage();
+      case FilterType.SORT:
+        return SortFilterPage();
+      default:
+        return const SizedBox();
     }
   }
 }

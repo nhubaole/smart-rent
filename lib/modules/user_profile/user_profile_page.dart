@@ -9,6 +9,7 @@ import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/button_setting_widget.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
+import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
@@ -19,23 +20,26 @@ class UserProfilePage extends GetView<UserProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWidget(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  AppColors.primary40,
-                  AppColors.primary80,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: ScaffoldWidget(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    AppColors.primary40,
+                    AppColors.primary80,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
-          ),
-          _buildContent(),
-        ],
+            _buildContent(),
+          ],
+        ),
       ),
     );
   }

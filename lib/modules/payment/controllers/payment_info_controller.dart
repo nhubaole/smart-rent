@@ -37,8 +37,6 @@ class PaymentInfoController extends GetxController {
   }
 
   Invoice orderInvoice() {
-    print(orderCode);
-    print(invoice.items);
     return Invoice(
       orderCode: orderCode,
       recieverId: invoice.recieverId,

@@ -44,7 +44,7 @@ class RoomTypeFilterPage extends StatelessWidget {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           contentPadding: const EdgeInsets.all(0),
           title: Text(
-            type.name,
+            type.value,
             style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
           ),
           value: type,

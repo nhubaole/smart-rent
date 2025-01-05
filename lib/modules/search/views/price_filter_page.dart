@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import '/modules/search/controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
@@ -22,70 +23,81 @@ class PriceFilterPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Từ",
+                  'Từ',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                       color: AppColors.secondary20),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: controller.fromPriceTextController,
+                SizedBox(height: 4.px),
+                // TextFormField(
+                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                //   controller: controller.fromPriceTextController,
+                //   readOnly: true,
+                //   decoration: const InputDecoration(
+                //     contentPadding:
+                //         EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                //     border: OutlineInputBorder(),
+                //     hintText: 'Nhập giá',
+                //     suffixText: '₫',
+                //     focusedBorder: OutlineInputBorder(
+                //         borderSide:
+                //             BorderSide(color: AppColors.primary40, width: 2)),
+                //   ),
+                // ),
+                OutlineTextFiledWidget(
+                  textEditingController: controller.fromPriceTextController,
+                  onValidateString: 'Nhập giá',
+                  hintText: 'Nhập giá',
+                  suffixUnit: '₫',
                   readOnly: true,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    border: OutlineInputBorder(),
-                    hintText: 'Nhập giá',
-                    suffixText: '₫',
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primary40, width: 2)),
-                  ),
+                  onTap: () {},
                 ),
               ],
             )),
-            const SizedBox(
-              width: 20,
+            SizedBox(width: 20.px
             ),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Đến",
+                  'Đến',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                       color: AppColors.secondary20),
                 ),
-                const SizedBox(
-                  height: 4,
+                SizedBox(height: 4.px
                 ),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: controller.toPriceTextController,
+                // TextFormField(
+                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                //   controller: controller.toPriceTextController,
+                //   readOnly: true,
+                //   decoration: const InputDecoration(
+                //     contentPadding:
+                //         EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                //     border: OutlineInputBorder(),
+                //     hintText: 'Nhập giá',
+                //     suffixText: '₫',
+                //     focusedBorder: OutlineInputBorder(
+                //         borderSide:
+                //             BorderSide(color: AppColors.primary40, width: 2)),
+                //   ),
+                // ),
+                OutlineTextFiledWidget(
+                  textEditingController: controller.toPriceTextController,
+                  onValidateString: 'Nhập giá',
+                  hintText: 'Nhập giá',
+                  suffixUnit: '₫',
                   readOnly: true,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    border: OutlineInputBorder(),
-                    hintText: 'Nhập giá',
-                    suffixText: '₫',
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primary40, width: 2)),
-                  ),
+                  onTap: () {},
                 ),
               ],
             )),
           ],
         ),
-        const SizedBox(
-          height: 30,
+        SizedBox(height: 30.px
         ),
         Obx(
           () => RangeSlider(

@@ -13,7 +13,7 @@ class RootScreenController extends GetxController {
     const HomePage(),
     const ManageRoomScreen(),
     // const Scaffold(),
-    const Scaffold(),
+    // const Scaffold(),
     // const Scaffold(),
     // ConversationScreen(),
     UserProfilePage(),
@@ -41,42 +41,6 @@ class RootScreenController extends GetxController {
     selectedPage.value = index;
     pageController.jumpToPage(index);
   }
-
-  // void ZIMLogin() {
-  //   ZIMAppConfig appConfig = ZIMAppConfig();
-  //   appConfig.appID = 2063303228;
-  //   appConfig.appSign =
-  //       "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3";
-
-  //   ZIMKit().init(
-  //     appID: 2063303228, // your appid
-  //     appSign:
-  //         "31062f3e9c522cd6fe3a210405fe72306e0ee2e1f865e5289db26dfea5a608c3", // your appSign
-  //   );
-
-  //   ZIM.create(appConfig);
-
-  //   ZIMUserInfo userInfo = ZIMUserInfo();
-
-  //   ZIM.getInstance()?.login(userInfo).then((value) {
-  //     print("Login successful");
-  //   }).catchError((onError) {
-  //     switch (onError.runtimeType) {
-  //       //This will be triggered when login failed.
-  //       case PlatformException:
-  //         print(onError.code); //Return the error code when login failed.
-  //         print(onError.message!); // Return the error indo when login failed.
-  //         break;
-  //       default:
-  //     }
-  //   });
-  //   ZIMKit()
-  //       .connectUser(
-  //           id: userInfo.userID,
-  //           name: userInfo.userName,
-  //           avatarUrl: 'currentAccount.photoUrl')
-  //       .then((value) => null);
-  // }
 
   void animateToTab(int page) {
     selectedPage.value = page;

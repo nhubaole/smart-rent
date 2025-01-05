@@ -706,7 +706,7 @@ class InfoPage extends GetView<PostRoomController> {
           style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
         ),
         value: gender,
-        groupValue: controller.roomCreateModel.value!.gender!,
+        groupValue: controller.roomCreateModel.value.gender!,
         onChanged: (Gender? value) {
           controller.onSelectGender(value!);
         },

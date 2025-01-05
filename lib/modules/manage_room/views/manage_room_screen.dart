@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import '/core/values/image_assets.dart';
@@ -16,12 +17,15 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWidget(
-      body: Stack(
-        children: [
-          _buildTopComponent(context),
-          _buildTrackingComponent(),
-        ],
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: ScaffoldWidget(
+        body: Stack(
+          children: [
+            _buildTopComponent(context),
+            _buildTrackingComponent(),
+          ],
+        ),
       ),
     );
   }

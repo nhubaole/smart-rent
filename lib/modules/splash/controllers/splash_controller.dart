@@ -38,20 +38,27 @@ class SplashController extends GetxController {
   }
 
   Future<void> checkStatusLogin() async {
-    final bool? repeat = AppStorage.getFistTimeInstall();
+    final bool? isFirstInstall = AppStorage.getFistTimeInstall();
     await Future.delayed(
       const Duration(seconds: 3),
     );
 
-    if (repeat == null) {
+    if (isFirstInstall == null) {
       await AppStorage.putFirstTimeInstall(value: true);
       Get.offAllNamed(AppRoutes.onBoarding);
     } else {
-      if (appManager.accessToken != null && appManager.refreshToken != null) {
+      final isLogged = AppStorage.getSession();
+      if (isLogged != null) {
         Get.offAllNamed(AppRoutes.root);
       } else {
         Get.offAllNamed(AppRoutes.login);
       }
+
+      // if (appManager.accessToken != null && appManager.refreshToken != null) {
+      //   Get.offAllNamed(AppRoutes.root);
+      // } else {
+      //   Get.offAllNamed(AppRoutes.login);
+      // }
     }
   }
 }
