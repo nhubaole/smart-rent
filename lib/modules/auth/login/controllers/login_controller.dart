@@ -59,6 +59,8 @@ class LoginController extends GetxController {
         return;
       } else {
         appManager.setSession(
+          phoneNumber: phoneNo.text.trim(),
+          password: password.text.trim(),
           newAccessToken: result.data['accessToken'],
           refreshToken: result.data['refreshToken'],
         );

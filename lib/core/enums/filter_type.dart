@@ -4,17 +4,17 @@ extension InfoFilterType on FilterType {
   String get getNameFilterType {
     switch (this) {
       case FilterType.PRICE:
-        return "Giá cả";
+        return 'Giá cả';
       case FilterType.UTIL:
-        return "Tiện ích";
+        return 'Tiện ích';
       case FilterType.ROOM_TYPE:
-        return "Loại phòng";
+        return 'Loại phòng';
       case FilterType.CAPACITY:
-        return "Số người";
+        return 'Số người';
       case FilterType.SORT:
-        return "Sắp xếp";
+        return 'Sắp xếp';
       default:
-        return "";
+        return '';
     }
   }
 }

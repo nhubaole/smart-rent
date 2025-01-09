@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/landlord_contract_create/landlord_contract_create_controller.dart';
 
@@ -35,17 +37,18 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.addressController,
               onValidateString: 'Enter',
               textLabel: 'ĐỊA CHỈ PHÒNG TRỌ'.tr,
-              hintText: '97 đường số 11, phường Trường Thọ, TP Thủ...',
+              maxlines: 2,
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.roomNumberController,
+              readOnly: true,
+              onTap: () {},
               onValidateString: 'Enter',
               textLabel: 'PHÒNG SỐ'.tr,
-              hintText: '3.11',
             ),
             SizedBox(height: 16.px),
             Align(
@@ -63,7 +66,7 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '*Giá niêm yết: 5 000 000 đ/tháng',
+                '*Giá niêm yết: ${controller.rentalRequest.room?.totalPrice?.toFormatCurrency} đ/tháng',
                 style: TextStyle(
                   fontSize: 15.sp,
                   color: AppColors.secondary40,
@@ -75,7 +78,7 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '** Giá yêu cầu: 4 500 000 đ/tháng',
+                '** Giá yêu cầu: ${controller.rentalRequest.suggestedPrice?.toFormatCurrency} đ/tháng',
                 style: TextStyle(
                   fontSize: 15.sp,
                   color: AppColors.secondary40,
@@ -85,65 +88,67 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.retalPriceController,
               onValidateString: 'Enter',
-              hintText: '3.11',
+              hintText: 'Nhập giá sẽ cho thuê',
               suffixUnit: '| đ/tháng',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.paymentMethodController,
               onValidateString: 'Enter',
               textLabel: 'HÌNH THỨC THANH TOÁN',
-              hintText: '3.11',
+              hintText: 'Chuyển khoản',
+              onTap: controller.showPaymentMethod,
+              readOnly: true,
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.electricPriceController,
               onValidateString: 'Enter',
               textLabel: 'TIỀN ĐIỆN',
-              hintText: '3.11',
+              hintText: 'Nhập giá tiền điện',
               suffixUnit: '| đ/kwh',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.waterPriceController,
               onValidateString: 'Enter',
               textLabel: 'TIỀN NƯỚC',
-              hintText: '3.11',
+              hintText: 'Nhập giá tiền nước',
               suffixUnit: '| đ/người',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.internetPriceController,
               onValidateString: 'Enter',
               textLabel: 'TIỀN INTERNET',
-              hintText: '3.11',
+              hintText: 'Nhập giá tiền internet',
               suffixUnit: '| đ/người',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.parkingPriceController,
               onValidateString: 'Enter',
               textLabel: 'PHÍ GIỮ XE',
-              hintText: '3.11',
+              hintText: 'Nhập giá phí giữ xe',
               suffixUnit: '| đ/người',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.depositPriceController,
               onValidateString: 'Enter',
               textLabel: 'ĐẶT CỌC',
-              hintText: '3.11',
+              hintText: 'Nhập giá tiền đặt cọc',
               suffixUnit: '| đ/người',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: controller.formDatePaidPerMonthController,
               onValidateString: 'Enter',
               textLabel: 'NGÀY THANH TOÁN HÀNG THẮNG',
-              hintText: '3.11',
-              suffixUnit: '| đ/người',
+              onTap: () => controller.onTapChoseDatePaidPerMonth(context),
+              readOnly: true,
             ),
             SizedBox(height: 16.px),
             Align(

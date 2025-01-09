@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/config/app_colors.dart';
-import '/core/enums/room_type.dart';
-import '/core/values/app_colors.dart';
-import '/modules/search/controllers/filter_controller.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/room_type.dart';
+import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
 class RoomTypeFilterPage extends StatelessWidget {

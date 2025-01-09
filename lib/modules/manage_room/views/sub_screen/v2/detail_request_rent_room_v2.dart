@@ -30,9 +30,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             children: [
               SizedBox(height: 2.h),
               _buildStatus(),
-              if (RequestRoomStatusExtension.fromInt(
-                      controller.rentalRequest.status ?? 0) ==
-                  RequestRoomStatus.accepted)
+              if (controller.requestStatus == RequestRoomStatus.accepted)
                 _buildDraftContract(),
               SizedBox(height: 2.h),
               _buildInfoRoom(),
@@ -51,7 +49,9 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               SizedBox(height: 2.h),
               _buildInfo(),
               SizedBox(height: 3.h),
-              if (controller.isLandlord) _buildButtonActionForLandlord(),
+              if (controller.isLandlord &&
+                  controller.requestStatus != RequestRoomStatus.accepted)
+                _buildButtonActionForLandlord(),
               SizedBox(height: 3.h),
             ],
           ),

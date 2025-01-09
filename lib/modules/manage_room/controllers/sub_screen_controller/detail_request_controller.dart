@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
+import 'package:smart_rent/core/enums/request_room_status.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/rental_request/rental_request_repo_impl.dart';
@@ -14,7 +15,8 @@ class DetailRequestController extends GetxController {
 
   UserModel get userModel => appManager.currentUser!;
   bool get isLandlord => userModel.role == 1;
-
+  RequestRoomStatus get requestStatus =>
+      RequestRoomStatusExtension.fromInt(rentalRequest.status!);
   @override
   void onInit() {
     final args = Get.arguments;
@@ -77,6 +79,8 @@ class DetailRequestController extends GetxController {
   }
 
   void onNavLandlordContractCreate() {
-    Get.toNamed(AppRoutes.landlordContractCreate);
+    Get.toNamed(AppRoutes.landlordContractCreate, arguments: {
+      'rental_request': rentalRequest,
+    });
   }
 }

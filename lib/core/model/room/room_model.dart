@@ -197,6 +197,8 @@ class RoomModel {
     );
   }
 
+  get electricPrice => null;
+
   static _handRoomNumbers(dynamic roomNumbers) {
     if (roomNumbers == null) {
       return null;

@@ -55,8 +55,7 @@ class PriceFilterPage extends StatelessWidget {
                 ),
               ],
             )),
-            SizedBox(width: 20.px
-            ),
+            SizedBox(width: 20.px),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,23 +67,7 @@ class PriceFilterPage extends StatelessWidget {
                       fontSize: 14,
                       color: AppColors.secondary20),
                 ),
-                SizedBox(height: 4.px
-                ),
-                // TextFormField(
-                //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                //   controller: controller.toPriceTextController,
-                //   readOnly: true,
-                //   decoration: const InputDecoration(
-                //     contentPadding:
-                //         EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                //     border: OutlineInputBorder(),
-                //     hintText: 'Nhập giá',
-                //     suffixText: '₫',
-                //     focusedBorder: OutlineInputBorder(
-                //         borderSide:
-                //             BorderSide(color: AppColors.primary40, width: 2)),
-                //   ),
-                // ),
+                SizedBox(height: 4.px),
                 OutlineTextFiledWidget(
                   textEditingController: controller.toPriceTextController,
                   onValidateString: 'Nhập giá',
@@ -97,8 +80,7 @@ class PriceFilterPage extends StatelessWidget {
             )),
           ],
         ),
-        SizedBox(height: 30.px
-        ),
+        SizedBox(height: 30.px),
         Obx(
           () => RangeSlider(
             activeColor: AppColors.primary40,

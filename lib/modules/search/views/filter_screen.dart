@@ -14,12 +14,7 @@ import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 
 import '/modules/search/controllers/filter_controller.dart';
-import '/modules/search/views/capacity_filter_page.dart';
-import '/modules/search/views/price_filter_page.dart';
 import '/modules/search/views/result_item.dart';
-import '/modules/search/views/room_type_filter_page.dart';
-import '/modules/search/views/sort_filter_page.dart';
-import '/modules/search/views/util_filter_page.dart';
 
 // ignore: must_be_immutable
 class FilterScreen extends GetView<FilterController> {
@@ -79,8 +74,8 @@ class FilterScreen extends GetView<FilterController> {
         //         : _buildListResultEmpty()
         //     : const SizedBox.shrink()),
         controller.results.value.isNotEmpty
-                ? _buildWidgetStatus(context)
-                : _buildListResultEmpty()
+            ? _buildWidgetStatus(context)
+            : _buildListResultEmpty()
         // TODO: OLD CODE
         // Obx(() => controller.selectedFilter.value == null
         //     ? const SizedBox()
@@ -180,29 +175,30 @@ class FilterScreen extends GetView<FilterController> {
 
   Widget _buildListFilter() {
     return Container(
-        height: 50,
+        height: 50.px,
         color: AppColors.secondary90,
         child: Row(
           children: [
-            const SizedBox(
-              width: 10,
+            SizedBox(
+              width: 16.px,
             ),
-            const Text(
+            Text(
               'Bộ lọc',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
                 color: AppColors.secondary20,
               ),
             ),
-            const SizedBox(
-              width: 10,
+            SizedBox(
+              width: 10.px,
             ),
             Expanded(
                 child: Obx(
               () => ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding:
+                    EdgeInsets.symmetric(vertical: 8.px, horizontal: 16.px),
                 itemBuilder: (context, index) {
                   return Container(
                       padding: const EdgeInsets.all(8),
@@ -219,20 +215,15 @@ class FilterScreen extends GetView<FilterController> {
                                     fontSize: 12,
                                     color: AppColors.secondary40),
                               )),
-                          const SizedBox(
-                            width: 10,
-                          ),
+                          SizedBox(width: 10.px),
                           InkWell(
                             onTap: () {
                               controller.removeFilter(
                                   controller.filterStringList[index]);
                               controller.queryRoomByLocation();
                             },
-                            child: const Icon(
-                              Icons.cancel,
-                              color: AppColors.secondary40,
-                              size: 16,
-                            ),
+                            child: Icon(Icons.cancel,
+                                color: AppColors.secondary40, size: 16.px),
                           )
                         ],
                       ));
@@ -295,9 +286,7 @@ class FilterScreen extends GetView<FilterController> {
                       onTap: (room) {
                         Get.toNamed(
                           AppRoutes.detail,
-                          arguments: {
-                            'id': room.id,
-                          },
+                          arguments: {'id': room.id},
                         );
                       },
                     );
@@ -311,7 +300,7 @@ class FilterScreen extends GetView<FilterController> {
     );
   }
 
-  SizedBox _buildSelectedFilter() {
+  Widget _buildSelectedFilter() {
     return SizedBox(
       height: 36.px,
       child: ListView.separated(
@@ -320,7 +309,7 @@ class FilterScreen extends GetView<FilterController> {
           final item = controller.filterType[index];
           return FilledButton.icon(
             style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10.px),
               backgroundColor: controller.selectedFilter.value == item
                   ? AppColors.primary40
                   : AppColors.primary98,
@@ -428,6 +417,4 @@ class FilterScreen extends GetView<FilterController> {
       ],
     );
   }
-
-  
 }

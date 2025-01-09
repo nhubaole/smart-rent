@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/model/filter_room_model.dart';
 import 'package:smart_rent/core/model/room/room_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/modules/search/views/capacity_filter_page.dart';
@@ -33,7 +34,10 @@ class FilterController extends GetxController {
   final itemFilterCount = 0.obs;
   final selectedFilter = Rx<FilterType?>(FilterType.PRICE);
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+  final filterModel = Rxn<FilterRoomModel>();
+  final capacityController = TextEditingController(text: '1');
   late TextEditingController searchController;
+
 
   RxList<UtilItem> utilList = const [
     UtilItem(utility: Utilities.WC, isChecked: false),
@@ -64,7 +68,7 @@ class FilterController extends GetxController {
   final currentRangeValues = const RangeValues(0, 50000000).obs;
   final fromPriceTextController = TextEditingController();
   final toPriceTextController = TextEditingController();
-  final quantity = 0.obs;
+  final quantity = 1.obs;
   final genderIdx = 0.obs;
   final isLoadingType = LoadingType.INIT.obs;
 
@@ -116,6 +120,7 @@ class FilterController extends GetxController {
   }
 
   void setCapacity() {
+    capacityController.text = quantity.value.toString();
     Gender selectedGender;
     switch (genderIdx.value) {
       case 0:
@@ -158,7 +163,7 @@ class FilterController extends GetxController {
     if (filter.value.roomTypeFilter != null) {
       filterStringList.add({
         filter.value.roomTypeFilter!.roomType.value:
-            filter.value.roomTypeFilter
+            filter.value.roomTypeFilter?.roomType.value
       });
     }
     if (filter.value.capacityFilter != null) {
@@ -315,6 +320,7 @@ class FilterController extends GetxController {
     selectedFilter.value = type;
     Get.bottomSheet(
       FilterSheet(
+        filterType: type,
         child: loadPageContent(type),
         onClose: () {
           selectedFilter.value = null;

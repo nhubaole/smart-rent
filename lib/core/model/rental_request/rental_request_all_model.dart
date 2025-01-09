@@ -139,12 +139,15 @@ class RentalRequestAllModel {
       room: RoomModel.fromMap(map['room']),
       suggestedPrice: map['suggested_price'],
       numOfPerson: map['num_of_person'],
-      beginDate: DateTime.parse(map['begin_date']),
-      endDate: DateTime.parse(map['end_date']),
+      beginDate:
+          map['begin_date'] != null ? DateTime.parse(map['begin_date']) : null,
+      endDate: map['end_date'] != null ? DateTime.parse(map['end_date']) : null,
       additionRequest: map['addition_request'],
       status: map['status'],
-      createdAt: DateTime.parse(map['created_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
+      createdAt:
+          map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       deletedAt:
           map['deleted_at'] != null ? DateTime.parse(map['deleted_at']) : null,
     );

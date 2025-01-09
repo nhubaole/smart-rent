@@ -3,6 +3,8 @@ import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/app/app_storage.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
+import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
+import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 
 class AppManager {
@@ -10,6 +12,9 @@ class AppManager {
   factory AppManager() => instance;
 
   AppManager._internal();
+
+  String? _phoneNumber;
+  String? _password;
 
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
@@ -26,10 +31,14 @@ class AppManager {
     UserModel? newUser,
     String? newAccessToken,
     String? refreshToken,
+    String? phoneNumber,
+    String? password,
   }) async {
     _currentUser = newUser ?? _currentUser;
     _accessToken = newAccessToken ?? _accessToken;
     _refreshToken = refreshToken ?? _refreshToken;
+    _phoneNumber = phoneNumber ?? _phoneNumber;
+    _password = password ?? _password;
     // await HiveManager.put(
     //   AppConstant.hiveSessionKey,
     //   {
@@ -43,6 +52,8 @@ class AppManager {
         'currentUser': _currentUser?.toJson(),
         'accessToken': _accessToken,
         'refreshToken': _refreshToken,
+        'phoneNumber': _phoneNumber,
+        'password': _password,
       },
     );
   }
@@ -59,5 +70,34 @@ class AppManager {
     }
     AppManager().cancelSession();
     await HiveManager.delete(AppConstant.hiveSessionKey);
+  }
+
+  Future<void> refreshSession({
+    required String phone,
+    required String password,
+  }) async {
+    final result = await AuthRepoImpl().login(
+      phoneNumber: phone,
+      password: password,
+    );
+    if (result.isSuccess()) {
+      setSession(newAccessToken: result.data['accessToken']);
+      final userModel = await UserRepoIml().getCurrentUser(
+        accessToken: result.data['accessToken'],
+      );
+      if (userModel.isSuccess()) {
+        setSession(
+          newUser: userModel.data,
+          newAccessToken: result.data['accessToken'],
+          refreshToken: result.data['refreshToken'],
+          phoneNumber: phone,
+          password: password,
+        );
+      } else {
+        forceLogOut();
+      }
+    } else {
+      forceLogOut();
+    }
   }
 }

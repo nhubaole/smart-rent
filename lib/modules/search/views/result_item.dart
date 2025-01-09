@@ -35,12 +35,12 @@ class ResultItem extends StatelessWidget {
       left: 0,
       top: 0,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: const BoxDecoration(
+        padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 4.px),
+        decoration: BoxDecoration(
           color: AppColors.primary40,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
+            topLeft: Radius.circular(20.px),
+            bottomRight: Radius.circular(20.px),
           ),
         ),
         child: const Text(
@@ -58,16 +58,26 @@ class ResultItem extends StatelessWidget {
   Container _buildMainContent() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: EdgeInsets.only(
+        top: 32.px,
+        right: 8.px,
+        left: 8.px,
+        bottom: 8.px,
+      ),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.px),
+      ),
       child: Column(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_buildImage(), SizedBox(width: 16.px), _buildInfo()],
+            children: [
+              _buildImage(),
+              SizedBox(width: 16.px),
+              _buildInfo(),
+            ],
           ),
-          // _buildRating()
         ],
       ),
     );
@@ -190,13 +200,13 @@ class ResultItem extends StatelessWidget {
       decoration: BoxDecoration(
         border:
             Border.all(color: AppColors.secondary80.withOpacity(0.2), width: 1),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(12.0.px),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(12.0.px),
         child: CachedNetworkImage(
-          height: 120,
-          width: 120,
+          height: 120.px,
+          width: 120.px,
           fit: BoxFit.cover,
           imageUrl: room.images![0],
         ),

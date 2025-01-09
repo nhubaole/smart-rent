@@ -36,7 +36,7 @@ class HomeController extends GetxController {
     setupFirebaseMessaging();
     fetchDataAndConvertToList();
     getListRoom(false);
-    await getCurrentLocation();
+    getCurrentLocation();
     super.onInit();
   }
 

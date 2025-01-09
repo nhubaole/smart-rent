@@ -24,7 +24,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
             partner: 'landlord_responsibility'.tr,
             onChanged: (value) {},
             value: true,
-            textEditingController: TextEditingController(),
+            textEditingController: controller.responsiblePartyAController,
             onValidate: (value) {
               return null;
             },
@@ -34,7 +34,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
             partner: 'tenant_responsibility'.tr,
             onChanged: (value) {},
             value: true,
-            textEditingController: TextEditingController(),
+            textEditingController: controller.responsiblePartyBController,
             onValidate: (value) {
               return null;
             },
@@ -44,7 +44,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
             partner: 'joint_responsibility'.tr,
             onChanged: (value) {},
             value: true,
-            textEditingController: TextEditingController(),
+            textEditingController: controller.responsiblejointCommonController,
             onValidate: (value) {
               return null;
             },

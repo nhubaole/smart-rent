@@ -36,11 +36,12 @@ class SearchPage extends GetView<SearchRoomController> {
           SizedBox(height: 8.px
           ),
           Text(
-            controller.label.isEmpty ? "Tìm kiếm gần đây" : "Gợi ý",
+            controller.label.isEmpty ? 'Tìm kiếm gần đây' : 'Gợi ý',
             style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.secondary20,
-                fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.w500,
+            ),
           ),
           Expanded(
             child: controller.textController.value.text.trim().isNotEmpty
@@ -82,7 +83,7 @@ class SearchPage extends GetView<SearchRoomController> {
       padding: const EdgeInsets.only(top: 16),
       width: double.infinity,
       child: const Text(
-        "Không tìm thấy kết quả",
+        'Không tìm thấy kết quả',
         textAlign: TextAlign.center,
       ),
     );
@@ -145,22 +146,27 @@ class SearchPage extends GetView<SearchRoomController> {
             decoration: BoxDecoration(
                 border: Border.all(color: AppColors.primary60, width: 1),
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.white),
+              color: Colors.white,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.asset('assets/images/ic_location.svg'),
-                const SizedBox(
-                  width: 4,
-                ),
+                SizedBox(width: 4.px),
                 Expanded(
                   child: TextField(
                     autofocus: true,
                     style: const TextStyle(fontSize: 12),
                     controller: controller.textController,
-                    decoration: const InputDecoration(
-                        hintText: 'Tìm theo phường/xã, địa điểm,...',
-                        border: InputBorder.none),
+                    decoration: InputDecoration(
+                      hintText: 'Tìm theo phường/xã, địa điểm,...',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: AppColors.secondary40,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     onChanged: controller.onSearchTextChanged,
                     onSubmitted: (value) {
                       controller.saveRecent(value);
@@ -170,13 +176,11 @@ class SearchPage extends GetView<SearchRoomController> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
+                SizedBox(width: 4.px),
                 InkWell(
-                  child: const Icon(
+                  child: Icon(
                     Icons.cancel,
-                    size: 16,
+                    size: 16.px,
                     color: AppColors.secondary40,
                   ),
                   onTap: () {
@@ -186,9 +190,7 @@ class SearchPage extends GetView<SearchRoomController> {
                 )
               ],
             )),
-        const SizedBox(
-          width: 16,
-        ),
+        SizedBox(width: 16.px),
         InkWell(
           onTap: () {
             Get.back();
