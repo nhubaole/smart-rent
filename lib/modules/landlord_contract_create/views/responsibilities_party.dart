@@ -16,41 +16,54 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
           right: 16.px,
           left: 16.px,
           bottom: MediaQuery.of(context).viewInsets.bottom + 10.px),
-      child: Column(
-        children: [
-          _buildHeader(),
-          SizedBox(height: 16.px),
-          _buildPrivateForPartner(
-            partner: 'landlord_responsibility'.tr,
-            onChanged: (value) {},
-            value: true,
-            textEditingController: controller.responsiblePartyAController,
-            onValidate: (value) {
-              return null;
-            },
-          ),
-          SizedBox(height: 16.px),
-          _buildPrivateForPartner(
-            partner: 'tenant_responsibility'.tr,
-            onChanged: (value) {},
-            value: true,
-            textEditingController: controller.responsiblePartyBController,
-            onValidate: (value) {
-              return null;
-            },
-          ),
-          SizedBox(height: 16.px),
-          _buildPrivateForPartner(
-            partner: 'joint_responsibility'.tr,
-            onChanged: (value) {},
-            value: true,
-            textEditingController: controller.responsiblejointCommonController,
-            onValidate: (value) {
-              return null;
-            },
-          ),
-          SizedBox(height: 16.px),
-        ],
+      child: Form(
+        key: controller.formKeyPageTwo,
+        child: Column(
+          children: [
+            _buildHeader(),
+            SizedBox(height: 16.px),
+            _buildPrivateForPartner(
+              partner: 'landlord_responsibility'.tr,
+              onChanged: (value) {},
+              value: true,
+              textEditingController: controller.responsiblePartyAController,
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập trách nhiệm của chủ nhà';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.px),
+            _buildPrivateForPartner(
+              partner: 'tenant_responsibility'.tr,
+              onChanged: (value) {},
+              value: true,
+              textEditingController: controller.responsiblePartyBController,
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập trách nhiệm của người thuê';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.px),
+            _buildPrivateForPartner(
+              partner: 'joint_responsibility'.tr,
+              onChanged: (value) {},
+              value: true,
+              textEditingController:
+                  controller.responsiblejointCommonController,
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập trách nhiệm chung';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.px),
+          ],
+        ),
       ),
     );
   }

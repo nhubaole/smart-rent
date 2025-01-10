@@ -19,7 +19,10 @@ class LandlordContractCreatePage
   @override
   Widget build(BuildContext context) {
     return ScaffoldWidget(
-      appBar: CustomAppBar(title: 'Soạn thảo hợp đồng'),
+      appBar: CustomAppBar(
+        title: 'Soạn thảo hợp đồng',
+        onBack: controller.onBack,
+      ),
       body: Obx(
         () => Column(
           children: [

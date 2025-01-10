@@ -107,11 +107,11 @@ class LikedRoomScreen extends GetView<LikedRoomController> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.65,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 10,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: Get.width / 2,
+        crossAxisSpacing: 5.px,
+        mainAxisSpacing: 10.px,
+        mainAxisExtent: 300.px,
       ),
       itemCount: controller.listRoom.value.length,
       itemBuilder: (context, index) {

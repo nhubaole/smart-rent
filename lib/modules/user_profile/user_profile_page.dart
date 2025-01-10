@@ -121,7 +121,7 @@ class UserProfilePage extends GetView<UserProfileController> {
               SolidButtonWidget(
                 margin: EdgeInsets.symmetric(horizontal: 16.px),
                 text: 'Đăng xuất',
-                onTap: () {},
+                onTap: controller.onLogout,
                 icon: Icon(
                   Icons.logout,
                   color: AppColors.white,

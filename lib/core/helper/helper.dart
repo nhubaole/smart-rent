@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -38,16 +39,33 @@ class Helper {
     return base64Encode(data);
   }
 
-  static String getStatus(int status) {
+  static String getRequestRentStatus(int status) {
     switch (status) {
-      case 0:
-        return 'not_processed'.tr;
       case 1:
-        return 'pending'.tr;
+        return 'Chờ xử lý'.tr;
       case 2:
-        return 'accepted'.tr;
+        return 'Đã tiếp nhận'.tr;
+      case 3:
+        return 'Đã từ chối'.tr;
+      case 4:
+        return 'Đã hủy'.tr;
       default:
         return '';
+    }
+  }
+
+  static Color getRequestRentColor(int status) {
+    switch (status) {
+      case 1:
+        return Colors.orange;
+      case 2:
+        return Colors.green;
+      case 3:
+        return Colors.red;
+      case 4:
+        return Colors.red;
+      default:
+        return Colors.black;
     }
   }
 

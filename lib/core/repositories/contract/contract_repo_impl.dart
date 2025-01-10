@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
@@ -53,7 +55,7 @@ class ContractRepoImpl extends ContractRepo {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${AppManager().accessToken}',
         },
-        data: contract.toMap(),
+        data: contract.toJson(),
       );
 
       return ResponseModel<ContractCreateModel>(

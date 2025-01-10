@@ -75,9 +75,11 @@ class StatusRequestRent extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          Helper.getStatus(rentalRequest.status!),
-                          style: const TextStyle(
-                            color: AppColors.primary40,
+                          Helper.getRequestRentStatus(rentalRequest.status!),
+                          style: TextStyle(
+                            color: Helper.getRequestRentColor(
+                              rentalRequest.status!,
+                            ),
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                           ),

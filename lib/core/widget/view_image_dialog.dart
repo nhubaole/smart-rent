@@ -158,7 +158,7 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
         borderRadius: BorderRadius.circular(10.px),
         child: CacheImageWidget(
           imageUrl: widget.url!,
-          shouldExtendCache: false,
+          shouldExtendCache: true,
         ),
       ),
     );

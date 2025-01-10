@@ -214,4 +214,8 @@ class UserProfileController extends GetxController {
       );
     }
   }
+
+  onLogout() {
+    AppManager.instance.forceLogOut();
+  }
 }

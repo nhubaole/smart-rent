@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // {
 //     "address": ["123 Main St","Ward 4","District 1","HCM City"],
 //     "party_a": 1,
@@ -22,8 +23,11 @@
 //     "signed_time_a": "2024-01-02T15:04:05-07:00"
 // }
 
+import 'dart:convert';
+
 import 'package:smart_rent/core/enums/electricity_payment_method.dart';
 import 'package:smart_rent/core/enums/payment_method.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
 
 class ContractCreateModel {
   List<String>? address;
@@ -139,21 +143,72 @@ class ContractCreateModel {
       'request_id': requestId,
       'room_id': roomId,
       'actual_price': actualPrice,
-      'payment_method': paymentMethod?.name,
-      'electricity_method': electricityMethod?.name,
+      'payment_method': paymentMethod?.name ?? 'cash',
+      'electricity_method': electricityMethod?.name ?? 'meter',
       'electricity_cost': electricityCost,
-      'water_method': waterMethod,
+      'water_method': waterMethod ?? 'flat',
       'water_cost': waterCost,
       'internet_cost': internetCost,
       'parking_fee': parkingFee,
       'deposit': deposit,
-      'begin_date': beginDate,
-      'end_date': endDate,
+      'begin_date': beginDate?.yyyyMMdd,
+      'end_date': endDate?.yyyyMMdd,
       'responsibility_a': responsibilityA,
       'responsibility_b': responsibilityB,
       'general_responsibility': generalResponsibility,
       'signature_a': signatureA,
-      'signed_time_a': signedTimeA,
+      'signed_time_a': signedTimeA?.toUtc().toIso8601String(),
     };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  ContractCreateModel copyWith({
+    List<String>? address,
+    int? partyA,
+    int? partyB,
+    int? requestId,
+    int? roomId,
+    int? actualPrice,
+    PaymentMethod? paymentMethod,
+    ElectricityPaymentMethod? electricityMethod,
+    int? electricityCost,
+    String? waterMethod,
+    int? waterCost,
+    int? internetCost,
+    int? parkingFee,
+    int? deposit,
+    DateTime? beginDate,
+    DateTime? endDate,
+    String? responsibilityA,
+    String? responsibilityB,
+    String? generalResponsibility,
+    String? signatureA,
+    DateTime? signedTimeA,
+  }) {
+    return ContractCreateModel(
+      address: address ?? this.address,
+      partyA: partyA ?? this.partyA,
+      partyB: partyB ?? this.partyB,
+      requestId: requestId ?? this.requestId,
+      roomId: roomId ?? this.roomId,
+      actualPrice: actualPrice ?? this.actualPrice,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      electricityMethod: electricityMethod ?? this.electricityMethod,
+      electricityCost: electricityCost ?? this.electricityCost,
+      waterMethod: waterMethod ?? this.waterMethod,
+      waterCost: waterCost ?? this.waterCost,
+      internetCost: internetCost ?? this.internetCost,
+      parkingFee: parkingFee ?? this.parkingFee,
+      deposit: deposit ?? this.deposit,
+      beginDate: beginDate ?? this.beginDate,
+      endDate: endDate ?? this.endDate,
+      responsibilityA: responsibilityA ?? this.responsibilityA,
+      responsibilityB: responsibilityB ?? this.responsibilityB,
+      generalResponsibility:
+          generalResponsibility ?? this.generalResponsibility,
+      signatureA: signatureA ?? this.signatureA,
+      signedTimeA: signedTimeA ?? this.signedTimeA,
+    );
   }
 }

@@ -75,12 +75,12 @@ class DetailController extends GetxController {
       final rq = await RoomRepoImpl().getRoomById(id: arg['id']);
       if (rq.isSuccess()) {
         room = rq.data!;
-        // rating = await fetchRatingByIdRoom(room!.id);
-        rating = await fetchRatingByIdRoom(48);
+        rating = await fetchRatingByIdRoom(room!.id);
+        // rating = await fetchRatingByIdRoom(48);
         onLikeAction();
         isLoadingData.value = LoadingType.LOADED;
         room!.roomNumbers?.forEach((key, value) async {
-          final roomSuggest = await getRoomSuggest(125);
+          final roomSuggest = await getRoomSuggest(value as int);
           if (roomSuggest != null) {
             suggestRooms!.add(roomSuggest);
           }

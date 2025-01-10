@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/landlord_contract_create/landlord_contract_create_controller.dart';
 
@@ -89,14 +90,29 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.retalPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập giá sẽ cho thuê';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               hintText: 'Nhập giá sẽ cho thuê',
               suffixUnit: '| đ/tháng',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.paymentMethodController,
-              onValidateString: 'Enter',
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng chọn hình thức thanh toán';
+                }
+                return null;
+              },
               textLabel: 'HÌNH THỨC THANH TOÁN',
               hintText: 'Chuyển khoản',
               onTap: controller.showPaymentMethod,
@@ -105,7 +121,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.electricPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập giá điện';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               textLabel: 'TIỀN ĐIỆN',
               hintText: 'Nhập giá tiền điện',
               suffixUnit: '| đ/kwh',
@@ -113,7 +139,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.waterPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập giá nước';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               textLabel: 'TIỀN NƯỚC',
               hintText: 'Nhập giá tiền nước',
               suffixUnit: '| đ/người',
@@ -121,7 +157,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.internetPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập giá internet';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               textLabel: 'TIỀN INTERNET',
               hintText: 'Nhập giá tiền internet',
               suffixUnit: '| đ/người',
@@ -129,7 +175,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.parkingPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập phí gửi xe';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               textLabel: 'PHÍ GIỮ XE',
               hintText: 'Nhập giá phí giữ xe',
               suffixUnit: '| đ/người',
@@ -137,7 +193,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.depositPriceController,
-              onValidateString: 'Enter',
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: true),
+              onValidate: (p0) {
+                if (p0 == null || p0.isEmpty) {
+                  return 'Vui lòng nhập số tiền đặt cọc';
+                }
+                if (HelpRegex.isNumber(p0) == false) {
+                  return 'Vui lòng nhập số';
+                }
+                return null;
+              },
               textLabel: 'ĐẶT CỌC',
               hintText: 'Nhập giá tiền đặt cọc',
               suffixUnit: '| đ/người',

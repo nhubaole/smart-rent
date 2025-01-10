@@ -275,7 +275,7 @@ class DetailPage extends GetView<DetailController> {
       height: 35.px,
       child: ListView.separated(
         itemCount: controller.room!.roomNumbers!.keys.length,
-        separatorBuilder: (context, index) => SizedBox(width: 16.px),
+        separatorBuilder: (context, index) => SizedBox(width: 8.px),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final key = controller.room!.roomNumbers!.keys.elementAt(index);
@@ -545,7 +545,7 @@ class DetailPage extends GetView<DetailController> {
               fontWeight: FontWeight.bold,
               fontSize: 14),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.px),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -572,8 +572,7 @@ class DetailPage extends GetView<DetailController> {
                 ],
               ),
             ),
-            const SizedBox(
-              width: 16,
+            SizedBox(width: 16.px
             ),
             Expanded(
               child: Column(
@@ -653,7 +652,7 @@ class DetailPage extends GetView<DetailController> {
     );
   }
 
-  Column _buildUtilities() {
+  Widget _buildUtilities() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -665,11 +664,10 @@ class DetailPage extends GetView<DetailController> {
               fontWeight: FontWeight.bold,
               fontSize: 14),
         ),
-        const SizedBox(
-          height: 4,
-        ),
+        SizedBox(height: 4.px),
         GridView.builder(
           padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,

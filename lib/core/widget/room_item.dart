@@ -54,8 +54,6 @@ class _RoomItemState extends State<RoomItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: widget.width ?? 45.w,
-      // constraints: BoxConstraints(minHeight: widget.minHeight ?? 300.px),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.px),
@@ -304,6 +302,7 @@ class _RoomItemState extends State<RoomItem> {
         borderRadius: BorderRadius.circular(4.px),
         child: CacheImageWidget(
           imageUrl: widget.room.images![0],
+          shouldExtendCache: true,
         ),
       ),
     );

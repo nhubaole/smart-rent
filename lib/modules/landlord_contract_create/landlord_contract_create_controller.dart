@@ -4,9 +4,11 @@ import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/payment_method.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
+import 'package:smart_rent/core/model/contract/contract_create_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/modules/landlord_contract_create/widgets/payment_method_sheet.dart';
 
 class LandlordContractCreateController extends GetxController
@@ -15,6 +17,7 @@ class LandlordContractCreateController extends GetxController
   ContractByIdModel? contractByIdModel;
   late RentalRequestAllModel rentalRequest;
   final methodSelected = PaymentMethod.no.obs;
+  final createContractModel = Rxn<ContractCreateModel>();
 
   final tabs = Rx<List<Map<String, dynamic>>>(List.generate(
     3,
@@ -60,6 +63,14 @@ class LandlordContractCreateController extends GetxController
     super.onInit();
   }
 
+  onBack() {
+    if (selectedTab.value == 0) {
+      Get.back();
+    } else {
+      changeTab(selectedTab.value - 1);
+    }
+  }
+
   initController() {
     addressController = TextEditingController(
         text: rentalRequest.room!.address ??
@@ -79,7 +90,7 @@ class LandlordContractCreateController extends GetxController
     depositPriceController =
         TextEditingController(text: rentalRequest.room!.deposit?.toString());
     formDatePaidPerMonthController =
-        TextEditingController(text: DateTime.now().ddMMyyyy);
+        TextEditingController(text: DateTime.now().day.toString());
     responsiblePartyAController = TextEditingController();
     responsiblePartyBController = TextEditingController();
     responsiblejointCommonController = TextEditingController();
@@ -94,7 +105,7 @@ class LandlordContractCreateController extends GetxController
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
     if (fromDataAt != null) {
-      formDatePaidPerMonthController.text = fromDataAt.ddMMyyyy;
+      formDatePaidPerMonthController.text = fromDataAt.day.toString();
     }
   }
 
@@ -136,12 +147,71 @@ class LandlordContractCreateController extends GetxController
   }
 
   onClickBottomNav() {
-    if (selectedTab.value == tabs.value.length - 1) {
-      // create contract
-      Get.toNamed(AppRoutes.contractSign);
+    switch (selectedTab.value) {
+      case 0:
+        if (formKeyPageOne.currentState!.validate()) {
+          formKeyPageOne.currentState!.save();
+          final fromDate = DatetimeExt.getParsedDate(formDateController.text);
+          final toDate = DatetimeExt.getParsedDate(toDateController.text);
+          if (fromDate == null || toDate == null) {
+            AlertSnackbar.show(
+              title: 'Thông báo',
+              message: 'Vui lòng chọn ngày bắt đầu và kết thúc',
+              isError: true,
+            );
+            return;
+          }
+          if (fromDate.difference(toDate).inSeconds >= 0) {
+            AlertSnackbar.show(
+              title: 'Thông báo',
+              message: 'Ngày bắt đầu và kết thúc không được trùng nhau',
+              isError: true,
+            );
+            return;
+          }
+          formKeyPageOne.currentState!.save();
+          changeTab(1);
+        }
+        break;
+      case 1:
+        if (formKeyPageTwo.currentState!.validate()) {
+          formKeyPageTwo.currentState!.save();
+          changeTab(2);
+        }
+        break;
+      case 2:
+        // create contract
+        createContractModel.value = ContractCreateModel(
+          address: rentalRequest.room?.addresses,
+          partyA: rentalRequest.room?.owner,
+          partyB: rentalRequest.sender?.id,
+          requestId: rentalRequest.id,
+          roomId: rentalRequest.room?.id,
+          actualPrice: int.tryParse(retalPriceController.text),
+          paymentMethod: methodSelected.value,
+          electricityCost: int.tryParse(electricPriceController.text),
+          waterCost: int.tryParse(waterPriceController.text),
+          internetCost: int.tryParse(internetPriceController.text),
+          parkingFee: int.tryParse(parkingPriceController.text),
+          deposit: int.tryParse(depositPriceController.text),
+          beginDate: DatetimeExt.getParsedDate(formDateController.text),
+          endDate: DatetimeExt.getParsedDate(toDateController.text),
+          responsibilityA: responsiblePartyAController.text,
+          responsibilityB: responsiblePartyBController.text,
+          generalResponsibility: responsiblejointCommonController.text,
+        );
+        Get.toNamed(
+          AppRoutes.contractSign,
+          arguments: createContractModel.value,
+        );
+        break;
     }
-    if (selectedTab.value < tabs.value.length - 1) selectedTab.value++;
-    tabController.animateTo(selectedTab.value);
+    // if (selectedTab.value == tabs.value.length - 1) {
+    //   // create contract
+    //   Get.toNamed(AppRoutes.contractSign);
+    // }
+    // if (selectedTab.value < tabs.value.length - 1) selectedTab.value++;
+    // tabController.animateTo(selectedTab.value);
   }
 
   showPaymentMethod() {
