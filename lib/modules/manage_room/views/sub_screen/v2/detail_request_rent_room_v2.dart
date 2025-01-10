@@ -31,13 +31,17 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             children: [
               SizedBox(height: 2.h),
               _buildStatus(),
-              if (controller.requestStatus == RequestRoomStatus.accepted)
+              if (controller.isLandlord &&
+                  controller.requestStatus == RequestRoomStatus.accepted)
                 _buildDraftContract(),
               SizedBox(height: 2.h),
               _buildInfoRoom(),
               SizedBox(height: 2.h),
               _buildTimeSend(),
-              if (!controller.isLandlord)
+              if (!controller.isLandlord &&
+                  (controller.requestStatus != RequestRoomStatus.accepted &&
+                      controller.requestStatus != RequestRoomStatus.rejected &&
+                      controller.requestStatus != RequestRoomStatus.canceled))
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
