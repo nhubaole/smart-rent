@@ -113,8 +113,10 @@ class RoomRepoImpl implements RoomRepo {
       return ResponseModel<List<RoomModel>>(
         errCode: response.data['errCode'],
         message: response.data['message'],
-        data: List<RoomModel>.from((response.data['data'] as List)
-            .map((room) => RoomModel.fromMap(room))),
+        data: response.data['data'] != null
+            ? List<RoomModel>.from((response.data['data'] as List)
+                .map((room) => RoomModel.fromMap(room)))
+            : [],
       );
     } catch (e) {
       log.e('getRoomsLikedByOwner', e.toString());
@@ -169,9 +171,11 @@ class RoomRepoImpl implements RoomRepo {
     }
   }
 
-
   _handleListRoomResponse(dynamic data) {
-    if (data is List && data.isEmpty) return <RoomModel>[];
+    if (data['rooms'] == null ||
+        data['rooms'] is List && data['rooms'].isEmpty) {
+      return <RoomModel>[];
+    }
     return List<RoomModel>.from(
         (data['rooms'] as List).map((room) => RoomModel.fromMap(room)));
   }
