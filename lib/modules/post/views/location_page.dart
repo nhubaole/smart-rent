@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/model/location/city.dart';
 import 'package:smart_rent/core/model/location/district.dart';
 import 'package:smart_rent/core/model/location/ward.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/post/post_controller.dart';
-
-
 
 List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -27,7 +27,6 @@ class _LocationPageState extends State<LocationPage> {
       margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-
         child: Form(
           key: controller.formKeyLocation,
           child: Column(
@@ -40,10 +39,7 @@ class _LocationPageState extends State<LocationPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-
+              SizedBox(height: 20.px),
               //---------------------City-------------------------
               const Text(
                 'THÀNH PHỐ',
@@ -52,18 +48,28 @@ class _LocationPageState extends State<LocationPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10.px),
               Obx(
                 () => DropdownButtonFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primary40, width: 2)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.primary40,
+                        width: 1,
+                      ),
+                    ),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4)),
+                      borderRadius: BorderRadius.circular(8.px),
+                      borderSide: const BorderSide(
+                        color: AppColors.secondary80,
+                      ),
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.secondary20,
+                    fontWeight: FontWeight.w500,
                   ),
                   hint: const Text('Bấm để chọn Thành Phố'),
                   isExpanded: true,
@@ -88,10 +94,7 @@ class _LocationPageState extends State<LocationPage> {
                       .fieldValidator(value == null ? '' : value.name),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-
+              SizedBox(height: 16.px),
               //---------------------District-------------------------
               const Text(
                 'QUẬN / HUYỆN',
@@ -100,18 +103,28 @@ class _LocationPageState extends State<LocationPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10.px),
               Obx(
                 () => DropdownButtonFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.secondary20,
+                    fontWeight: FontWeight.w500,
+                  ),
                   decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primary40, width: 2)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.primary40,
+                        width: 1,
+                      ),
+                    ),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4)),
+                      borderRadius: BorderRadius.circular(8.px),
+                      borderSide: const BorderSide(
+                        color: AppColors.secondary80,
+                      ),
+                    ),
                   ),
                   hint: const Text('Bấm để chọn Quận / Huyện'),
                   isExpanded: true,
@@ -135,10 +148,7 @@ class _LocationPageState extends State<LocationPage> {
                       .fieldValidator(value == null ? '' : value.name),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-
+              SizedBox(height: 16.px),
               //---------------------Ward-------------------------
               const Text(
                 'PHƯỜNG / XÃ',
@@ -153,12 +163,24 @@ class _LocationPageState extends State<LocationPage> {
               Obx(
                 () => DropdownButtonFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.secondary20,
+                    fontWeight: FontWeight.w500,
+                  ),
                   decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primary40, width: 2)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.primary40,
+                        width: 1,
+                      ),
+                    ),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4)),
+                      borderRadius: BorderRadius.circular(8.px),
+                      borderSide: const BorderSide(
+                        color: AppColors.secondary80,
+                      ),
+                    ),
                   ),
                   hint: const Text('Bấm để chọn Phường / Xã'),
                   isExpanded: true,
@@ -179,10 +201,7 @@ class _LocationPageState extends State<LocationPage> {
                       .fieldValidator(value == null ? '' : value.name),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-
+              SizedBox(height: 16.px),
               //---------------------Street-------------------------
               const Text(
                 'TÊN ĐƯỜNG',
@@ -191,24 +210,33 @@ class _LocationPageState extends State<LocationPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(height: 10.px),
+              // TextFormField(
+              //   validator: (value) => controller.fieldValidator(value!),
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   controller: controller.streetTextController,
+              //   decoration: const InputDecoration(
+              //     border: OutlineInputBorder(),
+              //     hintText: 'Ví dụ: Huỳnh Văn Bánh',
+              //     focusedBorder: OutlineInputBorder(
+              //         borderSide:
+              //             BorderSide(color: AppColors.primary40, width: 2)),
+              //   ),
+              // ),
+              OutlineTextFiledWidget(
+                textEditingController: controller.streetTextController,
+                textInputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
+                hintText: 'Ví dụ: Huỳnh Văn Bánh',
+                onValidate: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Vui lòng nhập số tên đường';
+                  }
+
+                  return null;
+                },
               ),
-              TextFormField(
-                validator: (value) => controller.fieldValidator(value!),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller.streetTextController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Ví dụ: Huỳnh Văn Bánh',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primary40, width: 2)),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
+              SizedBox(height: 16.px),
 
               //---------------------Address-------------------------
               const Text(
@@ -218,25 +246,34 @@ class _LocationPageState extends State<LocationPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(height: 10.px),
+              // TextFormField(
+              //   validator: (value) => controller.fieldValidator(value!),
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   controller: controller.addressTextController,
+              //   decoration: const InputDecoration(
+              //     border: OutlineInputBorder(),
+              //     hintText: 'Ví dụ: 41/1A',
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide:
+              //           BorderSide(color: AppColors.primary40, width: 2),
+              //     ),
+              //   ),
+              // ),
+              OutlineTextFiledWidget(
+                textEditingController: controller.addressTextController,
+                textInputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
+                hintText: 'Ví dụ: 41/1A',
+                onValidate: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Vui lòng nhập số tên đường';
+                  }
+
+                  return null;
+                },
               ),
-              TextFormField(
-                validator: (value) => controller.fieldValidator(value!),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller.addressTextController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Ví dụ: 41/1A',
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primary40, width: 2),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
+              SizedBox(height: 16.px),
             ],
           ),
         ),

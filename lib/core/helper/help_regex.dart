@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class HelpRegex {
   static bool isEmail(String email) {
     return RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
@@ -27,5 +30,23 @@ class HelpRegex {
   // Kiểm tra tiếng Việt không dấu
   static bool isVietnameseNoDiacritics(String text) {
     return RegExp(r"^[a-zA-Z0-9 ]+$").hasMatch(text);
+  }
+
+  static formatCurrency(TextEditingController textEditingController) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+
+    if (textEditingController.text.isNotEmpty) {
+      final doubleAmount = double.tryParse(
+        textEditingController.text.replaceAll(RegExp(r'[^\d]'), ''),
+      );
+
+      if (doubleAmount != null) {
+        final formattedValue = formatter.format(doubleAmount);
+        textEditingController.value = TextEditingValue(
+          text: formattedValue,
+          selection: TextSelection.collapsed(offset: formattedValue.length - 1),
+        );
+      }
+    }
   }
 }

@@ -181,25 +181,25 @@ class LandlordContractCreateController extends GetxController
         break;
       case 2:
         // create contract
-        createContractModel.value = ContractCreateModel(
-          address: rentalRequest.room?.addresses,
-          partyA: rentalRequest.room?.owner,
-          partyB: rentalRequest.sender?.id,
-          requestId: rentalRequest.id,
-          roomId: rentalRequest.room?.id,
-          actualPrice: int.tryParse(retalPriceController.text),
-          paymentMethod: methodSelected.value,
-          electricityCost: int.tryParse(electricPriceController.text),
-          waterCost: int.tryParse(waterPriceController.text),
-          internetCost: int.tryParse(internetPriceController.text),
-          parkingFee: int.tryParse(parkingPriceController.text),
-          deposit: int.tryParse(depositPriceController.text),
-          beginDate: DatetimeExt.getParsedDate(formDateController.text),
-          endDate: DatetimeExt.getParsedDate(toDateController.text),
-          responsibilityA: responsiblePartyAController.text,
-          responsibilityB: responsiblePartyBController.text,
-          generalResponsibility: responsiblejointCommonController.text,
-        );
+        // createContractModel.value = ContractCreateModel(
+        //   address: rentalRequest.room?.addresses,
+        //   partyA: rentalRequest.room?.owner,
+        //   partyB: rentalRequest.sender?.id,
+        //   requestId: rentalRequest.id,
+        //   roomId: rentalRequest.room?.id,
+        //   actualPrice: int.tryParse(retalPriceController.text),
+        //   paymentMethod: methodSelected.value,
+        //   electricityCost: int.tryParse(electricPriceController.text),
+        //   waterCost: int.tryParse(waterPriceController.text),
+        //   internetCost: int.tryParse(internetPriceController.text),
+        //   parkingFee: int.tryParse(parkingPriceController.text),
+        //   deposit: int.tryParse(depositPriceController.text),
+        //   beginDate: DatetimeExt.getParsedDate(formDateController.text),
+        //   endDate: DatetimeExt.getParsedDate(toDateController.text),
+        //   responsibilityA: responsiblePartyAController.text,
+        //   responsibilityB: responsiblePartyBController.text,
+        //   generalResponsibility: responsiblejointCommonController.text,
+        // );
         Get.toNamed(
           AppRoutes.contractSign,
           arguments: createContractModel.value,

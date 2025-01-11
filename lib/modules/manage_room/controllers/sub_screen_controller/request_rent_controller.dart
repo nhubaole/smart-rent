@@ -36,9 +36,7 @@ class RequestRentController extends GetxController {
     }
   }
 
-  onDetailRequestRoomV2(RentalRequestAllModel rentalRequest) {
-    Get.toNamed(AppRoutes.detailRequestRoomV2, arguments: {
-      'rental_request': rentalRequest,
-    });
+  onDetailRequestRoomV2(RequestInfo requestInfo) {
+    Get.toNamed(AppRoutes.detailRequestRoomV2, arguments: requestInfo);
   }
 }

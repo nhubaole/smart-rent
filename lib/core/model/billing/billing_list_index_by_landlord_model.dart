@@ -14,26 +14,28 @@
 
 class BillingListIndexByLandlordModel {
   BillingListIndexByLandlordModel({
-    required this.address,
-    required this.indexInfo,
-    required this.roomId,
+    this.address,
+    this.indexInfo,
+    this.roomId,
   });
 
-  final String address;
-  final List<IndexInfo> indexInfo;
-  final int roomId;
+  final String? address;
+  final List<IndexInfo>? indexInfo;
+  final int? roomId;
 
   factory BillingListIndexByLandlordModel.fromMap(Map<String, dynamic> json) =>
       BillingListIndexByLandlordModel(
         address: json['address'],
-        indexInfo: List<IndexInfo>.from(
-            json['index_info'].map((x) => IndexInfo.fromMap(x))),
+        indexInfo: json['index_info'] != null
+            ? List<IndexInfo>.from(
+                json['index_info'].map((x) => IndexInfo.fromMap(x)))
+            : null,
         roomId: json['room_id'],
       );
 
   Map<String, dynamic> toMap() => {
         'address': address,
-        'index_info': List<dynamic>.from(indexInfo.map((x) => x.toMap())),
+        'index_info': List<dynamic>.from(indexInfo!.map((x) => x.toMap())),
         'room_id': roomId,
       };
 }
@@ -43,12 +45,15 @@ class IndexInfo {
   int? oldIndex;
   int? roomNumber;
   int? used;
+  int? roomId;
+
 
   IndexInfo({
     this.newIndex,
     this.oldIndex,
     this.roomNumber,
     this.used,
+    this.roomId,
   });
 
   factory IndexInfo.fromMap(Map<String, dynamic> json) => IndexInfo(
@@ -56,6 +61,7 @@ class IndexInfo {
         oldIndex: json['old_index'],
         roomNumber: json['room_number'],
         used: json['used'],
+        roomId: json['room_id'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -63,5 +69,6 @@ class IndexInfo {
         'old_index': oldIndex,
         'room_number': roomNumber,
         'used': used,
+        'room_id': roomId,
       };
 }

@@ -33,6 +33,8 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final TextInputAction? textInputAction;
   final AutovalidateMode autovalidateMode;
   final TextAlign textAlign;
+  final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -64,6 +66,8 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.textInputAction,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.textAlign = TextAlign.start,
+    this.maxLength,
+    this.maxLengthEnforcement,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -133,6 +137,8 @@ class OutlineTextFiledWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
         );
     return TextFormField(
+      maxLengthEnforcement: maxLengthEnforcement,
+      maxLength: maxLength,
       focusNode: focusNode,
       onFieldSubmitted: onSubmit,
       enabled: !readOnly!,

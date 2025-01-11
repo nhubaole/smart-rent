@@ -86,7 +86,7 @@ class ContractController extends GetxController
   Future<void> fetchExpiredContracts() async {
     loadingExpiredContracts.value = LoadingType.LOADING;
     try {
-      final rq = await ContractRepoImpl().getContractByStatus(1);
+      final rq = await ContractRepoImpl().getContractByStatus(2);
       if (rq.isSuccess()) {
         expiredContracts.value = rq.data!;
         loadingExpiredContracts.value = LoadingType.LOADED;

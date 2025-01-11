@@ -80,44 +80,70 @@ class ManageElectricityWaterIndexController extends GetxController
     return periods;
   }
 
-  onCreteNewIndex(int indexInBilling) {
+  onCreateNewIndex(int indexInBilling, int indexInfoPosition) async {
     Get.bottomSheet(
       isScrollControlled: true,
       isDismissible: true,
       WriteElectricityIndexSheet(
-        billingIndexs: billingIndexs[indexInBilling],
+        billingIndexs: billingIndexs[indexInfoPosition],
         indexInBill: indexInBilling,
         isWater: isWater,
-        onSubmit: onSubmitNewIndex,
+        onSubmit: ({
+          required bill,
+          required image,
+          required index,
+          required indexInfoPosition,
+        }) =>
+            onSubmitNewIndex(
+          bill: bill,
+          indexInfoPosition: indexInfoPosition,
+          indexInBill: indexInBilling,
+          value: index,
+          image: image,
+        ),
+        indexInfoPosition: indexInfoPosition,
       ),
     );
   }
 
   onSubmitNewIndex({
     required BillingListIndexByLandlordModel bill,
-    required int index,
+    required int indexInfoPosition,
+    required int value,
     required String image,
+    required int indexInBill,
   }) async {
     FocusManager.instance.primaryFocus?.unfocus();
     Get.back();
-    OverlayLoading.show();
+    // OverlayLoading.show();
     final indexValue = isWater
         ? BillingCreateIndexRequestModel(
-            waterIndex: index,
-            roomId: bill.roomId,
+            waterIndex: value,
+            roomId: bill.indexInfo![indexInBill].roomId,
             month: periodSelected.value.month,
             year: periodSelected.value.year,
           )
         : BillingCreateIndexRequestModel(
-            electricityIndex: index,
-            roomId: bill.roomId,
+            electricityIndex: value,
+            roomId: bill.indexInfo![indexInBill].roomId,
             month: periodSelected.value.month,
             year: periodSelected.value.year,
           );
     final rq = await BillingRepoImpl().createIndex(request: indexValue);
     OverlayLoading.hide();
     if (rq.isSuccess()) {
-      await fetchData();
+      // await fetchData();
+      final response = rq.data!;
+      // billingIndexs.value = billingIndexs.map((e) {
+      //   if (e.roomId == response.roomId) {
+      //     e.indexInfo![indexInfoPosition].newIndex = index;
+      //   }
+      //   return e;
+      // }).toList();
+      billingIndexs[indexInfoPosition].indexInfo![indexInBill].newIndex =
+          response.electricityIndex ?? response.waterIndex;
+      billingIndexs.refresh();
+
     } else {
       int index =
           billingIndexs.indexWhere((element) => element.roomId == bill.roomId);
@@ -126,7 +152,7 @@ class ManageElectricityWaterIndexController extends GetxController
         message: 'sent_request_failed'.tr,
         isError: true,
       );
-      onCreteNewIndex(index);
+      onCreateNewIndex(index, indexInfoPosition);
     }
 
   }

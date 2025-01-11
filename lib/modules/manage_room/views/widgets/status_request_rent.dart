@@ -9,15 +9,17 @@ import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
 
 class StatusRequestRent extends StatelessWidget {
-  final RentalRequestAllModel rentalRequest;
+  final RequestInfo requestInfo;
   final bool isLandlord;
   final Function() onTap;
+  final bool isLast;
 
   const StatusRequestRent({
     super.key,
     required this.onTap,
     required this.isLandlord,
-    required this.rentalRequest,
+    required this.requestInfo,
+    this.isLast = false,
   });
 
 
@@ -27,10 +29,12 @@ class StatusRequestRent extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         splashColor: Colors.grey.withOpacity(0.5),
-        borderRadius: BorderRadius.only(
+        borderRadius: isLast
+            ? BorderRadius.only(
           bottomLeft: Radius.circular(16.px),
           bottomRight: Radius.circular(16.px),
-        ),
+              )
+            : null,
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.only(
@@ -56,7 +60,7 @@ class StatusRequestRent extends StatelessWidget {
                     ClipOval(
                       child: CacheImageWidget(
                         imageUrl:
-                            rentalRequest.sender!.avatarUrl ?? ImageAssets.demo,
+                            requestInfo.avatar ?? ImageAssets.demo,
                         width: 6.h,
                         height: 6.h,
                       ),
@@ -75,10 +79,10 @@ class StatusRequestRent extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          Helper.getRequestRentStatus(rentalRequest.status!),
+                          Helper.getRequestRentStatus(requestInfo.status!),
                           style: TextStyle(
                             color: Helper.getRequestRentColor(
-                              rentalRequest.status!,
+                              requestInfo.status!,
                             ),
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
@@ -89,7 +93,7 @@ class StatusRequestRent extends StatelessWidget {
                     ),
                     if (isLandlord)
                       Text(
-                        rentalRequest.sender!.fullName ?? '',
+                        requestInfo.name ?? '',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
@@ -108,7 +112,7 @@ class StatusRequestRent extends StatelessWidget {
                           ),
                           const TextSpan(text: ' '),
                           TextSpan(
-                            text: rentalRequest.createdAt?.ddMMyyyyHHmm,
+                            text: requestInfo.createdAt?.ddMMyyyyHHmm ?? '',
                           ),
                         ],
                       ),

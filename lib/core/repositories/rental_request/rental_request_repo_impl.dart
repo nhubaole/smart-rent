@@ -1,6 +1,7 @@
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
+import 'package:smart_rent/core/model/rental_request/rental_request_by_id_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_create_model.dart';
 import 'package:smart_rent/core/model/response/request_model.dart';
 import 'package:smart_rent/core/repositories/dio/dio_provider.dart';
@@ -30,7 +31,7 @@ class RentalRequestRepoImpl extends RentalRequestRepo {
         errCode: response.data['errCode'],
         message: response.data['message'],
         data: List<RentalRequestAllModel>.from(
-          (response.data['data']['requests'] as List)
+          (response.data['data'] as List)
               .map((e) => RentalRequestAllModel.fromMap(e))
               .toList(),
         ),
@@ -108,6 +109,30 @@ class RentalRequestRepoImpl extends RentalRequestRepo {
       );
     } catch (e) {
       log.e('createRentalRequest', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
+
+  @override
+  Future<ResponseModel<RentalRequestByIdModel>> getRentalRequestById(
+      int id) async {
+    final String url = '/requests/$id';
+    try {
+      final response = await dio.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+      );
+
+      return ResponseModel<RentalRequestByIdModel>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: RentalRequestByIdModel.fromMap(response.data['data']),
+      );
+    } catch (e) {
+      log.e('getRentalRequestById', e.toString());
       return ResponseModel.failed(e);
     }
   }

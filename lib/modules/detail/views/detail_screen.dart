@@ -110,7 +110,9 @@ class DetailPage extends GetView<DetailController> {
           Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: controller.canRent
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
               children: [
                 Text(
                   controller.priceFormatterFull(),
@@ -161,12 +163,14 @@ class DetailPage extends GetView<DetailController> {
                     ),
                   ],
                 )
-              : ButtonActionNavbar(
+              : controller.canRent
+                  ? ButtonActionNavbar(
                   title: 'Thuê phòng trọ ngay',
                   onTap: controller.onRentNow,
                   backgroundColor: AppColors.primary98,
                   textColor: AppColors.primary40,
-                )
+                    )
+                  : SizedBox()
           // ElevatedButton(
           //   style: ButtonStyle(
           //     backgroundColor: WidgetStateProperty.all(AppColors.primary98),
@@ -313,7 +317,8 @@ class DetailPage extends GetView<DetailController> {
     );
   }
 
-  Column _buildSuggestRoom() {
+  Widget _buildSuggestRoom() {
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -338,6 +343,10 @@ class DetailPage extends GetView<DetailController> {
       case LoadingType.LOADING:
         return const LoadingWidget();
       case LoadingType.LOADED:
+        if (controller.suggestRooms == null ||
+            controller.suggestRooms!.isEmpty) {
+          return const SizedBox();
+        }
         return Align(
           alignment: Alignment.centerLeft,
           child: Wrap(
@@ -352,6 +361,9 @@ class DetailPage extends GetView<DetailController> {
                   minHeight: 20.h,
                   width: double.infinity,
                   room: room,
+                  onTap: () async {
+                    await controller.reselectRoom(room.id);
+                  },
                 );
               },
             ).toList(),

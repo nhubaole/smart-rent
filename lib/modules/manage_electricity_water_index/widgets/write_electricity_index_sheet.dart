@@ -11,11 +11,14 @@ import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 
 class WriteElectricityIndexSheet extends StatefulWidget {
   final BillingListIndexByLandlordModel billingIndexs;
+  final int indexInfoPosition;
   final int indexInBill;
+
   final Function({
     required BillingListIndexByLandlordModel bill,
     required int index,
     required String image,
+    required int indexInfoPosition,
   }) onSubmit;
   final bool isWater;
   const WriteElectricityIndexSheet({
@@ -24,6 +27,7 @@ class WriteElectricityIndexSheet extends StatefulWidget {
     required this.indexInBill,
     required this.onSubmit,
     required this.isWater,
+    required this.indexInfoPosition,
   });
 
   @override
@@ -76,7 +80,7 @@ class _WriteElectricityIndexSheetState
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Phòng số ${widget.billingIndexs.indexInfo[widget.indexInBill].roomNumber}',
+                'Phòng số ${widget.billingIndexs.indexInfo?[widget.indexInBill].roomNumber}',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16.sp,
@@ -123,6 +127,7 @@ class _WriteElectricityIndexSheetState
                         bill: widget.billingIndexs,
                         index: int.tryParse(numberController.text) ?? 0,
                         image: imagePath,
+                        indexInfoPosition: widget.indexInfoPosition,
                       );
                     },
                   ),

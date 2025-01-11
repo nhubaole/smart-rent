@@ -45,21 +45,11 @@ class TenantSentRentRequestController extends GetxController {
   }
 
   _initController() {
-    suggestPriceController = TextEditingController(
-      text: '500000',
-    );
-    peopleWillJoinController = TextEditingController(
-      text: '...',
-    );
-    specialSuggestController = TextEditingController(
-      text: '...',
-    );
-    dateStartJoinController = TextEditingController(
-      text: '...',
-    );
-    dateLeaveController = TextEditingController(
-      text: '...',
-    );
+    suggestPriceController = TextEditingController();
+    peopleWillJoinController = TextEditingController();
+    specialSuggestController = TextEditingController();
+    dateStartJoinController = TextEditingController();
+    dateLeaveController = TextEditingController();
   }
 
   onChangeJoinNow(bool value) {

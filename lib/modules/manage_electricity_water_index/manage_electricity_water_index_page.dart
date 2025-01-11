@@ -113,8 +113,9 @@ class ManageElectricityWaterIndexPage
             itemBuilder: (context, index) {
               final item = controller.billingIndexs[index];
               return ElectricWaterIndexWidget(
+                indexInfoPosition: index,
                 billingIndexs: item,
-                onWriteIndex: controller.onCreteNewIndex,
+                onWriteIndex: controller.onCreateNewIndex,
               );
             },
           ),

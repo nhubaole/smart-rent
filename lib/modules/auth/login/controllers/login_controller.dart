@@ -47,6 +47,10 @@ class LoginController extends GetxController {
         phoneNumber: phoneNo.text.trim(),
         password: password.text.trim(),
       );
+      // final result = await AuthRepoImpl().login(
+      //   phoneNumber: '0916290520',
+      //   password: 'Test1234',
+      // );
       if (!result.isSuccess()) {
         OverlayLoading.hide();
         AlertSnackbar.show(
@@ -64,6 +68,12 @@ class LoginController extends GetxController {
           newAccessToken: result.data['accessToken'],
           refreshToken: result.data['refreshToken'],
         );
+        // appManager.setSession(
+        //   phoneNumber: '0916290520',
+        //   password: 'Test1234',
+        //   newAccessToken: result.data['accessToken'],
+        //   refreshToken: result.data['refreshToken'],
+        // );
         final userModel = await UserRepoIml().getCurrentUser(
           accessToken: result.data['accessToken'],
         );

@@ -76,17 +76,17 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
               ),
             ),
             SizedBox(height: 8.px),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '** Giá yêu cầu: ${controller.rentalRequest.suggestedPrice?.toFormatCurrency} đ/tháng',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  color: AppColors.secondary40,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.centerLeft,
+            //   child: Text(
+            //     '** Giá yêu cầu: ${controller.rentalRequest.suggestedPrice?.toFormatCurrency} đ/tháng',
+            //     style: TextStyle(
+            //       fontSize: 15.sp,
+            //       color: AppColors.secondary40,
+            //       fontWeight: FontWeight.w400,
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
               textEditingController: controller.retalPriceController,

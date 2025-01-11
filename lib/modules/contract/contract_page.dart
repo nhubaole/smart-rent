@@ -192,7 +192,7 @@ class ContractPage extends GetView<ContractController> {
     );
   }
 
-  RefreshIndicator _buildRefreshIndicator({
+  Widget _buildRefreshIndicator({
     required Function() onRefresh,
     required List<ContractByStatusModel> contracts,
     required LoadingType loadingType,
@@ -226,7 +226,9 @@ class ContractPage extends GetView<ContractController> {
           contractType: contractType,
         );
       case LoadingType.ERROR:
-        return const ErrorCustomWidget();
+        return const ErrorCustomWidget(
+          expandToCanPullToRefresh: true,
+        );
     }
   }
 
@@ -237,28 +239,33 @@ class ContractPage extends GetView<ContractController> {
     return KeepAliveWrapper(
       wantKeepAlive: true,
       child: SingleChildScrollView(
-        child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (context, index) => const Divider(
-            color: AppColors.secondary80,
-            thickness: 0.5,
-            height: 0,
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: Container(
+          constraints: BoxConstraints(minHeight: Get.height),
+          child: ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const Divider(
+              color: AppColors.secondary80,
+              thickness: 0.5,
+              height: 0,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: contracts.length,
+            itemBuilder: (context, index) {
+              final contract = contracts[index];
+              return ContractItem(
+                contract: contract,
+                onTap: () => Get.toNamed(
+                  AppRoutes.contractInfo,
+                  arguments: {
+                    'contract': contract,
+                    'contract_type': contractType,
+                  },
+                ),
+              );
+            },
           ),
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: contracts.length,
-          itemBuilder: (context, index) {
-            final contract = contracts[index];
-            return ContractItem(
-              contract: contract,
-              onTap: () => Get.toNamed(
-                AppRoutes.contractInfo,
-                arguments: {
-                  'contract': contract,
-                  'contract_type': contractType,
-                },
-              ),
-            );
-          },
         ),
       ),
     );

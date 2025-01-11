@@ -5,7 +5,6 @@ import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/model/billing/bill_by_status_model.dart';
-import 'package:smart_rent/modules/landlord_bill_collection/landlord_bill_collection_controller.dart';
 
 class BillCollectionItem extends StatelessWidget {
   final Function() onTap;
@@ -86,7 +85,7 @@ class BillCollectionItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               color: AppColors.secondary20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
             TextSpan(text: title),
           ),
@@ -100,86 +99,88 @@ class BillCollectionItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text.rich(
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              TextSpan(
-                style: TextStyle(
-                  color: AppColors.primary40,
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                children: [
-                  TextSpan(text: 'bill_collection_for_month'.tr),
-                  const TextSpan(text: ' '),
-                  TextSpan(
-                      text:
-                          '${billByStatusModel.month}/${billByStatusModel.year}')
-                ],
-              ),
-            ),
-            Text.rich(
-              textAlign: TextAlign.start,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              TextSpan(
-                style: TextStyle(
-                  color: AppColors.secondary40,
-                  fontSize: 15.sp,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'creation_time'.tr,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                TextSpan(
+                  style: TextStyle(
+                    color: AppColors.primary40,
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const TextSpan(text: ' '),
-                  TextSpan(
-                    text: billByStatusModel.createdAt?.hhmmDDMMyyyy ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Text.rich(
-              textAlign: TextAlign.start,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              TextSpan(
-                style: TextStyle(
-                  color: AppColors.red,
-                  fontSize: 15.sp,
+                  children: [
+                    TextSpan(text: 'bill_collection_for_month'.tr),
+                    const TextSpan(text: ' '),
+                    TextSpan(
+                        text:
+                            '${billByStatusModel.month}/${billByStatusModel.year}')
+                  ],
                 ),
-                children: [
-                  TextSpan(
-                    text: 'payment_deadline'.tr,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  const TextSpan(text: ' '),
-                  TextSpan(
-                    text: billByStatusModel.deadline?.hhmmDDMMyyyy ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
               ),
-            ),
-          ],
-        ),
-        const Expanded(
-          child: Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: Color(0xff1E2731),
+              SizedBox(height: 2.px),
+              Text.rich(
+                textAlign: TextAlign.start,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                TextSpan(
+                  style: TextStyle(
+                    color: AppColors.secondary40,
+                    fontSize: 15.sp,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'creation_time'.tr,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const TextSpan(text: ' '),
+                    TextSpan(
+                      text: billByStatusModel.createdAt?.hhmmDDMMyyyy ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 2.px),
+              Text.rich(
+                textAlign: TextAlign.start,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                TextSpan(
+                  style: TextStyle(
+                    color: AppColors.red,
+                    fontSize: 15.sp,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'payment_deadline'.tr,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const TextSpan(text: ' '),
+                    TextSpan(
+                      text: billByStatusModel.deadline?.hhmmDDMMyyyy ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
+        ),
+        Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: Color(0xff1E2731),
         ),
       ],
     );

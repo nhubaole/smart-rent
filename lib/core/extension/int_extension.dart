@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 
-final moneyVNFormat = NumberFormat.currency(locale: "vi_VN", symbol: "");
+final moneyVNFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
 extension IntExt on int {
   getNameGender() {
@@ -33,13 +33,13 @@ extension IntExt on int {
 
   String get toFormattedPrice {
     if (this <= 0) {
-      return "Miễn phí";
+      return 'Miễn phí';
     } else if (this < 1000) {
-      return "$this ₫";
+      return '$this ₫';
     } else if (this >= 1000 && this < 1000000) {
-      return "${this / 1000} k";
+      return '${this / 1000} k';
     } else {
-      return "${this / 1000000} tr";
+      return '${this / 1000000} tr';
     }
   }
 

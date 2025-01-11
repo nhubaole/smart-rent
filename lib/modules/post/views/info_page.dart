@@ -4,8 +4,8 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/post/post_controller.dart';
-
 
 class InfoPage extends GetView<PostRoomController> {
   const InfoPage({super.key});
@@ -29,20 +29,15 @@ class InfoPage extends GetView<PostRoomController> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               ),
-              SizedBox(
-                height: 4.h),
+              SizedBox(height: 4.h),
               _buildTypeRoom(),
-              SizedBox(
-                height: 3.h),
+              SizedBox(height: 3.h),
               _buildCapacity(),
-              SizedBox(
-                height: 4.h),
+              SizedBox(height: 4.h),
               _buildGender(),
-              SizedBox(
-                height: 3.h),
+              SizedBox(height: 3.h),
               _buildArea(),
-              SizedBox(
-                height: 4.h),
+              SizedBox(height: 4.h),
               const Text(
                 'Chi phí',
                 style: TextStyle(
@@ -159,21 +154,41 @@ class InfoPage extends GetView<PostRoomController> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Obx(() => TextFormField(
-                        enabled: !controller.isParkingFree.value,
-                        validator: (value) => controller.fieldValidator(value!),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: controller.parkingFeeTextController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Nhập số tiền',
-                          suffixText: '₫',
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: AppColors.primary40, width: 2)),
-                        ),
-                      )),
+                  // Obx(() => TextFormField(
+                  //       enabled: !controller.isParkingFree.value,
+                  //       validator: (value) => controller.fieldValidator(value!),
+                  //       autovalidateMode: AutovalidateMode.onUserInteraction,
+                  //       controller: controller.parkingFeeTextController,
+                  //       keyboardType: TextInputType.number,
+                  //       decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         hintText: 'Nhập số tiền',
+                  //         suffixText: '₫',
+                  //         focusedBorder: OutlineInputBorder(
+                  //             borderSide: BorderSide(
+                  //                 color: AppColors.primary40, width: 2)),
+                  //       ),
+                  //     )),
+                  Obx(
+                    () => OutlineTextFiledWidget(
+                      readOnly: controller.isParkingFree.value,
+                      textInputType: TextInputType.numberWithOptions(
+                          decimal: true, signed: true),
+                      onTap: controller.isParkingFree.value ? () {} : null,
+                      textEditingController: controller.capacityTextController,
+                      hintText: 'Nhập số tiền',
+                      suffixUnit: ' | người/phòng',
+                      onValidate: (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Vui lòng nhập số người/phòng';
+                        }
+                        // if (HelpRegex.isNumber(p0) == false) {
+                        //   return 'Vui lòng nhập số';
+                        // }
+                        return null;
+                      },
+                    ),
+                  ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -233,8 +248,7 @@ class InfoPage extends GetView<PostRoomController> {
                     },
                   ));
             }),
-            const SizedBox(
-              width: 10,
+            SizedBox(width: 10.px
             ),
             Obx(
               () => Text(
@@ -249,26 +263,44 @@ class InfoPage extends GetView<PostRoomController> {
             )
           ],
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(height: 10.px
         ),
-        Obx(() => TextFormField(
-              enabled: !controller.isInternetFree.value,
-              validator: (value) => controller.fieldValidator(value!),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: controller.internetCostTextController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Nhập số tiền',
-                suffixText: '₫',
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primary40, width: 2)),
-              ),
-            )),
-        const SizedBox(
-          height: 16,
+        // Obx(() => TextFormField(
+        //       enabled: !controller.isInternetFree.value,
+        //       validator: (value) => controller.fieldValidator(value!),
+        //       autovalidateMode: AutovalidateMode.onUserInteraction,
+        //       controller: controller.internetCostTextController,
+        //       keyboardType: TextInputType.number,
+        //       decoration: const InputDecoration(
+        //         border: OutlineInputBorder(),
+        //         hintText: 'Nhập số tiền',
+        //         suffixText: '₫',
+        //         focusedBorder: OutlineInputBorder(
+        //             borderSide:
+        //                 BorderSide(color: AppColors.primary40, width: 2)),
+        //       ),
+        //     )),
+        Obx(
+          () => OutlineTextFiledWidget(
+            readOnly: controller.isInternetFree.value,
+            onTap: controller.isInternetFree.value ? () {} : null,
+            textEditingController: controller.internetCostTextController,
+            textInputType:
+                TextInputType.numberWithOptions(decimal: true, signed: true),
+            hintText: 'Nhập số tiền',
+            suffixUnit: '₫',
+            onValidate: (p0) {
+              if (p0 == null || p0.isEmpty) {
+                return 'Vui lòng số tiền';
+              }
+              // if (HelpRegex.isNumber(p0) == false) {
+              //   return 'Vui lòng nhập số';
+              // }
+              return null;
+            },
+          ),
+        ),
+        SizedBox(height: 16.px
         ),
       ],
     );
@@ -341,21 +373,41 @@ class InfoPage extends GetView<PostRoomController> {
         const SizedBox(
           height: 10,
         ),
-        Obx(() => TextFormField(
-              enabled: !controller.isWaterFree.value,
-              validator: (value) => controller.fieldValidator(value!),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: controller.waterCostTextController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Nhập số tiền',
-                suffixText: '₫',
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primary40, width: 2)),
-              ),
-            )),
+        // Obx(() => TextFormField(
+        //       enabled: !controller.isWaterFree.value,
+        //       validator: (value) => controller.fieldValidator(value!),
+        //       autovalidateMode: AutovalidateMode.onUserInteraction,
+        //       controller: controller.waterCostTextController,
+        //       keyboardType: TextInputType.number,
+        //       decoration: const InputDecoration(
+        //         border: OutlineInputBorder(),
+        //         hintText: 'Nhập số tiền',
+        //         suffixText: '₫',
+        //         focusedBorder: OutlineInputBorder(
+        //             borderSide:
+        //                 BorderSide(color: AppColors.primary40, width: 2)),
+        //       ),
+        //     )),
+        Obx(
+          () => OutlineTextFiledWidget(
+            readOnly: controller.isWaterFree.value,
+            onTap: controller.isWaterFree.value ? () {} : null,
+            textEditingController: controller.waterCostTextController,
+            textInputType:
+                TextInputType.numberWithOptions(decimal: true, signed: true),
+            hintText: 'Nhập số tiền',
+            suffixUnit: '₫',
+            onValidate: (p0) {
+              if (p0 == null || p0.isEmpty) {
+                return 'Vui lòng số tiền';
+              }
+              // if (HelpRegex.isNumber(p0) == false) {
+              //   return 'Vui lòng nhập số';
+              // }
+              return null;
+            },
+          ),
+        ),
         const SizedBox(
           height: 16,
         ),
@@ -413,8 +465,7 @@ class InfoPage extends GetView<PostRoomController> {
                     },
                   ));
             }),
-            const SizedBox(
-              width: 10,
+            SizedBox(width: 10.px
             ),
             Obx(
               () => Text(
@@ -429,26 +480,44 @@ class InfoPage extends GetView<PostRoomController> {
             ),
           ],
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(height: 10.px
         ),
-        Obx(() => TextFormField(
-              enabled: !controller.isElectricityFree.value,
-              validator: (value) => controller.fieldValidator(value!),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: controller.electricityCostTextController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Nhập số tiền',
-                suffixText: '₫',
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primary40, width: 2)),
-              ),
-            )),
-        const SizedBox(
-          height: 16,
+        // Obx(() => TextFormField(
+        //       enabled: !controller.isElectricityFree.value,
+        //       validator: (value) => controller.fieldValidator(value!),
+        //       autovalidateMode: AutovalidateMode.onUserInteraction,
+        //       controller: controller.electricityCostTextController,
+        //       keyboardType: TextInputType.number,
+        //       decoration: const InputDecoration(
+        //         border: OutlineInputBorder(),
+        //         hintText: 'Nhập số tiền',
+        //         suffixText: '₫',
+        //         focusedBorder: OutlineInputBorder(
+        //             borderSide:
+        //                 BorderSide(color: AppColors.primary40, width: 2)),
+        //       ),
+        //     )),
+        Obx(
+          () => OutlineTextFiledWidget(
+            readOnly: controller.isElectricityFree.value,
+            onTap: controller.isElectricityFree.value ? () {} : null,
+            textEditingController: controller.electricityCostTextController,
+            textInputType:
+                TextInputType.numberWithOptions(decimal: true, signed: true),
+            hintText: 'Nhập số tiền',
+            suffixUnit: '₫',
+            onValidate: (p0) {
+              if (p0 == null || p0.isEmpty) {
+                return 'Vui lòng số tiền';
+              }
+              // if (HelpRegex.isNumberHelpRegex.isNumber(p0) == false) {
+              //   return 'Vui lòng nhập số';
+              // }
+              return null;
+            },
+          ),
+        ),
+        SizedBox(height: 16.px
         ),
       ],
     );
@@ -466,20 +535,37 @@ class InfoPage extends GetView<PostRoomController> {
               fontWeight: FontWeight.w500),
         ),
         SizedBox(
-          height: 2.h,
+          height: 16.px,
         ),
-        TextFormField(
-          validator: (value) => controller.fieldValidator(value!),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller.depositTextController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Nhập số tiền đặt cọc',
-            suffixText: '₫',
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary40, width: 2)),
-          ),
+        // TextFormField(
+        //   validator: (value) => controller.fieldValidator(value!),
+        //   autovalidateMode: AutovalidateMode.onUserInteraction,
+        //   controller: controller.depositTextController,
+        //   keyboardType: TextInputType.number,
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Nhập số tiền đặt cọc',
+        //     suffixText: '₫',
+        //     focusedBorder: OutlineInputBorder(
+        //         borderSide: BorderSide(color: AppColors.primary40, width: 2)),
+        //   ),
+        // ),
+
+        OutlineTextFiledWidget(
+          textEditingController: controller.depositTextController,
+          textInputType:
+              TextInputType.numberWithOptions(decimal: true, signed: true),
+          hintText: 'Nhập số tiền đặt cọc',
+          suffixUnit: '₫',
+          onValidate: (p0) {
+            if (p0 == null || p0.isEmpty) {
+              return 'Vui lòng số tiền đặt cọc';
+            }
+            // if (HelpRegex.isNumber(p0) == false) {
+            //   return 'Vui lòng nhập số';
+            // }
+            return null;
+          },
         ),
       ],
     );
@@ -499,18 +585,34 @@ class InfoPage extends GetView<PostRoomController> {
         SizedBox(
           height: 2.h,
         ),
-        TextFormField(
-          validator: (value) => controller.fieldValidator(value!),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller.priceTextController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Nhập giá cho thuê',
-            suffixText: '₫/phòng',
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary40, width: 2)),
-          ),
+        // TextFormField(
+        //   validator: (value) => controller.fieldValidator(value!),
+        //   autovalidateMode: AutovalidateMode.onUserInteraction,
+        //   controller: controller.priceTextController,
+        //   keyboardType: TextInputType.number,
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Nhập giá cho thuê',
+        //     suffixText: '₫/phòng',
+        //     focusedBorder: OutlineInputBorder(
+        //         borderSide: BorderSide(color: AppColors.primary40, width: 2)),
+        //   ),
+        // ),
+        OutlineTextFiledWidget(
+          textEditingController: controller.priceTextController,
+          textInputType:
+              TextInputType.numberWithOptions(decimal: true, signed: true),
+          hintText: 'Nhập giá cho thuê',
+          suffixUnit: '₫/phòng',
+          onValidate: (p0) {
+            if (p0 == null || p0.isEmpty) {
+              return 'Vui lòng giá cho thuê';
+            }
+            // if (HelpRegex.isNumber(p0) == false) {
+            //   return 'Vui lòng nhập số';
+            // }
+            return null;
+          },
         ),
       ],
     );
@@ -530,18 +632,34 @@ class InfoPage extends GetView<PostRoomController> {
         SizedBox(
           height: 2.w,
         ),
-        TextFormField(
-          validator: (value) => controller.fieldValidator(value!),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller.areaTextController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Nhập diện tích phòng',
-            suffixText: ' | m2',
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary40, width: 2)),
-          ),
+        // TextFormField(
+        //   validator: (value) => controller.fieldValidator(value!),
+        //   autovalidateMode: AutovalidateMode.onUserInteraction,
+        //   controller: controller.areaTextController,
+        //   keyboardType: TextInputType.number,
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Nhập diện tích phòng',
+        //     suffixText: ' | m2',
+        //     focusedBorder: OutlineInputBorder(
+        //         borderSide: BorderSide(color: AppColors.primary40, width: 2)),
+        //   ),
+        // ),
+        OutlineTextFiledWidget(
+          textEditingController: controller.areaTextController,
+          textInputType:
+              TextInputType.numberWithOptions(decimal: true, signed: true),
+          hintText: 'Nhập diện tích phòng',
+          suffixUnit: ' | m2',
+          onValidate: (p0) {
+            if (p0 == null || p0.isEmpty) {
+              return 'Vui lòng nhập diện tích phòng';
+            }
+            // if (HelpRegex.isNumber(p0) == false) {
+            //   return 'Vui lòng nhập số';
+            // }
+            return null;
+          },
         ),
       ],
     );
@@ -580,27 +698,43 @@ class InfoPage extends GetView<PostRoomController> {
         SizedBox(
           height: 2.w,
         ),
-        TextFormField(
-          validator: (value) => controller.fieldValidator(value!),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller.capacityTextController,
-          keyboardType: TextInputType.number,
-          maxLines: 1,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            suffixStyle: TextStyle(
-                color: AppColors.secondary20,
-                fontSize: 14,
-                fontWeight: FontWeight.w500),
-            hintStyle: TextStyle(
-                color: AppColors.secondary20,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
-            hintText: 'Nhập số người/phòng',
-            suffixText: ' | người/phòng',
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary40, width: 2)),
-          ),
+        // TextFormField(
+        //   validator: (value) => controller.fieldValidator(value!),
+        //   autovalidateMode: AutovalidateMode.onUserInteraction,
+        //   controller: controller.capacityTextController,
+        //   keyboardType: TextInputType.number,
+        //   maxLines: 1,
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     suffixStyle: TextStyle(
+        //         color: AppColors.secondary20,
+        //         fontSize: 14,
+        //         fontWeight: FontWeight.w500),
+        //     hintStyle: TextStyle(
+        //         color: AppColors.secondary20,
+        //         fontSize: 14,
+        //         fontWeight: FontWeight.w400),
+        //     hintText: 'Nhập số người/phòng',
+        //     suffixText: ' | người/phòng',
+        //     focusedBorder: OutlineInputBorder(
+        //         borderSide: BorderSide(color: AppColors.primary40, width: 2)),
+        //   ),
+        // ),
+        OutlineTextFiledWidget(
+          textEditingController: controller.capacityTextController,
+          textInputType:
+              TextInputType.numberWithOptions(decimal: true, signed: true),
+          hintText: 'Nhập số người/phòng',
+          suffixUnit: ' | người/phòng',
+          onValidate: (p0) {
+            if (p0 == null || p0.isEmpty) {
+              return 'Vui lòng nhập số người/phòng';
+            }
+            // if (HelpRegex.isNumber(p0) == false) {
+            //   return 'Vui lòng nhập số';
+            // }
+            return null;
+          },
         ),
       ],
     );

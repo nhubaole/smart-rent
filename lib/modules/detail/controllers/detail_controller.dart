@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/helper/helper.dart';
 import 'package:smart_rent/core/model/rating/rating_by_id_room_model.dart';
@@ -59,8 +62,15 @@ class DetailController extends GetxController {
 
 
   // TODO: ONLY TESTING
-  bool get isOwner => room!.owner!.id == 2;
+  bool get isOwner =>
+      (room!.owner! is UserModel
+          ? ((room!.owner! as UserModel).id!)
+          : (room!.owner! as int)) ==
+      AppManager().currentUser!.id!;
 
+  bool get canRent =>
+      !room!.isRent! && !isOwner && AppManager().currentUser!.role == 0;
+  
   @override
   void onInit() async {
     initData(null);
@@ -79,10 +89,18 @@ class DetailController extends GetxController {
         // rating = await fetchRatingByIdRoom(48);
         onLikeAction();
         isLoadingData.value = LoadingType.LOADED;
-        room!.roomNumbers?.forEach((key, value) async {
-          final roomSuggest = await getRoomSuggest(value as int);
-          if (roomSuggest != null) {
-            suggestRooms!.add(roomSuggest);
+        // room!.roomNumbers?.forEach((key, value) async {
+        //   final roomSuggest = await getRoomSuggest(value as int);
+        //   if (roomSuggest != null) {
+        //     suggestRooms!.add(roomSuggest);
+        //   }
+        // });
+        await Future.forEach(room!.roomNumbers!.values, (element) async {
+          if (element != room!.id) {
+            final roomSuggest = await getRoomSuggest(element as int);
+            if (roomSuggest != null) {
+              suggestRooms!.add(roomSuggest);
+            }
           }
         });
         isLoadingSuggestRoom.value = LoadingType.LOADED;

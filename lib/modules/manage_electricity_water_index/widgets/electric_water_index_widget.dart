@@ -7,11 +7,13 @@ import 'package:smart_rent/core/model/billing/billing_list_index_by_landlord_mod
 
 class ElectricWaterIndexWidget extends StatelessWidget {
   final BillingListIndexByLandlordModel billingIndexs;
-  final Function(int) onWriteIndex;
+  final Function(int, int) onWriteIndex;
+  final int indexInfoPosition;
   const ElectricWaterIndexWidget({
     super.key,
     required this.billingIndexs,
     required this.onWriteIndex,
+    required this.indexInfoPosition,
   });
 
   @override
@@ -42,16 +44,18 @@ class ElectricWaterIndexWidget extends StatelessWidget {
               color: AppColors.secondary40,
             ),
           ),
+          if (billingIndexs.indexInfo != null)
           Column(
-            children: billingIndexs.indexInfo
+              children: billingIndexs.indexInfo!
                 .mapIndexed(
                   (index, item) => _buildRowData(
                     context,
                     value: [
                       item.roomNumber,
                       item.oldIndex,
-                      () => onWriteIndex(index),
-                      item.used == null ? '--' : item.used.toString(),
+                        item.newIndex ??
+                            () => onWriteIndex(index, indexInfoPosition),
+                        item.used == null ? '--' : '${item.used}*',
                     ],
                     textStyle: TextStyle(
                       fontSize: 16.sp,
@@ -97,11 +101,11 @@ class ElectricWaterIndexWidget extends StatelessWidget {
     required TextStyle textStyle,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.px),
+      padding: EdgeInsets.only(left: 8.px, right: 8.px, top: 4.px),
       child: Row(
         children: value.mapIndexed((index, e) {
           if (e is String) {
-            String t = e.toString().trim();
+            String t = e.toString().trim().replaceAll('*', '');
             TextAlign? align;
             if (index == 0) align = TextAlign.start;
             if (index == value.length - 1) align = TextAlign.end;
@@ -109,7 +113,13 @@ class ElectricWaterIndexWidget extends StatelessWidget {
             return Expanded(
               child: Text(
                 t,
-                style: textStyle,
+                style: textStyle.copyWith(
+                  color: int.tryParse(t) != null
+                      ? int.parse(t) > 0
+                          ? AppColors.green20
+                          : AppColors.error
+                      : null,
+                ),
                 textAlign: align,
               ),
             );
@@ -130,6 +140,13 @@ class ElectricWaterIndexWidget extends StatelessWidget {
                     style: textStyle.copyWith(color: AppColors.primary40),
                   ),
                 ),
+              ),
+            );
+          } else if (e == null) {
+            return Expanded(
+              child: Text(
+                '--',
+                style: textStyle,
               ),
             );
           } else {

@@ -126,9 +126,11 @@ class ContractRepoImpl extends ContractRepo {
       return ResponseModel<List<ContractByStatusModel>>(
         errCode: response.data['errCode'],
         message: response.data['message'],
-        data: List<ContractByStatusModel>.from((response.data['data'] as List)
+        data: response.data['data'] != null
+            ? List<ContractByStatusModel>.from((response.data['data'] as List)
             .map((c) =>
-                ContractByStatusModel.fromMap(c as Map<String, dynamic>))),
+                    ContractByStatusModel.fromMap(c as Map<String, dynamic>)))
+            : [],
       );
     } catch (e) {
       log.e('getContractByStatus', e.toString());

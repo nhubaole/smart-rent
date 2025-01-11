@@ -185,6 +185,7 @@ class BillInfoPage extends GetView<BillInfoController> {
             values: [
               controller.billInfo.value!.info?.address ?? '',
             ],
+              maxLines: 5
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -341,6 +342,7 @@ class BillInfoPage extends GetView<BillInfoController> {
     required String title,
     String? note,
     required List<String> values,
+    int? maxLines = 3,
   }) {
     final TextStyle titleStyle = TextStyle(
       fontSize: 16.sp,
@@ -382,7 +384,7 @@ class BillInfoPage extends GetView<BillInfoController> {
                         color: AppColors.secondary20,
                         fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 3,
+                      maxLines: maxLines,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                     ),

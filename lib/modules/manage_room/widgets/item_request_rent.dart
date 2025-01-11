@@ -1,15 +1,16 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/extension/double_extension.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/cache_image_widget.dart';
 import 'package:smart_rent/modules/manage_room/views/widgets/status_request_rent.dart';
 
 class ItemRequestRent extends StatelessWidget {
-  final VoidCallback onNav;
+  final Function(RequestInfo) onNav;
   final RentalRequestAllModel rentalRequest;
   final bool isLandlord;
   const ItemRequestRent({
@@ -37,13 +38,13 @@ class ItemRequestRent extends StatelessWidget {
           SizedBox(height: 1.2.h),
           _buildDescription(),
           SizedBox(height: 1.2.h),
-          ...[
-            StatusRequestRent(
-              rentalRequest: rentalRequest,
-              onTap: onNav,
-              isLandlord: isLandlord,
-            ),
-          ],
+          ...rentalRequest.requestInfo!
+              .mapIndexed((index, requestInfo) => StatusRequestRent(
+                    requestInfo: requestInfo,
+                    onTap: () => onNav(requestInfo),
+                    isLandlord: isLandlord,
+                    isLast: index == rentalRequest.requestInfo!.length - 1,
+                  )),
         ],
       ),
     );
@@ -61,8 +62,7 @@ class ItemRequestRent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            
-            borderRadius: BorderRadius.circular(10.px),
+            borderRadius: BorderRadius.circular(6.px),
             child: Container(
               color: AppColors.white,
               child: CacheImageWidget(
@@ -73,9 +73,7 @@ class ItemRequestRent extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            width: 2.w,
-          ),
+          SizedBox(width: 2.w),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,12 +99,12 @@ class ItemRequestRent extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        rentalRequest.room!.totalPrice != null
-                            ? rentalRequest.room!.totalPrice!
+                        rentalRequest.room!.price != null
+                            ? (rentalRequest.room!.price! as int)
                                 .toStringTotalthis(symbol: 'VND/người')
                             : '--',
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary40,
                         ),
@@ -152,8 +150,8 @@ class ItemRequestRent extends StatelessWidget {
           TextSpan(
             text: 'you_have_sent'.tr,
           ),
-          const TextSpan(
-            text: ' 1 ',
+          TextSpan(
+            text: ' ${rentalRequest.requestCount} ',
             style: TextStyle(
               color: AppColors.primary40,
               fontWeight: FontWeight.bold,

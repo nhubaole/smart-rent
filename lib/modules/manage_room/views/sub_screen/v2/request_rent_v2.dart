@@ -63,7 +63,8 @@ class RequestRentV2Screen extends GetView<RequestRentController> {
             return ItemRequestRent(
             isLandlord: controller.isLandlord,
             rentalRequest: request,
-            onNav: () => controller.onDetailRequestRoomV2(request),
+            onNav: (requestInfo) =>
+                controller.onDetailRequestRoomV2(requestInfo),
           );
         },
       ),

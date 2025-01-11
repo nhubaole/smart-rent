@@ -77,7 +77,7 @@ class BillCollectionPage extends GetView<BillCollectionController> {
           physics: const BouncingScrollPhysics(),
           child: Container(
             alignment: Alignment.topCenter,
-            constraints: BoxConstraints(minHeight: Get.height + 100.px),
+            constraints: BoxConstraints(minHeight: Get.height * 1.1),
             child: ListView.separated(
               separatorBuilder: (context, index) => SizedBox(height: 16.px),
               itemCount: controller.billingPaided.length,

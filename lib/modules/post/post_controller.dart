@@ -12,6 +12,7 @@ import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
+import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/helper/helper.dart';
 import 'package:smart_rent/core/model/location/city.dart';
 import 'package:smart_rent/core/model/location/district.dart';
@@ -59,24 +60,24 @@ class PostRoomController extends GetxController
   final formKeyLocation = GlobalKey<FormState>();
   final formKeyConfirm = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final capacityTextController = TextEditingController(text: "5");
-  final areaTextController = TextEditingController(text: "5");
-  final priceTextController = TextEditingController(text: "5");
-  final depositTextController = TextEditingController(text: "5");
-  final electricityCostTextController = TextEditingController(text: "5");
-  final waterCostTextController = TextEditingController(text: "5");
-  final internetCostTextController = TextEditingController(text: "5");
-  final parkingFeeTextController = TextEditingController(text: "5");
+  final capacityTextController = TextEditingController();
+  final areaTextController = TextEditingController();
+  final priceTextController = TextEditingController();
+  final depositTextController = TextEditingController();
+  final electricityCostTextController = TextEditingController();
+  final waterCostTextController = TextEditingController();
+  final internetCostTextController = TextEditingController();
+  final parkingFeeTextController = TextEditingController();
   final streetTextController =
-      TextEditingController(text: 'Street ${DateTime.now()}');
+      TextEditingController();
   final addressTextController =
-      TextEditingController(text: 'Address ${DateTime.now()}');
+      TextEditingController();
   final titleTextController =
-      TextEditingController(text: 'Title ${DateTime.now()}');
+      TextEditingController();
   final descriptionTextController =
-      TextEditingController(text: 'Description  ${DateTime.now()}');
+      TextEditingController();
   final regulationsTextController =
-      TextEditingController(text: 'Regulations ${DateTime.now()}');
+      TextEditingController();
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
   final pickedImages = Rxn<List<XFile>>([]);
   final validImageTotal = true.obs;
@@ -104,18 +105,21 @@ class PostRoomController extends GetxController
       gender: Gender.ALL,
       roomType: RoomType.DORMITORY_HOMESTAY,
     );
-    priceTextController.addListener(() => formatCurrency(priceTextController));
+    priceTextController
+        .addListener(() => HelpRegex.formatCurrency(priceTextController));
     depositTextController
-        .addListener(() => formatCurrency(depositTextController));
+        .addListener(() => HelpRegex.formatCurrency(depositTextController));
 
     electricityCostTextController
-        .addListener(() => formatCurrency(electricityCostTextController));
+        .addListener(
+        () => HelpRegex.formatCurrency(electricityCostTextController));
     waterCostTextController
-        .addListener(() => formatCurrency(waterCostTextController));
+        .addListener(() => HelpRegex.formatCurrency(waterCostTextController));
     internetCostTextController
-        .addListener(() => formatCurrency(internetCostTextController));
+        .addListener(
+        () => HelpRegex.formatCurrency(internetCostTextController));
     parkingFeeTextController
-        .addListener(() => formatCurrency(parkingFeeTextController));
+        .addListener(() => HelpRegex.formatCurrency(parkingFeeTextController));
     fetchAsset();
     super.onInit();
   }
@@ -144,23 +148,23 @@ class PostRoomController extends GetxController
     isLoadingData.value = LoadingType.LOADED;
   }
 
-  void formatCurrency(TextEditingController textEditingController) {
-    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+  // void formatCurrency(TextEditingController textEditingController) {
+  //   final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
-    if (textEditingController.text.isNotEmpty) {
-      final doubleAmount = double.tryParse(
-        textEditingController.text.replaceAll(RegExp(r'[^\d]'), ''),
-      );
+  //   if (textEditingController.text.isNotEmpty) {
+  //     final doubleAmount = double.tryParse(
+  //       textEditingController.text.replaceAll(RegExp(r'[^\d]'), ''),
+  //     );
 
-      if (doubleAmount != null) {
-        final formattedValue = formatter.format(doubleAmount);
-        textEditingController.value = TextEditingValue(
-          text: formattedValue,
-          selection: TextSelection.collapsed(offset: formattedValue.length - 1),
-        );
-      }
-    }
-  }
+  //     if (doubleAmount != null) {
+  //       final formattedValue = formatter.format(doubleAmount);
+  //       textEditingController.value = TextEditingValue(
+  //         text: formattedValue,
+  //         selection: TextSelection.collapsed(offset: formattedValue.length - 1),
+  //       );
+  //     }
+  //   }
+  // }
 
   String? fieldValidator(String value) {
     return value.isEmpty ? 'Vui lòng nhập đầy đủ thông tin' : null;

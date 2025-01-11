@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/post/post_controller.dart';
 
 class ConfirmPage extends StatefulWidget {
@@ -33,9 +35,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20.px),
               //---------------------Title-------------------------
               const Text(
                 'TIÊU ĐỀ BÀI ĐĂNG',
@@ -44,27 +44,37 @@ class _ConfirmPageState extends State<ConfirmPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                validator: (value) => controller.fieldValidator(value!),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller.titleTextController,
-                maxLength: 60,
+              SizedBox(height: 10.px),
+              // TextFormField(
+              //   validator: (value) => controller.fieldValidator(value!),
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   controller: controller.titleTextController,
+              //   maxLength: 60,
+              //   maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              //   decoration: const InputDecoration(
+              //     border: OutlineInputBorder(),
+              //     hintText: 'Nhập tiêu đề bài đăng',
+              //     focusedBorder: OutlineInputBorder(
+              //         borderSide:
+              //             BorderSide(color: AppColors.primary40, width: 2)),
+              //   ),
+              // ),
+              OutlineTextFiledWidget(
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Nhập tiêu đề bài đăng',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primary40, width: 2)),
-                ),
+                maxLength: 60,
+                textEditingController: controller.titleTextController,
+                textInputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
+                hintText: 'Nhập tiêu đề bài đăng',
+                onValidate: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Vui lòng nhập tiêu đề bài đăng';
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(
-                height: 16,
-              ),
-        
+              SizedBox(height: 16.px),
+
               //---------------------Title-------------------------
               const Text(
                 'MÔ TẢ',
@@ -73,26 +83,36 @@ class _ConfirmPageState extends State<ConfirmPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(height: 10.px),
+              // TextFormField(
+              //   validator: (value) => controller.fieldValidator(value!),
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   controller: controller.descriptionTextController,
+              //   keyboardType: TextInputType.multiline,
+              //   maxLines: 4,
+              //   decoration: const InputDecoration(
+              //     border: OutlineInputBorder(),
+              //     hintText: 'Môi trường sống sạch, khu phố an ninh,...',
+              //     focusedBorder: OutlineInputBorder(
+              //         borderSide:
+              //             BorderSide(color: AppColors.primary40, width: 2)),
+              //   ),
+              // ),
+              OutlineTextFiledWidget(
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                maxlines: 4,
+                textEditingController: controller.descriptionTextController,
+                textInputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
+                hintText: 'Môi trường sống sạch, khu phố an ninh,...',
+                onValidate: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Vui lòng nhập mô tả';
+                  }
+                  return null;
+                },
               ),
-              TextFormField(
-                validator: (value) => controller.fieldValidator(value!),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller.descriptionTextController,
-                keyboardType: TextInputType.multiline,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Môi trường sống sạch, khu phố an ninh,...',
-                  focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primary40, width: 2)),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
+              SizedBox(height: 16.px),
               const Text(
                 'Nội quy phòng',
                 style: TextStyle(
@@ -100,29 +120,39 @@ class _ConfirmPageState extends State<ConfirmPage> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(height: 10.px),
+              // TextFormField(
+              //   validator: (value) => controller.fieldValidator(value!),
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   controller: controller.regulationsTextController,
+              //   keyboardType: TextInputType.multiline,
+              //   maxLines: 4,
+              //   decoration: const InputDecoration(
+              //     border: OutlineInputBorder(),
+              //     hintText: 'Nội quy phòng để đảm bảo quyền lợi đôi bên...',
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: AppColors.primary40,
+              //         width: 2,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              OutlineTextFiledWidget(
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                maxlines: 4,
+                textEditingController: controller.regulationsTextController,
+                textInputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
+                hintText: 'Nội quy phòng để đảm bảo quyền lợi đôi bên...',
+                onValidate: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Vui lòng nhập nội quy phòng';
+                  }
+                  return null;
+                },
               ),
-              TextFormField(
-                validator: (value) => controller.fieldValidator(value!),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller.regulationsTextController,
-                keyboardType: TextInputType.multiline,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Nội quy phòng để đảm bảo quyền lợi đôi bên...',
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: AppColors.primary40,
-                      width: 2,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
+              SizedBox(height: 16.px),
             ],
           ),
         ),
