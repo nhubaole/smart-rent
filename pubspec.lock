@@ -797,6 +797,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_upgrade_version:
+    dependency: "direct main"
+    description:
+      name: flutter_upgrade_version
+      sha256: "121e15f91641f32bb2ee87f5a0b574c05288bfd328c652b3332df6623eb9214f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.7"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
