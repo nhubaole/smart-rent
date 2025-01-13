@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/model/contract/contract_by_status_model.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract/contract_controller.dart';
 import 'package:smart_rent/modules/contract/widget/contract_item.dart';
@@ -22,7 +27,9 @@ class ContractPage extends GetView<ContractController> {
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
+          return !controller.isLandlord
+              ? []
+              : [
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -61,6 +68,28 @@ class ContractPage extends GetView<ContractController> {
           ),
         ),
       ),
+      bottomNavigationBar: controller.isLandlord
+          ? OutlineButtonWidget(
+              height: 50.px,
+              onTap: () {},
+              margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
+              padding: EdgeInsets.zero,
+              trailing: const Icon(
+                Icons.edit_note_outlined,
+                size: 20,
+                color: AppColors.primary60,
+              ),
+              borderRadius: BorderRadius.circular(100),
+              child: Text(
+                'draft_contract'.tr,
+                style: const TextStyle(
+                  color: AppColors.primary60,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            )
+          : null,
     );
   }
 
@@ -132,40 +161,113 @@ class ContractPage extends GetView<ContractController> {
     );
   }
 
-  Expanded _buildTabView() {
+  Widget _buildTabView() {
     return Expanded(
-      child: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: controller.tabController,
-        children: [
-          RefreshIndicator(
-            onRefresh: () async {
-              return Future.delayed(const Duration(seconds: 1), () {});
-            },
-            child: KeepAliveWrapper(
-              wantKeepAlive: true,
-              child: SingleChildScrollView(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const Divider(
-                    color: AppColors.secondary80,
-                    thickness: 0.5,
-                    height: 0,
-                  ),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ContractItem(
-                      onTap: () => Get.toNamed(AppRoutes.contractInfo),
-                    );
+      child: Obx(
+        () => TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: controller.tabController,
+          children: [
+            _buildRefreshIndicator(
+              onRefresh: controller.fetchPendingContracts,
+              contracts: controller.pendingContracts,
+              loadingType: controller.loadingPendingContracts.value,
+              contractType: 0,
+            ),
+            _buildRefreshIndicator(
+              onRefresh: controller.fetchActiveContracts,
+              contracts: controller.activeContracts,
+              loadingType: controller.loadingActiveContracts.value,
+              contractType: 1,
+            ),
+            _buildRefreshIndicator(
+              onRefresh: controller.fetchExpiredContracts,
+              contracts: controller.expiredContracts,
+              loadingType: controller.loadingExpiredContracts.value,
+              contractType: 2,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRefreshIndicator({
+    required Function() onRefresh,
+    required List<ContractByStatusModel> contracts,
+    required LoadingType loadingType,
+    required int contractType,
+  }) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await onRefresh();
+      },
+      child: _buildListContractsByStatus(
+        contracts: contracts,
+        loadingType: loadingType,
+        contractType: contractType,
+      ),
+    );
+  }
+
+  _buildListContractsByStatus({
+    required List<ContractByStatusModel> contracts,
+    required LoadingType loadingType,
+    required int contractType,
+  }) {
+    switch (loadingType) {
+      case LoadingType.INIT:
+        return const LoadingWidget();
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildListConstracts(
+          contracts: contracts,
+          contractType: contractType,
+        );
+      case LoadingType.ERROR:
+        return ErrorCustomWidget(
+          minHeight: Get.height / 2,
+          expandToCanPullToRefresh: true,
+        );
+    }
+  }
+
+  Widget _buildListConstracts({
+    required List<ContractByStatusModel> contracts,
+    required int contractType,
+  }) {
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: Container(
+          constraints: BoxConstraints(minHeight: Get.height * 3 / 4),
+          child: ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const Divider(
+              color: AppColors.secondary80,
+              thickness: 0.5,
+              height: 0,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: contracts.length,
+            itemBuilder: (context, index) {
+              final contract = contracts[index];
+              return ContractItem(
+                contract: contract,
+                onTap: () => Get.toNamed(
+                  AppRoutes.contractInfo,
+                  arguments: {
+                    'contract': contract,
+                    'contract_type': contractType,
                   },
                 ),
-              ),
-            ),
+              );
+            },
           ),
-          Container(),
-          Container(),
-        ],
+        ),
       ),
     );
   }

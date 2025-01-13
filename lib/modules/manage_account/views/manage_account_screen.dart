@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/config/app_colors.dart';
-import '/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import '/modules/manage_account/views/account_nav_button.dart';
 import '/modules/manage_account/views/account_show_information.dart';
 

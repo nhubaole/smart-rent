@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/rented_room_controller.dart';
@@ -108,25 +109,19 @@ class RentedRoomScreen extends GetView<RentedRoomController> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.71,
-                            crossAxisSpacing: 5,
-                            // mainAxisSpacing: 20,
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: Get.width / 2,
+                            crossAxisSpacing: 5.px,
+                            mainAxisSpacing: 10.px,
+                            mainAxisExtent: 300.px,
                           ),
                           itemCount:
                               controller.listHistoryRoom.value.length + 1,
                           itemBuilder: (context, index) {
                             if (index <
                                 controller.listHistoryRoom.value.length) {
-                              return RoomItem(
-                                isRenting: false,
-                                isHandleRentRoom: false,
-                                isHandleRequestReturnRoom: false,
-                                isRequestReturnRent: false,
-                                isRequestRented: false,
+                              return RoomItem(                               
                                 room: controller.listHistoryRoom.value[index],
-                                isLiked: false,
                               );
                             } else {
                               return Obx(

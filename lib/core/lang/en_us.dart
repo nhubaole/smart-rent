@@ -201,7 +201,8 @@ final enUS = {
   'success_image': 'SUCCESSFUL TRANSFER IMAGE',
   'payment_success': 'Payment Successful',
   'thank_you': 'Thank you! Your bill has been successfully paid.',
-  'please_wait':
+  'please_wait_process': 'Please wait for the process',
+  'please_wait_landlord':
       'Please wait for the landlord to confirm to complete the procedure.',
   'reminder':
       'Don’t forget to pay your upcoming bills on time to ensure your rental benefits.',
@@ -266,9 +267,6 @@ final enUS = {
   'confirm_end_rent':
       'Are you sure you want to end the contract and proceed with the room return?',
   'confirmation_info': 'Confirmation Information',
-  'room': 'Room',
-  'address': 'Address',
-  'rent_price': 'Rental Price',
   'start_date': 'Start Date',
   'return_request': 'Room Return Request',
   'return_date': 'RETURN DATE',
@@ -324,5 +322,12 @@ final enUS = {
   'thank_review_message':
       'Your feedback will help us improve our service quality and provide better information to other tenants.',
   'back_home': 'Back to Home',
-
+  'month': 'Month',
+  'sent_request_failed': 'Failed to send the request',
+  'tenant_payment_on_time': 'Does the tenant pay the rent on time?',
+  'tenant_protects_property':
+      'Does the tenant take good care of the rental property?',
+  'tenant_no_disturbance': 'Does the tenant avoid disturbing neighbors?',
+  'tenant_follows_rules':
+      'Does the tenant comply with the terms and rules of the contract?'
 };

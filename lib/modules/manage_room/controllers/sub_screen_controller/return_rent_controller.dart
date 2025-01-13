@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import '/core/model/account/Account.dart';
-import '/core/model/room/room.dart';
 import '/core/resources/auth_methods.dart';
 
 class ReturnRentController extends GetxController {
@@ -11,7 +11,7 @@ class ReturnRentController extends GetxController {
   var isLoading = false.obs;
   var isLoadMore = false.obs;
   var listTicket = Rx<List<Map<String, dynamic>>>([]);
-  var listRoom = Rx<List<Room>>([]);
+  var listRoom = Rx<List<RoomModel>>([]);
   var profileOwner = Rx<Account?>(null);
   var page = Rx<int>(10);
 

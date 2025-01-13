@@ -5,19 +5,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-import '/core/model/room/room.dart';
 import '/core/resources/google_map_services.dart';
-import '/modules/detail/views/detail_screen.dart';
 
 class MapScreenController extends GetxController {
   final bool fromDetailRoom;
   double? lat;
   double? lon;
-  List<Room>? roomInArea;
+  List<RoomModel>? roomInArea;
   MapScreenController({
     required this.fromDetailRoom,
     this.lat,
@@ -196,12 +195,12 @@ class MapScreenController extends GetxController {
     //await cameraToRoute();
   }
 
-  Future<void> getListMarkers(List<Room> listRoomInArea) async {
+  Future<void> getListMarkers(List<RoomModel> listRoomInArea) async {
     if (listRoomInArea.isNotEmpty) {
       for (var i = 0; i < listRoomInArea.length; i++) {
         isLoading.value = true;
         LatLng latLng = await GoogleMapServices().getLatLngFromAddress(
-          listRoomInArea[i].address![0],
+          listRoomInArea[i].addresses![0],
           'vi',
         );
         await getPolylinePointsInArea(latLng);
@@ -212,7 +211,7 @@ class MapScreenController extends GetxController {
               markerId: MarkerId(listRoomInArea[i].title!),
               position: latLng,
               infoWindow: InfoWindow(
-                title: listRoomInArea[i].address![0],
+                title: listRoomInArea[i].addresses![0],
                 snippet:
                     '${listRoomInArea[i].title} Giá: ${listRoomInArea[i].totalPrice}',
                 onTap: () {

@@ -78,7 +78,7 @@ class TenantRentReturnPage extends GetView<TenantRentReturnController> {
             color: AppColors.primary60,
           ),
         ),
-        onTap: () => Get.toNamed(AppRoutes.tenantSentReturnRequest),
+        onTap: controller.onNavTenantSentReturnRequest,
       ),
     );
   }

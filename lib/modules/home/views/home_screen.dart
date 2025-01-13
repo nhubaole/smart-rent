@@ -3,54 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/room_fetch.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/room_item_skeleton.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
-import '../../../core/config/app_colors.dart';
-import '../../../core/widget/room_item_skeleton.dart';
-import '/core/values/app_colors.dart';
-import '/core/widget/room_item.dart';
-import '/modules/home/controllers/home_screen_controller.dart';
-import '/modules/map/views/map_screen.dart';
-import '/modules/notification/views/notification_screen.dart';
-import '/modules/post/views/post_screen.dart';
-import '/modules/recently/views/recently_view.dart';
-import '/modules/search/views/filter_screen.dart';
-import '/modules/search/views/search_screen.dart';
+import 'package:smart_rent/modules/home/controllers/home_controller.dart';
+import 'package:smart_rent/modules/map/views/map_screen.dart';
+import 'package:smart_rent/modules/recently/views/recently_view.dart';
+import 'package:smart_rent/modules/search/views/search_screen.dart';
+
 import 'package:transparent_image/transparent_image.dart';
 
-// ignore: must_be_immutable
-class HomeScreen extends GetView<HomeScreenController> {
-  const HomeScreen({super.key});
+class HomePage extends GetView<HomeController> {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ScaffoldWidget(
-        floatingActionButton: _buildFloatingButton(),
-        body: _buildContent(),
+    return KeepAliveWrapper(
+        wantKeepAlive: true,
+        child: ScaffoldWidget(
+          body: _buildContent(),
+          floatingActionButton: _buildFloatingButton(),
       ),
-    );
-  }
-
-  NotificationListener<Notification> _buildBody() {
-    return NotificationListener(
-      onNotification: (notification) {
-        if (notification is ScrollUpdateNotification) {
-          if (notification.dragDetails != null) {
-            final delta = notification.dragDetails!.delta.dy;
-            if (delta < 0) {
-              controller.isScrollingUp.value = true;
-            } else if (delta > 0) {
-              controller.isScrollingUp.value = true;
-            }
-          }
-        } else if (notification is ScrollStartNotification) {
-        } else if (notification is ScrollEndNotification) {
-          controller.isScrollingUp.value = false;
-        }
-        return true;
-      },
-      child: _buildContent(),
     );
   }
 
@@ -75,35 +52,28 @@ class HomeScreen extends GetView<HomeScreenController> {
   Stack _buildTopComponent() {
     return Stack(
       children: [
-        _buildTopBackground(),
-        _buildMainContent(),
+        _buildBackground(),
+        _buildNameLocationNav(),
       ],
     );
   }
 
-  Positioned _buildMainContent() {
+  Positioned _buildNameLocationNav() {
     return Positioned(
       child: Column(
         children: [
-          const SizedBox(
-            height: 80,
-          ),
+          SizedBox(height: 12.h),
           _buildNameAndLocation(),
-          const SizedBox(
-            height: 16,
-          ),
-          // search bar
+          SizedBox(height: 1.6.h),
           _buildSearchComponent(),
-          const SizedBox(
-            height: 24,
-          ),
+          SizedBox(height: 2.4.h),
           _buildNavButtons(),
         ],
       ),
     );
   }
 
-  Container _buildNavButtons() {
+  Widget _buildNavButtons() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -165,8 +135,14 @@ class HomeScreen extends GetView<HomeScreenController> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              Get.to(() => const PostScreen());
+            onTap: () async {
+              // Get.to(() => const PostRoomPage());
+              if (controller.currentUser.role == 0) {
+                controller.onAskToUpgradeToLandlord();
+                return;
+              }
+              await Get.toNamed(AppRoutes.postRoom);
+              await controller.getListRoom(false);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -219,8 +195,10 @@ class HomeScreen extends GetView<HomeScreenController> {
 
   InkWell _buildSearchComponent() {
     return InkWell(
-      onTap: () {
-        Get.to(() => const SearchScreen());
+      onTap: () async {
+        // Get.to(() => const SearchPage());
+        await Get.toNamed(AppRoutes.searchRoom);
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -347,9 +325,7 @@ class HomeScreen extends GetView<HomeScreenController> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(
-            () => const NotificationScreen(),
-          );
+          Get.toNamed(AppRoutes.notification);
         },
         child: Lottie.asset('assets/lottie/bell.json',
             repeat: true, reverse: true, height: 50, width: double.infinity),
@@ -366,13 +342,9 @@ class HomeScreen extends GetView<HomeScreenController> {
       child: Column(
         children: [
           _buildTextPopularRoom(),
-          const SizedBox(
-            height: 8,
-          ),
-          _buildGridViewPopularRoom(),
-          const SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 8.px),
+          Obx(() => _buildGridViewPopularRoom()),
+          SizedBox(height: 16.px),
           _buildSeeMore()
         ],
       ),
@@ -418,32 +390,48 @@ class HomeScreen extends GetView<HomeScreenController> {
             : _buildGridPopularRoomNotEmpty();
   }
 
-  RefreshIndicator _buildGridPopularRoomNotEmpty() {
-    return RefreshIndicator(
-      onRefresh: () {
-        return controller.getListRoom(false);
-      },
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Wrap(
-          alignment: WrapAlignment.start,
-          crossAxisAlignment: WrapCrossAlignment.start,
-          runAlignment: WrapAlignment.spaceEvenly,
-          runSpacing: 2.h,
-          spacing: 2.w,
-          children: controller.listRoom.value.map<Widget>(
-            (room) {
+  Widget _buildGridPopularRoomNotEmpty() {
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await controller.getListRoom(false);
+        },
+        child: Container(
+          alignment: Alignment.topCenter,
+          // child: Wrap(
+          //   alignment: WrapAlignment.start,
+          //   crossAxisAlignment: WrapCrossAlignment.start,
+          //   runAlignment: WrapAlignment.spaceEvenly,
+          //   runSpacing: 2.h,
+          //   spacing: 2.w,
+          //   children: controller.listRoom.value.map<Widget>(
+          //     (room) {
+          //       return RoomItem(
+          //         room: room,
+          //       );
+          //     },
+          //   ).toList(),
+          // ),
+          child: GridView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: Get.width / 2,
+              crossAxisSpacing: 5.px,
+              mainAxisSpacing: 10.px,
+              mainAxisExtent: 300.px,
+            ),
+            itemCount: controller.listRoom.value.length,
+            itemBuilder: (context, index) {
+              final room = controller.listRoom.value[index];
               return RoomItem(
-                isRenting: false,
-                isHandleRentRoom: false,
-                isHandleRequestReturnRoom: false,
-                isRequestReturnRent: false,
-                isRequestRented: false,
-                room: room,
-                isLiked: false,
-              );
+                  room: room,
+                );
             },
-          ).toList(),
+          ),
         ),
       ),
     );
@@ -575,11 +563,15 @@ class HomeScreen extends GetView<HomeScreenController> {
                 child: InkWell(
                   onTap: () {
                     Get.closeAllSnackbars();
-                    Get.to(
-                      FilterScreen(
-                          location:
-                              controller.dataList[index]['address'] as String),
-                    );
+                    // Get.to(
+                    //   FilterScreen(
+                    //       location:
+                    //           controller.dataList[index]['address'] as String),
+                    // );
+                    Get.toNamed(AppRoutes.filter, arguments: {
+                      'location':
+                          controller.dataList[index]['address'] as String,
+                    });
                   },
                   child: Stack(
                     children: [
@@ -672,14 +664,14 @@ class HomeScreen extends GetView<HomeScreenController> {
     );
   }
 
-  Container _buildTopBackground() {
+  Container _buildBackground() {
     return Container(
       height: 40.h,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
             AppColors.primary40,
-            primary80,
+            AppColors.primary80,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -698,7 +690,7 @@ class HomeScreen extends GetView<HomeScreenController> {
             child: const Icon(Icons.search),
             onPressed: () {
               Get.to(
-                const SearchScreen(),
+                const SearchPage(),
                 preventDuplicates: true,
                 curve: Curves.easeInBack,
               );
@@ -709,7 +701,7 @@ class HomeScreen extends GetView<HomeScreenController> {
             ),
             onPressed: () {
               Get.to(
-                const SearchScreen(),
+                const SearchPage(),
               );
             },
           );

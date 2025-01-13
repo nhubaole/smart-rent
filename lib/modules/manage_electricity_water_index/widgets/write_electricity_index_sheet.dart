@@ -3,13 +3,53 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/model/billing/billing_list_index_by_landlord_model.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/outline_button_widget.dart';
-import 'package:smart_rent/core/widget/text_form_field_input.dart';
+import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 
-class WriteElectricityIndexSheet extends StatelessWidget {
-  const WriteElectricityIndexSheet({super.key});
+class WriteElectricityIndexSheet extends StatefulWidget {
+  final BillingListIndexByLandlordModel billingIndexs;
+  final int indexInfoPosition;
+  final int indexInBill;
 
+  final Function({
+    required BillingListIndexByLandlordModel bill,
+    required int index,
+    required String image,
+    required int indexInfoPosition,
+  }) onSubmit;
+  final bool isWater;
+  const WriteElectricityIndexSheet({
+    super.key,
+    required this.billingIndexs,
+    required this.indexInBill,
+    required this.onSubmit,
+    required this.isWater,
+    required this.indexInfoPosition,
+  });
+
+  @override
+  State<WriteElectricityIndexSheet> createState() =>
+      _WriteElectricityIndexSheetState();
+}
+
+class _WriteElectricityIndexSheetState
+    extends State<WriteElectricityIndexSheet> {
+  late TextEditingController numberController;
+  String imagePath = '';
+  @override
+  void initState() {
+    numberController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    numberController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -37,11 +77,16 @@ class WriteElectricityIndexSheet extends StatelessWidget {
             SizedBox(height: 16.px),
             _buildAddress(),
             SizedBox(height: 12.px),
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'room_3',
+                'Phòng số ${widget.billingIndexs.indexInfo?[widget.indexInBill].roomNumber}',
                 textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: AppColors.primary60,
+                  fontWeight: FontWeight.w500,
+                ),  
               ),
             ),
             const Divider(
@@ -50,8 +95,8 @@ class WriteElectricityIndexSheet extends StatelessWidget {
             ),
             _buildInput(),
             SizedBox(height: 12.px),
-            _buildUploadImage(),
-            SizedBox(height: 12.px),
+            // _buildUploadImage(),
+            // SizedBox(height: 12.px),
             // _buildButtonSubmit(),
             Row(
               children: [
@@ -59,7 +104,31 @@ class WriteElectricityIndexSheet extends StatelessWidget {
                   child: OutlineButtonWidget(
                     text: 'write'.tr,
                     onTap: () {
-                      print('object');
+                      if (numberController.text.isEmpty) {
+                        AlertSnackbar.show(
+                          title: 'Chưa điền đủ thông tin',
+                          message:
+                              'Vui lòng điền chỉ số ${widget.isWater ? 'Nước' : 'Điện'}',
+                          isError: true,
+                        );
+
+                        return;
+                      }
+                      // if (imagePath.isEmpty) {
+                      //   AlertSnackbar.show(
+                      //     title: 'Chưa điền đủ thông tin',
+                      //     message:
+                      //         'Vui lòng chụp ảnh chỉ số ${widget.isWater ? 'Nước' : 'Điện'}',
+                      //     isError: true,
+                      //   );
+                      //   return;
+                      // }
+                      widget.onSubmit(
+                        bill: widget.billingIndexs,
+                        index: int.tryParse(numberController.text) ?? 0,
+                        image: imagePath,
+                        indexInfoPosition: widget.indexInfoPosition,
+                      );
                     },
                   ),
                 )
@@ -207,53 +276,23 @@ class WriteElectricityIndexSheet extends StatelessWidget {
     );
   }
 
-  Column _buildInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'electricity_number'.tr.toUpperCase(),
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: AppColors.secondary20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        SizedBox(height: 12.px),
-        TextFormFieldInput(
-          textEditingController: TextEditingController(),
-          textInputType: TextInputType.number,
-          textStyle: TextStyle(
+  Widget _buildInput() {
+    return OutlineTextFiledWidget(
+      textLabel: 'Số ${widget.isWater ? 'Nước' : 'Điện'}'.tr,
+          textEditingController: numberController,
+          onValidate: (value) {
+            if (value!.isEmpty) {
+          return 'Vui lòng nhập số ${widget.isWater ? 'Nước' : 'Điện'}'.tr;
+            }
+            return null;
+          },
+          textStyleInput: TextStyle(
             fontSize: 16.sp,
             color: AppColors.secondary20,
             fontWeight: FontWeight.w400,
           ),
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            hintText: 'enter_electricity_number'.tr,
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.secondary60,
-                width: 1,
-              ),
-            ),
-          ),
-          borderRadius: BorderRadius.circular(8.px),
-          borderColor: AppColors.secondary60,
-          onSaved: (newValue) {},
-          onValidate: (value) {
-            if (value!.isEmpty) {
-              return 'please_enter_electricity_number'.tr;
-            }
-            return null;
-          },
-          autoCorrect: false,
-          textCapitalization: TextCapitalization.none,
-        ),
-      ],
+          textInputType: TextInputType.number,
+      hintText: 'Nhập số ${widget.isWater ? 'nước' : 'điện'}'.tr,
     );
   }
 
@@ -272,8 +311,8 @@ class WriteElectricityIndexSheet extends StatelessWidget {
               color: AppColors.secondary20,
               fontWeight: FontWeight.w400,
             ),
-            const TextSpan(
-              text: 'Số 9 Nguyễn Văn Huyên, Dịch Vọng, Cầu Giấy, Hà Nội',
+            TextSpan(
+              text: widget.billingIndexs.address,
             ),
           ),
         ),
@@ -286,7 +325,7 @@ class WriteElectricityIndexSheet extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'write_electricity_number'.tr,
+          'Ghi chỉ số ${widget.isWater ? 'Nước' : 'Điện'}'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w500,

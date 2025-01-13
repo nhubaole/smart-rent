@@ -40,32 +40,32 @@ extension RatingLevelExt on RatingLevel {
     }
   }
 
-  double get value {
+  int get value {
     switch (this) {
       case RatingLevel.TERRIBLE:
-        return 1.0;
+        return 1;
       case RatingLevel.BAD:
-        return 2.0;
+        return 2;
       case RatingLevel.AVERAGE:
-        return 3.0;
+        return 3;
       case RatingLevel.GOOD:
-        return 4.0;
+        return 4;
       case RatingLevel.EXCELLENT:
-        return 5.0;
+        return 5;
     }
   }
 
-  RatingLevel valueToEnum(double value) {
+  RatingLevel valueToEnum(int value) {
     switch (value) {
-      case 1.0:
+      case 1:
         return RatingLevel.TERRIBLE;
-      case 2.0:
+      case 2:
         return RatingLevel.BAD;
-      case 3.0:
+      case 3:
         return RatingLevel.AVERAGE;
-      case 4.0:
+      case 4:
         return RatingLevel.GOOD;
-      case 5.0:
+      case 5:
         return RatingLevel.EXCELLENT;
       default:
         return RatingLevel.AVERAGE;

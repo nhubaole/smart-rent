@@ -110,14 +110,8 @@ class ReturnRentScreen extends GetView<ReturnRentController> {
                               itemCount: controller.listRoom.value.length + 1,
                               itemBuilder: (context, index) {
                                 if (index < controller.listRoom.value.length) {
-                                  return RoomItem(
-                                    isRenting: false,
-                                    isHandleRentRoom: false,
-                                    isHandleRequestReturnRoom: false,
-                                    isRequestReturnRent: true,
-                                    isRequestRented: false,
+                                  return RoomItem(                                    
                                     room: controller.listRoom.value[index],
-                                    isLiked: false,
                                   );
                                 } else {
                                   return Obx(

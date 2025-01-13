@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
-import 'package:smart_rent/core/widget/button_outline.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract_info/contract_info_controller.dart';
 
@@ -24,7 +24,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
           children: [
             _buildInfoItem(
               title: 'contract_code'.tr,
-              value: 'value',
+              value: controller.contract.code ?? '',
               padding: EdgeInsets.symmetric(vertical: 16.px),
             ),
             const Divider(
@@ -34,7 +34,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
             ),
             _buildInfoItem(
               title: 'contract_type'.tr,
-              value: 'value',
+              value: 'rental_contract'.tr,
               padding: EdgeInsets.symmetric(vertical: 16.px),
             ),
             const Divider(
@@ -44,7 +44,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
             ),
             _buildInfoItem(
               title: 'address'.tr,
-              value: '97 đường số 11, phường Trường Thọ, TP Thủ Đức, TP HCM',
+              value: controller.contract.roomAddress ?? '',
               padding: EdgeInsets.symmetric(vertical: 16.px),
             ),
             const Divider(
@@ -53,48 +53,52 @@ class ContractInfoPage extends GetView<ContractInfoController> {
               height: 0,
             ),
             _buildInfoParty(
-                'party_a'.tr, ['Nguyễn Phương Phương', '14:05:03 10/12/2023']),
+                'party_a'.tr, [
+              controller.contract.landlordName ?? '--',
+              controller.contract.signatureTimeA?.ddMMyyyy ?? '--',
+            ]),
             const Divider(
               color: AppColors.secondary80,
               thickness: 0.5,
               height: 0,
             ),
             _buildInfoParty(
-                'party_b'.tr, ['Nguyễn Phương Phương', '14:05:03 10/12/2023']),
+                'party_b'.tr, [
+              controller.contract.tenantName ?? '--',
+              controller.contract.signatureTimeB?.ddMMyyyy ?? '--',
+            ]),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-        child: Row(
-          children: [
-            Expanded(
-              child: ButtonOutline(
-                borderWidth: 1.5,
-                onPressed: () {
-                  Get.toNamed(AppRoutes.contractDetail);
-                },
-                icon: const Icon(
-                  Icons.mode_edit_sharp,
-                  size: 20,
-                  color: AppColors.primary60,
-                ),
-                text: Text(
-                  'sign_contract'.tr,
-                  style: const TextStyle(
-                    color: AppColors.primary60,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                borderColor: AppColors.primary60,
-                borderRadius: BorderRadius.circular(100),
-              ),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: _buildButtonSignContract(),
     );
+  }
+
+  Widget? _buildButtonSignContract() {
+    if (controller.showButtonSignContract) {
+      return OutlineButtonWidget(
+        height: 50.px,
+        onTap: controller.onNavContractDetail,
+        margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
+        padding: EdgeInsets.zero,
+        trailing: const Icon(
+          Icons.arrow_forward_ios_outlined,
+          size: 20,
+          color: AppColors.primary60,
+        ),
+        borderRadius: BorderRadius.circular(100),
+        child: Text(
+          'sign_contract'.tr,
+          style: const TextStyle(
+            color: AppColors.primary60,
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      );
+    }
+
+    return null;
   }
 
   Widget _buildInfoItem(
@@ -152,7 +156,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
             children: [
               _buildInfoItem(title: 'signer_name_a'.tr, value: value[0]),
               SizedBox(height: 16.px),
-              _buildInfoItem(title: 'signer_name_b'.tr, value: value[1])
+              _buildInfoItem(title: 'signing_time_a'.tr, value: value[1])
             ],
           ),
         ],

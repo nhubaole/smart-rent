@@ -13,6 +13,8 @@ class OutlineButtonWidget extends StatelessWidget {
   final Widget? child;
   final Widget? leading;
   final BorderRadius? borderRadius;
+  final Color? borderColor;
+  final Color? textColor;
   const OutlineButtonWidget({
     super.key,
     this.text,
@@ -25,6 +27,8 @@ class OutlineButtonWidget extends StatelessWidget {
     this.child,
     this.borderRadius,
     this.padding = const EdgeInsets.all(16.0),
+    this.borderColor,
+    this.textColor,
   }) : assert(text != null || child != null);
 
   @override
@@ -38,7 +42,8 @@ class OutlineButtonWidget extends StatelessWidget {
         borderRadius: borderRadius ?? BorderRadius.circular(20.px),
         border: Border.all(
           width: 1,
-          color: onTap == null ? AppColors.secondary40 : AppColors.primary60,
+          color: borderColor ??
+              (onTap == null ? AppColors.secondary40 : AppColors.primary60),
         ),
       ),
       child: Material(
@@ -67,9 +72,10 @@ class OutlineButtonWidget extends StatelessWidget {
                       text!,
                       style: TextStyle(
                         fontSize: 16.sp,
-                        color: onTap == null
+                        color: textColor ??
+                            (onTap == null
                             ? AppColors.white
-                            : AppColors.primary60,
+                                : AppColors.primary60),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

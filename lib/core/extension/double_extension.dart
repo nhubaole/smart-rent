@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 final moneyVNFormat = NumberFormat.currency(locale: "vi_VN", symbol: "");
@@ -19,7 +20,15 @@ extension DoubleExt on double {
     }
   }
 
+  String get toFormatCurrency {
+    return moneyVNFormat.format(this);
+  }
+
   dynamic get getAcreage {
     return this % 1 == 0 ? toInt() : this;
+  }
+
+  String toStringTotalthis({String? symbol}) {
+    return '${moneyVNFormat.format(this)} ${symbol ?? 'VND/ ${'room'.tr}'}';
   }
 }

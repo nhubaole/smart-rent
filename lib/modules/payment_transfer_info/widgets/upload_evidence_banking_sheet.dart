@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,9 +10,13 @@ import 'package:smart_rent/core/widget/outline_button_widget.dart';
 
 class UploadEvidenceBankingSheet extends StatelessWidget {
   final Function() onSave;
+  final Function() onSelectImage;
+  final String? proofImage;
   const UploadEvidenceBankingSheet({
     super.key,
     required this.onSave,
+    this.proofImage,
+    required this.onSelectImage,
   });
 
   @override
@@ -44,7 +50,7 @@ class UploadEvidenceBankingSheet extends StatelessWidget {
             SizedBox(height: 16.px),
             _buildOptionImage(
               title: 'upload_image_from_library'.tr,
-              onTap: () {},
+              onTap: onSelectImage,
               icon: ImageAssets.icAddGallery,
             ),
             SizedBox(height: 16.px),
@@ -107,7 +113,12 @@ class UploadEvidenceBankingSheet extends StatelessWidget {
             alignment: Alignment.center,
             width: double.infinity,
             height: 120.px,
-            child: Column(
+            child: proofImage != null
+                ? Image.file(
+                    File(proofImage!),
+                    fit: BoxFit.contain,
+                  )
+                : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -5,7 +5,7 @@ enum Gender {
 }
 
 extension InfoGender on Gender {
-  String getNameGender() {
+  String get getNameGender {
     switch (this) {
       case Gender.ALL:
         return "Tất cả";
@@ -18,7 +18,7 @@ extension InfoGender on Gender {
     }
   }
 
-  int getNameGenderInt() {
+  int get getNameGenderInt {
     switch (this) {
       case Gender.ALL:
         return -1;

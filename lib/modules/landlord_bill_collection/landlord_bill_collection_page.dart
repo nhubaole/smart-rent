@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/landlord_bill_collection/landlord_bill_collection_controller.dart';
@@ -27,7 +30,7 @@ class LandlordBillCollectionPage
           SizedBox(height: 16.px),
           _buildRowSelectionMode(),
           Expanded(
-            child: _buildBillCollection(),
+            child: Obx(() => _buildListByStatus()),
           ),
           SizedBox(height: 8.px),
         ],
@@ -43,6 +46,25 @@ class LandlordBillCollectionPage
             : const SizedBox.shrink(),
       ),
     );
+  }
+
+  Widget _buildListByStatus() {
+    switch (controller.isLoadingData.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        if (controller.billings.value == null) {
+          return const Center(
+            child: Text('Không có hóa đơn'),
+          );
+        }
+        return _buildBillCollection();
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget(
+          expandToCanPullToRefresh: true,
+        );
+    }
   }
 
   Widget _buildRowSelectionMode() {
@@ -118,7 +140,7 @@ class LandlordBillCollectionPage
     );
   }
 
-  Container _buildBillCollection() {
+  Widget _buildBillCollection() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.px),
       width: double.infinity,
@@ -149,7 +171,10 @@ class LandlordBillCollectionPage
     );
   }
 
-  KeepAliveWrapper _buildBills() {
+  Widget _buildBills() {
+    if (controller.billings.value!.listBill!.isEmpty) {
+      return const SizedBox.shrink();
+    }
     return KeepAliveWrapper(
       wantKeepAlive: true,
       child: Expanded(
@@ -159,18 +184,19 @@ class LandlordBillCollectionPage
             thickness: 1,
             height: 8.px,
           ),
-          itemCount: 20,
+          itemCount: controller.billings.value!.listBill!.length,
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
           padding: EdgeInsets.symmetric(vertical: 8.px),
           itemBuilder: (context, index) {
+            final item = controller.billings.value!.listBill![index];
             return Obx(
               () => LandlordBillCollectionItem(
-                object: Object(),
                 isMultipleSelectionMode:
                     controller.isMultipleSelectionMode.value,
                 isSelected: controller.isSelectAllMode.value,
                 onTap: controller.onSelectItem,
+                bill: item,
               ),
             );
           },
@@ -205,8 +231,8 @@ class LandlordBillCollectionPage
                 color: AppColors.secondary20,
                 fontWeight: FontWeight.w600,
               ),
-              const TextSpan(
-                text: 'Số 9 Nguyễn Văn Huyên, Dịch Vọng, Cầu Giấy, Hà Nội',
+              TextSpan(
+                text: controller.billings.value!.address ?? '',
               ),
             ),
           ),
@@ -228,7 +254,9 @@ class LandlordBillCollectionPage
               padding: EdgeInsets.all(8.px),
               height: 65.px,
               text: 'select'.tr,
-              onTap: () {},
+              onTap: () {
+                controller.fetchBilling();
+              },
             ),
           ),
         ],
@@ -274,7 +302,7 @@ class LandlordBillCollectionPage
                       ),
                     ),
                     Text(
-                      controller.periodSelected.value,
+                      controller.periodSelected.value.toPediod,
                       style: textStyle,
                     ),
                   ],
@@ -294,14 +322,16 @@ class LandlordBillCollectionPage
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(period.toPediod),
-                    if (controller.periodSelected.value == period.toPediod)
+                    if (controller.periodSelected.value.toPediod ==
+                        period.toPediod)
                       const Icon(Icons.check, color: AppColors.primary40),
                   ],
                 ),
               );
             }).toList(),
             onChanged: (value) {
-              controller.periodSelected.value = value!.toPediod;
+              controller.periodSelected.value = value!;
+              controller.fetchBilling();
             },
           ),
         ),

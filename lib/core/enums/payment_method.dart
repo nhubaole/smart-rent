@@ -37,6 +37,29 @@ extension PaymentMethodExtension on PaymentMethod {
     }
   }
 
+  String get value {
+    switch (this) {
+      case PaymentMethod.no:
+        return 'no';
+      case PaymentMethod.cash:
+        return 'cash';
+      case PaymentMethod.card:
+        return 'card';
+      case PaymentMethod.paypal:
+        return 'paypal';
+      case PaymentMethod.stripe:
+        return 'stripe';
+      case PaymentMethod.applePay:
+        return 'applePay';
+      case PaymentMethod.googlePay:
+        return 'googlePay';
+      case PaymentMethod.samsungPay:
+        return 'samsungPay';
+      case PaymentMethod.other:
+        return 'other';
+    }
+  }
+
   IconData get icon {
     switch (this) {
       case PaymentMethod.no:
@@ -57,6 +80,29 @@ extension PaymentMethodExtension on PaymentMethod {
         return Icons.payment;
       case PaymentMethod.other:
         return Icons.payment;
+    }
+  }
+
+static PaymentMethod fromString(String value) {
+    switch (value) {
+      case 'cash':
+        return PaymentMethod.cash;
+      case 'card':
+        return PaymentMethod.card;
+      case 'paypal':
+        return PaymentMethod.paypal;
+      case 'stripe':
+        return PaymentMethod.stripe;
+      case 'applePay':
+        return PaymentMethod.applePay;
+      case 'googlePay':
+        return PaymentMethod.googlePay;
+      case 'samsungPay':
+        return PaymentMethod.samsungPay;
+      case 'other':
+        return PaymentMethod.other;
+      default:
+        return PaymentMethod.no;
     }
   }
 }

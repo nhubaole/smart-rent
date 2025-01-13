@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/enums/request_room_status.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
 import 'package:smart_rent/modules/bill_info/bill_info_controller.dart';
@@ -16,61 +20,84 @@ class BillInfoPage extends GetView<BillInfoController> {
   Widget build(BuildContext context) {
     return ScaffoldWidget(
       appBar: CustomAppBar(title: 'bill_information'.tr),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.px),
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverToBoxAdapter(
+      body: Obx(() => _buildListByStatus()),
+      bottomNavigationBar: Obx(
+        () => Visibility(
+          visible: controller.isLoadingData.value == LoadingType.LOADED,
+          child: SolidButtonWidget(
+            height: 50.px,
+            margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+            text: 'payment'.tr,
+            onTap: controller.onNavPaymentDeposit,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListByStatus() {
+    switch (controller.isLoadingData.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildBillInfoPage();
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget(
+          expandToCanPullToRefresh: true,
+        );
+    }
+  }
+
+  Widget _buildBillInfoPage() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  _buildTimeCreation(),
+                  SizedBox(height: 16.px),
+                  _buildStatus(),
+                  SizedBox(height: 16.px),
+                ],
+              ),
+            ),
+          ];
+        },
+        scrollDirection: Axis.vertical,
+        physics: const ClampingScrollPhysics(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeaderBillInfo('bill_information'.tr),
+            SizedBox(height: 8.px),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildTimeCreation(),
+                    _buildBillInfo(),
                     SizedBox(height: 16.px),
-                    _buildStatus(),
+                    _buildTotalAmount(),
+                    SizedBox(height: 16.px),
+                    Divider(
+                      color: AppColors.secondary80.withOpacity(0.5),
+                      thickness: 1,
+                      height: 16.px,
+                    ),
+                    SizedBox(height: 16.px),
+                    _buildHeaderBillInfo('payment_information'.tr),
+                    SizedBox(height: 16.px),
+                    _buildBillPayment(),
                     SizedBox(height: 16.px),
                   ],
                 ),
               ),
-            ];
-          },
-          scrollDirection: Axis.vertical,
-          physics: const ClampingScrollPhysics(),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeaderBillInfo('bill_information'.tr),
-              SizedBox(height: 8.px),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildBillInfo(),
-                      SizedBox(height: 16.px),
-                      _buildTotalAmount(),
-                      SizedBox(height: 16.px),
-                      Divider(
-                        color: AppColors.secondary80.withOpacity(0.5),
-                        thickness: 1,
-                        height: 16.px,
-                      ),
-                      SizedBox(height: 16.px),
-                      _buildHeaderBillInfo('payment_information'.tr),
-                      SizedBox(height: 16.px),
-                      _buildBillPayment(),
-                      SizedBox(height: 16.px),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: SolidButtonWidget(
-          height: 50.px,
-          margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-          text: 'payment'.tr,
-          onTap: () => Get.toNamed(AppRoutes.paymentDeposit)
       ),
     );
   }
@@ -126,7 +153,7 @@ class BillInfoPage extends GetView<BillInfoController> {
         children: [
           _buildBillInfoItem(
             title: 'name'.tr,
-            values: ['LÊ BẢO NHƯ'],
+            values: [controller.billInfo.value!.info?.tenantName ?? ''],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -135,7 +162,7 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'phone_number'.tr,
-            values: ['0823306992'],
+            values: [controller.billInfo.value!.info?.phoneNumber ?? ''],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -145,7 +172,7 @@ class BillInfoPage extends GetView<BillInfoController> {
           _buildBillInfoItem(
             title: 'room_number'.tr,
             values: [
-              '3.11',
+              controller.billInfo.value!.info?.roomNumber.toString() ?? '',
             ],
           ),
           Divider(
@@ -156,8 +183,9 @@ class BillInfoPage extends GetView<BillInfoController> {
           _buildBillInfoItem(
             title: 'address'.tr,
             values: [
-              '97 đường số 11, phường Trường Thọ, TP Thủ Đức, TP HCM',
+              controller.billInfo.value!.info?.address ?? '',
             ],
+              maxLines: 5
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -166,7 +194,9 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'period'.tr,
-            values: ['Tháng 10/2024'],
+            values: [
+              'Tháng ${controller.billInfo.value!.info?.month ?? ''}/${controller.billInfo.value!.info?.year ?? ''}'
+            ],
           ),
         ],
       ),
@@ -184,7 +214,9 @@ class BillInfoPage extends GetView<BillInfoController> {
       children: [
         Text('total_amount'.tr, style: textStyle),
         Text(
-          '3,560,000đ',
+          controller.billInfo.value!.totalAmount
+                  ?.toStringTotalthis(symbol: 'đ') ??
+              '',
           style: textStyle.copyWith(
             color: AppColors.primary40,
           ),
@@ -208,7 +240,7 @@ class BillInfoPage extends GetView<BillInfoController> {
         children: [
           _buildBillInfoItem(
             title: 'bill_code'.tr,
-            values: ['HD2220'],
+            values: [controller.billInfo.value!.code ?? ''],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -217,7 +249,11 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'rent_fee'.tr,
-            values: ['200,000 VND'],
+            values: [
+              controller.billInfo.value!.roomPrice
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''
+            ],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -227,10 +263,15 @@ class BillInfoPage extends GetView<BillInfoController> {
           _buildBillInfoItem(
             title: 'electricity'.tr,
             values: [
-              'số cũ: 234 - số mới: 254',
-              '3,000đ',
-              'x20',
-              '350,000đ',
+              'số cũ: ${controller.billInfo.value!.oldElectricityIndex} - số mới: ${controller.billInfo.value!.newElectricityIndex}',
+              (controller.billInfo.value!.electricityCost
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''),
+              'x${controller.billInfo.value!.newElectricityIndex! - controller.billInfo.value!.oldElectricityIndex!}',
+              (((controller.billInfo.value!.electricityCost!) *
+                      (controller.billInfo.value!.newElectricityIndex! -
+                          controller.billInfo.value!.oldElectricityIndex!))
+                  .toStringTotalthis(symbol: 'đ')),
             ],
           ),
           Divider(
@@ -241,10 +282,15 @@ class BillInfoPage extends GetView<BillInfoController> {
           _buildBillInfoItem(
             title: 'water'.tr,
             values: [
-              'số cũ: 234 - số mới: 254',
-              '3,000đ',
-              'x20',
-              '350,000đ',
+              'số cũ: ${controller.billInfo.value!.oldWaterIndex} - số mới: ${controller.billInfo.value!.newWaterIndex}',
+              (controller.billInfo.value!.waterCost
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''),
+              'x${controller.billInfo.value!.newWaterIndex! - controller.billInfo.value!.oldWaterIndex!}',
+              (((controller.billInfo.value!.waterCost!) *
+                      (controller.billInfo.value!.newWaterIndex! -
+                          controller.billInfo.value!.oldWaterIndex!))
+                  .toStringTotalthis(symbol: 'đ')),
             ],
           ),
           Divider(
@@ -254,7 +300,11 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'internet'.tr,
-            values: ['1,300,000 VND'],
+            values: [
+              controller.billInfo.value!.internetCost
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''
+            ],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -263,7 +313,11 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'parking_fee'.tr,
-            values: ['1,300,000 VND'],
+            values: [
+              controller.billInfo.value!.parkingFee
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''
+            ],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -272,8 +326,12 @@ class BillInfoPage extends GetView<BillInfoController> {
           ),
           _buildBillInfoItem(
             title: 'additional_fee'.tr,
-            note: 'Tiền đổ rác',
-            values: ['1,300,000 VND'],
+            note: controller.billInfo.value!.additionNote,
+            values: [
+              controller.billInfo.value!.additionFee
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''
+            ],
           ),
         ],
       ),
@@ -284,6 +342,7 @@ class BillInfoPage extends GetView<BillInfoController> {
     required String title,
     String? note,
     required List<String> values,
+    int? maxLines = 3,
   }) {
     final TextStyle titleStyle = TextStyle(
       fontSize: 16.sp,
@@ -325,7 +384,7 @@ class BillInfoPage extends GetView<BillInfoController> {
                         color: AppColors.secondary20,
                         fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 3,
+                      maxLines: maxLines,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                     ),
@@ -354,7 +413,8 @@ class BillInfoPage extends GetView<BillInfoController> {
   }
 
   Container _buildStatus() {
-    const status = RequestRoomStatus.pending;
+    final status = RequestRoomStatusExtension.fromInt(
+        controller.billInfo.value!.status! - 1);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -362,7 +422,7 @@ class BillInfoPage extends GetView<BillInfoController> {
         horizontal: 2.h,
       ),
       decoration: BoxDecoration(
-        color: RequestRoomStatus.pending.colorBackground,
+        color: status.colorBackground,
         borderRadius: BorderRadius.circular(8.px),
       ),
       child: Row(
@@ -371,7 +431,7 @@ class BillInfoPage extends GetView<BillInfoController> {
           Icon(status.icon, color: status.colorContent),
           SizedBox(width: 1.w),
           Text(
-            status.value,
+            controller.billInfo.value!.status == 1 ? 'unpaid'.tr : 'paid'.tr,
             style: TextStyle(
               color: status.colorContent,
               fontSize: 16.sp,
@@ -400,10 +460,10 @@ class BillInfoPage extends GetView<BillInfoController> {
               ),
             ),
             const TextSpan(text: ' '),
-            const TextSpan(
-              text: '13:49 17/09/2023',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            TextSpan(
+              text: controller.billInfo.value!.createdAt?.hhmmDDMMyyyy ?? '',
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

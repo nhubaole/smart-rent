@@ -3,13 +3,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/model/contract/contract_by_status_model.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 
 class ContractItem extends StatelessWidget {
   final VoidCallback onTap;
+  final ContractByStatusModel contract;
   const ContractItem({
     super.key,
     required this.onTap,
+    required this.contract,
   });
 
   @override
@@ -29,35 +33,28 @@ class ContractItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
             child: Row(
               children: [
-                Expanded(
-                  child: Center(
-                    child: SvgPicture.asset(
-                      ImageAssets.icContract,
-                      width: 42.px,
-                      height: 42.px,
-                    ),
-                  ),
-                ),
+                _buildIconContract(),
                 Flexible(
                   fit: FlexFit.loose,
                   flex: 4,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Phòng 3.11',
-                            style: TextStyle(
+                            '${'room'.tr} ${contract.roomNumber ?? '--'}',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: AppColors.secondary60,
                             ),
                           ),
                           Text(
-                            'Nguyễn Phương Phương',
-                            style: TextStyle(
+                            contract.tenantName ?? '--',
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: AppColors.secondary60,
@@ -66,15 +63,16 @@ class ContractItem extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.px),
-                      const Text.rich(
-                        style: TextStyle(
+                      Text.rich(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: AppColors.secondary20,
                         ),
+                        textAlign: TextAlign.start,
                         TextSpan(
                           text:
-                              'Hợp đồng thuê trọ 97 đường số 11, phường Trường Thọ, TP Thủ Đức',
+                              '${'rental_contract'.tr} ${contract.roomAddress ?? '--'}',
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -94,7 +92,9 @@ class ContractItem extends StatelessWidget {
                               children: [
                                 TextSpan(text: 'creation_date'.tr),
                                 const TextSpan(text: ': '),
-                                const TextSpan(text: '04/12/2023'),
+                                TextSpan(
+                                  text: contract.createdAt?.ddMMyyyy ?? '--',
+                                ),
                               ],
                             ),
                           ),
@@ -115,7 +115,9 @@ class ContractItem extends StatelessWidget {
                               children: [
                                 TextSpan(text: 'expried_date'.tr),
                                 const TextSpan(text: ': '),
-                                const TextSpan(text: '04/12/2023'),
+                                TextSpan(
+                                  text: contract.expiredAt?.ddMMyyyy ?? '--',
+                                ),
                               ],
                             ),
                           ),
@@ -124,13 +126,35 @@ class ContractItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: AppColors.primary40,
-                ),
+                _buildArrow(),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Row _buildArrow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(width: 8.px),
+        const Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: AppColors.primary40,
+        ),
+      ],
+    );
+  }
+
+  Expanded _buildIconContract() {
+    return Expanded(
+      child: Center(
+        child: SvgPicture.asset(
+          ImageAssets.icContract,
+          width: 42.px,
+          height: 42.px,
         ),
       ),
     );

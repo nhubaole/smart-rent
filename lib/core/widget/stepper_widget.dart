@@ -8,14 +8,13 @@ class StepperWidget<T> extends StatefulWidget {
   final Future<bool> Function(int) onStepTapped;
   final Color selectedColor;
   final Color unselectedColor;
-
   const StepperWidget({
     super.key,
-    this.initStep = 0,
+    required this.tabs,
+    required this.initStep,
     required this.onStepTapped,
     required this.selectedColor,
     required this.unselectedColor,
-    required this.tabs,
   }) : assert(initStep <= tabs.length);
 
   @override

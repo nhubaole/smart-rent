@@ -4,19 +4,21 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/config/app_images.dart';
 import 'package:smart_rent/core/enums/bill_status.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/model/billing/bill_by_month_and_user_model.dart';
 
 class LandlordBillCollectionItem extends StatefulWidget {
-  final Object object;
-  final Function(Object) onTap;
+  final Function(BillByMonthAndUserItemModel) onTap;
   final bool isMultipleSelectionMode;
   final bool isSelected;
+  final BillByMonthAndUserItemModel bill;
 
   const LandlordBillCollectionItem({
     super.key,
     required this.onTap,
     required this.isMultipleSelectionMode,
     this.isSelected = false,
-    required this.object,
+    required this.bill,
   });
 
   @override
@@ -46,7 +48,7 @@ class _LandlordBillCollectionItemState
   void _toggleCheckBox() {
     setState(() {
       isSelected = !isSelected;
-      widget.onTap(widget.object);
+      widget.onTap(widget.bill);
     });
   }
 
@@ -65,7 +67,7 @@ class _LandlordBillCollectionItemState
             if (widget.isMultipleSelectionMode) {
               _toggleCheckBox();
             } else {
-              widget.onTap(widget.object);
+              widget.onTap(widget.bill);
             }
           },
           child: Container(
@@ -89,9 +91,10 @@ class _LandlordBillCollectionItemState
                       SizedBox(width: 8.px),
                     ],
                   ),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 28,
                   backgroundImage: CachedNetworkImageProvider(
+                    widget.bill.avatar ??
                     AppImages.demo,
                   ),
                 ),
@@ -112,20 +115,22 @@ class _LandlordBillCollectionItemState
                             ),
                           ),
                           Text(
-                            '2,560,000đ',
+                            widget.bill.totalAmount
+                                    ?.toStringTotalthis(symbol: 'đ') ??
+                                '',
                             style: textStyle,
                             textAlign: TextAlign.end,
                           ),
                         ],
                       ),
                       Text(
-                        'Phòng số 3',
+                        'Phòng số ${widget.bill.roomNumber ?? ''}',
                         style: textStyle.copyWith(
                           color: AppColors.secondary40,
                         ),
                       ),
                       Text(
-                        'Lê Bảo Như',
+                        widget.bill.tenantName ?? 'Không xác định',
                         style: textStyle.copyWith(
                           fontSize: 16.sp,
                           color: AppColors.secondary20,
