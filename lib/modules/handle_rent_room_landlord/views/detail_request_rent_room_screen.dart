@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
 import '../../../core/config/app_colors.dart';
 import '/core/values/app_colors.dart';
 import '/modules/chat/views/chat_screen.dart';
@@ -179,25 +180,8 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () async {
-                                        Get.to(
-                                          () => ChatScreen(
-                                            conversationID:
-                                                detailRequestController
-                                                    .profileOwner
-                                                    .value!
-                                                    .phoneNumber,
-                                            conversationName:
-                                                detailRequestController
-                                                    .profileOwner
-                                                    .value!
-                                                    .username,
-                                            userId: detailRequestController
-                                                .profileOwner
-                                                .value!
-                                                .phoneNumber,
-                                          ),
-                                        );
+                                      onPressed: () {
+                                        Get.toNamed(AppRoutes.chat);
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(

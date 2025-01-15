@@ -11,6 +11,7 @@ import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
+import 'package:smart_rent/modules/chat/socket_service.dart';
 import 'package:smart_rent/modules/home/widgets/confirm_upgrade_landlord_sheet.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_controller.dart';
 import '/core/resources/google_map_services.dart';
@@ -30,17 +31,17 @@ class HomeController extends GetxController {
   UserModel get currentUser => appManager.currentUser!;
 
   String get fullName => currentUser.fullName ?? '--';
+
   @override
   void onInit() async {
     logger = getIt<Log>();
     setupFirebaseMessaging();
+    setupSocket();
     fetchDataAndConvertToList();
     getListRoom(false);
     getCurrentLocation();
     super.onInit();
   }
-
-
 
   Future<void> getCurrentLocation() async {
     Location location = Location();
@@ -187,6 +188,11 @@ class HomeController extends GetxController {
     if (token != null) {
       await saveDeviceToken(token);
     }
+  }
+
+  void setupSocket() {
+    final SocketService socketService = Get.put(SocketService());
+    socketService.initializeSocket(userId: AppManager().currentUser?.id.toString() ?? "");
   }
 
   Future<void> saveDeviceToken(String token) async {
