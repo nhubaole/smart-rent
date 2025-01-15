@@ -72,8 +72,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           ],
         ),
       );
-    }
-    else if (controller.contractType != null &&
+    } else if (controller.contractType != null &&
         controller.contractType == 2) {
       return SizedBox();
     }
@@ -341,7 +340,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           text: 'water_fee'.trParams({
             'price':
                 controller.contractByIdModel?.waterCost?.toFormatCurrency ??
-                '--',
+                    '--',
             'unit': 'VND'
           }),
           style: childTextStyle),
@@ -353,9 +352,9 @@ class ContractDetailPage extends GetView<ContractDetailController> {
       textAlign: TextAlign.start,
       TextSpan(
           text: 'electricity_fee'.trParams({
-            'price': controller
-                    .contractByIdModel?.electricCost?.toFormatCurrency ??
-                '--',
+            'price':
+                controller.contractByIdModel?.electricCost?.toFormatCurrency ??
+                    '--',
             'unit': 'VND'
           }),
           style: childTextStyle),
@@ -610,8 +609,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
               style: childTextStyle),
           TextSpan(text: 'birth_landlord'.tr, style: childTextStyle),
           TextSpan(
-              text:
-                  ' ${controller.partyA?.dob?.ddMMyyyy ?? ''} ',
+              text: ' ${controller.partyA?.dob?.ddMMyyyy ?? ''} ',
               style: childTextStyle),
         ],
       ),
@@ -642,7 +640,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           text: 'date_location'.trParams({
             'day':
                 controller.contractByStatusModel?.createdAt?.day.toString() ??
-                '--',
+                    '--',
             'month':
                 controller.contractByStatusModel?.createdAt?.month.toString() ??
                     '--',

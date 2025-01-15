@@ -52,8 +52,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
               thickness: 0.5,
               height: 0,
             ),
-            _buildInfoParty(
-                'party_a'.tr, [
+            _buildInfoParty('party_a'.tr, [
               controller.contract.landlordName ?? '--',
               controller.contract.signatureTimeA?.ddMMyyyy ?? '--',
             ]),
@@ -62,8 +61,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
               thickness: 0.5,
               height: 0,
             ),
-            _buildInfoParty(
-                'party_b'.tr, [
+            _buildInfoParty('party_b'.tr, [
               controller.contract.tenantName ?? '--',
               controller.contract.signatureTimeB?.ddMMyyyy ?? '--',
             ]),

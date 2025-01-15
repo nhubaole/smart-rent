@@ -147,4 +147,3 @@ class ContractDetailController extends GetxController {
     }
   }
 }
-
