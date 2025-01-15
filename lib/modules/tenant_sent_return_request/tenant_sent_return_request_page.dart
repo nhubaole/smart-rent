@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
@@ -55,7 +56,7 @@ class TenantSentReturnRequestPage
                     color: AppColors.white,
                   ),
                 ),
-                onTap: () => Get.toNamed(AppRoutes.tenantRequestSuccess),
+                onTap: controller.onSubmit,
               ),
             ],
           ),
@@ -81,10 +82,8 @@ class TenantSentReturnRequestPage
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () {
-                      controller.isFollowPerContractTerm.value =
-                          !controller.isFollowPerContractTerm.value;
-                    },
+                    onTap: () => controller.onChangeFollowPerContractTerm(
+                        !controller.isFollowPerContractTerm.value),
                     borderRadius: BorderRadius.circular(8.px),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +92,8 @@ class TenantSentReturnRequestPage
                           activeTrackColor: AppColors.primary40,
                           value: controller.isFollowPerContractTerm.value,
                           onChanged: (value) {
-                            controller.isFollowPerContractTerm.value = value;
+                            controller.onChangeFollowPerContractTerm(value);
+                            // controller.isFollowPerContractTerm.value = value;
                           },
                         ),
                         SizedBox(width: 8.px),
@@ -194,18 +194,23 @@ class TenantSentReturnRequestPage
       children: [
         _buildTextLabel(text: 'confirmation_info'.tr),
         SizedBox(height: 16.px),
-        _buildTextType(text: 'room'.tr, value: '3.11'),
+        _buildTextType(
+            text: 'room'.tr,
+            value: '${controller.contractByStatusModel?.roomNumber}'),
         SizedBox(height: 16.px),
         _buildTextType(
           text: 'address'.tr,
-          value: '320 Nguyễn Văn Linh, Phường Bình Thuận, Quận 7, Hồ Chí Minh',
+          value: controller.contractByStatusModel?.roomAddress ?? '',
         ),
         SizedBox(height: 16.px),
-        _buildTextType(text: 'rent_price'.tr, value: '2.000.000 ₫'),
+        _buildTextType(
+            text: 'Giá thuê'.tr,
+            value:
+                '${controller.contractByIdModel!.roomPrice?.toStringTotalthis(symbol: 'đ')}'),
         SizedBox(height: 16.px),
         _buildTextType(
           text: 'start_date'.tr,
-          value: '25/09/2023',
+          value: '${controller.contractByIdModel!.dateCreated?.ddMMyyyy}',
           leadingIcon: Icon(
             Icons.calendar_today_outlined,
             color: AppColors.secondary40,

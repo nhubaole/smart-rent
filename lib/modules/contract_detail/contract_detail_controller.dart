@@ -94,15 +94,19 @@ class ContractDetailController extends GetxController {
 
   onLeftButtonClick() async {
     if (contractType != null && contractType == 1) {
+      //  contractByStatusModel = args['contract'];
+      //   contractType = args['contract_type'];
       Get.bottomSheet(
         ConfirmEndContractAndReturnRoom(
           onCancel: () {},
           onConfirm: () {
             Get.toNamed(
               AppRoutes.tenantRentReturn,
-              arguments: ReturnRequestArgument(
-                returnRequestID: notiArgument?.contractID,
-              ),
+              arguments: {
+                'contract': contractByStatusModel,
+                'contract_type': contractType,
+                'contract_by_id': contractByIdModel,
+              },
             );
           },
         ),
