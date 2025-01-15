@@ -23,12 +23,16 @@ class UserProfilePage extends GetView<UserProfileController> {
     return KeepAliveWrapper(
       wantKeepAlive: true,
       child: ScaffoldWidget(
-        body: Stack(
-          children: [
-            _buildBackground(),
-            _buildTextTitlePage(),
-            _buildContent(),
-          ],
+        body: GetBuilder<UserProfileController>(
+          id: 'user_profile',
+          init: controller,
+          builder: (controller) => Stack(
+            children: [
+              _buildBackground(),
+              _buildTextTitlePage(),
+              _buildContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -79,12 +83,9 @@ class UserProfilePage extends GetView<UserProfileController> {
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Container(
-          margin: EdgeInsets.only(top: Get.height * 0.2),
+          margin: EdgeInsets.only(top: Get.height * 0.15),
           padding: EdgeInsets.only(top: 32.px),
           width: double.infinity,
-          // constraints: BoxConstraints(
-          //   maxHeight: Get.height,
-          // ),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.only(
@@ -95,7 +96,7 @@ class UserProfilePage extends GetView<UserProfileController> {
           child: Column(
             children: [
               _buildInfoUser(),
-              SizedBox(height: 32.px),
+              SizedBox(height: 16.px),
               ButtonSettingWidget(
                 icon: FontAwesomeIcons.person,
                 title: 'Thông tin các nhân',
@@ -122,12 +123,16 @@ class UserProfilePage extends GetView<UserProfileController> {
               if (controller.user.role == 0)
                 OutlineButtonWidget(
                   margin: EdgeInsets.symmetric(horizontal: 16.px),
-                  onTap: controller.onUpgradeToLandlord,
+                  padding: EdgeInsets.zero,
+                  height: 40.px,
+                  onTap: controller.onAskToUpgradeToLandlord,
                   text: 'Chuyển sang tài khoản Chủ nhà',
                 ),
               SizedBox(height: 16.px),
               SolidButtonWidget(
                 margin: EdgeInsets.symmetric(horizontal: 16.px),
+                padding: EdgeInsets.zero,
+                height: 40.px,
                 text: 'Đăng xuất',
                 onTap: controller.onLogout,
                 icon: Icon(
@@ -137,16 +142,40 @@ class UserProfilePage extends GetView<UserProfileController> {
                 ),
               ),
               SizedBox(height: 16.px),
-              Text(
-                'Thông tin phiên bản ${controller.version}(${controller.buildNumber})',
-                style: TextStyle(
-                  color: AppColors.secondary60,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+              _buildInAppUpdate(),
               SizedBox(height: 16.px),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _buildInAppUpdate() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.px),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          enableFeedback: true,
+          onTap: controller.checkingAvailabeInAppUpdate,
+          splashColor: AppColors.secondary90,
+          borderRadius: BorderRadius.circular(8.px),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8.px),
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.px),
+            ),
+            child: Text(
+              'Thông tin phiên bản ${controller.version}(${controller.buildNumber})',
+              style: TextStyle(
+                color: AppColors.secondary60,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
         ),
       ),

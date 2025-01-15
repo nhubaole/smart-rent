@@ -22,13 +22,13 @@ class PostRoomPage extends GetView<PostRoomController> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-
         final shouldExit = await controller.onPopInvokedWithResult();
         if (context.mounted && shouldExit) {
           Get.back();
         }
       },
       child: SafeArea(
+        top: false,
         child: ScaffoldWidget(
           appBar: _buildAppbar(context),
           body: Obx(() => _buildWidgetByStatus()),
@@ -75,7 +75,6 @@ class PostRoomPage extends GetView<PostRoomController> {
           selectedColor: AppColors.primary40,
           unselectedColor: AppColors.secondary60,
         ),
-        // _buildHeader(),
         SizedBox(height: 16.px),
         Expanded(
           child: TabBarView(
@@ -143,27 +142,8 @@ class PostRoomPage extends GetView<PostRoomController> {
   }
 
   Widget _buildButtonNext() {
-    // return ButtonOutline(
-    //     borderWidth: 2,
-    //     onPressed: () {
-
-    //     },
-    //     icon: const Icon(
-    //       Icons.arrow_forward_ios_rounded,
-    //       size: 20,
-    //       color: AppColors.primary60,
-    //     ),
-    //     text: const Text(
-    //       'Tiếp theo',
-    //       style: TextStyle(
-    //           color: AppColors.primary60,
-    //           fontSize: 18,
-    //           fontWeight: FontWeight.w500),
-    //     ),
-    //     borderColor: AppColors.primary60,
-    //     borderRadius: BorderRadius.circular(100));
     return OutlineButtonWidget(
-      margin: EdgeInsets.symmetric(horizontal: 20.px),
+      margin: EdgeInsets.only(left: 20.px, right: 20.px, bottom: 2.px),
       padding: EdgeInsets.zero,
       onTap: controller.onNextButton,
       text: 'Tiếp theo',
@@ -176,28 +156,9 @@ class PostRoomPage extends GetView<PostRoomController> {
   }
 
   Widget _buildButtonPost() {
-    // return ButtonFill(
-    //     onPressed: () {
-    //       if (controller.formInfoKey.currentState!.validate()) {
-    //         controller.formInfoKey.currentState!.save();
-    //         controller.postRoom();
-    //       }
-    //     },
-    //     icon: const Icon(
-    //       Icons.add_box_rounded,
-    //       size: 20,
-    //       color: Colors.white,
-    //     ),
-    //     text: const Text(
-    //       'Đăng bài',
-    //       style: TextStyle(
-    //           color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-    //     ),
-    //     backgroundColor: AppColors.primary60,
-    //     borderRadius: BorderRadius.circular(100));
     return SolidButtonWidget(
       padding: EdgeInsets.zero,
-      margin: EdgeInsets.symmetric(horizontal: 20.px),
+      margin: EdgeInsets.only(left: 20.px, right: 20.px, bottom: 2.px),
       text: 'Đăng bài',
       onTap: controller.postRoom,
       leading: const Icon(

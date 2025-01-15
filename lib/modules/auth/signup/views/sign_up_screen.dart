@@ -103,6 +103,7 @@ class SignUpPage extends GetView<SignUpController> {
             text: 'Đăng ký ngay',
             onTap: () async {
               FocusManager.instance.primaryFocus?.unfocus();
+              controller.onRegister();
             },
             child: controller.isVerifying.value
                 ? SizedBox(
@@ -125,7 +126,7 @@ class SignUpPage extends GetView<SignUpController> {
               ),
               TextButton(
                 onPressed: () {
-                  Get.offNamed(AppRoutes.login, preventDuplicates: true);
+                  Get.offNamed(AppRoutes.login);
                 },
                 child: Text(
                   'Đăng nhập ngay',

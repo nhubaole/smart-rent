@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/app/app_storage.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/extension/int_extension.dart';
@@ -35,20 +36,19 @@ class _RoomItemState extends State<RoomItem> {
   void initState() {
     super.initState();
     isLiked = widget.room.isLike ?? false;
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   final response = await RoomRepoImpl().getLikedRoom(widget.room.id);
-    //   if (response.isSuccess()) {
-    //     setState(() {
-    //       isLiked = !response.data!;
-    //     });
-    //   }
-    // });
   }
 
   @override
   void didUpdateWidget(covariant RoomItem oldWidget) {
-    
     super.didUpdateWidget(oldWidget);
+  }
+
+  Future<void> setRecentRoom() async {
+    final recentRoom = await AppStorage.getRecentRoom();
+    if (!recentRoom.contains(widget.room.id)) {
+      recentRoom.add(widget.room.id);
+      await AppStorage.setRecentRoom(recentRoom);
+    }
   }
 
   @override
@@ -71,6 +71,7 @@ class _RoomItemState extends State<RoomItem> {
           borderRadius: BorderRadius.circular(8.px),
           splashColor: AppColors.splashColor,
           onTap: () async {
+            await setRecentRoom();
             if (widget.onTap != null) {
               widget.onTap!();
             } else {
@@ -266,7 +267,7 @@ class _RoomItemState extends State<RoomItem> {
     } else {
       icon = const Icon(
         Icons.favorite_outline,
-        color: AppColors.like,
+        color: AppColors.white,
       );
     }
     return Positioned(

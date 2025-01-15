@@ -225,8 +225,6 @@ class _LocationPageState extends State<LocationPage> {
               // ),
               OutlineTextFiledWidget(
                 textEditingController: controller.streetTextController,
-                textInputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
                 hintText: 'Ví dụ: Huỳnh Văn Bánh',
                 onValidate: (p0) {
                   if (p0 == null || p0.isEmpty) {
@@ -262,12 +260,10 @@ class _LocationPageState extends State<LocationPage> {
               // ),
               OutlineTextFiledWidget(
                 textEditingController: controller.addressTextController,
-                textInputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
                 hintText: 'Ví dụ: 41/1A',
                 onValidate: (p0) {
                   if (p0 == null || p0.isEmpty) {
-                    return 'Vui lòng nhập số tên đường';
+                    return 'Vui lòng nhập số nhà';
                   }
 
                   return null;

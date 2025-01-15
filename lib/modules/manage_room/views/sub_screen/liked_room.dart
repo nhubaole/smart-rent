@@ -67,12 +67,12 @@ class LikedRoomScreen extends GetView<LikedRoomController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _buildGridList(),
-                  SizedBox(height: 2.h),
-                  SolidButtonWidget(
-                      text: 'Xem thêm',
-                      onTap: () {
-                        controller.getListRoom();
-                      }),
+                  // SizedBox(height: 2.h),
+                  // SolidButtonWidget(
+                  //     text: 'Xem thêm',
+                  //     onTap: () {
+                  //       controller.getListRoom();
+                  //     }),
                 ],
               ),
       ),

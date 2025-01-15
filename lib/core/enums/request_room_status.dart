@@ -32,7 +32,7 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
   String get value {
     switch (this) {
       case RequestRoomStatus.notProcessed:
-        return 'not_processed';
+        return 'not_processed'.tr;
       case RequestRoomStatus.accepted:
         return 'accepted'.tr;
       case RequestRoomStatus.rejected:

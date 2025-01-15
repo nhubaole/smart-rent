@@ -165,6 +165,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> setupFirebaseMessaging() async {
+    await FirebaseMessaging.instance.requestPermission();
+    
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     String? token = await messaging.getToken();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
@@ -67,15 +68,30 @@ class LandlordDetailReturnRequestPage
             SizedBox(height: 2.h),
             _buildInfo(),
             SizedBox(height: 3.h),
-            SolidButtonWidget(
-              text: 'Xác nhận',
-              onTap: controller.onConfirm,
-            ),
+            _buildButtonSubmit(),
             SizedBox(height: 3.h),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildButtonSubmit() {
+    if (controller.returnRequestByIdModel?.status == 0) {
+      return SolidButtonWidget(
+        text: 'Xác nhận',
+        onTap: controller.onConfirm,
+      );
+    } else if (controller.returnRequestByIdModel?.status == 1) {
+      return SolidButtonWidget(
+        text: 'Xác nhận',
+        onTap: controller.onConfirm,
+      );
+    } else if (controller.returnRequestByIdModel?.status == 2) {
+      return Container();
+    } else {
+      return Container();
+    }
   }
 
   Row _buildIdAndCreateTime() {
@@ -97,10 +113,17 @@ class LandlordDetailReturnRequestPage
           ),
         ),
         Expanded(
-          child: Text(
-            'Yêu cầu #${controller.returnRequestByIdModel!.createdAt?.ddMMyyyy}',
-            textAlign: TextAlign.end,
-            style: textStyle,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(FontAwesomeIcons.clock, size: 16.sp),
+              SizedBox(width: 5.px),
+              Text(
+                '${controller.returnRequestByIdModel!.createdAt?.hhmmDDMMyyyy}',
+                textAlign: TextAlign.end,
+                style: textStyle,
+              ),
+            ],
           ),
         ),
       ],
@@ -485,7 +508,10 @@ class LandlordDetailReturnRequestPage
             ),
             Expanded(
               child: Text(
-                controller.returnRequestByIdModel?.totalReturnDeposit!
+                (controller.returnRequestByIdModel?.totalReturnDeposit! ??
+                            0 -
+                                controller
+                                    .returnRequestByIdModel!.deductAmount!)
                         .toStringTotalthis(symbol: 'đ') ??
                     '--',
                 style: TextStyle(

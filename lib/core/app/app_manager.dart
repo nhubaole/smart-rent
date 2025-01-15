@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_upgrade_version/flutter_upgrade_version.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart' as package_info_plus;
 import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/app/app_storage.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
@@ -14,7 +18,7 @@ class AppManager {
 
   AppManager._internal();
 
-  late PackageInfo packageInfo;
+  late package_info_plus.PackageInfo packageInfo;
 
   String? _phoneNumber;
   String? _password;
@@ -37,7 +41,7 @@ class AppManager {
   String get buildNumber => packageInfo.buildNumber;
 
   Future<void> init() async {
-    packageInfo = await PackageInfo.fromPlatform();
+    packageInfo = await package_info_plus.PackageInfo.fromPlatform();
   }
 
   setSession({
@@ -52,14 +56,6 @@ class AppManager {
     _refreshToken = refreshToken ?? _refreshToken;
     _phoneNumber = phoneNumber ?? _phoneNumber;
     _password = password ?? _password;
-    // await HiveManager.put(
-    //   AppConstant.hiveSessionKey,
-    //   {
-    //     'currentUser': _currentUser?.toJson(),
-    //     'accessToken': _accessToken,
-    //     'refreshToken': _refreshToken,
-    //   },
-    // );
     await AppStorage.putSession(
       {
         'currentUser': _currentUser?.toJson(),
@@ -77,7 +73,6 @@ class AppManager {
   }
 
   Future<void> forceLogOut() async {
-    // Get.offAll(const LoginScreen());
     if (Get.currentRoute != AppRoutes.login) {
       Get.offAllNamed(AppRoutes.login);
     }
@@ -111,6 +106,36 @@ class AppManager {
       }
     } else {
       forceLogOut();
+    }
+  }
+
+  updateApp() async {
+    if (Platform.isAndroid) {
+      InAppUpdateManager manager = InAppUpdateManager();
+      AppUpdateInfo? appUpdateInfo = await manager.checkForUpdate();
+      if (appUpdateInfo == null) return;
+      if (appUpdateInfo.updateAvailability ==
+          UpdateAvailability.developerTriggeredUpdateInProgress) {
+        //If an in-app update is already running, resume the update.
+        String? message =
+            await manager.startAnUpdate(type: AppUpdateType.immediate);
+        debugPrint(message ?? '');
+      } else if (appUpdateInfo.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+        ///Update available
+        if (appUpdateInfo.immediateAllowed) {
+          String? message =
+              await manager.startAnUpdate(type: AppUpdateType.immediate);
+          debugPrint('immediateAllowed: $message');
+        } else if (appUpdateInfo.flexibleAllowed) {
+          String? message =
+              await manager.startAnUpdate(type: AppUpdateType.flexible);
+          debugPrint('flexibleAllowed: $message');
+        } else {
+          debugPrint(
+              'Update available. Immediate & Flexible Update Flow not allow');
+        }
+      }
     }
   }
 }

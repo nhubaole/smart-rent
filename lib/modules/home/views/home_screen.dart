@@ -12,8 +12,6 @@ import 'package:smart_rent/core/widget/room_item_skeleton.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/home/controllers/home_controller.dart';
 import 'package:smart_rent/modules/map/views/map_screen.dart';
-import 'package:smart_rent/modules/recently/views/recently_view.dart';
-import 'package:smart_rent/modules/search/views/search_screen.dart';
 
 import 'package:transparent_image/transparent_image.dart';
 
@@ -166,7 +164,7 @@ class HomePage extends GetView<HomeController> {
           ),
           GestureDetector(
             onTap: () {
-              Get.to(() => const RecentlyViewScreen());
+              Get.toNamed(AppRoutes.recentlyRoom);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -243,18 +241,17 @@ class HomePage extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildUsername(),
-              SizedBox(
-                height: 0.8.h,
-              ),
-              _buildLocation()
-            ],
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildUsername(),
+                SizedBox(height: 0.8.h),
+                _buildLocation(),
+              ],
+            ),
           ),
-          const Spacer(),
           _buildButtonNotifications(),
         ],
       ),
@@ -287,31 +284,43 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Row _buildLocation() {
-    return Row(
-      children: [
-        const Icon(
-          Icons.location_on,
-          color: Colors.white,
-          size: 16,
-        ),
-        SizedBox(
-          width: 2.w,
-        ),
-        SizedBox(
-          width: 70.w,
-          child: Text.rich(
-            TextSpan(
-              text: controller.currenLocation.value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+  Widget _buildLocation() {
+    return Obx(
+      () => Row(
+        children: [
+          const Icon(
+            Icons.location_on,
+            color: Colors.white,
+            size: 16,
           ),
-        ),
-      ],
+          SizedBox(
+            width: 2.w,
+          ),
+          controller.currenLocation.value.isEmpty
+              ? SizedBox(
+                  width: 12.px,
+                  height: 12.px,
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary60,
+                    backgroundColor: Colors.white,
+                    strokeCap: StrokeCap.round,
+                    strokeWidth: 2.px,
+                  ),
+                )
+              : Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      text: controller.currenLocation.value,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
@@ -689,19 +698,17 @@ class HomePage extends GetView<HomeController> {
         ? FloatingActionButton(
             child: const Icon(Icons.search),
             onPressed: () {
-              Get.to(
-                const SearchPage(),
-                preventDuplicates: true,
-                curve: Curves.easeInBack,
-              );
+              Get.toNamed(AppRoutes.searchRoom, preventDuplicates: true);
             })
         : FloatingActionButton.extended(
             label: const Row(
-              children: [Icon(Icons.search), Text('Tìm phòng trọ ngay')],
+              children: [
+                Icon(Icons.search),
+                Text('Tìm phòng trọ ngay'),
+              ],
             ),
             onPressed: () {
-              Get.to(
-                const SearchPage(),
+              Get.toNamed(AppRoutes.searchRoom
               );
             },
           );

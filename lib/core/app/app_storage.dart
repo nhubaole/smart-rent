@@ -29,4 +29,22 @@ class AppStorage {
   static Future<void> clearSession() async {
     await HiveManager.delete(AppConstant.hiveSession);
   }
+
+  static Future<void> setRecentRoom(List<int> room) async {
+    await HiveManager.put(AppConstant.hiveRecentRoom, room);
+  }
+
+  static Future<List<int>> getRecentRoom() async {
+    final recentRoom = HiveManager.get(AppConstant.hiveRecentRoom);
+    if (recentRoom is List) {
+      return recentRoom.cast<int>();
+    }
+    return [];
+  }
+
+  static Future<void> clearRecentRoom() async {
+    await HiveManager.delete(AppConstant.hiveRecentRoom);
+  }
 }
+
+

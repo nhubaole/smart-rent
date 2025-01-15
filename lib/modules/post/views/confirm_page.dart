@@ -63,8 +63,6 @@ class _ConfirmPageState extends State<ConfirmPage> {
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 maxLength: 60,
                 textEditingController: controller.titleTextController,
-                textInputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
                 hintText: 'Nhập tiêu đề bài đăng',
                 onValidate: (p0) {
                   if (p0 == null || p0.isEmpty) {
@@ -102,8 +100,6 @@ class _ConfirmPageState extends State<ConfirmPage> {
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 maxlines: 4,
                 textEditingController: controller.descriptionTextController,
-                textInputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
                 hintText: 'Môi trường sống sạch, khu phố an ninh,...',
                 onValidate: (p0) {
                   if (p0 == null || p0.isEmpty) {
@@ -142,8 +138,6 @@ class _ConfirmPageState extends State<ConfirmPage> {
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 maxlines: 4,
                 textEditingController: controller.regulationsTextController,
-                textInputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
                 hintText: 'Nội quy phòng để đảm bảo quyền lợi đôi bên...',
                 onValidate: (p0) {
                   if (p0 == null || p0.isEmpty) {

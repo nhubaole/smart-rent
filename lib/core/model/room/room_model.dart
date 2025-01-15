@@ -4,7 +4,6 @@ import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 
 class RoomModel {
@@ -21,7 +20,7 @@ class RoomModel {
   int? availableFrom;
   int? roomNumber;
   Map<String, dynamic>? roomNumbers;
-  RoomType? roomType;
+  String? roomType;
   List<String>? images;
   List<Utilities>? utilities;
   String? description;
@@ -102,9 +101,7 @@ class RoomModel {
               .map((e) => InfoUtilities.fromString(e.toString().toUpperCase()))
               .toList()
           : null,
-      roomType: json['room_type'] != null
-          ? InfoRoomType.fromString(json['room_type'])
-          : null,
+      roomType: json['room_type'],
       description: json['description'] as String?,
       owner: json['owner'] is Map<String, dynamic>
           ? UserModel.fromMap(json['owner'] as Map<String, dynamic>)
@@ -159,9 +156,7 @@ class RoomModel {
       //     ? map['list_room_numbers'] as Map<String, dynamic>
       //     : null,
       roomNumbers: _handRoomNumbers(map['list_room_numbers']),
-      roomType: map['room_type'] != null
-          ? InfoRoomType.fromString(map['room_type'])
-          : null,
+      roomType: map['room_type'],
       images: map['room_images'] != null
           ? List<String>.from(map['room_images'])
           : null,
@@ -189,10 +184,10 @@ class RoomModel {
       isRent: map['is_rent'] != null ? map['is_rent'] as bool : null,
       isLike: map['is_liked'] != null ? map['is_liked'] as bool : null,
       createAt: map['created_at'] != null
-          ? DatetimeExt.parseFormatddMMyyyy(map['created_at'].toString())
+          ? DateTime.tryParse(map['created_at'].toString())
           : null,
       updateAt: map['updated_at'] != null
-          ? DatetimeExt.parseFormatddMMyyyy(map['updated_at'].toString())
+          ? DateTime.tryParse(map['updated_at'].toString())
           : null,
     );
   }
@@ -244,7 +239,7 @@ class RoomModel {
     int? availableFrom,
     int? roomNumber,
     Map<String, dynamic>? roomNumbers,
-    RoomType? roomType,
+    String? roomType,
     List<String>? images,
     List<Utilities>? utilities,
     String? description,
@@ -333,10 +328,6 @@ class RoomModel {
       'updated_at': updateAt?.toIso8601String(),
       'is_liked': isLike,
     };
-  }
-
-  Future<dio.FormData> toFormData() async {
-    return dio.FormData.fromMap({});
   }
 
   @override

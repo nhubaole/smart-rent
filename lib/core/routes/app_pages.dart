@@ -76,6 +76,8 @@ import 'package:smart_rent/modules/rating/rating_binding.dart';
 import 'package:smart_rent/modules/rating/rating_page.dart';
 import 'package:smart_rent/modules/rating_user/rating_user_binding.dart';
 import 'package:smart_rent/modules/rating_user/rating_user_page.dart';
+import 'package:smart_rent/modules/recently/recently_page_binding.dart';
+import 'package:smart_rent/modules/recently/recently_room_page.dart';
 import 'package:smart_rent/modules/root_view/bindings/root_binding.dart';
 import 'package:smart_rent/modules/root_view/views/root_screen.dart';
 import 'package:smart_rent/modules/contract_sign/contract_sign_binding.dart';
@@ -416,6 +418,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.userProfileDetail,
       page: () => const UserProfileDetailPage(),
+    ),
+    GetPage(
+      name: AppRoutes.recentlyRoom,
+      page: () => const RecentlyRoomPage(),
+      binding: RecentlyPageBinding(),
     ),
   ];
 }

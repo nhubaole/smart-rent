@@ -11,6 +11,7 @@ import 'package:smart_rent/core/repositories/payment/payment_repo_impl.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
+import 'package:smart_rent/modules/home/widgets/confirm_upgrade_landlord_sheet.dart';
 import 'package:smart_rent/modules/user_profile/widgets/list_bank_bottom_sheet.dart';
 
 class UserProfileController extends GetxController {
@@ -206,6 +207,14 @@ class UserProfileController extends GetxController {
     }
   }
 
+  onAskToUpgradeToLandlord() async {
+    Get.bottomSheet(
+      ConfirmUpgradeLandlordSheet(
+        onConfirm: onUpgradeToLandlord,
+      ),
+    );
+  }
+
   onUpgradeToLandlord() async {
     final updateInfoModel = UserUpdateInfoModel(
       fullName: fullNameController.text.trim(),
@@ -222,6 +231,7 @@ class UserProfileController extends GetxController {
       final currentUser = await UserRepoIml().getUserById(id: user.id!);
       if (currentUser.isSuccess()) {
         appManager.setSession(newUser: currentUser.data!);
+        update(['user_profile']);
         AlertSnackbar.show(
           title: 'Cập nhật thông tin thanh toán thành công',
           message: 'Thông tin của bạn đã được cập nhật thành công',
@@ -238,5 +248,9 @@ class UserProfileController extends GetxController {
 
   onLogout() {
     AppManager.instance.forceLogOut();
+  }
+
+  checkingAvailabeInAppUpdate() async {
+    await AppManager().updateApp();
   }
 }

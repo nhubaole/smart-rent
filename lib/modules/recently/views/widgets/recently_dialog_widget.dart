@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/config/app_colors.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/outline_button_widget.dart';
+import 'package:smart_rent/core/widget/solid_button_widget.dart';
 
 class RecentlyDialogWidget extends StatelessWidget {
   const RecentlyDialogWidget({
     super.key,
-    required this.onPressed,
+    this.onConfirm,
+    this.onCancel,
   });
-  final Future<void> onPressed;
+  final Function()? onConfirm;
+  final Function()? onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -17,81 +22,65 @@ class RecentlyDialogWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       backgroundColor: Colors.transparent,
-      child: Card(
-        elevation: 0,
-        color: Colors.white,
+      child: Container(
+        padding: EdgeInsets.all(16.px),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primary95,
-                      border: Border.all(
-                        width: 5,
-                        color: Colors.transparent,
-                      ),
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Cảnh báo xóa',
-                      style: TextStyle(
-                        color: AppColors.primary40,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+            Icon(Icons.warning, color: AppColors.error, size: 48.px),
+            SizedBox(height: 16.px),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Bạn có chắc chắn muốn xóa lịch sử đã xem?',
+                style: TextStyle(
+                  color: AppColors.primary40,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            const Text(
-              'Bạn có muốn xóa hết lịch sử phòng gần đấy không?',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text('Không, đừng xóa'),
-                  ),
-                  const Spacer(),
-                  OutlinedButton(
-                    onPressed: () {
-                      onPressed;
-                      Get.back(closeOverlays: true);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: AppColors.secondary40,
-                    ),
-                    child: const Text('Có, xóa ngay'),
-                  ),
-                ],
-              ),
-            )
+            SizedBox(height: 16.px),
+            _buildGroupButtonActions(),
           ],
         ),
       ),
+    );
+  }
+
+  Row _buildGroupButtonActions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: OutlineButtonWidget(
+            padding: EdgeInsets.symmetric(vertical: 8.px, horizontal: 16.px),
+            text: 'Hủy',
+            onTap: () {
+              Get.back();
+              onCancel?.call();
+            },
+          ),
+        ),
+        SizedBox(width: 16.px),
+        Expanded(
+          child: SolidButtonWidget(
+            padding: EdgeInsets.symmetric(vertical: 8.px, horizontal: 16.px),
+            text: 'Xóa ngay',
+            onTap: () {
+              Get.back();
+              onConfirm?.call();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

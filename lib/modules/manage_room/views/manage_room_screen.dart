@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/services/sr_method_channel.dart';
+import 'package:smart_rent/core/widget/form_contract_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
@@ -177,6 +178,16 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                           startTime: startTime,
                           endTime: endTime,
                         );
+                      },
+                    ),
+                  ),
+
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'Test Button'.tr,
+                      icon: ImageAssets.icCustomer,
+                      onTap: () {
+                        Get.to(FormContractWidget());
                       },
                     ),
                   ),

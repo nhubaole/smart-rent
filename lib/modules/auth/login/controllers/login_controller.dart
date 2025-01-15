@@ -15,11 +15,11 @@ class LoginController extends GetxController {
   late Log logger;
   final AppManager appManager = AppManager();
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final phoneNo = TextEditingController(text: '0123456789');
   final password = TextEditingController(text: 'test');
   final isLoading = Rx<bool>(false);
-  final obscureText = Rx<bool>(false);
+  final obscureText = Rx<bool>(true);
   final phoneNoFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
 
@@ -40,18 +40,22 @@ class LoginController extends GetxController {
 
   Future<void> submit() async {
     try {
+      if (!loginFormKey.currentState!.validate()) {
+        return;
+      }
+      loginFormKey.currentState!.save();
       isLoading.value = true;
       OverlayLoading.show(title: 'Đang đăng nhập...', canPop: true);
       logger.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');
-      // final result = await AuthRepoImpl().login(
-      //   phoneNumber: phoneNo.text.trim(),
-      //   password: password.text.trim(),
-      // );
-      
       final result = await AuthRepoImpl().login(
-        phoneNumber: '0916290520',
-        password: 'Test1234',
+        phoneNumber: phoneNo.text.trim(),
+        password: password.text.trim(),
       );
+      
+      // final result = await AuthRepoImpl().login(
+      //   phoneNumber: '0916290520',
+      //   password: 'Test1234',
+      // );
       if (!result.isSuccess()) {
         OverlayLoading.hide();
         AlertSnackbar.show(
@@ -63,19 +67,19 @@ class LoginController extends GetxController {
 
         return;
       } else {
-        // appManager.setSession(
-        //   phoneNumber: phoneNo.text.trim(),
-        //   password: password.text.trim(),
-        //   newAccessToken: result.data['accessToken'],
-        //   refreshToken: result.data['refreshToken'],
-        // );
-        
         appManager.setSession(
-          phoneNumber: '0916290520',
-          password: 'Test1234',
+          phoneNumber: phoneNo.text.trim(),
+          password: password.text.trim(),
           newAccessToken: result.data['accessToken'],
           refreshToken: result.data['refreshToken'],
         );
+        
+        // appManager.setSession(
+        //   phoneNumber: '0916290520',
+        //   password: 'Test1234',
+        //   newAccessToken: result.data['accessToken'],
+        //   refreshToken: result.data['refreshToken'],
+        // );
         final userModel = await UserRepoIml().getCurrentUser(
           accessToken: result.data['accessToken'],
         );

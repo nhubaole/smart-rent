@@ -10,13 +10,12 @@ class SignUpController extends GetxController {
   final isShowPassword = false.obs;
   final now = DateTime.now();
   final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
-  final fullName = TextEditingController(text: DateTime.now().toString());
-  final phoneNumber = TextEditingController(
-      text: DateTime.now().microsecondsSinceEpoch.toString());
-  final password = TextEditingController(text: DateTime.now().toString());
-  final dateOfBirth = TextEditingController(text: DateTime.now().toString());
-  final address = TextEditingController(text: DateTime.now().toString());
-  final obscureText = Rx<bool>(false);
+  final fullName = TextEditingController();
+  final phoneNumber = TextEditingController();
+  final password = TextEditingController();
+  final dateOfBirth = TextEditingController();
+  final address = TextEditingController();
+  final obscureText = Rx<bool>(true);
 
   late Log log;
 
@@ -34,11 +33,6 @@ class SignUpController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     fullName.dispose();
     phoneNumber.dispose();
@@ -49,6 +43,11 @@ class SignUpController extends GetxController {
   }
 
   Future<String?> onRegister() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!signUpFormKey.currentState!.validate()) {
+      return 'Vui lòng kiểm tra lại thông tin';
+    }
+    signUpFormKey.currentState!.save();
     final result = await AuthRepoImpl().register(
       phoneNumber: phoneNumber.text.trim(),
       fullName: fullName.text.trim(),

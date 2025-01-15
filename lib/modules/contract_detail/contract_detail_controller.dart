@@ -20,6 +20,7 @@ class ContractDetailController extends GetxController {
   ContractByStatusModel? contractByStatusModel;
   ContractByIdModel? contractByIdModel;
   NotiArgument? notiArgument;
+  int? contractType;
   // late int contractType;
   PartyInfoModel? get partyA => contractByIdModel?.partyA;
   PartyInfoModel? get partyB => contractByIdModel?.partyB;
@@ -36,7 +37,7 @@ class ContractDetailController extends GetxController {
     if (args != null) {
       if (args is Map<String, dynamic>) {
         contractByStatusModel = args['contract'];
-        // contractType = args['contract_type'];
+        contractType = args['contract_type'];
         await fetchContractById();
       } else if (args is int) {
         final id = args;
@@ -92,7 +93,25 @@ class ContractDetailController extends GetxController {
   }
 
   onLeftButtonClick() async {
-    if (notiArgument != null) {
+    if (contractType != null && contractType == 1) {
+      //  contractByStatusModel = args['contract'];
+      //   contractType = args['contract_type'];
+      Get.bottomSheet(
+        ConfirmEndContractAndReturnRoom(
+          onCancel: () {},
+          onConfirm: () {
+            Get.toNamed(
+              AppRoutes.tenantRentReturn,
+              arguments: {
+                'contract': contractByStatusModel,
+                'contract_type': contractType,
+                'contract_by_id': contractByIdModel,
+              },
+            );
+          },
+        ),
+      );
+    } else if (notiArgument != null) {
       Get.bottomSheet(
         ConfirmEndContractAndReturnRoom(
           onCancel: () {},
