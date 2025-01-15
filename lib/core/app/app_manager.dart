@@ -56,14 +56,6 @@ class AppManager {
     _refreshToken = refreshToken ?? _refreshToken;
     _phoneNumber = phoneNumber ?? _phoneNumber;
     _password = password ?? _password;
-    // await HiveManager.put(
-    //   AppConstant.hiveSessionKey,
-    //   {
-    //     'currentUser': _currentUser?.toJson(),
-    //     'accessToken': _accessToken,
-    //     'refreshToken': _refreshToken,
-    //   },
-    // );
     await AppStorage.putSession(
       {
         'currentUser': _currentUser?.toJson(),
@@ -81,7 +73,6 @@ class AppManager {
   }
 
   Future<void> forceLogOut() async {
-    // Get.offAll(const LoginScreen());
     if (Get.currentRoute != AppRoutes.login) {
       Get.offAllNamed(AppRoutes.login);
     }
@@ -135,11 +126,11 @@ class AppManager {
         if (appUpdateInfo.immediateAllowed) {
           String? message =
               await manager.startAnUpdate(type: AppUpdateType.immediate);
-          debugPrint(message ?? '');
+          debugPrint('immediateAllowed: $message');
         } else if (appUpdateInfo.flexibleAllowed) {
           String? message =
               await manager.startAnUpdate(type: AppUpdateType.flexible);
-          debugPrint(message ?? '');
+          debugPrint('flexibleAllowed: $message');
         } else {
           debugPrint(
               'Update available. Immediate & Flexible Update Flow not allow');

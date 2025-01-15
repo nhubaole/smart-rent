@@ -36,7 +36,7 @@ class LoginScreen extends GetView<LoginController> {
 
   Form _buildForm() {
     return Form(
-      key: controller.formKey,
+      key: controller.loginFormKey,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.px),
         child: Column(
@@ -132,8 +132,8 @@ class LoginScreen extends GetView<LoginController> {
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (controller.isLoading.value) return;
-                  if (controller.formKey.currentState!.validate()) {
-                    controller.formKey.currentState!.save();
+                  if (controller.loginFormKey.currentState!.validate()) {
+                    controller.loginFormKey.currentState!.save();
                     await controller.submit();
                   }
                 },
@@ -179,7 +179,7 @@ class LoginScreen extends GetView<LoginController> {
             ),
             TextButton(
               onPressed: () {
-                Get.offNamed(AppRoutes.signUp, preventDuplicates: true);
+                Get.offNamed(AppRoutes.signUp);
               },
               child: const Text(
                 'Đăng ký ngay',

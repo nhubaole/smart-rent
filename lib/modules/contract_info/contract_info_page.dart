@@ -75,12 +75,21 @@ class ContractInfoPage extends GetView<ContractInfoController> {
   }
 
   Widget? _buildButtonSignContract() {
+    if (controller.contractType == 1) {
+      return OutlineButtonWidget(
+        height: 50.px,
+        margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
+        padding: EdgeInsets.zero,
+        text: 'Xem chi tiết hợp đồng',
+        onTap: controller.onNavContractDetail,
+      );
+    }
     if (controller.showButtonSignContract) {
       return OutlineButtonWidget(
         height: 50.px,
-        onTap: controller.onNavContractDetail,
         margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
         padding: EdgeInsets.zero,
+        onTap: controller.onNavContractDetail,
         trailing: const Icon(
           Icons.arrow_forward_ios_outlined,
           size: 20,

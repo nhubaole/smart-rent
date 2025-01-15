@@ -61,6 +61,7 @@ class PostRoomController extends GetxController
   final formKeyConfirm = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final capacityTextController = TextEditingController();
+  final roomNumberTextController = TextEditingController();
   final areaTextController = TextEditingController();
   final priceTextController = TextEditingController();
   final depositTextController = TextEditingController();
@@ -68,16 +69,11 @@ class PostRoomController extends GetxController
   final waterCostTextController = TextEditingController();
   final internetCostTextController = TextEditingController();
   final parkingFeeTextController = TextEditingController();
-  final streetTextController =
-      TextEditingController();
-  final addressTextController =
-      TextEditingController();
-  final titleTextController =
-      TextEditingController();
-  final descriptionTextController =
-      TextEditingController();
-  final regulationsTextController =
-      TextEditingController();
+  final streetTextController = TextEditingController();
+  final addressTextController = TextEditingController();
+  final titleTextController = TextEditingController();
+  final descriptionTextController = TextEditingController();
+  final regulationsTextController = TextEditingController();
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
   final pickedImages = Rxn<List<XFile>>([]);
   final validImageTotal = true.obs;
@@ -127,6 +123,7 @@ class PostRoomController extends GetxController
   @override
   void onClose() {
     capacityTextController.dispose();
+    roomNumberTextController.dispose();
     areaTextController.dispose();
     priceTextController.dispose();
     depositTextController.dispose();
@@ -191,6 +188,7 @@ class PostRoomController extends GetxController
       title: titleTextController.text,
       description: descriptionTextController.text,
       capacity: int.tryParse(capacityTextController.text) ?? 0,
+      roomNumber: int.tryParse(roomNumberTextController.text),
       area: double.tryParse(areaTextController.text) ?? 0,
       totalPrice: double.tryParse(
               priceTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
@@ -465,6 +463,7 @@ class PostRoomController extends GetxController
       description: descriptionTextController.text,
       capacity: int.tryParse(capacityTextController.text) ?? 0,
       area: double.tryParse(areaTextController.text) ?? 0,
+      roomNumber: int.tryParse(roomNumberTextController.text) ?? 0,
       totalPrice: double.tryParse(
               priceTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
           0.0,

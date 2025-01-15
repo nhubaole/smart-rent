@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/config/app_images.dart';
+import 'package:smart_rent/core/enums/gender.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/extension/boolean_extension.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
@@ -26,11 +26,8 @@ import 'package:smart_rent/core/widget/view_image_dialog.dart';
 import 'package:smart_rent/modules/detail/widgets/button_action_navbar.dart';
 import '/modules/detail/controllers/detail_controller.dart';
 
-// ignore: must_be_immutable
 class DetailPage extends GetView<DetailController> {
-  const DetailPage({
-    super.key,
-  });
+  const DetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,31 +105,6 @@ class DetailPage extends GetView<DetailController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            // child: Row(
-            //   mainAxisSize: MainAxisSize.max,
-            //   mainAxisAlignment: controller.canRent
-            //       ? MainAxisAlignment.start
-            //       : MainAxisAlignment.center,
-            //   children: [
-
-            //     Text(
-            //       controller.priceFormatterFull(),
-            //       style: const TextStyle(
-            //         fontSize: 20,
-            //         color: Colors.white,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //     const Text(
-            //       '/phòng',
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         color: Colors.white,
-            //         fontWeight: FontWeight.w600,
-            //       ),
-            //     ),
-            //   ],
-            // ),
             child: Text.rich(
               style: TextStyle(
                     fontSize: 20,
@@ -250,8 +222,6 @@ class DetailPage extends GetView<DetailController> {
           SizedBox(height: 1.8.h),
           _buildUtilities(),
           SizedBox(height: 1.8.h),
-          // _buildPolicy(),
-          // SizedBox(height: 1.8.h),
           _buildRating(),
           SizedBox(height: 1.8.h),
           _buildOwner(),
@@ -331,7 +301,7 @@ class DetailPage extends GetView<DetailController> {
                   ),
                   children: [
                     TextSpan(text: '${'room'.tr} '),
-                    TextSpan(text: roomID.toString()),
+                    TextSpan(text: key.toString()),
                   ],
                 ),
               ),
@@ -444,15 +414,17 @@ class DetailPage extends GetView<DetailController> {
                   children: [
                     Column(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 24,
                           backgroundImage:
-                              CachedNetworkImageProvider(AppImages.demo),
+                              CachedNetworkImageProvider(
+                            controller.owner.avatarUrl ?? AppImages.demo,
+                          ),
                         ),
                         SizedBox(height: 1.h),
                         Row(
                           children: List.generate(
-                            5,
+                            controller.owner.totalRating ?? 0,
                             (index) => Icon(
                               Icons.star,
                               color: AppColors.rating,
@@ -1035,14 +1007,14 @@ class DetailPage extends GetView<DetailController> {
       children: [
         Expanded(
             child: Text(
-          controller.room!.roomType?.value ?? '--',
+          controller.room!.roomType ?? '--',
           style: const TextStyle(
             color: AppColors.secondary40,
             fontSize: 12,
           ),
         )),
         Text(
-          '${controller.room!.capacity!} ${'male_female'.tr}',
+          '${controller.room!.capacity!} ${InfoGender.fromInt(controller.room!.gender!).getNameGender}',
           style: const TextStyle(
             color: AppColors.secondary40,
             fontSize: 12,

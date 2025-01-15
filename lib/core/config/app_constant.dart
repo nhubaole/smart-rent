@@ -20,6 +20,7 @@ abstract class AppConstant {
   static const hiveFirstTimeInstall = 'first_time_install';
   static const hiveAccessToken = 'access_token';
   static const hiveSession = 'session';
+  static const hiveRecentRoom = 'recent_room';
 
 
 

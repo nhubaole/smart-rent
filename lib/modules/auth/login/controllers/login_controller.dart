@@ -15,11 +15,11 @@ class LoginController extends GetxController {
   late Log logger;
   final AppManager appManager = AppManager();
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   final phoneNo = TextEditingController(text: '0123456789');
   final password = TextEditingController(text: 'test');
   final isLoading = Rx<bool>(false);
-  final obscureText = Rx<bool>(false);
+  final obscureText = Rx<bool>(true);
   final phoneNoFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
 
@@ -40,6 +40,10 @@ class LoginController extends GetxController {
 
   Future<void> submit() async {
     try {
+      if (!loginFormKey.currentState!.validate()) {
+        return;
+      }
+      loginFormKey.currentState!.save();
       isLoading.value = true;
       OverlayLoading.show(title: 'Đang đăng nhập...', canPop: true);
       logger.d('tag', '${phoneNo.text.trim()} ${password.text.trim()}');

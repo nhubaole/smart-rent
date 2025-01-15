@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/extension/double_extension.dart';
-import 'package:smart_rent/core/extension/int_extension.dart';
 import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
 import 'package:smart_rent/modules/landlord_contract_create/landlord_contract_create_controller.dart';

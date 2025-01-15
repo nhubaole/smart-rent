@@ -6,5 +6,4 @@ final getIt = GetIt.instance;
 
 Future<void> configureDependencies() async {
   getIt.registerFactory<Log>(() => LogImpl());
-  // getIt.registerFactory<AuthController>(() => AuthController());
 }

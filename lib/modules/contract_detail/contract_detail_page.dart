@@ -30,13 +30,54 @@ class ContractDetailPage extends GetView<ContractDetailController> {
       appBar: CustomAppBar(title: 'detaul_contract'.tr),
       body: Obx(() => _buildContractByStatus()),
       bottomNavigationBar: Obx(
-        () => Visibility(
-          visible: controller.isLoading.value == LoadingType.LOADED,
-          child: controller.notiArgument != null
-              ? _buildButtonFromNoti()
-              : _buildButtonActions(),
-        ),
+        () => _buildButtonNav(),
       ),
+    );
+  }
+
+  Widget _buildButtonNav() {
+    if (controller.contractType != null && controller.contractType == 1) {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 16.px,
+          right: 16.px,
+          bottom: 16.px,
+          top: 8.px,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: OutlineButtonWidget(
+                padding: EdgeInsets.zero,
+                height: 50.px,
+                onTap: controller.isLoading.value == LoadingType.LOADING
+                    ? null
+                    : controller.onLeftButtonClick,
+                text: 'Kết thúc'.tr,
+                borderColor: AppColors.error,
+                textColor: AppColors.error,
+              ),
+            ),
+            SizedBox(width: 16.px),
+            Expanded(
+              child: SolidButtonWidget(
+                padding: EdgeInsets.zero,
+                height: 50.px,
+                text: 'Gia hạn'.tr,
+                onTap: controller.isLoading.value == LoadingType.LOADING
+                    ? null
+                    : controller.onRightButtonClick,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Visibility(
+      visible: controller.isLoading.value == LoadingType.LOADED,
+      child: controller.notiArgument != null
+          ? _buildButtonFromNoti()
+          : _buildButtonActions(),
     );
   }
 

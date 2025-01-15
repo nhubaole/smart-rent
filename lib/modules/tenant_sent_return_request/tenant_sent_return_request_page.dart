@@ -127,15 +127,11 @@ class TenantSentReturnRequestPage
               SizedBox(height: 16.px),
               OutlineTextFiledWidget(
                 textLabel: 'reason'.tr,
-                textEditingController: controller.returnDateController,
+                textEditingController: controller.reasonController,
                 onValidate: (p0) {
                   return null;
                 },
-                suffixIcon: Icon(
-                  Icons.calendar_today_outlined,
-                  color: AppColors.secondary40,
-                  size: 24.px,
-                ),
+                minlines: 5,
               ),
               SizedBox(height: 16.px),
               Text.rich(

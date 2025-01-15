@@ -203,7 +203,7 @@ class RoomRepoImpl implements RoomRepo {
         data: response.data['data']['isLiked'] as bool,
       );
     } catch (e) {
-      log.e('createRoom', e.toString());
+      log.e('getLikedRoom', e.toString());
       return ResponseModel.failed(e);
     }
   }

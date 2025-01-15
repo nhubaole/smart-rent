@@ -86,52 +86,55 @@ class PostedRoomScreen extends GetView<PostedRoomController> {
               mainAxisSpacing: 10.px,
               mainAxisExtent: 300.px,
             ),
-            itemCount: controller.listRoom.value.length + 1,
+            itemCount: controller.listRoom.value.length,
             itemBuilder: (context, index) {
-              if (index < controller.listRoom.value.length) {
-                return RoomItem(
+              // if (index < controller.listRoom.value.length) {
+              //   return RoomItem(
+              //     room: controller.listRoom.value[index],
+              //   );
+              // } else {
+              //   return Obx(
+              //     () => controller.isLoadMore.value
+              //         ? const Center(
+              //             child: CircularProgressIndicator(
+              //               color: AppColors.primary95,
+              //               backgroundColor: Colors.white,
+              //             ),
+              //           )
+              //         : Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Center(
+              //               child: OutlinedButton(
+              //                 onPressed: () {
+              //                   controller.getListRoom();
+              //                 },
+              //                 style: ButtonStyle(
+              //                   side: WidgetStateProperty.all(
+              //                     const BorderSide(
+              //                       color: AppColors.primary40,
+              //                     ),
+              //                   ),
+              //                   shape: WidgetStateProperty.all(
+              //                     RoundedRectangleBorder(
+              //                       borderRadius:
+              //                                     BorderRadius.circular(10),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 child: const Text(
+              //                   'Xem thêm',
+              //                   style: TextStyle(
+              //                     color: AppColors.primary40,
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //   );
+              // }
+              return RoomItem(
                   room: controller.listRoom.value[index],
-                );
-              } else {
-                return Obx(
-                  () => controller.isLoadMore.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.primary95,
-                            backgroundColor: Colors.white,
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: OutlinedButton(
-                              onPressed: () {
-                                controller.getListRoom();
-                              },
-                              style: ButtonStyle(
-                                side: WidgetStateProperty.all(
-                                  const BorderSide(
-                                    color: AppColors.primary40,
-                                  ),
-                                ),
-                                shape: WidgetStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius:
-                                                  BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              child: const Text(
-                                'Xem thêm',
-                                style: TextStyle(
-                                  color: AppColors.primary40,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                );
-              }
+              );
             },
           ),
         ),

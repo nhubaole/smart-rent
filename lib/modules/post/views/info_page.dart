@@ -38,6 +38,8 @@ class InfoPage extends GetView<PostRoomController> {
               SizedBox(height: 3.h),
               _buildArea(),
               SizedBox(height: 4.h),
+              _buildRoomNumber(),
+              SizedBox(height: 4.h),
               const Text(
                 'Chi phí',
                 style: TextStyle(
@@ -175,7 +177,8 @@ class InfoPage extends GetView<PostRoomController> {
                       textInputType: TextInputType.numberWithOptions(
                           decimal: true, signed: true),
                       onTap: controller.isParkingFree.value ? () {} : null,
-                      textEditingController: controller.capacityTextController,
+                      textEditingController:
+                          controller.parkingFeeTextController,
                       hintText: 'Nhập số tiền',
                       suffixUnit: ' | người/phòng',
                       onValidate: (p0) {
@@ -698,28 +701,6 @@ class InfoPage extends GetView<PostRoomController> {
         SizedBox(
           height: 2.w,
         ),
-        // TextFormField(
-        //   validator: (value) => controller.fieldValidator(value!),
-        //   autovalidateMode: AutovalidateMode.onUserInteraction,
-        //   controller: controller.capacityTextController,
-        //   keyboardType: TextInputType.number,
-        //   maxLines: 1,
-        //   decoration: const InputDecoration(
-        //     border: OutlineInputBorder(),
-        //     suffixStyle: TextStyle(
-        //         color: AppColors.secondary20,
-        //         fontSize: 14,
-        //         fontWeight: FontWeight.w500),
-        //     hintStyle: TextStyle(
-        //         color: AppColors.secondary20,
-        //         fontSize: 14,
-        //         fontWeight: FontWeight.w400),
-        //     hintText: 'Nhập số người/phòng',
-        //     suffixText: ' | người/phòng',
-        //     focusedBorder: OutlineInputBorder(
-        //         borderSide: BorderSide(color: AppColors.primary40, width: 2)),
-        //   ),
-        // ),
         OutlineTextFiledWidget(
           textEditingController: controller.capacityTextController,
           textInputType:
@@ -729,6 +710,39 @@ class InfoPage extends GetView<PostRoomController> {
           onValidate: (p0) {
             if (p0 == null || p0.isEmpty) {
               return 'Vui lòng nhập số người/phòng';
+            }
+            // if (HelpRegex.isNumber(p0) == false) {
+            //   return 'Vui lòng nhập số';
+            // }
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _buildRoomNumber() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'PHÒNG SỐ',
+          style: TextStyle(
+              color: AppColors.secondary40,
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
+        ),
+        SizedBox(
+          height: 2.w,
+        ),
+        OutlineTextFiledWidget(
+          textEditingController: controller.roomNumberTextController,
+          textInputType:
+              TextInputType.numberWithOptions(decimal: true, signed: true),
+          hintText: 'Nhập số phòng số',
+          onValidate: (p0) {
+            if (p0 == null || p0.isEmpty) {
+              return 'Vui lòng nhập phòng số';
             }
             // if (HelpRegex.isNumber(p0) == false) {
             //   return 'Vui lòng nhập số';

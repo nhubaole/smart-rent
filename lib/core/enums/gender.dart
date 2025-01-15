@@ -21,13 +21,11 @@ extension InfoGender on Gender {
   int get getNameGenderInt {
     switch (this) {
       case Gender.ALL:
-        return -1;
-      case Gender.MALE:
-        return 0;
-      case Gender.FEMALE:
         return 1;
-      default:
-        return -1;
+      case Gender.MALE:
+        return 2;
+      case Gender.FEMALE:
+        return 3;
     }
   }
 
@@ -46,14 +44,14 @@ extension InfoGender on Gender {
 
   static Gender fromInt(int value) {
     switch (value) {
-      case -1:
-        return Gender.ALL;
-      case 0:
-        return Gender.MALE;
       case 1:
+        return Gender.ALL;
+      case 2:
+        return Gender.MALE;
+      case 3:
         return Gender.FEMALE;
       default:
-        throw ArgumentError('Invalid room type: $value');
+        return Gender.ALL;
     }
   }
 }

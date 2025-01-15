@@ -54,6 +54,8 @@ class DetailController extends GetxController {
           ? 'Khá'
           : 'Trung bình';
 
+  UserModel get owner => room!.owner as UserModel;
+
   final isLoadingData = LoadingType.INIT.obs;
 
   final isLoadingSuggestRoom = LoadingType.INIT.obs;
