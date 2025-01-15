@@ -211,4 +211,9 @@ class ContractCreateModel {
       signedTimeA: signedTimeA ?? this.signedTimeA,
     );
   }
+
+  @override
+  String toString() {
+    return 'ContractCreateModel(address: $address, partyA: $partyA, partyB: $partyB, requestId: $requestId, roomId: $roomId, actualPrice: $actualPrice, paymentMethod: $paymentMethod, electricityMethod: $electricityMethod, electricityCost: $electricityCost, waterMethod: $waterMethod, waterCost: $waterCost, internetCost: $internetCost, parkingFee: $parkingFee, deposit: $deposit, beginDate: $beginDate, endDate: $endDate, responsibilityA: $responsibilityA, responsibilityB: $responsibilityB, generalResponsibility: $generalResponsibility, signatureA: $signatureA, signedTimeA: $signedTimeA)';
+  }
 }

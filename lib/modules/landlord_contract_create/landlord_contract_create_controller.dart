@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/payment_method.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
 import 'package:smart_rent/core/model/contract/contract_create_model.dart';
-import 'package:smart_rent/core/model/rental_request/rental_request_all_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_by_id_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
@@ -75,32 +75,61 @@ class LandlordContractCreateController extends GetxController
   }
 
   initController() {
+    
+
+
+
     addressController = TextEditingController(
         text: rentalRequestById.room!.address ??
             rentalRequestById.room!.addresses?.join(', '));
     roomNumberController =
         TextEditingController(
         text: rentalRequestById.room!.roomNumber.toString());
-    retalPriceController = TextEditingController();
+    retalPriceController = TextEditingController(
+        text: rentalRequestById.room!.totalPrice?.toInt().toString());
+
+    retalPriceController
+        .addListener(() => HelpRegex.formatCurrency(retalPriceController));
+
     paymentMethodController = TextEditingController();
+
     electricPriceController = TextEditingController(
-        text: rentalRequestById.room!.electricPrice?.toString());
-    waterPriceController =
-        TextEditingController(
-        text: rentalRequestById.room!.waterCost?.toString());
+        text: (rentalRequestById.room!.electricPrice ??
+                rentalRequestById.room!.electricityCost)
+            ?.toInt()
+            .toString());
+    electricPriceController
+        .addListener(() => HelpRegex.formatCurrency(electricPriceController));
+
+    waterPriceController = TextEditingController(
+        text: rentalRequestById.room!.waterCost?.toInt().toString());
+    waterPriceController
+        .addListener(() => HelpRegex.formatCurrency(waterPriceController));
+
     internetPriceController = TextEditingController(
-        text: rentalRequestById.room!.internetCost?.toString());
-    parkingPriceController =
-        TextEditingController(
-        text: rentalRequestById.room!.parkingFee?.toString());
-    depositPriceController =
-        TextEditingController(
-        text: rentalRequestById.room!.deposit?.toString());
+        text: rentalRequestById.room!.internetCost?.toInt().toString());
+
+    internetPriceController
+        .addListener(() => HelpRegex.formatCurrency(internetPriceController));
+
+    parkingPriceController = TextEditingController(
+        text: rentalRequestById.room!.parkingFee?.toInt().toString());
+    parkingPriceController
+        .addListener(() => HelpRegex.formatCurrency(parkingPriceController));
+
+    depositPriceController = TextEditingController(
+        text: rentalRequestById.room!.deposit?.toInt().toString());
+    depositPriceController
+        .addListener(() => HelpRegex.formatCurrency(depositPriceController));
+
+
     formDatePaidPerMonthController =
         TextEditingController(text: DateTime.now().day.toString());
     responsiblePartyAController = TextEditingController();
     responsiblePartyBController = TextEditingController();
     responsiblejointCommonController = TextEditingController();
+
+    
   }
 
   onTapChoseDatePaidPerMonth(BuildContext context) async {
@@ -120,6 +149,7 @@ class LandlordContractCreateController extends GetxController
     FocusManager.instance.primaryFocus?.unfocus();
     selectedTab.value = index;
     tabController.animateTo(index);
+    log('electedTab.value: ${selectedTab.value}');
     return false;
   }
 
@@ -188,25 +218,32 @@ class LandlordContractCreateController extends GetxController
         break;
       case 2:
         // create contract
-        // createContractModel.value = ContractCreateModel(
-        //   address: rentalRequest.room?.addresses,
-        //   partyA: rentalRequest.room?.owner,
-        //   partyB: rentalRequest.sender?.id,
-        //   requestId: rentalRequest.id,
-        //   roomId: rentalRequest.room?.id,
-        //   actualPrice: int.tryParse(retalPriceController.text),
-        //   paymentMethod: methodSelected.value,
-        //   electricityCost: int.tryParse(electricPriceController.text),
-        //   waterCost: int.tryParse(waterPriceController.text),
-        //   internetCost: int.tryParse(internetPriceController.text),
-        //   parkingFee: int.tryParse(parkingPriceController.text),
-        //   deposit: int.tryParse(depositPriceController.text),
-        //   beginDate: DatetimeExt.getParsedDate(formDateController.text),
-        //   endDate: DatetimeExt.getParsedDate(toDateController.text),
-        //   responsibilityA: responsiblePartyAController.text,
-        //   responsibilityB: responsiblePartyBController.text,
-        //   generalResponsibility: responsiblejointCommonController.text,
-        // );
+        createContractModel.value = ContractCreateModel(
+          address: rentalRequestById.room?.addresses,
+          partyA: rentalRequestById.room?.owner,
+          partyB: rentalRequestById.sender?.id,
+          requestId: rentalRequestById.id,
+          roomId: rentalRequestById.room?.id,
+          actualPrice:
+              int.tryParse(retalPriceController.text.replaceAll('.', '')),
+          paymentMethod: methodSelected.value,
+          electricityCost:
+              int.tryParse(electricPriceController.text.replaceAll('.', '')),
+          waterCost:
+              int.tryParse(waterPriceController.text.replaceAll('.', '')),
+          internetCost:
+              int.tryParse(internetPriceController.text.replaceAll('.', '')),
+          parkingFee:
+              int.tryParse(parkingPriceController.text.replaceAll('.', '')),
+          deposit:
+              int.tryParse(depositPriceController.text.replaceAll('.', '')),
+          beginDate: DatetimeExt.convertDateFormat(formDateController.text),
+          endDate: DatetimeExt.convertDateFormat(toDateController.text),
+          responsibilityA: responsiblePartyAController.text,
+          responsibilityB: responsiblePartyBController.text,
+          generalResponsibility: responsiblejointCommonController.text,
+        );
+        print(createContractModel.value);
         Get.toNamed(
           AppRoutes.contractSign,
           arguments: createContractModel.value,

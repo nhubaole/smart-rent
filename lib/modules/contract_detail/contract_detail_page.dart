@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/enums/payment_method.dart';
@@ -123,6 +127,9 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   }
 
   Widget _buildButtonActions() {
+    if (AppManager().currentUser!.role == 1) {
+      return SizedBox();
+    } 
     return Padding(
       padding: EdgeInsets.only(
         left: 16.px,
@@ -280,7 +287,120 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                 text: '- ${controller.contractByIdModel?.responsibilityB}',
                 style: childTextStyle),
           ),
+          SizedBox(height: 8.px),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1.px,
+                      color: AppColors.secondary20,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildText(
+                        text: 'Đại diện bên A',
+                        textStyle: childTextStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                      SizedBox(height: 4.px),
+                      _buildText(
+                        text: '(Ký ghi rõ họ tên)',
+                        alignment: Alignment.center,
+                      ),
+                      SizedBox(
+                        height: 80.px,
+                        child: Column(
+                          children: [
+                            Image.memory(
+                              fit: BoxFit.contain,
+                              base64Decode(
+                                  controller.contractByIdModel?.signatureA ??
+                                      ''),
+                              width: 60.px,
+                              height: 60.px,
+                            ),
+                            _buildText(
+                              text:
+                                  controller.contractByIdModel?.partyA?.name ??
+                                      '',
+                              alignment: Alignment.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1.px,
+                      color: AppColors.secondary20,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildText(
+                        text: 'Đại diện bên B',
+                        textStyle: childTextStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                      SizedBox(height: 4.px),
+                      _buildText(
+                        text: '(Ký ghi rõ họ tên)',
+                        alignment: Alignment.center,
+                      ),
+                      SizedBox(
+                        height: 80.px,
+                        child: Column(
+                          children: [
+                            Image.memory(
+                              fit: BoxFit.contain,
+                              base64Decode(
+                                  controller.contractByIdModel?.signatureB ??
+                                      ''),
+                              width: 60.px,
+                              height: 60.px,
+                            ),
+                            _buildText(
+                              text:
+                                  controller.contractByIdModel?.partyB?.name ??
+                                      '',
+                              alignment: Alignment.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildText({
+    required String text,
+    AlignmentGeometry? alignment,
+    TextStyle? textStyle,
+  }) {
+    return Align(
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text.rich(
+        style: textStyle ?? childTextStyle,
+        TextSpan(text: text),
       ),
     );
   }

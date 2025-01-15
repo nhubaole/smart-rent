@@ -16,4 +16,6 @@ abstract class PaymentRepo {
   });
 
   Future<ResponseModel<List<BankModel>>> getAllBanks();
+  Future<ResponseModel<PaymentAllModel>> getPaymentById({required int id});
+  Future<ResponseModel<int>> confirmPayment({required int id});
 }

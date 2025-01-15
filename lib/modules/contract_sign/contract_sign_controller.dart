@@ -71,6 +71,7 @@ class ContractSignController extends GetxController {
   }
 
   onConfirm() async {
+    print(contractCreateModel);
     OverlayDialog.show();
     if (signatureController.isNotEmpty) {
       if (contractCreateModel != null) {
@@ -128,6 +129,7 @@ class ContractSignController extends GetxController {
           signatureA: signatureBase64,
           signedTimeA: DateTime.now(),
         );
+        
         log(json.encode(c.toMap()));
         final rq = await ContractRepoImpl().createContract(c);
         OverlayDialog.hide();

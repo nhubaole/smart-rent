@@ -14,9 +14,9 @@ enum RequestRoomStatus {
 extension RequestRoomStatusExtension on RequestRoomStatus {
   static RequestRoomStatus fromInt(int status) {
     switch (status) {
-      case 1:
+      case 0:
         return RequestRoomStatus.pending;
-      case 2:
+      case 1:
         return RequestRoomStatus.accepted;
       case 3:
         return RequestRoomStatus.rejected;
@@ -24,7 +24,6 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
         return RequestRoomStatus.canceled;
       case 5:
         return RequestRoomStatus.completed;
-      case 0:
       default:
         return RequestRoomStatus.notProcessed;
     }
@@ -81,7 +80,7 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
     switch (this) {
       case RequestRoomStatus.accepted:
       case RequestRoomStatus.completed:
-        return AppColors.successBackground;
+        return AppColors.green20.withOpacity(0.1);
       case RequestRoomStatus.rejected:
       case RequestRoomStatus.canceled:
         return AppColors.errorBackground;
