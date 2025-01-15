@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
 import 'package:smart_rent/modules/home/views/home_screen.dart';
 import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_page.dart';
@@ -15,7 +16,7 @@ class RootScreenController extends GetxController {
     // const Scaffold(),
     // const Scaffold(),
     // const Scaffold(),
-    // ConversationScreen(),
+    ConversationScreen(),
     UserProfilePage(),
   ];
 

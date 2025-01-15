@@ -49,7 +49,7 @@ class RootScreen extends GetView<RootScreenController> {
             tabs: const [
               GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),
               GButton(icon: Icons.home_work_outlined, text: 'Phòng của bạn'),
-              // GButton(icon: Icons.sms_outlined, text: 'Tin Nhắn'),
+              GButton(icon: Icons.sms_outlined, text: 'Tin Nhắn'),
               GButton(icon: Icons.person_outline, text: 'Tài Khoản'),
             ],
           ),
