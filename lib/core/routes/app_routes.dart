@@ -67,6 +67,8 @@ abstract class AppRoutes {
   static const transactionHistory = '/transaction_history';
 
 
+  static const conversation = '/conversation';
+  static const chat = '/chat';
   static const map = '/map';
   static const rating = '/rating';
   static const postRoom = '/post_room';

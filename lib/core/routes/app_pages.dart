@@ -8,6 +8,8 @@ import 'package:smart_rent/modules/bill_collection/bill_collection_binding.dart'
 import 'package:smart_rent/modules/bill_collection/bill_collection_page.dart';
 import 'package:smart_rent/modules/bill_info/bill_info_binding.dart';
 import 'package:smart_rent/modules/bill_info/bill_info_page.dart';
+import 'package:smart_rent/modules/chat/chat_binding.dart';
+import 'package:smart_rent/modules/chat/views/chat_screen.dart';
 import 'package:smart_rent/modules/contract/contract_binding.dart';
 import 'package:smart_rent/modules/contract/contract_page.dart';
 import 'package:smart_rent/modules/contract_creation/contract_creation_binding.dart';
@@ -423,6 +425,11 @@ abstract class AppPages {
       name: AppRoutes.recentlyRoom,
       page: () => const RecentlyRoomPage(),
       binding: RecentlyPageBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.chat,
+      page: () => ChatScreen(),
+      binding: ChatBinding(),
     ),
   ];
 }
