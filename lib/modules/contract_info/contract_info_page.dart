@@ -75,7 +75,7 @@ class ContractInfoPage extends GetView<ContractInfoController> {
   }
 
   Widget? _buildButtonSignContract() {
-    if (controller.contractType == 1) {
+    if (controller.contractType != 0) {
       return OutlineButtonWidget(
         height: 50.px,
         margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
