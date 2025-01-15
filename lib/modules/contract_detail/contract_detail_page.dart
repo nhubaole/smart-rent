@@ -76,6 +76,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
         controller.contractType == 2) {
       return SizedBox();
     }
+    else if (controller.contractType != null &&
+        controller.contractType == 2) {
+      return SizedBox();
+    }
     return Visibility(
       visible: controller.isLoading.value == LoadingType.LOADED,
       child: controller.notiArgument != null
