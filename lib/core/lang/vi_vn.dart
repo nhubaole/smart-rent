@@ -25,7 +25,7 @@ final viVN = {
   'archive_storage': 'Kho Lưu trữ',
   'you_have_sent': 'Bạn đã gửi',
   'rent_room': 'thuê phòng trọ',
-  'not_processed': 'Chưa xử lý',
+  'not_processed': 'Chờ xử lý',
   'sent_time': 'Thời gian gửi',
   'pending': 'Đang chờ xử lý',
   'accepted': 'Đã chấp nhận',

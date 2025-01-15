@@ -57,6 +57,11 @@ class LandlordDetailReturnRequestController extends GetxController {
   }
 
   onConfirm() async {
+    if (returnRequestByIdModel!.totalReturnDeposit! -
+            returnRequestByIdModel!.deductAmount! ==
+        0) {
+      return;
+    }
     OverlayLoading.show();
     if (returnRequestByIdModel == null) return;
     final rq =

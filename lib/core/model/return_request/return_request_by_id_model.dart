@@ -112,4 +112,5 @@ class ReturnRequestByIdModel {
           map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
     );
   }
+
 }
