@@ -20,7 +20,7 @@ class ButtonDetailTrackingRoom extends StatelessWidget {
       width: width ?? 52,
       height: height ?? 24,
       decoration: BoxDecoration(
-        color: primary80,
+        color: Colors.white.withOpacity(0.5),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Material(

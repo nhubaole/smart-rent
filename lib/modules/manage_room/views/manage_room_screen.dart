@@ -37,6 +37,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
       right: 0,
       left: 0,
       bottom: 0,
+      top: 200,
       child: Container(
         padding: EdgeInsets.only(
           top: 20.px,
@@ -132,8 +133,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                         if (controller.user.role == 0) {
                           Get.toNamed(AppRoutes.billCollection);
                         } else {
-                        Get.toNamed(AppRoutes.landlordBillCollection);
-
+                          Get.toNamed(AppRoutes.landlordBillCollection);
                         }
                       },
                     ),
@@ -149,7 +149,8 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                     child: ButtonManageResource(
                       title: 'utility_meter_reading'.tr,
                       icon: ImageAssets.icElectric,
-                      onTap: () => Get.toNamed(AppRoutes.manageElectricityWaterIndex),
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.manageElectricityWaterIndex),
                     ),
                   ),
                   Expanded(
@@ -181,17 +182,16 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                       },
                     ),
                   ),
-
-                  Expanded(
-                    child: ButtonManageResource(
-                      title: 'Test Button'.tr,
-                      icon: ImageAssets.icCustomer,
-                      onTap: () {
-                        Get.to(FormContractWidget());
-                      },
-                    ),
-                  ),
-                  const Expanded(child: SizedBox()),
+                  // Expanded(
+                  //   child: ButtonManageResource(
+                  //     title: 'Test Button'.tr,
+                  //     icon: ImageAssets.icCustomer,
+                  //     onTap: () {
+                  //       Get.to(FormContractWidget());
+                  //     },
+                  //   ),
+                  // ),
+                  // const Expanded(child: SizedBox()),
                 ],
               ),
             ],
@@ -274,6 +274,9 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+            ),
+            SizedBox(
+              height: 8,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

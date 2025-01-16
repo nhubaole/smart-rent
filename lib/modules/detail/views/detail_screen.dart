@@ -952,7 +952,7 @@ class DetailPage extends GetView<DetailController> {
                 height: 0.8.h,
               ),
               Text(
-                controller.room!.isRent!.getStatusRoom.tr,
+                "Còn phòng",
                 style: const TextStyle(
                     color: AppColors.primary40,
                     fontSize: 16,

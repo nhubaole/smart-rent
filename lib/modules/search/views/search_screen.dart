@@ -25,8 +25,9 @@ class SearchPage extends GetView<SearchRoomController> {
     );
   }
 
-  Padding _buildBody(BuildContext context) {
-    return Padding(
+  Widget _buildBody(BuildContext context) {
+    return Container(
+      color: Colors.white,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

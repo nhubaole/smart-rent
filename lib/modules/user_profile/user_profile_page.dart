@@ -99,7 +99,7 @@ class UserProfilePage extends GetView<UserProfileController> {
               SizedBox(height: 16.px),
               ButtonSettingWidget(
                 icon: FontAwesomeIcons.person,
-                title: 'Thông tin các nhân',
+                title: 'Thông tin cá nhân',
                 onTap: () {
                   Get.toNamed(AppRoutes.userProfileDetail);
                 },

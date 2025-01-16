@@ -46,41 +46,44 @@ class FilterScreen extends GetView<FilterController> {
     }
   }
 
-  Column _buildBody(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(16.px),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 24.px),
-              _buildSearchBar(context),
-              SizedBox(height: 16.px),
-              _buildSelectedFilter(),
-            ],
+  Widget _buildBody(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.px),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 24.px),
+                _buildSearchBar(context),
+                SizedBox(height: 16.px),
+                _buildSelectedFilter(),
+              ],
+            ),
           ),
-        ),
-        // Obx(() => controller.filterStringList.isNotEmpty
-        //     ? _buildListFilter()
-        //     : const SizedBox()),
-        if (controller.filterStringList.isNotEmpty) _buildListFilter(),
-        _buildHeaderTotalRoom(),
-        // TODO: OLD CODE
-        // Obx(() => controller.selectedFilter.value == null
-        //     ? controller.results.value.isNotEmpty
-        //         ? _buildWidgetStatus(context)
-        //         : _buildListResultEmpty()
-        //     : const SizedBox.shrink()),
-        controller.results.value.isNotEmpty
-            ? _buildWidgetStatus(context)
-            : _buildListResultEmpty()
-        // TODO: OLD CODE
-        // Obx(() => controller.selectedFilter.value == null
-        //     ? const SizedBox()
-        //     : _buildPageFilter()),
-      ],
+          // Obx(() => controller.filterStringList.isNotEmpty
+          //     ? _buildListFilter()
+          //     : const SizedBox()),
+          if (controller.filterStringList.isNotEmpty) _buildListFilter(),
+          _buildHeaderTotalRoom(),
+          // TODO: OLD CODE
+          // Obx(() => controller.selectedFilter.value == null
+          //     ? controller.results.value.isNotEmpty
+          //         ? _buildWidgetStatus(context)
+          //         : _buildListResultEmpty()
+          //     : const SizedBox.shrink()),
+          controller.results.value.isNotEmpty
+              ? _buildWidgetStatus(context)
+              : _buildListResultEmpty()
+          // TODO: OLD CODE
+          // Obx(() => controller.selectedFilter.value == null
+          //     ? const SizedBox()
+          //     : _buildPageFilter()),
+        ],
+      ),
     );
   }
 
@@ -263,7 +266,7 @@ class FilterScreen extends GetView<FilterController> {
     return Expanded(
       child: Container(
         width: double.infinity,
-        color: AppColors.primary95,
+        color: AppColors.primary98,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Obx(
           () => RefreshIndicator(
@@ -312,7 +315,7 @@ class FilterScreen extends GetView<FilterController> {
               padding: EdgeInsets.symmetric(horizontal: 10.px),
               backgroundColor: controller.selectedFilter.value == item
                   ? AppColors.primary40
-                  : AppColors.primary98,
+                  : AppColors.secondary90,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -369,36 +372,35 @@ class FilterScreen extends GetView<FilterController> {
       children: [
         SizedBox(
           width: Get.width - 80,
-          child: OutlineTextFiledWidget(
-            textEditingController: controller.searchController,
-            onValidate: (p0) => null,
-            hintText: 'Tìm kiếm',
-            prefixIcon: Container(
-              margin: EdgeInsets.only(right: 4.px, left: 4.px),
-              padding: EdgeInsets.only(right: 2.px, left: 2.px),
-              child: SvgPicture.asset(
-                'assets/images/ic_location.svg',
-              ),
+          child: Container(
+            width: double.minPositive,
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.primary60),
+              borderRadius: BorderRadius.circular(4),
             ),
-            suffixIcon: InkWell(
-              borderRadius: BorderRadius.circular(100.px),
-              child: Icon(
-                Icons.cancel,
-                size: 16.px,
-                color: AppColors.secondary40,
-              ),
-              onTap: () {
-                controller.searchController.clear();
-              },
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 4.px, left: 4.px),
+                  padding: EdgeInsets.only(right: 2.px, left: 2.px),
+                  child: SvgPicture.asset(
+                    'assets/images/ic_location.svg',
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    controller.locationNormal ?? "",
+                    style: TextStyle(
+                      color: AppColors.primary60,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            maxlines: 1,
-            onSubmit: (value) {
-              if (value == null || value.isEmpty) {
-                return;
-              }
-              controller.location = value;
-              controller.queryRoomByLocation();
-            },
           ),
         ),
         SizedBox(width: 16.px),

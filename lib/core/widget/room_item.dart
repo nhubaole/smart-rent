@@ -62,8 +62,8 @@ class _RoomItemState extends State<RoomItem> {
         borderRadius: BorderRadius.circular(8.px),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary60.withOpacity(0.6),
-            blurRadius: 5.px,
+            color: AppColors.secondary60.withOpacity(0.2),
+            blurRadius: 8.px,
             offset: const Offset(0, 1),
           ),
         ],
