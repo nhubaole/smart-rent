@@ -7,7 +7,7 @@ import 'package:smart_rent/core/repositories/log/log.dart';
 class DioProvider {
   final Log logger = getIt<Log>();
   final Dio _dio = Dio();
-  final baseUrl = dotenv.get('base_url_prod');
+  final baseUrl = dotenv.get('base_url_local');
 
   DioProvider() {
     _dio.interceptors.add(InterceptorsWrapper(

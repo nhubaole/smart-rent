@@ -27,6 +27,7 @@ import '/core/model/room/util_item.dart';
 
 class FilterController extends GetxController {
   String? location;
+  String? locationNormal;
 
   final results = Rx<List<RoomModel>>([]);
   final filter = const Filter().obs;
@@ -76,6 +77,7 @@ class FilterController extends GetxController {
   void onInit() {
     final args = Get.arguments;
     location = args['location'];
+    locationNormal = args['location'];
     selectedFilter.value = null;
     searchController = TextEditingController(text: location ?? '');
     queryRoomByLocation();

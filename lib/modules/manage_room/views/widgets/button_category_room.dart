@@ -30,7 +30,7 @@ class ButtonCategoryRoom extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          splashColor: AppColors.primary40.withOpacity(0.1),
+          splashColor: AppColors.white.withOpacity(0.1),
           onTap: onTap,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -39,7 +39,7 @@ class ButtonCategoryRoom extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary60,
+                    color: AppColors.white.withOpacity(0.3),
                     border: Border.all(
                       width: 0.5,
                       color: Colors.black.withOpacity(
@@ -50,8 +50,8 @@ class ButtonCategoryRoom extends StatelessWidget {
                   ),
                   child: Container(
                     padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: primary80,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.4),
                       shape: BoxShape.circle,
                     ),
                     child: Center(

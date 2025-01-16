@@ -61,18 +61,18 @@ class ItemRequestRent extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6.px),
-            child: Container(
-              color: AppColors.white,
-              child: CacheImageWidget(
-                imageUrl: rentalRequest.room!.images?.first ?? ImageAssets.demo,
-                width: 6.h,
-                height: 6.h,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(6.px),
+          //   child: Container(
+          //     color: AppColors.white,
+          //     child: CacheImageWidget(
+          //       imageUrl: rentalRequest.room!.images?.first ?? ImageAssets.demo,
+          //       width: 6.h,
+          //       height: 6.h,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           SizedBox(width: 2.w),
           Expanded(
             child: Column(

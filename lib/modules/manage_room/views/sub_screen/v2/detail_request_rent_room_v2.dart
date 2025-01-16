@@ -719,14 +719,14 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Flexible(
-          child: CacheImageWidget(
-            imageUrl: ImageAssets.demo,
-            borderRadius: BorderRadius.circular(20.px),
-            height: 120.px,
-            width: 120.px,
-          ),
-        ),
+        // Flexible(
+        //   child: CacheImageWidget(
+        //     imageUrl: ImageAssets.demo,
+        //     borderRadius: BorderRadius.circular(20.px),
+        //     height: 120.px,
+        //     width: 120.px,
+        //   ),
+        // ),
         Expanded(
           flex: 1,
           child: Column(

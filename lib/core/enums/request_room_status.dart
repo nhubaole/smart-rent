@@ -15,15 +15,15 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
   static RequestRoomStatus fromInt(int status) {
     switch (status) {
       case 0:
-        return RequestRoomStatus.pending;
+        return RequestRoomStatus.notProcessed;
       case 1:
+        return RequestRoomStatus.pending;
+      case 2:
         return RequestRoomStatus.accepted;
       case 3:
         return RequestRoomStatus.rejected;
       case 4:
         return RequestRoomStatus.canceled;
-      case 5:
-        return RequestRoomStatus.completed;
       default:
         return RequestRoomStatus.notProcessed;
     }
