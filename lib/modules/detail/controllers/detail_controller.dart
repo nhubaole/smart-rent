@@ -48,11 +48,13 @@ class DetailController extends GetxController {
 
   String get getStatus => room!.isRent! ? "Hết" : "Còn";
 
-  String get ratingOveview => rating!.avgRating! > 4
-      ? 'Tốt'
-      : rating!.avgRating! > 3
-          ? 'Khá'
-          : 'Trung bình';
+  String get ratingOveview => rating?.avgRating != null
+      ? rating!.avgRating! > 4
+          ? 'Tốt'
+          : rating!.avgRating! > 3
+              ? 'Khá'
+              : 'Trung bình'
+      : 'Chưa có đánh giá';
 
   UserModel get owner => room!.owner as UserModel;
 

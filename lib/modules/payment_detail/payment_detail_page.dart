@@ -39,20 +39,25 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
   }
 
   Widget _buildBottomNavByType() {
+    if (controller.notificationModel != null) {
+      if (controller.paymentAllModel!.status! == 1) return const SizedBox();
+      return _buildBottomNavOption(
+        title: 'Xác nhận đã hoàn thành',
+        onTap: controller.onConfirmCompletedPayment,
+      );
+    }
     if (controller.paymentAllModel!.contractId != null) {
       return _buildBottomNavOption(
         title: 'Xem phụ lục hợp đồng',
         onTap: controller.onNavTypeContract,
       );
     }
-
     if (controller.paymentAllModel!.billId != null) {
       return _buildBottomNavOption(
         title: 'Xem phụ lục hoá đơn',
         onTap: controller.onNavTypeBill,
       );
     }
-
     if (controller.paymentAllModel!.returnRequestId != null) {
       return _buildBottomNavOption(
         title: 'pay_room'.tr,
@@ -227,7 +232,7 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 4.px),
       decoration: BoxDecoration(
-        color: RequestRoomStatus.pending.colorBackground,
+        color: status.colorBackground,
         borderRadius: BorderRadius.circular(20.px),
       ),
       child: Text(

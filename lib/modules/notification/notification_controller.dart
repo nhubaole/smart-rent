@@ -57,6 +57,8 @@ class NotificationController extends GetxController {
       case null:
         break;
       case NotificationType.PAYMENT:
+        Get.toNamed(AppRoutes.paymentDetail, arguments: noti);
+        break;
       case NotificationType.BILL:
 
       // TODO: Handle this case.

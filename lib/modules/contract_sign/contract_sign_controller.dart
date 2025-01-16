@@ -13,6 +13,8 @@ import 'package:smart_rent/core/repositories/contract/contract_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_dialog.dart';
+import 'package:smart_rent/core/widget/overlay_loading.dart';
+import 'package:smart_rent/modules/success_page/success_controller.dart';
 
 class RenewContractArgument {
   ContractByIdModel? contractByIdModel;
@@ -71,7 +73,8 @@ class ContractSignController extends GetxController {
   }
 
   onConfirm() async {
-    OverlayDialog.show();
+    print(contractCreateModel);
+    OverlayLoading.show();
     if (signatureController.isNotEmpty) {
       if (contractCreateModel != null) {
         onSubmitContractCreateModel(contractCreateModel!);
@@ -85,7 +88,7 @@ class ContractSignController extends GetxController {
         onSubmitSignContract();
       }
     } else {
-      OverlayDialog.hide();
+      OverlayLoading.hide();
       AlertSnackbar.show(
           title: 'Error', message: 'Please sign the contract', isError: true);
     }
@@ -101,7 +104,7 @@ class ContractSignController extends GetxController {
             signatureBase64: signatureBase64,
           ),
         );
-        OverlayDialog.hide();
+        OverlayLoading.hide();
         if (rq.isSuccess()) {
           AlertSnackbar.show(
             isError: false,
@@ -128,16 +131,29 @@ class ContractSignController extends GetxController {
           signatureA: signatureBase64,
           signedTimeA: DateTime.now(),
         );
+        
         log(json.encode(c.toMap()));
         final rq = await ContractRepoImpl().createContract(c);
-        OverlayDialog.hide();
+        OverlayLoading.hide();
         if (rq.isSuccess()) {
-          AlertSnackbar.show(
-            isError: false,
-            title: 'Success',
-            message: 'Create contract success',
+          // AlertSnackbar.show(
+          //   isError: false,
+          //   title: 'Success',
+          //   message: 'Create contract success',
+          // );
+          Get.offNamedUntil(
+            AppRoutes.successPage,
+            arguments: SuccessArgument(
+              firstText: 'Tạo hợp đồng thành công',
+              secondText:
+                  'Hợp đồng thuê trọ của bạn đã được tạo và gửi đến người thuê thành công.',
+              fifthText:
+                  'Bạn có thể theo dõi trạng thái trong phần Quản lý hợp đồng của ứng dụng.',
+              rightButtonText: 'Quay lại',
+              rightButtonOnTap: () => Get.back(),
+            ),
+            (route) => route.settings.name == AppRoutes.root,
           );
-          Get.until((route) => route.settings.name == AppRoutes.root);
         } else {
           AlertSnackbar.show(
               title: 'Error', message: rq.message ?? 'Error', isError: true);

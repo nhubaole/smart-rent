@@ -66,7 +66,9 @@ class ItemRequestRent extends StatelessWidget {
             child: Container(
               color: AppColors.white,
               child: CacheImageWidget(
-                imageUrl: rentalRequest.room!.images?.first ?? ImageAssets.demo,
+                imageUrl: rentalRequest.room!.images?.first ??
+                    rentalRequest.room!.image ??
+                    ImageAssets.demo,
                 width: 6.h,
                 height: 6.h,
                 fit: BoxFit.cover,

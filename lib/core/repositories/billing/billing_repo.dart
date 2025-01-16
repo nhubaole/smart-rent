@@ -8,7 +8,7 @@ import 'package:smart_rent/core/model/billing/billing_list_index_by_landlord_mod
 import 'package:smart_rent/core/model/response/request_model.dart';
 
 abstract class BillingRepo {
-  Future<ResponseModel<BillByMonthAndUserModel>> getBillByMonthAndUser({
+  Future<ResponseModel<List<BillByMonthAndUserModel>>> getBillByMonthAndUser({
     required int month,
     required int year,
   });

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -150,10 +152,13 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
             ),
           ),
         ),
-        _buildOptionImage(
-          title: 'upload_image_from_library'.tr,
-          onTap: () {},
-          icon: ImageAssets.icAddGallery,
+        Obx(
+          () => _buildOptionImage(
+            title: 'upload_image_from_library'.tr,
+            onTap: controller.onPickImage,
+            icon: ImageAssets.icAddGallery,
+            image: controller.images.value,
+          ),
         ),
       ],
     );
@@ -163,6 +168,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
     required String title,
     String? icon,
     required Function() onTap,
+    String? image,
   }) {
     return DottedBorder(
       color: AppColors.secondary60,
@@ -184,6 +190,15 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                image != null
+                    ? SizedBox(
+                        height: 80.px,
+                        child: Image.file(
+                          File(image),
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    :
                 icon != null
                     ? Image.asset(
                         icon,

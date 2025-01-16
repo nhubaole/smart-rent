@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/model/billing/bill_by_month_and_user_model.dart';
 import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
@@ -54,12 +55,12 @@ class LandlordBillCollectionPage
       case LoadingType.LOADING:
         return const LoadingWidget();
       case LoadingType.LOADED:
-        if (controller.billings.value == null) {
+        if (controller.billings.isEmpty) {
           return const Center(
             child: Text('Không có hóa đơn'),
           );
         }
-        return _buildBillCollection();
+        return _buildList();
       case LoadingType.ERROR:
         return const ErrorCustomWidget(
           expandToCanPullToRefresh: true,
@@ -140,7 +141,23 @@ class LandlordBillCollectionPage
     );
   }
 
-  Widget _buildBillCollection() {
+  Widget _buildList() {
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        separatorBuilder: (context, index) => SizedBox(height: 16.px),
+        itemCount: controller.billings.length,
+        itemBuilder: (context, index) {
+          final model = controller.billings[index];
+          return _buildBillCollection(model: model);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBillCollection({required BillByMonthAndUserModel model}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.px),
       width: double.infinity,
@@ -162,50 +179,45 @@ class LandlordBillCollectionPage
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.px),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _buildAddress(),
-            _buildBills(),
+            _buildAddress(model.address ?? ''),
+            _buildBills(model.listBill!),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBills() {
-    if (controller.billings.value!.listBill!.isEmpty) {
+  Widget _buildBills(List<BillByMonthAndUserItemModel> bills) {
+    if (controller.billings.isEmpty) {
       return const SizedBox.shrink();
     }
-    return KeepAliveWrapper(
-      wantKeepAlive: true,
-      child: Expanded(
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-            color: AppColors.secondary80.withOpacity(0.2),
-            thickness: 1,
-            height: 8.px,
-          ),
-          itemCount: controller.billings.value!.listBill!.length,
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 8.px),
-          itemBuilder: (context, index) {
-            final item = controller.billings.value!.listBill![index];
-            return Obx(
-              () => LandlordBillCollectionItem(
-                isMultipleSelectionMode:
-                    controller.isMultipleSelectionMode.value,
-                isSelected: controller.isSelectAllMode.value,
-                onTap: controller.onSelectItem,
-                bill: item,
-              ),
-            );
-          },
-        ),
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+        color: AppColors.secondary80.withOpacity(0.2),
+        thickness: 1,
+        height: 8.px,
       ),
+      itemCount: bills.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(vertical: 8.px),
+      itemBuilder: (context, index) {
+        final item = bills[index];
+        return Obx(
+          () => LandlordBillCollectionItem(
+            isMultipleSelectionMode: controller.isMultipleSelectionMode.value,
+            isSelected: controller.isSelectAllMode.value,
+            onTap: controller.onSelectItem,
+            bill: item,
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildAddress() {
+  Widget _buildAddress(String address) {
     return Container(
       padding:
           EdgeInsets.only(left: 16.px, right: 16.px, top: 16.px, bottom: 8.px),
@@ -232,7 +244,7 @@ class LandlordBillCollectionPage
                 fontWeight: FontWeight.w600,
               ),
               TextSpan(
-                text: controller.billings.value!.address ?? '',
+                text: address,
               ),
             ),
           ),

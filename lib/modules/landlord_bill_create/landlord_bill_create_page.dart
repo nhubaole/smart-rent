@@ -319,7 +319,7 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           _buildBillInfoItem(
             title: 'rent_fee'.tr,
             values: [
-              controller.billByIdModel!.totalAmount
+              controller.billByIdModel!.roomPrice
                       ?.toStringTotalthis(symbol: 'đ') ??
                   '--'
             ],
@@ -336,8 +336,8 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
               (controller.billByIdModel!.electricityCost
                       ?.toStringTotalthis(symbol: 'đ') ??
                   '--'),
-              'x20',
-              '350,000đ',
+              'x${controller.billByIdModel!.electricityCost}',
+              (controller.calElectricCost.toStringTotalthis(symbol: 'đ')),
             ],
           ),
           Divider(
@@ -347,11 +347,20 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           ),
           _buildBillInfoItem(
             title: 'water'.tr,
+            // values: [
+            //   'số cũ: 234 - số mới: 254',
+            //   '3,000đ',
+            //   'x20',
+            //   '350,000đ',
+            // ],
+
             values: [
-              'số cũ: 234 - số mới: 254',
-              '3,000đ',
-              'x20',
-              '350,000đ',
+              'số cũ: ${controller.billByIdModel?.oldWaterIndex} - số mới: ${controller.billByIdModel?.newWaterIndex}',
+              (controller.billByIdModel!.waterCost
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  '--'),
+              'x${controller.billByIdModel!.waterCost}',
+              (controller.calWaterCost.toStringTotalthis(symbol: 'đ')),
             ],
           ),
           Divider(
@@ -361,7 +370,11 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           ),
           _buildBillInfoItem(
             title: 'internet'.tr,
-            values: ['1,300,000 VND'],
+            values: [
+              controller.billByIdModel!.internetCost
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  ''
+            ],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),

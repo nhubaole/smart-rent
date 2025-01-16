@@ -16,13 +16,15 @@ class RoomItem extends StatefulWidget {
   final Function()? onTap;
   final double? width;
   final double? minHeight;
+  final double? height;
  
   const RoomItem({
     super.key,
     required this.room,
       this.onTap,
       this.width,
-      this.minHeight
+      this.minHeight,
+      this.height
   });
 
   @override
@@ -54,6 +56,7 @@ class _RoomItemState extends State<RoomItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: widget.height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.px),

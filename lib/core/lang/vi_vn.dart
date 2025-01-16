@@ -9,6 +9,8 @@ final viVN = {
   'unavailable': 'Hết phòng',
   'acreage': 'Diện tích',
   'deposit': 'Đặt cọc',
+  'cash': 'Tiền mặt',
+  'bank_transfer': 'Chuyển khoản',
   'resource_management': 'Quản lý tài nguyên',
   'rental_contract': 'Hợp đồng thuê trọ',
   'rental_request': 'Yêu cầu thuê trọ',

@@ -29,6 +29,10 @@ class LandlordDetailReturnRequestController extends GetxController {
   UserModel get user => appManager.currentUser!;
   bool get isLandlord => user.role == 1;
 
+  double get remainingDeposit =>
+      (returnRequestByIdModel?.totalReturnDeposit ?? 0) -
+      (returnRequestByIdModel?.deductAmount ?? 0);
+
   @override
   void onInit() {
     final args = Get.arguments;
@@ -57,11 +61,6 @@ class LandlordDetailReturnRequestController extends GetxController {
   }
 
   onConfirm() async {
-    if (returnRequestByIdModel!.totalReturnDeposit! -
-            returnRequestByIdModel!.deductAmount! ==
-        0) {
-      return;
-    }
     OverlayLoading.show();
     if (returnRequestByIdModel == null) return;
     final rq =
@@ -69,6 +68,17 @@ class LandlordDetailReturnRequestController extends GetxController {
     OverlayLoading.hide();
     if (rq.isSuccess()) {
       if (rq.data == true) {
+        if (remainingDeposit == 0) {
+          Get.offNamedUntil(
+            AppRoutes.landlordReturnSuccess,
+            (route) => route.settings.name == AppRoutes.root,
+            arguments: {
+              'tenant': returnRequestByIdModel!.createdUser,
+            },
+          );
+          return;
+        }
+
         Get.toNamed(
           AppRoutes.landlordPaymentDeposit,
           arguments: returnRequestByIdModel,
@@ -82,4 +92,6 @@ class LandlordDetailReturnRequestController extends GetxController {
       );
     }
   }
+
+  navOptione() {}
 }

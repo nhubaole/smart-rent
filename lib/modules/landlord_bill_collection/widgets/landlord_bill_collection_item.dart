@@ -105,24 +105,7 @@ class _LandlordBillCollectionItemState
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            BillStatus.unpaid.value,
-                            style: textStyle.copyWith(
-                              color: BillStatus.unpaid.colorContent,
-                            ),
-                          ),
-                          Text(
-                            widget.bill.totalAmount
-                                    ?.toStringTotalthis(symbol: 'đ') ??
-                                '',
-                            style: textStyle,
-                            textAlign: TextAlign.end,
-                          ),
-                        ],
-                      ),
+                      _buildStatusAndPrice(textStyle),
                       Text(
                         'Phòng số ${widget.bill.roomNumber ?? ''}',
                         style: textStyle.copyWith(
@@ -144,6 +127,35 @@ class _LandlordBillCollectionItemState
           ),
         ),
       ),
+    );
+  }
+
+  Row _buildStatusAndPrice(TextStyle textStyle) {
+    BillStatus status = BillStatus.unknown;
+    if (widget.bill.status == -1) {
+      status = BillStatus.not_yet_created;
+    } else if (widget.bill.status == 0) {
+      status = BillStatus.unpaid;
+    } else if (widget.bill.status == 1) {
+      status = BillStatus.pending;
+    } else if (widget.bill.status == 2) {
+      status = BillStatus.paid;
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          status.value,
+          style: textStyle.copyWith(
+            color: status.colorContent,
+          ),
+        ),
+        Text(
+          widget.bill.totalAmount?.toStringTotalthis(symbol: 'đ') ?? '',
+          style: textStyle,
+          textAlign: TextAlign.end,
+        ),
+      ],
     );
   }
 }
