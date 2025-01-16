@@ -29,7 +29,7 @@ class DetailRequestController extends GetxController {
     if (args != null) {
       if (args is RequestInfo) {
         requestInfo = args;
-        fetchRentailRequestById(requestInfo!);
+        fetchRentalRequestById(requestInfo!);
       } else {
         Get.back();
       }
@@ -39,7 +39,7 @@ class DetailRequestController extends GetxController {
     super.onInit();
   }
 
-  fetchRentailRequestById(RequestInfo requestInfo) async {
+  fetchRentalRequestById(RequestInfo requestInfo) async {
     isLoadingData.value = LoadingType.LOADING;
     final rq =
         await RentalRequestRepoImpl().getRentalRequestById(requestInfo.id!);

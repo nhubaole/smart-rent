@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/model/rental_request/all_process_tracking_model.dart';
 
 import '../../../../core/config/app_colors.dart';
 import '/core/values/image_assets.dart';
@@ -8,9 +11,11 @@ import '/modules/manage_room/views/widgets/button_detail_tracking_room.dart';
 
 class TrackingRoom extends StatelessWidget {
   final Function() onDetail;
+  final AllProcessTrackingModel model;
   const TrackingRoom({
     super.key,
     required this.onDetail,
+    required this.model,
   });
 
   @override
@@ -39,6 +44,19 @@ class TrackingRoom extends StatelessWidget {
     );
   }
 
+  String getStatus() {
+    switch (model.status) {
+      case 0:
+        return 'pending'.tr;
+      case 1:
+        return 'approved'.tr;
+      case 2:
+        return 'declined'.tr;
+      default:
+        return 'pending'.tr;
+    }
+  }
+
   Column _buildBottomComponent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +67,7 @@ class TrackingRoom extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'status'.tr,
+                getStatus(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -60,11 +78,11 @@ class TrackingRoom extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '12:45 06/08/2024',
+                  model.createdAt?.hhmmDDMMyyyy ?? '',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -110,7 +128,7 @@ class TrackingRoom extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-              imageUrl: ImageAssets.demo,
+              imageUrl: model.room!.images?.first ?? ImageAssets.demo,
               width: 50,
               height: 50,
               fit: BoxFit.cover,
@@ -123,47 +141,33 @@ class TrackingRoom extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'HOMESTAY DOOM MẶT ...',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        '1.6 triệu VND/người',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
                   Expanded(
-                    child: ButtonDetailTrackingRoom(
-                      onTap: onDetail,
-                      title: 'detail'.tr,
+                    child: Text(
+                      model.room!.title ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                  ),
+                  ButtonDetailTrackingRoom(
+                    onTap: onDetail,
+                    title: 'detail'.tr,
                   )
                 ],
               ),
-              const Text(
-                'Khối 5, thị trấn Đức Thọ',
+              SizedBox(height: 4.px),
+              Text(
+                model.room!.addresses?.join(', ') ?? '',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ],

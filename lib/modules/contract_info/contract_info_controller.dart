@@ -45,6 +45,10 @@ class ContractInfoController extends GetxController {
 
   onNavContractDetail() {
     print('onNavContractDetail');
+    if (contractType == 2) {
+      Get.toNamed(AppRoutes.contractDetail, arguments: contract.id);
+      return;
+    }
     Get.toNamed(AppRoutes.contractDetail, arguments: {
       'contract': contract,
       'contract_type': contractType,

@@ -72,17 +72,37 @@ class _CacheImageWidgetState extends State<CacheImageWidget>
   }
 
   Widget _buildCacheImage(BaseCacheManager? cacheManager) {
-    final cacheImage = CachedNetworkImage(
-      maxHeightDiskCache: widget.shouldExtendCache == true
-          ? AppConstant.maxHeightDiskCache
-          : null,
-      maxWidthDiskCache: widget.shouldExtendCache == true
-          ? AppConstant.maxWidthDiskCache
-          : null,
-      memCacheHeight:
-          widget.shouldExtendCache == true ? AppConstant.memCacheHeight : null,
-      memCacheWidth:
-          widget.shouldExtendCache == true ? AppConstant.memCacheWidth : null,
+
+    final cacheImage = widget.shouldExtendCache ?? true
+        ? CachedNetworkImage(
+            // maxHeightDiskCache: widget.shouldExtendCache == true
+            //     ? AppConstant.maxHeightDiskCache
+            //     : null,
+            // maxWidthDiskCache: widget.shouldExtendCache == true
+            //     ? AppConstant.maxWidthDiskCache
+            //     : null,
+            // memCacheHeight:
+            //     widget.shouldExtendCache == true ? AppConstant.memCacheHeight : null,
+            // memCacheWidth:
+            //     widget.shouldExtendCache == true ? AppConstant.memCacheWidth : null,
+            height: widget.height,
+            width: widget.width,
+            imageUrl: widget.imageUrl,
+            alignment: Alignment.center,
+            // useOldImageOnUrlChange: true,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                _buildLoadingProgress(downloadProgress),
+            errorWidget: (context, url, error) => _buildErrorImage(),
+            fadeInCurve: Curves.bounceInOut,
+            fadeInDuration: const Duration(milliseconds: 100),
+            fit: widget.fit ?? BoxFit.cover,
+            // cacheManager: cacheManager,
+          )
+        : CachedNetworkImage(
+            maxHeightDiskCache: AppConstant.maxHeightDiskCache,
+            maxWidthDiskCache: AppConstant.maxWidthDiskCache,
+            memCacheHeight: AppConstant.memCacheHeight,
+            memCacheWidth: AppConstant.memCacheWidth,
       height: widget.height,
       width: widget.width,
       imageUrl: widget.imageUrl,

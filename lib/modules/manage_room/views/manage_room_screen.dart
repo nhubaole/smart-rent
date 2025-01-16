@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/services/sr_method_channel.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/form_contract_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
 import '/core/values/image_assets.dart';
@@ -56,7 +59,12 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildTrackingList(),
+            Obx(
+              () => SizedBox(
+                height: 200.px,
+                child: _buildWidgetStatus(),
+              ),
+            ),
             SizedBox(
               height: 32.px,
             ),
@@ -67,6 +75,23 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
         ),
       ),
     );
+  }
+
+  Widget _buildWidgetStatus() {
+    switch (controller.isFetchingProcessTracking.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildTrackingList();
+      case LoadingType.ERROR:
+        return RefreshIndicator(
+          onRefresh: () async => controller.fetchProcessTracking(),
+          child: ErrorCustomWidget(
+            expandToCanPullToRefresh: true,
+          ),
+        );
+    }
   }
 
   Column _buildManageResource() {
@@ -227,11 +252,13 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: controller.processTracking.length,
             padding: EdgeInsets.symmetric(horizontal: 16.px),
             itemBuilder: (context, index) {
+              final item = controller.processTracking[index];
               return TrackingRoom(
-                onDetail: () => Get.toNamed(AppRoutes.trackRentalProcess),
+                model: item,
+                onDetail: () => controller.onDetailProcess(item),
               );
             },
           ),

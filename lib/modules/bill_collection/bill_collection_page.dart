@@ -55,6 +55,7 @@ class BillCollectionPage extends GetView<BillCollectionController> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _buildBillingUnPaid(),
+          _buildBillingWaitToConfirm(),
           _buildBillingPaid(),
         ],
       ),
@@ -121,6 +122,41 @@ class BillCollectionPage extends GetView<BillCollectionController> {
     );
   }
 
+  Widget _buildBillingWaitToConfirm() {
+    if (controller.billingUnpaid.isEmpty) {
+      return _buildButtonReloadData(
+        onTap: () => controller.fetchBillings(),
+      );
+    }
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await controller.fetchBillings();
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(height: 16.px),
+            itemCount: controller.billingWaitToConfirm.length,
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = controller.billingWaitToConfirm[index];
+              return BillCollectionItem(
+                // onTap: () => Get.toNamed(AppRoutes.billInfo),
+                onTap: () => controller.onNavBillInfo(item),
+                billByStatusModel: item,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBillingUnPaid() {
     if (controller.billingUnpaid.isEmpty) {
       return _buildButtonReloadData(
@@ -159,12 +195,15 @@ class BillCollectionPage extends GetView<BillCollectionController> {
   Widget _buildTabbar() {
     return Obx(
       () => TabBar(
+        padding: EdgeInsets.zero,
         controller: controller.tabController,
+        tabAlignment: TabAlignment.center,
         tabs: controller.tabs.map((e) {
           final index = controller.tabs.indexOf(e);
           return Container(
             padding: EdgeInsets.all(8.px),
-            constraints: BoxConstraints(minWidth: Get.width / 2 - 32.px),
+            // constraints: BoxConstraints(maxHeight: Get.width / 3 - 32.px),
+            width: Get.width / 3 - 32.px,
             decoration: BoxDecoration(
               color: controller.selectedTab.value == index
                   ? AppColors.primary40
@@ -183,6 +222,8 @@ class BillCollectionPage extends GetView<BillCollectionController> {
                     : AppColors.secondary40,
               ),
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           );
         }).toList(),

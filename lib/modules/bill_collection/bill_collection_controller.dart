@@ -11,12 +11,14 @@ class BillCollectionController extends GetxController
 
   final tabs = [
     'unpaid'.tr,
+    'chờ xác nhận'.tr,
     'paid'.tr,
   ];
 
   final selectedTab = 0.obs;
   final isLoadingData = LoadingType.INIT.obs;
   final billingUnpaid = RxList<BillByStatusModel>([]);
+  final billingWaitToConfirm = RxList<BillByStatusModel>([]);
   final billingPaided = RxList<BillByStatusModel>([]);
 
   @override
@@ -36,19 +38,29 @@ class BillCollectionController extends GetxController
   fetchBillings() async {
     isLoadingData.value = LoadingType.LOADING;
     await Future.wait([
-      fetchBillingUnpain(),
+      fetchBillingUnpaid(),
+      fetchBillingWaitToConfirm(),
       fetchBillingPaid(),
     ]);
     isLoadingData.value = LoadingType.LOADED;
   }
 
-  // UnPaid Status: 1
-  Future<void> fetchBillingUnpain() async {
-    final rq = await BillingRepoImpl().getBillByStatus(status: 1);
+  Future<void> fetchBillingUnpaid() async {
+    final rq = await BillingRepoImpl().getBillByStatus(status: 0);
     if (rq.isSuccess() && rq.data != null) {
       billingUnpaid.value = rq.data!;
     } else {
       billingUnpaid.value = [];
+    }
+  }
+
+  // UnPaid Status: 1
+  Future<void> fetchBillingWaitToConfirm() async {
+    final rq = await BillingRepoImpl().getBillByStatus(status: 1);
+    if (rq.isSuccess() && rq.data != null) {
+      billingWaitToConfirm.value = rq.data!;
+    } else {
+      billingWaitToConfirm.value = [];
     }
   }
 

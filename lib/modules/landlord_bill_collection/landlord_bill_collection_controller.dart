@@ -88,12 +88,46 @@ class LandlordBillCollectionController extends GetxController {
     //   Get.toNamed(AppRoutes.landlordPaymentDetail);
     //   return;
     // }
-
-    // CHI TIET HOA DON
-    Get.toNamed(AppRoutes.landlordBillInfo, arguments: {
-      'selected_bill': object,
-      'period': periodSelected.value,
-    });
+    switch (object.status) {
+      // "Bill
+      // -1. Chưa tạo
+      // 0. Chưa thanh toán
+      // 1. Chờ xác nhận
+      // 2. Đã thanh toán"
+      case -1:
+        {
+          Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
+            'selected_bill': object,
+            'period': periodSelected.value,
+          });
+          break;
+        }
+      case 0:
+        {
+          Get.toNamed(AppRoutes.landlordBillInfo, arguments: {
+            'selected_bill': object,
+            'period': periodSelected.value,
+          });
+          break;
+        }
+      case 1:
+        {
+          Get.toNamed(AppRoutes.landlordBillInfo, arguments: {
+            'selected_bill': object,
+            'period': periodSelected.value,
+          });
+          break;
+        }
+      case 2:
+        {
+          Get.toNamed(AppRoutes.landlordBillInfo, arguments: {
+            'selected_bill': object,
+            'period': periodSelected.value,
+          });
+          break;
+        }
+    }
+   
 
     // if (!isMultipleSelectionMode.value) {
     //   Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
@@ -139,7 +173,13 @@ class LandlordBillCollectionController extends GetxController {
     for (int year = currentYear - yearsBefore;
         year <= currentYear + yearsAfter;
         year++) {
+      if (year > currentYear) {
+        break;
+      }
       for (int month = 1; month <= 12; month++) {
+        if (year == currentYear && month > DateTime.now().month) {
+          break;
+        }
         periods.add(DateTime(year, month));
       }
     }

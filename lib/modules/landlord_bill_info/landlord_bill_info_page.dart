@@ -21,15 +21,27 @@ class LandlordBillInfoPage extends GetView<LandlordBillInfoController> {
     return ScaffoldWidget(
       appBar: CustomAppBar(title: 'bill_information'.tr),
       body: Obx(() => _buildListByStatus(context)),
-      bottomNavigationBar: OutlineButtonWidget(
-        height: 50.px,
-        margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-        text: 'edit_invoice'.tr,
-        onTap: () => Get.toNamed(AppRoutes.landlordBillEdit),
-        leading: const Icon(
-          Icons.edit,
-          color: AppColors.primary60,
-        ),
+      bottomNavigationBar: _buildNavButton(),
+    );
+  }
+
+  Widget _buildNavButton() {
+    if (controller.isLoadingData.value != LoadingType.LOADED) {
+      return SizedBox();
+    }
+    if (controller.billByIdModel?.status == 1 ||
+        controller.billByIdModel?.status == 2 ||
+        controller.billByIdModel?.status == 0) {
+      return SizedBox();
+    }
+    return OutlineButtonWidget(
+      height: 50.px,
+      margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+      text: 'edit_invoice'.tr,
+      onTap: () => Get.toNamed(AppRoutes.landlordBillEdit),
+      leading: const Icon(
+        Icons.edit,
+        color: AppColors.primary60,
       ),
     );
   }
@@ -61,6 +73,7 @@ class LandlordBillInfoPage extends GetView<LandlordBillInfoController> {
                   SizedBox(height: 16.px),
                   _buildStatus(),
                   SizedBox(height: 16.px),
+                  if (controller.billByIdModel!.status! < 1)
                   OutlineButtonWidget(
                     leading: const Icon(
                       Icons.notifications,
@@ -415,7 +428,7 @@ class LandlordBillInfoPage extends GetView<LandlordBillInfoController> {
           // Icon(status.icon, color: status.colorContent),
           SizedBox(width: 1.w),
           Text(
-            status.value,
+            '${status.value} ${controller.billByIdModel?.paidAt != null ? 'Đã thanh toán lúc ${controller.billByIdModel?.paidAt}' : ''}',
             style: TextStyle(
               color: status.colorContent,
               fontSize: 16.sp,

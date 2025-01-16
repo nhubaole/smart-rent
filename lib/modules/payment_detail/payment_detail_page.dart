@@ -60,7 +60,7 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
     }
     if (controller.paymentAllModel!.returnRequestId != null) {
       return _buildBottomNavOption(
-        title: 'pay_room'.tr,
+        title: 'Xem yêu cầu trả phòng'.tr,
         onTap: controller.onNavTypeReturn,
       );
     }
@@ -186,6 +186,7 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
             width: 100.px,
             height: 200.px,
             fit: BoxFit.cover,
+            shouldExtendCache: true,
           ),
         ),
       ),
@@ -226,9 +227,19 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
   }
 
   Container _buildStatus() {
-    final status = RequestRoomStatusExtension.fromInt(
-      controller.paymentAllModel!.status!,
-    );
+    RequestRoomStatus status;
+    switch (controller.paymentAllModel!.status!) {
+      case 0:
+        status = RequestRoomStatus.pending;
+        break;
+      case 1:
+        status = RequestRoomStatus.accepted;
+        break;
+      default: // 2
+        status = RequestRoomStatus.rejected;
+        break;
+    }
+    
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 4.px),
       decoration: BoxDecoration(
