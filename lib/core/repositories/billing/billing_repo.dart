@@ -1,6 +1,7 @@
 import 'package:smart_rent/core/model/billing/bill_by_id_model.dart';
 import 'package:smart_rent/core/model/billing/bill_by_month_and_user_model.dart';
 import 'package:smart_rent/core/model/billing/bill_by_status_model.dart';
+import 'package:smart_rent/core/model/billing/bill_create_model.dart';
 import 'package:smart_rent/core/model/billing/billing_all_metric_model.dart';
 import 'package:smart_rent/core/model/billing/billing_create_index_request_model.dart';
 import 'package:smart_rent/core/model/billing/billing_create_index_response.dart';
@@ -36,6 +37,9 @@ abstract class BillingRepo {
 
   Future<ResponseModel<BillingCreateIndexResponse>> createIndex({
     required BillingCreateIndexRequestModel request,
+  });
+  Future<ResponseModel<int>> createBill({
+    required BillCreateModel model,
   });
 
 }

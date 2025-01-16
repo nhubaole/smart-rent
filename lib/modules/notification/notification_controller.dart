@@ -54,6 +54,8 @@ class NotificationController extends GetxController {
         );
         break;
       case NotificationType.NULL:
+        Get.toNamed(AppRoutes.billInfo, arguments: noti.referenceId);
+        break;
       case null:
         break;
       case NotificationType.PAYMENT:

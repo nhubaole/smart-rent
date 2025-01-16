@@ -6,26 +6,32 @@ import 'package:smart_rent/core/repositories/billing/billing_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 
 class BillInfoController extends GetxController {
-  late BillByStatusModel billByStatusModel;
+  BillByStatusModel? billByStatusModel;
   final isLoadingData = LoadingType.INIT.obs;
   final billInfo = Rxn<BillByIdModel>();
 
   @override
   void onInit() {
     final args = Get.arguments;
-    if (args != null && args is Map<String, dynamic>) {
-      billByStatusModel = args['bill'];
-      fetchInfo();
+    if (args != null) {
+      if (args is Map<String, dynamic>) {
+        billByStatusModel = args['bill'];
+        fetchInfo(billByStatusModel!.id!);
+      } else if (args is int) {
+        fetchInfo(args);
+      } else {
+        Get.back();
+      }
     } else {
       Get.back();
     }
     super.onInit();
   }
 
-  fetchInfo() async {
+  fetchInfo(int id) async {
     isLoadingData.value = LoadingType.LOADING;
     final rq =
-        await BillingRepoImpl().getBillByID(billID: billByStatusModel.id!);
+        await BillingRepoImpl().getBillByID(billID: id);
     if (rq.isSuccess() && rq.data != null) {
       billInfo.value = rq.data!;
       isLoadingData.value = LoadingType.LOADED;

@@ -18,6 +18,8 @@ class TenantSentReturnRequestController extends GetxController {
   ContractByStatusModel? contractByStatusModel;
   ContractByIdModel? contractByIdModel;
 
+  final returnDate = DateTime.now().obs;
+
   @override
   void onInit() {
     _initData();
@@ -32,6 +34,9 @@ class TenantSentReturnRequestController extends GetxController {
         contractByStatusModel = args['contract'];
         contractType = args['contract_type'];
         contractByIdModel = args['contract_by_id'];
+        returnDate.value = contractByIdModel!.endDate ?? DateTime.now();
+      } else {
+        Get.back();
       }
     } else {
       Get.back();
@@ -40,8 +45,13 @@ class TenantSentReturnRequestController extends GetxController {
 
   _initController() {
     returnDateController = TextEditingController(
-      text: contractByIdModel?.endDate?.ddMMyyyy ?? '',
+      text: returnDate.value.ddMMyyyy,
     );
+
+    returnDateController.addListener(() {
+      returnDateController.text = returnDate.value.ddMMyyyy;
+    });
+
     reasonController = TextEditingController();
   }
 
@@ -71,6 +81,7 @@ class TenantSentReturnRequestController extends GetxController {
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
     if (fromDataAt != null) {
+      returnDate.value = fromDataAt;
       returnDateController.text = fromDataAt.ddMMyyyy;
     }
   }
@@ -85,9 +96,7 @@ class TenantSentReturnRequestController extends GetxController {
       return;
     }
     if (isFollowPerContractTerm.value) {
-      if (contractByIdModel?.endDate?.isBefore(
-              DateTime.tryParse(returnDateController.text) ?? DateTime.now()) ??
-          false) {
+      if (contractByIdModel?.endDate?.isBefore(returnDate.value) ?? false) {
         AlertSnackbar.show(
           title: 'Ngày trả phòng không hợp lệ',
           message: 'Ngày trả phòng không thể sau ngày hết hạn hợp đồng',
@@ -97,16 +106,15 @@ class TenantSentReturnRequestController extends GetxController {
       }
     }
 
-    OverlayLoading.show();
-
-    final rq = await ReturnRequestRepoImpl().createReturnRequest(
-      ReturnRequestCreateTenantModel(
-        contractId: contractByStatusModel?.id,
-        returnDate:
-            DateTime.tryParse(returnDateController.text) ?? DateTime.now(),
-        reason: reasonController.text,
-      ),
+    final model = ReturnRequestCreateTenantModel(
+      contractId: contractByStatusModel?.id,
+      returnDate: returnDate.value,
+      reason: reasonController.text,
     );
+
+    print(model);
+    OverlayLoading.show();
+    final rq = await ReturnRequestRepoImpl().createReturnRequest(model);
     OverlayLoading.hide();
     if (rq.isSuccess()) {
       Get.offNamedUntil(
@@ -120,8 +128,5 @@ class TenantSentReturnRequestController extends GetxController {
         isError: true,
       );
     }
-
   }
-
-
 }

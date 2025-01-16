@@ -119,7 +119,7 @@ class LandlordDetailReturnRequestPage
               Icon(FontAwesomeIcons.clock, size: 16.sp),
               SizedBox(width: 5.px),
               Text(
-                '${controller.returnRequestByIdModel!.createdAt?.hhmmDDMMyyyy}',
+                '${controller.returnRequestByIdModel!.returnDate?.hhmmDDMMyyyy}',
                 textAlign: TextAlign.end,
                 style: textStyle,
               ),

@@ -310,8 +310,12 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                       SizedBox(height: 4.px),
                       _buildText(
                         text: '(Ký ghi rõ họ tên)',
+                        
                         alignment: Alignment.center,
                       ),
+                      if (controller
+                              .contractByIdModel!.signatureA?.isNotEmpty ==
+                          true)
                       SizedBox(
                         height: 80.px,
                         child: Column(
@@ -319,7 +323,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                             Image.memory(
                               fit: BoxFit.contain,
                               base64Decode(
-                                  controller.contractByIdModel?.signatureA ??
+                                    controller.contractByIdModel?.signatureA! ??
                                       ''),
                               width: 60.px,
                               height: 60.px,
@@ -333,6 +337,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                           ],
                         ),
                       ),
+                      if (controller
+                              .contractByIdModel!.signatureA?.isNotEmpty ==
+                          false)
+                        SizedBox(height: 80.px),
                     ],
                   ),
                 ),
@@ -359,27 +367,36 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                         text: '(Ký ghi rõ họ tên)',
                         alignment: Alignment.center,
                       ),
-                      SizedBox(
-                        height: 80.px,
-                        child: Column(
-                          children: [
-                            Image.memory(
-                              fit: BoxFit.contain,
-                              base64Decode(
-                                  controller.contractByIdModel?.signatureB ??
-                                      ''),
-                              width: 60.px,
-                              height: 60.px,
-                            ),
-                            _buildText(
-                              text:
-                                  controller.contractByIdModel?.partyB?.name ??
-                                      '',
-                              alignment: Alignment.center,
-                            ),
-                          ],
+                      if (controller
+                              .contractByIdModel!.signatureB?.isNotEmpty ==
+                          true)
+                        SizedBox(
+                          height: 80.px,
+                          child: Column(
+                            children: [
+                              Image.memory(
+                                fit: BoxFit.contain,
+                                base64Decode(
+                                    controller.contractByIdModel?.signatureB ??
+                                        ''),
+                                width: 60.px,
+                                height: 60.px,
+                              ),
+                              _buildText(
+                                text: controller
+                                        .contractByIdModel?.partyB?.name ??
+                                    '',
+                                alignment: Alignment.center,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      if (controller
+                              .contractByIdModel!.signatureB?.isNotEmpty ==
+                          false)
+                        SizedBox(
+                          height: 80.px,
+                        )
                     ],
                   ),
                 ),

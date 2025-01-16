@@ -22,6 +22,12 @@ extension DatetimeExt on DateTime {
     DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(dateStr);
     return parsedDate;
   }
+
+  static DateTime convertToDate(String inputDate) {
+    DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+    return inputFormat.parse(inputDate);
+  } 
+
   static DateTime? getParsedDate(String time) {
     try {
       return DateFormat('dd/MM/yyyy').parseStrict(time);

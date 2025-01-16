@@ -3,6 +3,7 @@ import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/billing/bill_by_id_model.dart';
 import 'package:smart_rent/core/model/billing/bill_by_month_and_user_model.dart';
 import 'package:smart_rent/core/model/billing/bill_by_status_model.dart';
+import 'package:smart_rent/core/model/billing/bill_create_model.dart';
 import 'package:smart_rent/core/model/billing/billing_all_metric_model.dart';
 import 'package:smart_rent/core/model/billing/billing_create_index_request_model.dart';
 import 'package:smart_rent/core/model/billing/billing_create_index_response.dart';
@@ -86,7 +87,7 @@ class BillingRepoImpl extends BillingRepo {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${AppManager().accessToken}',
       }, data: {
-        'room_id': roomID,
+        'id': roomID,
         'month': month,
         'year': year,
       });
@@ -187,6 +188,31 @@ class BillingRepoImpl extends BillingRepo {
       );
     } catch (e) {
       log.e('createIndex', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
+
+  @override
+  Future<ResponseModel<int>> createBill(
+      {required BillCreateModel model}) async {
+    const String url = '/billings';
+    try {
+      final response = await dio.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+        data: model.toJson(),
+      );
+
+      return ResponseModel<int>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: response.data['data'] ?? 0,
+      );
+    } catch (e) {
+      log.e('createBill', e.toString());
       return ResponseModel.failed(e);
     }
   }

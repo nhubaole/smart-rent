@@ -29,7 +29,7 @@ class LandlordBillCollectionPage
           SizedBox(height: 24.px),
           _buildRowPeriodSelection(context),
           SizedBox(height: 16.px),
-          _buildRowSelectionMode(),
+          // _buildRowSelectionMode(),
           Expanded(
             child: Obx(() => _buildListByStatus()),
           ),

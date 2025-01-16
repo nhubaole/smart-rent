@@ -156,9 +156,13 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.px),
-        child: CacheImageWidget(
-          imageUrl: widget.url!,
-          shouldExtendCache: true,
+        child: InteractiveViewer(
+          maxScale: 5.0,
+          minScale: 0.5,
+          child: CacheImageWidget(
+            imageUrl: widget.url!,
+            shouldExtendCache: true,
+          ),
         ),
       ),
     );

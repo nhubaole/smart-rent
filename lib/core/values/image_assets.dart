@@ -21,8 +21,7 @@ class ImageAssets {
   static const icAddFromCamera = '$path/ic_add_camera.ong';
   static const icPayment = '$path/payment.png';
   static const icKyHopDong = '$path/kyhopdong.png';
-  static const icDatLichXemPhong = '$path/datlichxemphong.png';
-  static const icThoaThuanChuNha = '$path/thoathuanchunha.png';
+
 
   static const icSend2 = '$path/ic_send_2.png';
   static const icTerm = '$path/ic_term.png';
@@ -34,6 +33,8 @@ class ImageAssets {
   static const icAverage = '$path/ic_average.png';
   static const icGood = '$path/ic_good.png';
   static const icExcellent = '$path/ic_excellent.png';
+  static const icDatLichXemPhong = '$path/datlichxemphong.png';
+  static const icThoaThuanChuNha = '$path/thoathuanchunha.png';
 
   // Lottie
   static const lottieEmpty = 'assets/lottie/empty.json';

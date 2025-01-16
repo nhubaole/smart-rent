@@ -40,7 +40,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
       case LoadingType.ERROR:
         return RefreshIndicator(
           onRefresh: () async {
-            await controller.fetchRentailRequestById(controller.requestInfo!);
+            await controller.fetchRentalRequestById(controller.requestInfo!);
           },
           child: const ErrorCustomWidget(
             expandToCanPullToRefresh: true,

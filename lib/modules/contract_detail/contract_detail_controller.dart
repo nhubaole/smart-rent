@@ -45,6 +45,8 @@ class ContractDetailController extends GetxController {
       } else if (args is NotiArgument) {
         notiArgument = args;
         await fetchContractById(id: args.contractID);
+      } else if (args is int) {
+        await fetchContractById(id: args);
       }
     } else {
       Get.back();

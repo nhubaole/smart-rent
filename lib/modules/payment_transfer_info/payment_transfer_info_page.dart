@@ -163,7 +163,7 @@ class PaymentTransferInfoPage extends GetView<PaymentTransferInfoController> {
       ),
       child: CacheImageWidget(
         imageUrl: controller.paymentDetailInfoModel?.qrUrl ?? ImageAssets.demo,
-        shouldExtendCache: false,
+        shouldExtendCache: true,
       ),
     );
   }

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 
 class PaymentCreateModel {
@@ -40,5 +41,10 @@ class PaymentCreateModel {
           : null,
       'paid_time': paidTime.toString(),
     });
+  }
+
+  @override
+  String toString() {
+    return 'PaymentCreateModel(code: $code, senderId: $senderId, billId: $billId, contractId: $contractId, returnRequestId: $returnRequestId, amount: $amount, status: $status, tranferContent: $tranferContent, evidenceImage: $evidenceImage, paidTime: $paidTime)';
   }
 }

@@ -115,14 +115,14 @@ class TrackingRentalProcessStepperItemWidget extends StatelessWidget {
         height: 30.px,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColors.secondary80,
+          color: AppColors.primary40,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(4.px),
         ),
         child: const Center(
           child: Icon(
             Icons.check_outlined,
-            color: AppColors.secondary60,
+            color: AppColors.white,
           ),
         ),
       );

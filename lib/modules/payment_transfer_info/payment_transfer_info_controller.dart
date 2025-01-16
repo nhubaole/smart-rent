@@ -15,11 +15,12 @@ import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
 import 'package:smart_rent/modules/payment_transfer_info/widgets/upload_evidence_banking_sheet.dart';
+import 'package:smart_rent/modules/success_page/success_controller.dart';
 
 class PaymentTransferInfoController extends GetxController {
 
   late Timer timer;
-  // BillByIdModel? billByIdModel;
+  BillByIdModel? billByIdModel;
   PaymentDetailInfoModel? paymentDetailInfoModel;
   UserModel? tenant;
   String? type;
@@ -38,7 +39,7 @@ class PaymentTransferInfoController extends GetxController {
   void onInit() {
     final args = Get.arguments;
     if (args != null && args is Map<String, dynamic>) {
-      // billByIdModel = args['bill'];
+      billByIdModel = args['bill'];
       type = args['type'];
       id = args['id'];
       paymentDetailInfoModel = args['payment_detail_info'];
@@ -86,16 +87,46 @@ class PaymentTransferInfoController extends GetxController {
             }
             final rq = await onCreatePayment();
             if (rq != null) {
+              // Get.offNamedUntil(
+              //   AppRoutes.landlordReturnSuccess,
+              //   (route) => route.settings.name == AppRoutes.root,
+              //   arguments: {
+              //     // 'bill': billByIdModel,
+              //     'payment_detail_info': paymentDetailInfoModel,
+              //     'payment_id': rq,
+              //     'tenant': tenant,
+              //     'allow_review': false,
+              //   },
+              // );
               Get.offNamedUntil(
-                AppRoutes.landlordReturnSuccess,
+                AppRoutes.successPage,
                 (route) => route.settings.name == AppRoutes.root,
-                arguments: {
-                  // 'bill': billByIdModel,
-                  'payment_detail_info': paymentDetailInfoModel,
-                  'payment_id': rq,
-                  'tenant': tenant,
-                  'allow_review': false,
-                },
+                arguments: SuccessArgument(
+                  firstText: 'Thanh toán thành công',
+                  secondText:
+                      'Cảm ơn bạn! Hóa đơn của bạn đã được thanh toán thành công.',
+                  thirdText:
+                      'Vui lòng chờ chủ nhà xác nhận để hoàn tất thủ tục.',
+                  fourthText:
+                      'Đừng quên thanh toán các hóa đơn tiếp theo đúng hạn để đảm bảo quyền lợi thuê trọ của bạn.',
+                  fifthText:
+                      'Bạn có thể xem lại chi tiết hóa đơn trong phần Quản lý hóa đơn của ứng dụng.',
+                  leftButtonText: 'Trang chủ',
+                  leftButtonOnTap: () {
+                    Get.until((route) => route.settings.name == AppRoutes.root);
+                  },
+                  rightButtonText: 'Chi tiết giao dịch',
+                  rightButtonOnTap: () {
+                    Get.toNamed(
+                      AppRoutes.paymentDetail,
+                      arguments: {
+                        'payment_id': rq,
+                        'payment_detail_info': paymentDetailInfoModel,
+                        'tenant': tenant,
+                      },
+                    );
+                  },
+                ),
               );
             }
           },
@@ -109,7 +140,7 @@ class PaymentTransferInfoController extends GetxController {
     final compressedImage =
         await Helper.compressImage(imageFile: XFile(proofImage.value!));
     final data = PaymentCreateModel(
-      billId: type == 'bill' ? id : null,
+      billId: type == 'bill' ? id : billByIdModel!.id!,
       contractId: type == 'contract' ? id : null,
       returnRequestId: type == 'return' ? id : null,
       amount: paymentDetailInfoModel?.amount!,
@@ -117,6 +148,7 @@ class PaymentTransferInfoController extends GetxController {
       // evidenceImage: compressedImage.path,
       evidenceImage: proofImage.value,
     );
+    print(data);
     final rq = await PaymentRepoImpl().createPayment(paymentCreateModel: data);
     OverlayLoading.hide();
 

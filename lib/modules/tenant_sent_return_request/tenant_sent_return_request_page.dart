@@ -19,47 +19,51 @@ class TenantSentReturnRequestPage
     return ScaffoldWidget(
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(title: 'rent_return'.tr),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(
-          right: 16.px,
-          left: 16.px,
-          top: 8.px,
+      body: _buildBody(),
+    );
+  }
+
+  SingleChildScrollView _buildBody() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.only(
+        right: 16.px,
+        left: 16.px,
+        top: 8.px,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: AppColors.transparent,
+            width: 0.5.px,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.px),
+          ),
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.transparent,
-              width: 0.5.px,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.px),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildConfirmInfo(),
-              SizedBox(height: 24.px),
-              _buildReturnDate(),
-              SizedBox(height: 16.px),
-              SolidButtonWidget(
-                height: 55.px,
-                margin: EdgeInsets.symmetric(vertical: 4.px),
-                text: 'submit'.tr,
-                trailing: Padding(
-                  padding: EdgeInsets.only(left: 8.px),
-                  child: Icon(
-                    Icons.send_rounded,
-                    size: 16.sp,
-                    color: AppColors.white,
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildConfirmInfo(),
+            SizedBox(height: 24.px),
+            _buildReturnDate(),
+            SizedBox(height: 16.px),
+            SolidButtonWidget(
+              height: 55.px,
+              margin: EdgeInsets.symmetric(vertical: 4.px),
+              text: 'submit'.tr,
+              trailing: Padding(
+                padding: EdgeInsets.only(left: 8.px),
+                child: Icon(
+                  Icons.send_rounded,
+                  size: 16.sp,
+                  color: AppColors.white,
                 ),
-                onTap: controller.onSubmit,
               ),
-            ],
-          ),
+              onTap: controller.onSubmit,
+            ),
+          ],
         ),
       ),
     );

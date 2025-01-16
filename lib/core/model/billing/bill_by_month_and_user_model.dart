@@ -40,6 +40,7 @@ class BillByMonthAndUserItemModel {
   int? id;
   int? paymentId;
   int? roomNumber;
+  int? roomId;
   int? status;
   String? tenantName;
   int? totalAmount;
@@ -50,6 +51,7 @@ class BillByMonthAndUserItemModel {
       this.id,
       this.paymentId,
       this.roomNumber,
+      this.roomId,
       this.status,
       this.tenantName,
       this.totalAmount});
@@ -71,6 +73,7 @@ class BillByMonthAndUserItemModel {
           json['tenant_name'] != null ? json['tenant_name'] as String : null,
       totalAmount:
           json['total_amount'] != null ? json['total_amount'] as int : null,
+      roomId: json['room_id'] != null ? json['room_id'] as int : null,
     );
   }
 }

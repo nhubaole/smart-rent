@@ -19,57 +19,61 @@ class ContractInfoPage extends GetView<ContractInfoController> {
       appBar: CustomAppBar(
         title: 'contract_information'.tr,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.px),
-        child: Column(
-          children: [
-            _buildInfoItem(
-              title: 'contract_code'.tr,
-              value: controller.contract.code ?? '',
-              padding: EdgeInsets.symmetric(vertical: 16.px),
-            ),
-            const Divider(
-              color: AppColors.secondary80,
-              thickness: 0.5,
-              height: 0,
-            ),
-            _buildInfoItem(
-              title: 'contract_type'.tr,
-              value: 'rental_contract'.tr,
-              padding: EdgeInsets.symmetric(vertical: 16.px),
-            ),
-            const Divider(
-              color: AppColors.secondary80,
-              thickness: 0.5,
-              height: 0,
-            ),
-            _buildInfoItem(
-              title: 'address'.tr,
-              value: controller.contract.roomAddress ?? '',
-              padding: EdgeInsets.symmetric(vertical: 16.px),
-            ),
-            const Divider(
-              color: AppColors.secondary80,
-              thickness: 0.5,
-              height: 0,
-            ),
-            _buildInfoParty('party_a'.tr, [
-              controller.contract.landlordName ?? '--',
-              controller.contract.signatureTimeA?.ddMMyyyy ?? '--',
-            ]),
-            const Divider(
-              color: AppColors.secondary80,
-              thickness: 0.5,
-              height: 0,
-            ),
-            _buildInfoParty('party_b'.tr, [
-              controller.contract.tenantName ?? '--',
-              controller.contract.signatureTimeB?.ddMMyyyy ?? '--',
-            ]),
-          ],
-        ),
-      ),
+      body: _buildBody(),
       bottomNavigationBar: _buildButtonSignContract(),
+    );
+  }
+
+  Padding _buildBody() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      child: Column(
+        children: [
+          _buildInfoItem(
+            title: 'contract_code'.tr,
+            value: controller.contract.code ?? '',
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+          ),
+          const Divider(
+            color: AppColors.secondary80,
+            thickness: 0.5,
+            height: 0,
+          ),
+          _buildInfoItem(
+            title: 'contract_type'.tr,
+            value: 'rental_contract'.tr,
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+          ),
+          const Divider(
+            color: AppColors.secondary80,
+            thickness: 0.5,
+            height: 0,
+          ),
+          _buildInfoItem(
+            title: 'address'.tr,
+            value: controller.contract.roomAddress ?? '',
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+          ),
+          const Divider(
+            color: AppColors.secondary80,
+            thickness: 0.5,
+            height: 0,
+          ),
+          _buildInfoParty('party_a'.tr, [
+            controller.contract.landlordName ?? '--',
+            controller.contract.signatureTimeA?.ddMMyyyy ?? '--',
+          ]),
+          const Divider(
+            color: AppColors.secondary80,
+            thickness: 0.5,
+            height: 0,
+          ),
+          _buildInfoParty('party_b'.tr, [
+            controller.contract.tenantName ?? '--',
+            controller.contract.signatureTimeB?.ddMMyyyy ?? '--',
+          ]),
+        ],
+      ),
     );
   }
 

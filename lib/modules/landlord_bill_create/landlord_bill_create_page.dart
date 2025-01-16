@@ -26,7 +26,7 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           height: 50.px,
           margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
           text: 'Tạo hóa đơn'.tr,
-          onTap: () => Get.toNamed(AppRoutes.landlordBillEdit),
+          onTap: controller.onCreateBill,
           leading: const Icon(
             Icons.edit,
             color: AppColors.primary60,
@@ -97,7 +97,9 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
         children: [
           _buildBillInfoItem(
             title: 'name'.tr,
-            values: ['Lê Bảo Như'],
+            values: [
+              controller.billingAllMetricModel?.info?.tenantName ?? '--'
+            ],
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -106,17 +108,8 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           ),
           _buildBillInfoItem(
             title: 'phone_number'.tr,
-            values: ['0823306992'],
-          ),
-          Divider(
-            color: AppColors.secondary80.withOpacity(0.5),
-            thickness: 1,
-            height: 16.px,
-          ),
-          _buildBillInfoItem(
-            title: 'room_number'.tr,
             values: [
-              '3.11',
+              controller.billingAllMetricModel?.info?.phoneNumber ?? '--'
             ],
           ),
           Divider(
@@ -127,7 +120,7 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           _buildBillInfoItem(
             title: 'room_number'.tr,
             values: [
-              '3.11',
+              '${controller.billingAllMetricModel?.info?.roomNumber ?? '--'}',
             ],
           ),
           Divider(
@@ -138,8 +131,9 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           _buildBillInfoItem(
             title: 'address'.tr,
             values: [
-              '97 đường số 11, phường Trường Thọ, TP Thủ Đức, TP HCM',
+              (controller.billingAllMetricModel?.info?.address ?? '--'),
             ],
+            maxLines: 5,
           ),
           Divider(
             color: AppColors.secondary80.withOpacity(0.5),
@@ -148,7 +142,9 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           ),
           _buildBillInfoItem(
             title: 'period'.tr,
-            values: ['Tháng 10/2024'],
+            values: [
+              'Tháng ${controller.period.value?.month ?? ''} - ${controller.period.value?.year ?? ''}'
+            ],
           ),
         ],
       ),
@@ -166,7 +162,9 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
       children: [
         Text('total_amount'.tr, style: textStyle),
         Text(
-          '3,560,000đ',
+          controller.billByIdModel!.totalAmount
+                  ?.toStringTotalthis(symbol: 'đ') ??
+              '--',
           style: textStyle.copyWith(
             color: AppColors.primary40,
           ),
@@ -175,31 +173,40 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
     );
   }
 
-  Row _buildAdditionalFee() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: _buildTextInputFieldAdditionalFee(
-            label: 'additional_fee'.tr,
-            hint: 'enter_amount'.tr,
+  Widget _buildAdditionalFee() {
+    return Form(
+      key: controller.createBillFormKey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: _buildTextInputFieldAdditionalFee(
+                label: 'additional_fee'.tr,
+                hint: 'enter_amount'.tr,
+                textController: controller.additionFeeController,
+                keyboardType: TextInputType.number
+            ),
           ),
-        ),
-        SizedBox(width: 16.px),
-        Expanded(
-          child: _buildTextInputFieldAdditionalFee(
-            label: 'noete'.tr,
-            hint: 'enter_note'.tr,
+          SizedBox(width: 16.px),
+          Expanded(
+            child: _buildTextInputFieldAdditionalFee(
+                label: 'noete'.tr,
+                hint: 'enter_note'.tr,
+                textController: controller.additionNoteController,
+                keyboardType: TextInputType.text
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Container _buildTextInputFieldAdditionalFee({
+    required TextEditingController textController,
     required String label,
     required String hint,
+    required TextInputType keyboardType,
   }) {
     return Container(
       padding: EdgeInsets.all(16.px),
@@ -220,7 +227,8 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           SizedBox(
             height: 30.px,
             child: TextFormField(
-              controller: TextEditingController(),
+              keyboardType: keyboardType,
+              controller: textController,
               decoration: InputDecoration(
                 hintText: 'note'.tr,
                 hintStyle: TextStyle(
@@ -249,6 +257,7 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
     required String title,
     String? note,
     required List<String> values,
+    int maxLines = 3,
   }) {
     final TextStyle titleStyle = TextStyle(
       fontSize: 16.sp,
@@ -290,7 +299,7 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
                         color: AppColors.secondary20,
                         fontWeight: FontWeight.bold,
                       ),
-                      maxLines: 3,
+                      maxLines: maxLines,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                     ),
@@ -383,7 +392,11 @@ class LandlordBillCreatePage extends GetView<LandlordBillCreateController> {
           ),
           _buildBillInfoItem(
             title: 'parking_fee'.tr,
-            values: ['1,300,000 VND'],
+            values: [
+              controller.billByIdModel!.parkingFee
+                      ?.toStringTotalthis(symbol: 'đ') ??
+                  '--'
+            ],
           ),
         ],
       ),

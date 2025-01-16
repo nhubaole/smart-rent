@@ -22,16 +22,21 @@ class BillInfoPage extends GetView<BillInfoController> {
       appBar: CustomAppBar(title: 'bill_information'.tr),
       body: Obx(() => _buildListByStatus()),
       bottomNavigationBar: Obx(
-        () => Visibility(
-          visible: controller.isLoadingData.value == LoadingType.LOADED,
-          child: SolidButtonWidget(
-            height: 50.px,
-            margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
-            text: 'payment'.tr,
-            onTap: controller.onNavPaymentDeposit,
-          ),
-        ),
+        () => _buildNavButton(),
       ),
+    );
+  }
+
+  Widget _buildNavButton() {
+    if (controller.isLoadingData.value != LoadingType.LOADED ||
+        controller.billByStatusModel?.status == 2) {
+      return SizedBox();
+    }
+    return SolidButtonWidget(
+      height: 50.px,
+      margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+      text: 'payment'.tr,
+      onTap: controller.onNavPaymentDeposit,
     );
   }
 
@@ -422,18 +427,25 @@ class BillInfoPage extends GetView<BillInfoController> {
         horizontal: 2.h,
       ),
       decoration: BoxDecoration(
-        color: status.colorBackground,
+        color: controller.billInfo.value!.status == 0
+            ? Colors.red.withOpacity(0.1)
+            : AppColors.greenOrigin.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8.px),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(status.icon, color: status.colorContent),
+          Icon(status.icon,
+              color: controller.billInfo.value!.status == 0
+                  ? Colors.red
+                  : AppColors.greenOrigin),
           SizedBox(width: 1.w),
           Text(
-            controller.billInfo.value!.status == 1 ? 'unpaid'.tr : 'paid'.tr,
+            controller.billInfo.value!.status == 0 ? 'unpaid'.tr : 'paid'.tr,
             style: TextStyle(
-              color: status.colorContent,
+              color: controller.billInfo.value!.status == 0
+                  ? Colors.red
+                  : AppColors.greenOrigin,
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,
             ),

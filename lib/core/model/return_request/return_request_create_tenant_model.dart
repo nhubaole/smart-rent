@@ -33,4 +33,8 @@ class ReturnRequestCreateTenantModel {
     data['return_date'] = returnDate?.toUtc().toIso8601String();
     return data;
   }
+
+  @override
+  String toString() =>
+      'ReturnRequestCreateTenantModel(contractId: $contractId, reason: $reason, returnDate: $returnDate)';
 }

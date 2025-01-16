@@ -28,6 +28,19 @@ class TransactionItemWidget extends StatelessWidget {
     return '';
   }
 
+  String get getIcon {
+    if (transaction.contractId != null) {
+      return ImageAssets.icKyHopDong;
+    }
+    if (transaction.billId != null) {
+      return ImageAssets.icDatLichXemPhong;
+    }
+    if (transaction.returnRequestId != null) {
+      return ImageAssets.icTerm;
+    }
+    return ImageAssets.icThoaThuanChuNha;
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -43,7 +56,7 @@ class TransactionItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              ImageAssets.icSend2,
+              getIcon,
               width: 30.px,
               height: 30.px,
               fit: BoxFit.cover,
