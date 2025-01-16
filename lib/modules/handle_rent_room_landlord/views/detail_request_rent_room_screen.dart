@@ -181,7 +181,16 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {
-                                        Get.toNamed(AppRoutes.chat);
+                                        Get.toNamed(AppRoutes.chat, arguments: {
+                                          'conversationId': 22,
+                                          'companionName':
+                                              detailRequestController
+                                        .profileOwner.value!.username,
+                                          'companionAvatarUrl':
+                                              detailRequestController
+                                        .profileOwner.value!.photoUrl,
+                                          'companionId': 76,
+                                        });
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
