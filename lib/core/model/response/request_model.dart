@@ -18,9 +18,9 @@ class ResponseModel<T> {
 
   ResponseModel.failed(dynamic error) {
     LogImpl().e('ResponseModel', error.toString());
-    if (error.toString().contains('401')) {
-      AppManager().forceLogOut();
-    }
+    // if (error.toString().contains('401')) {
+    //   AppManager().forceLogOut();
+    // }
     if (error is DioException) {
       errCode = error.response?.data['errCode'];
       message = error.response?.data['message'];

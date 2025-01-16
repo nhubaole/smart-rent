@@ -24,37 +24,41 @@ class LandlordContractCreatePage
         onBack: controller.onBack,
       ),
       body: Obx(
-        () => Column(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: StepperWidget<Map<String, dynamic>>(
-                tabs: controller.tabs.value,
-                initStep: controller.selectedTab.value,
-                onStepTapped: (p0) async {
-                  final result = await controller.onStepTapped(p0);
-                  return result;
-                },
-                selectedColor: AppColors.primary40,
-                unselectedColor: AppColors.secondary60,
-              ),
-            ),
-            SizedBox(height: 16.px),
-            Expanded(
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller.tabController,
-                children: const [
-                  ContentRentContract(),
-                  ResponsibilitiesParty(),
-                  PreviewContract(),
-                ],
-              ),
-            ),
-          ],
-        ),
+        () => _buildBody(),
       ),
       bottomNavigationBar: Obx(() => _buildButtonNav()),
+    );
+  }
+
+  Column _buildBody() {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: StepperWidget<Map<String, dynamic>>(
+            tabs: controller.tabs.value,
+            initStep: controller.selectedTab.value,
+            onStepTapped: (p0) async {
+              final result = await controller.onStepTapped(p0);
+              return result;
+            },
+            selectedColor: AppColors.primary40,
+            unselectedColor: AppColors.secondary60,
+          ),
+        ),
+        SizedBox(height: 16.px),
+        Expanded(
+          child: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: controller.tabController,
+            children: const [
+              ContentRentContract(),
+              ResponsibilitiesParty(),
+              PreviewContract(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

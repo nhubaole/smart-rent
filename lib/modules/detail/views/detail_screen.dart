@@ -398,6 +398,9 @@ class DetailPage extends GetView<DetailController> {
         //     uidOwner: controller.owner.value!.uid,
         //   ),
         // );
+        Get.toNamed(AppRoutes.ratingUser, arguments: {
+          'user_id': controller.room!.owner!.id,
+        });
       },
       child: Container(
           decoration: BoxDecoration(
@@ -536,9 +539,9 @@ class DetailPage extends GetView<DetailController> {
   }
 
   Widget _buildRating() {
-    if (controller.rating == null) {
-      return const SizedBox();
-    }
+    // if (controller.rating == null) {
+    //   return const SizedBox();
+    // }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -563,7 +566,7 @@ class DetailPage extends GetView<DetailController> {
               child: Row(
                 children: [
                   Text(
-                    controller.rating!.totalRating?.toString() ?? '--',
+                    '${controller.rating?.totalRating?.toInt() ?? 0}',
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -601,8 +604,10 @@ class DetailPage extends GetView<DetailController> {
                 ],
               ),
             ),
+            if (controller.rating != null)
             InkWell(
               onTap: () {
+
                 Get.toNamed(AppRoutes.rating, arguments: {
                   'rating': controller.rating,
                 });

@@ -508,10 +508,7 @@ class LandlordDetailReturnRequestPage
             ),
             Expanded(
               child: Text(
-                (controller.returnRequestByIdModel?.totalReturnDeposit! ??
-                            0 -
-                                controller
-                                    .returnRequestByIdModel!.deductAmount!)
+                controller.remainingDeposit
                         .toStringTotalthis(symbol: 'đ') ??
                     '--',
                 style: TextStyle(

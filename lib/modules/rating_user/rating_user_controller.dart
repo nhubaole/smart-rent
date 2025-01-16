@@ -33,6 +33,8 @@ class RatingUserController extends GetxController {
       final rqRooms = await RoomRepoImpl().getByOwner();
       if (rqRooms.isSuccess()) {
         userModel.value.rooms = rqRooms.data;
+      } else {
+        userModel.value.rooms = [];
       }
       isLoading.value = LoadingType.LOADED;
     } else {

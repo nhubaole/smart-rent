@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
@@ -18,9 +19,11 @@ import 'package:smart_rent/modules/payment_transfer_info/widgets/upload_evidence
 class PaymentTransferInfoController extends GetxController {
 
   late Timer timer;
-  BillByIdModel? billByIdModel;
+  // BillByIdModel? billByIdModel;
   PaymentDetailInfoModel? paymentDetailInfoModel;
   UserModel? tenant;
+  String? type;
+  int? id;
 
   final AppManager appManager = AppManager();
   final isLoadingData = LoadingType.INIT.obs;
@@ -35,7 +38,9 @@ class PaymentTransferInfoController extends GetxController {
   void onInit() {
     final args = Get.arguments;
     if (args != null && args is Map<String, dynamic>) {
-      billByIdModel = args['bill'];
+      // billByIdModel = args['bill'];
+      type = args['type'];
+      id = args['id'];
       paymentDetailInfoModel = args['payment_detail_info'];
       tenant = args['tenant'];
       isLoadingData.value = LoadingType.LOADED;
@@ -85,10 +90,11 @@ class PaymentTransferInfoController extends GetxController {
                 AppRoutes.landlordReturnSuccess,
                 (route) => route.settings.name == AppRoutes.root,
                 arguments: {
-                  'bill': billByIdModel,
+                  // 'bill': billByIdModel,
                   'payment_detail_info': paymentDetailInfoModel,
                   'payment_id': rq,
                   'tenant': tenant,
+                  'allow_review': false,
                 },
               );
             }
@@ -103,15 +109,13 @@ class PaymentTransferInfoController extends GetxController {
     final compressedImage =
         await Helper.compressImage(imageFile: XFile(proofImage.value!));
     final data = PaymentCreateModel(
-      code: billByIdModel?.code!,
-      senderId: user.id!,
-      billId: billByIdModel?.id!,
-      amount: billByIdModel?.totalAmount!,
-      status: billByIdModel?.status!,
+      billId: type == 'bill' ? id : null,
+      contractId: type == 'contract' ? id : null,
+      returnRequestId: type == 'return' ? id : null,
+      amount: paymentDetailInfoModel?.amount!,
       tranferContent: paymentDetailInfoModel?.tranferContent!,
       // evidenceImage: compressedImage.path,
-      evidenceImage: proofImage.value!,
-      paidTime: DateTime.now(),
+      evidenceImage: proofImage.value,
     );
     final rq = await PaymentRepoImpl().createPayment(paymentCreateModel: data);
     OverlayLoading.hide();

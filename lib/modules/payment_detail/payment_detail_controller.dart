@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/helper/helper.dart';
+import 'package:smart_rent/core/model/notification_model.dart';
 import 'package:smart_rent/core/model/payment/payment_all_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/payment/payment_repo_impl.dart';
@@ -11,6 +12,7 @@ import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/values/image_assets.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
+import 'package:smart_rent/core/widget/overlay_loading.dart';
 import 'package:smart_rent/core/widget/view_image_dialog.dart';
 
 class PaymentDetailController extends GetxController {
@@ -19,6 +21,7 @@ class PaymentDetailController extends GetxController {
   PaymentAllModel? paymentAllModel;
   UserModel? sender;
   int? paymentId;
+  NotificationModel? notificationModel;
 
   final isLoadingData = LoadingType.INIT.obs;
   final AppManager appManager = AppManager.instance;
@@ -40,6 +43,10 @@ class PaymentDetailController extends GetxController {
     isLoadingData.value = LoadingType.LOADING;
     final arguments = Get.arguments;
     if (arguments != null) {
+      if (arguments is NotificationModel) {
+        notificationModel = arguments;
+        fetchPatmentFromNoti(notificationModel!.referenceId!);
+      } else 
       if (arguments is PaymentAllModel) {
         paymentAllModel = arguments;
         isFromHistoryTransaction = true;
@@ -64,6 +71,20 @@ class PaymentDetailController extends GetxController {
     }
 
     // payment_id
+  }
+
+  fetchPatmentFromNoti(int id) async {
+    isLoadingData.value = LoadingType.LOADING;
+    final rq = await PaymentRepoImpl().getPaymentById(id: id);
+    isLoadingData.value = LoadingType.LOADING;
+    if (rq.isSuccess()) {
+      paymentAllModel = rq.data!;
+      await getSender();
+      isLoadingData.value = LoadingType.LOADED;
+    } else {
+      isLoadingData.value = LoadingType.ERROR;
+      Get.until((route) => route.settings.name == AppRoutes.root);
+    }
   }
 
   Future<void> getSender() async {
@@ -143,4 +164,26 @@ class PaymentDetailController extends GetxController {
   onNavTypeBill() {}
 
   onNavTypeReturn() {}
+
+  onConfirmCompletedPayment() async {
+    OverlayLoading.show();
+    final rq = await PaymentRepoImpl().confirmPayment(
+      id: paymentAllModel!.id!,
+    );
+    OverlayLoading.hide();
+    if (rq.isSuccess()) {
+      AlertSnackbar.show(
+        title: 'Xác nhận hoàn thành thanh toán',
+        message: 'Xác nhận thanh toán thành công',
+        isError: false,
+      );
+      Get.until((route) => route.settings.name == AppRoutes.root);
+    } else {
+      AlertSnackbar.show(
+        title: 'Xác nhận thanh toán',
+        message: 'Xác nhận thanh toán thất bại',
+        isError: true,
+      );
+    }
+  }
 }

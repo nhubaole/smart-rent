@@ -9,6 +9,7 @@ class LandlordReturnSuccessController extends GetxController {
   PaymentDetailInfoModel? paymentDetailInfoModel;
   int? paymentId;
   UserModel? tenant;
+  bool? allowReview;
 
   @override
   void onInit() {
@@ -18,6 +19,7 @@ class LandlordReturnSuccessController extends GetxController {
       paymentDetailInfoModel = args['payment_detail_info'];
       paymentId = args['payment_id'];
       tenant = args['tenant'];
+      allowReview = args['allow_review'] as bool?;
     } else {
       Get.back();
     }

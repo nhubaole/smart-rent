@@ -130,4 +130,52 @@ class PaymentRepoImpl extends PaymentRepo {
       return ResponseModel.failed(e);
     }
   }
+
+  @override
+  Future<ResponseModel<PaymentAllModel>> getPaymentById(
+      {required int id}) async {
+    final String url = '/payments/$id';
+    try {
+      final response = await dio.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+      );
+
+      return ResponseModel<PaymentAllModel>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: PaymentAllModel.fromMap(response.data['data']),
+      );
+    } catch (e) {
+      log.e('getAllBanks', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
+
+  @override
+  Future<ResponseModel<int>> confirmPayment({required int id}) async {
+    final String url = '/payments/$id';
+    try {
+      final response = await dio.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+      );
+
+      return ResponseModel<int>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data:
+            response.data['data'] != null ? response.data['data'] as int : null,
+      );
+    } catch (e) {
+      log.e('getAllBanks', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
 }

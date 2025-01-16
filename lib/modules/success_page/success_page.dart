@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/core/widget/solid_button_widget.dart';
-import 'package:smart_rent/modules/landlord_return_success/landlord_return_success_controller.dart';
+import 'package:smart_rent/modules/success_page/success_controller.dart';
 
-class LandlordReturnSuccessPage
-    extends GetView<LandlordReturnSuccessController> {
-  const LandlordReturnSuccessPage({super.key});
+class SuccessPage extends GetView<SuccessController> {
+  const SuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +24,47 @@ class LandlordReturnSuccessPage
               children: [
                 _buildCheckIcon(),
                 SizedBox(height: 16.px),
-                _buildSentSuccess(),
+                _buildPaymentSuccessText(),
                 SizedBox(height: 16.px),
-                _buildSentSuccessDes(),
+                _buildContentThankYou(),
                 SizedBox(height: 32.px),
                 _buildSuggesstNavManageInvoice(),
-                SizedBox(height: 64.px),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.px),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: OutlineButtonWidget(
-                          onTap: () {
-                            Get.until(
-                              (route) => route.settings.name == AppRoutes.root,
-                            );
-                          },
-                          text: 'Để sau',
-                        ),
-                      ),
-                      if (controller.allowReview == true)
-                        SizedBox(width: 16.px),
-                      if (controller.allowReview == true)
-                        Expanded(
-                          flex: 3,
-                          child: SolidButtonWidget(
-                            text: 'Đánh giá'.tr,
-                            onTap: controller.onNavRating,
-                          ),
-                        ),
-                    ],
-                  ),
-                )
+                SizedBox(height: 32.px),
+                _buildButtons(),
               ],
             ),
-          )
+          ),
         ],
       ),
+    );
+  }
+
+  Row _buildButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (controller.successArgument?.leftButtonOnTap != null)
+          OutlineButtonWidget(
+            height: 50.px,
+            padding: EdgeInsets.symmetric(
+              horizontal: 32.px,
+              vertical: 2.px,
+            ),
+            text: controller.successArgument?.leftButtonText ?? 'Trở về'.tr,
+            onTap: controller.successArgument?.leftButtonOnTap,
+          ),
+        if (controller.successArgument?.rightButtonOnTap != null)
+          SolidButtonWidget(
+            height: 50.px,
+            padding: EdgeInsets.symmetric(
+              horizontal: 32.px,
+              vertical: 2.px,
+            ),
+            text: controller.successArgument?.rightButtonText ??
+                'transaction_details'.tr,
+            onTap: controller.successArgument?.rightButtonOnTap,
+          )
+      ],
     );
   }
 
@@ -80,24 +80,16 @@ class LandlordReturnSuccessPage
         textAlign: TextAlign.center,
         TextSpan(
           children: [
-            TextSpan(text: 'Hãy'.tr),
-            const TextSpan(text: ' '),
-            TextSpan(
-              text: 'đánh giá người thuê'.tr,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const TextSpan(text: ' '),
             TextSpan(
                 text:
-                    'để giúp các chủ nhà khác có thêm thông tin và nâng cao chất lượng cộng đồng thuê trọ.'
-                        .tr),
+                    controller.successArgument?.fifthText ?? 'view_details'.tr),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSentSuccessDes() {
+  Widget _buildContentThankYou() {
     final defaultTextStyle = TextStyle(
       fontSize: 16.sp,
       fontWeight: FontWeight.normal,
@@ -107,32 +99,34 @@ class LandlordReturnSuccessPage
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.px),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text.rich(
             style: defaultTextStyle,
             textAlign: TextAlign.center,
             TextSpan(
-              text:
-                  'Chúc mừng bạn! Quá trình trả phòng trọ của bạn đã hoàn tất thành công.'
-                      .tr,
-            ),
+                text: controller.successArgument?.secondText ?? 'thank_you'.tr),
+          ),
+          Text.rich(
+            style: defaultTextStyle,
+            textAlign: TextAlign.center,
+            TextSpan(
+                text: controller.successArgument?.thirdText ??
+                    'please_wait_landlord'.tr),
           ),
           SizedBox(height: 16.px),
           Text.rich(
             style: defaultTextStyle,
             textAlign: TextAlign.center,
             TextSpan(
-              text:
-                  'Tiền hoàn cọc sẽ được chuyển đến bạn trong vòng 07 ngày làm việc.'
-                      .tr,
-            ),
+                text: controller.successArgument?.fourthText ?? 'reminder'.tr),
           ),
         ],
       ),
     );
   }
 
-  Text _buildSentSuccess() {
+  Text _buildPaymentSuccessText() {
     return Text.rich(
       style: TextStyle(
         fontSize: 22.sp,
@@ -140,7 +134,8 @@ class LandlordReturnSuccessPage
         color: AppColors.black,
       ),
       textAlign: TextAlign.center,
-      TextSpan(text: 'Trả phòng thành công'.tr),
+      TextSpan(
+          text: controller.successArgument?.firstText ?? 'payment_success'.tr),
     );
   }
 

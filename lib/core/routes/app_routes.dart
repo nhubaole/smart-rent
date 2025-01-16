@@ -92,5 +92,6 @@ abstract class AppRoutes {
   static const landlordContractCreate = '/landlord_contract_create';
   static const useProfile = '/use_profile';
   static const userProfileDetail = '/user_profile_detail';
-static const recentlyRoom = '/recently_room';
+  static const recentlyRoom = '/recently_room';
+  static const successPage = '/success_page';
 }

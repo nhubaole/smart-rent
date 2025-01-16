@@ -1,8 +1,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart' as getx;
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
 
 class DioProvider {
   final Log logger = getIt<Log>();
@@ -34,6 +38,17 @@ class DioProvider {
         logger.e('[ERROR]',
             ' ${error.response?.statusCode} ${error.response?.statusMessage}');
         logger.e('[ERROR BODY]', ' ${error.response?.data}');
+        if (error.response?.statusCode == 401 &&
+            (getx.Get.currentRoute != AppRoutes.login &&
+                getx.Get.currentRoute != AppRoutes.signUp)) {
+          // Xử lý logout khi lỗi 401
+          AlertSnackbar.show(
+            title: 'Thông báo',
+            message: 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại',
+            isError: true,
+          );
+          AppManager().forceLogOut();
+        }
         return handler.next(error); // Tiếp tục xử lý lỗi
       },
     ));

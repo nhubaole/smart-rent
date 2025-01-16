@@ -14,7 +14,7 @@ class LandlordBillCollectionController extends GetxController {
   final RxBool isMultipleSelectionMode = false.obs;
   final RxBool isSelectAllMode = false.obs;
   final selectedBills = <BillByMonthAndUserItemModel>[].obs;
-  final billings = Rxn<BillByMonthAndUserModel>();
+  final billings = RxList<BillByMonthAndUserModel>();
   final isLoadingData = LoadingType.INIT.obs;
 
 
@@ -37,7 +37,7 @@ class LandlordBillCollectionController extends GetxController {
       year: periodSelected.value.year,
     );
     if (rq.isSuccess()) {
-      billings.value = rq.data;
+      billings.value = rq.data!;
       isLoadingData.value = LoadingType.LOADED;
     } else {
       isLoadingData.value = LoadingType.ERROR;
@@ -56,10 +56,10 @@ class LandlordBillCollectionController extends GetxController {
     isSelectAllMode.value = !isSelectAllMode.value;
     if (isSelectAllMode.value) {
       selectedBills.clear();
-      selectedBills.assignAll(
-                 billings.value!.listBill!.toList()
+      // selectedBills.assignAll(
+      //            billings.value!.listBill!.toList()
 
-      );
+      // );
     } else {
       selectedBills.clear();
     }
@@ -89,14 +89,20 @@ class LandlordBillCollectionController extends GetxController {
     //   return;
     // }
 
-    if (!isMultipleSelectionMode.value) {
-      Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
-        'selected_bill': object,
-        'period': periodSelected.value,
-      });
-    } else {
-      onAddSelectedBill(object);
-    }
+    // CHI TIET HOA DON
+    Get.toNamed(AppRoutes.landlordBillInfo, arguments: {
+      'selected_bill': object,
+      'period': periodSelected.value,
+    });
+
+    // if (!isMultipleSelectionMode.value) {
+    //   Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
+    //     'selected_bill': object,
+    //     'period': periodSelected.value,
+    //   });
+    // } else {
+    //   onAddSelectedBill(object);
+    // }
 
   }
 
@@ -109,7 +115,10 @@ class LandlordBillCollectionController extends GetxController {
         period: periodSelected.value.toPediod,
         onConfirm: () {
           Get.back();
-          // Get.toNamed(AppRoutes.landlordBillInfo);
+          // CHI TIET HOA DON
+          // Get.toNamed(AppRoutes.landlordBillInfo, ar);
+
+          // TẠO HOA DON
           Get.toNamed(AppRoutes.landlordBillCreate, arguments: {
             'selected_bill': selectedBills,
             'period': periodSelected.value,

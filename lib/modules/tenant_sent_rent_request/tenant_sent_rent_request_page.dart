@@ -224,9 +224,7 @@ class TenantSentRentRequestPage
           ),
         ),
         InkWell(
-          onTap: () {
-            controller.isLeaveDay.value = !controller.isLeaveDay.value;
-          },
+          onTap: controller.onChangeSwitchLeaveDate,
           borderRadius: BorderRadius.circular(8.px),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -234,7 +232,7 @@ class TenantSentRentRequestPage
               Switch(
                 activeTrackColor: AppColors.primary40,
                 value: controller.isLeaveDay.value,
-                onChanged: controller.onChangeLeave,
+                onChanged: (value) => controller.onChangeSwitchLeaveDate(),
               ),
               SizedBox(width: 8.px),
               Text(

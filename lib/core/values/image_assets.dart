@@ -20,6 +20,9 @@ class ImageAssets {
   static const icAddGallery = '$path/ic_add_gallery.png';
   static const icAddFromCamera = '$path/ic_add_camera.ong';
   static const icPayment = '$path/payment.png';
+  static const icKyHopDong = '$path/kyhopdong.png';
+  static const icDatLichXemPhong = '$path/datlichxemphong.png';
+  static const icThoaThuanChuNha = '$path/thoathuanchunha.png';
 
   static const icSend2 = '$path/ic_send_2.png';
   static const icTerm = '$path/ic_term.png';

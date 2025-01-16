@@ -184,48 +184,48 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             ),
           ),
         ),
-        SizedBox(
-          width: 5.w,
-        ),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.secondary90,
-              borderRadius: BorderRadius.circular(10.px),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(10.px),
-                onTap: controller.tenantEditRequest,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.px,
-                    vertical: 8.px,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Icon(
-                        Icons.edit,
-                        color: AppColors.secondary40,
-                      ),
-                      SizedBox(width: 3.px),
-                      Text(
-                        'edit'.tr,
-                        style: const TextStyle(
-                          color: AppColors.secondary40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+        // SizedBox(
+        //   width: 5.w,
+        // ),
+        // Expanded(
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //       color: AppColors.secondary90,
+        //       borderRadius: BorderRadius.circular(10.px),
+        //     ),
+        //     child: Material(
+        //       color: Colors.transparent,
+        //       child: InkWell(
+        //         borderRadius: BorderRadius.circular(10.px),
+        //         onTap: controller.tenantEditRequest,
+        //         child: Container(
+        //           padding: EdgeInsets.symmetric(
+        //             horizontal: 12.px,
+        //             vertical: 8.px,
+        //           ),
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             mainAxisSize: MainAxisSize.max,
+        //             children: [
+        //               const Icon(
+        //                 Icons.edit,
+        //                 color: AppColors.secondary40,
+        //               ),
+        //               SizedBox(width: 3.px),
+        //               Text(
+        //                 'edit'.tr,
+        //                 style: const TextStyle(
+        //                   color: AppColors.secondary40,
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -379,7 +379,10 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             ),
             SizedBox(width: 5.px),
             Text(
-              controller.rentalRequestById!.endDate?.ddMMyyyy ?? 'Dài hạn',
+              controller.rentalRequestById!.beginDate?.ddMMyyyy ==
+                      controller.rentalRequestById!.endDate?.ddMMyyyy
+                  ? 'Dài hạn'
+                  : controller.rentalRequestById!.endDate?.ddMMyyyy ?? '--',
               style: TextStyle(
                 fontSize: 16.sp,
                 color: AppColors.secondary40,
@@ -687,7 +690,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
               TextSpan(text: 'request'.tr),
               const TextSpan(text: ' #'),
               TextSpan(
-                text: controller.rentalRequestById!.id.toString(),
+                text: controller.rentalRequestById!.code.toString(),
               ),
             ],
           ),
@@ -721,7 +724,8 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
       children: [
         Flexible(
           child: CacheImageWidget(
-            imageUrl: ImageAssets.demo,
+            imageUrl: controller.rentalRequestById!.room!.images?.first ??
+                ImageAssets.demo,
             borderRadius: BorderRadius.circular(20.px),
             height: 120.px,
             width: 120.px,
@@ -735,7 +739,7 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                'number_of_people'.tr,
+                '${'number_of_people'.tr} ${controller.rentalRequestById!.room!.capacity ?? 0}',
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.grey20,
