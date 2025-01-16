@@ -1,6 +1,8 @@
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/rating/rating_by_id_room_model.dart';
+import 'package:smart_rent/core/model/rating/rating_landlord_create_model.dart';
+import 'package:smart_rent/core/model/rating/rating_room_create_model.dart';
 import 'package:smart_rent/core/model/rating/rating_tenant_create_model.dart';
 import 'package:smart_rent/core/model/response/request_model.dart';
 import 'package:smart_rent/core/repositories/dio/dio_provider.dart';
@@ -61,7 +63,58 @@ class RatingRepoImpl extends RatingRepo {
         data: response.data['data'] as bool,
       );
     } catch (e) {
-      log.e('getRatingByIdRoom', e.toString());
+      log.e('createRatingTenant', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
+
+  @override
+  Future<ResponseModel<bool>> createRatingLandlord(
+      {required RatingLandlordCreateModel ratingLandlordCreateModel}) async {
+    const String url = '/ratings/create-landlord-rating';
+    try {
+      final response = await dio.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+        data: ratingLandlordCreateModel.toJson(),
+      );
+
+      return ResponseModel<bool>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: response.data['data'] as bool,
+      );
+    } catch (e) {
+      log.e('createRatingLandlord', e.toString());
+      return ResponseModel.failed(e);
+    }
+  }
+
+  @override
+  Future<ResponseModel<bool>> createRatingRoom(
+      {required RatingRoomCreateModel ratingRoomCreateModel}) async {
+    const String url = '/ratings/create-room-rating';
+    final formData = await ratingRoomCreateModel.toFormData();
+    try {
+      final response = await dio.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+        data: formData,
+      );
+
+      return ResponseModel<bool>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: response.data['data'] as bool,
+      );
+    } catch (e) {
+      log.e('createRatingLandlord', e.toString());
       return ResponseModel.failed(e);
     }
   }

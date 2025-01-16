@@ -60,6 +60,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
                 }
                 return null;
               },
+              textInputAction: TextInputAction.done,
             ),
             SizedBox(height: 16.px),
           ],
@@ -74,6 +75,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
     required bool value,
     required TextEditingController textEditingController,
     required String? Function(String?)? onValidate,
+    TextInputAction textInputAction = TextInputAction.next,
     int minlines = 5,
   }) {
     return Column(
@@ -84,6 +86,7 @@ class ResponsibilitiesParty extends GetView<LandlordContractCreateController> {
           textEditingController: textEditingController,
           onValidate: onValidate,
           minlines: minlines,
+          textInputAction: textInputAction,
         ),
       ],
     );

@@ -24,7 +24,6 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
         return RequestRoomStatus.canceled;
       case 5:
         return RequestRoomStatus.completed;
-      case 0:
       default:
         return RequestRoomStatus.notProcessed;
     }
@@ -81,7 +80,7 @@ extension RequestRoomStatusExtension on RequestRoomStatus {
     switch (this) {
       case RequestRoomStatus.accepted:
       case RequestRoomStatus.completed:
-        return AppColors.successBackground;
+        return AppColors.green20.withOpacity(0.1);
       case RequestRoomStatus.rejected:
       case RequestRoomStatus.canceled:
         return AppColors.errorBackground;

@@ -10,6 +10,15 @@ class LandlordBillCreateController extends GetxController {
   late BillByMonthAndUserItemModel billByMonthAndUserItemModel;
 
   final isLoadingData = LoadingType.INIT.obs;
+  int get calElectricCost =>
+      (billByIdModel!.newElectricityIndex! -
+          billByIdModel!.oldElectricityIndex!) *
+      billByIdModel!.electricityCost!;
+
+  int get calWaterCost =>
+      (billByIdModel!.newWaterIndex! - billByIdModel!.oldWaterIndex!) *
+      billByIdModel!.waterCost!;
+
 
   @override
   void onInit() {

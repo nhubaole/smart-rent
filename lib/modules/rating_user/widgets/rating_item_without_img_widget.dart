@@ -19,6 +19,7 @@ class RatingItemWithoutImgWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
       width: Get.width * 0.8,
       padding: EdgeInsets.all(16.px),
       decoration: BoxDecoration(

@@ -7,6 +7,8 @@ import 'package:smart_rent/core/routes/app_routes.dart';
 
 class PaymentDepositController extends GetxController {
   BillByIdModel? billByIdModel;
+  String? type;
+  int? id;
   final isLoadingData = LoadingType.INIT.obs;
 
   PaymentDetailInfoModel? paymentDetailInfoModel;
@@ -17,6 +19,8 @@ class PaymentDepositController extends GetxController {
     if (args != null) {
       if (args is Map<String, dynamic>) {
         billByIdModel = args['bill'];
+        type = args['type'];
+        id = args['id'];
         fetchDetailInfo();
       } 
     } else {
@@ -29,8 +33,8 @@ class PaymentDepositController extends GetxController {
     isLoadingData.value = LoadingType.LOADING;
     final rq =
         await PaymentRepoImpl().getPaymentDetailInfo(
-      billID: billByIdModel!.id!,
-      type: 'bill',
+      billID: id ?? billByIdModel!.id!,
+      type: type ?? 'bill',
     );
     if (rq.isSuccess() && rq.data != null) {
       paymentDetailInfoModel = rq.data!;
@@ -46,6 +50,8 @@ class PaymentDepositController extends GetxController {
       arguments: {
         'bill': billByIdModel,
         'payment_detail_info': paymentDetailInfoModel,
+        'type': type,
+        'id': id,
       },
     );
   }

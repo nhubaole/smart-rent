@@ -47,7 +47,7 @@ class ContractRepoImpl extends ContractRepo {
     ContractCreateModel contract,
   ) async {
     const url = '/contracts';
-
+    
     try {
       final response = await dio.post(
         url,

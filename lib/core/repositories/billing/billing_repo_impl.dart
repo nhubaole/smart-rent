@@ -19,7 +19,7 @@ class BillingRepoImpl extends BillingRepo {
       : log = getIt<Log>(),
         dio = DioProvider();
   @override
-  Future<ResponseModel<BillByMonthAndUserModel>> getBillByMonthAndUser({
+  Future<ResponseModel<List<BillByMonthAndUserModel>>> getBillByMonthAndUser({
     required int month,
     required int year,
   }) async {
@@ -33,11 +33,13 @@ class BillingRepoImpl extends BillingRepo {
         },
       );
 
-      return ResponseModel<BillByMonthAndUserModel>(
+      return ResponseModel<List<BillByMonthAndUserModel>>(
         errCode: response.data['errCode'],
         message: response.data['message'],
         data: response.data['data'] != null
-            ? BillByMonthAndUserModel.fromMap(response.data['data'][0])
+            ? (response.data['data'] as List)
+                .map((i) => BillByMonthAndUserModel.fromMap(i))
+                .toList()
             : null,
       );
     } catch (e) {

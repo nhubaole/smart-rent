@@ -51,14 +51,14 @@ class TenantRentRequestPage extends GetView<TenantRentRequestController> {
               SizedBox(height: 16.px),
               _buildStepItem(
                 index: 3,
-                pathIcon: ImageAssets.icCreditCard,
+                pathIcon: ImageAssets.icDatLichXemPhong,
                 title: 'Đặt lịch hẹn xem phòng'.tr,
                 description: 'Nhận và kiểm tra hợp đồng'.tr,
               ),
               SizedBox(height: 16.px),
               _buildStepItem(
                 index: 4,
-                pathIcon: ImageAssets.icRating1,
+                pathIcon: ImageAssets.icTerm,
                 title: 'Nhận và kiểm tra hợp đồng'.tr,
                 description:
                     'Chủ nhà sẽ soạn thảo hợp đồng và gửi cho bạn qua ứng dụng'
@@ -67,14 +67,14 @@ class TenantRentRequestPage extends GetView<TenantRentRequestController> {
               SizedBox(height: 16.px),
               _buildStepItem(
                 index: 5,
-                pathIcon: ImageAssets.icRating1,
+                pathIcon: ImageAssets.icKyHopDong,
                 title: 'Ký hợp đồng điện tử'.tr,
                 description: 'Nếu đồng ý với các điều khoản, thực hiện ký'.tr,
               ),
               SizedBox(height: 16.px),
               _buildStepItem(
                 index: 6,
-                pathIcon: ImageAssets.icRating1,
+                pathIcon: ImageAssets.icCreditCard,
                 title: 'Thanh toán tiền đặt cọc'.tr,
                 description:
                     'Thực hiện thanh toán tiền đặt cọc để hoàn tất thủ tục thuê phòng'
@@ -85,8 +85,9 @@ class TenantRentRequestPage extends GetView<TenantRentRequestController> {
         ),
       ),
       bottomNavigationBar: OutlineButtonWidget(
-        height: 55.px,
+        height: 50.px,
         margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 4.px),
+        padding: EdgeInsets.zero,
         text: 'continue'.tr,
         trailing: Padding(
           padding: EdgeInsets.only(left: 8.px),

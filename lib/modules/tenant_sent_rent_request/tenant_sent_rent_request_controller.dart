@@ -16,8 +16,8 @@ class TenantSentRentRequestController extends GetxController {
   late final TextEditingController dateStartJoinController;
   late final TextEditingController dateLeaveController;
 
-  final canJoinNow = true.obs;
-  final isLeaveDay = false.obs;
+  final canJoinNow = false.obs;
+  final isLeaveDay = true.obs;
   final isCheckboxSubmitStatement = false.obs;
   final formKey = GlobalKey<FormState>();
   @override
@@ -44,7 +44,8 @@ class TenantSentRentRequestController extends GetxController {
     suggestPriceController = TextEditingController();
     peopleWillJoinController = TextEditingController();
     specialSuggestController = TextEditingController();
-    dateStartJoinController = TextEditingController();
+    dateStartJoinController =
+        TextEditingController(text: DateTime.now().ddMMyyyy);
     dateLeaveController = TextEditingController();
     // Format currency
     suggestPriceController
@@ -62,16 +63,16 @@ class TenantSentRentRequestController extends GetxController {
   onChangeJoinNow(bool value) {
     canJoinNow.value = value;
     if (!canJoinNow.value) {
-      dateStartJoinController.text = 'Không có';
+      dateStartJoinController.text = DateTime.now().ddMMyyyy;
     }
   }
 
-  onChangeLeave(bool value) {
-    isLeaveDay.value = value;
-    if (!isLeaveDay.value) {
-      dateLeaveController.text = 'Không có';
-    }
-  }
+  // onChangeLeave(bool value) {
+  //   isLeaveDay.value = value;
+  //   if (!isLeaveDay.value) {
+  //     dateLeaveController.text = 'Không có';
+  //   }
+  // }
 
   onTapChoseStartJoinDate(BuildContext context) async {
     if (canJoinNow.value) return;
@@ -84,6 +85,15 @@ class TenantSentRentRequestController extends GetxController {
     );
     if (startJoinAt != null) {
       dateStartJoinController.text = startJoinAt.ddMMyyyy;
+    }
+  }
+
+  onChangeSwitchLeaveDate() {
+    isLeaveDay.value = !isLeaveDay.value;
+    if (isLeaveDay.value) {
+      dateLeaveController.text = 'Dài hạn';
+    } else {
+      onTapChoseLeaveDate(Get.context!);
     }
   }
 
@@ -117,7 +127,8 @@ class TenantSentRentRequestController extends GetxController {
           : ' ',
       beginDate:
           DateTime.tryParse(dateStartJoinController.text) ?? DateTime.now(),
-      endDate: DateTime.tryParse(dateLeaveController.text) ?? DateTime.now(),
+      endDate: DateTime.tryParse(dateLeaveController.text) ??
+          DateTime.now().add(Duration(days: 365 * 5)),
     );
   }
 

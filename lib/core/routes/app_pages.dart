@@ -90,6 +90,8 @@ import 'package:smart_rent/modules/search/views/filter_screen.dart';
 import 'package:smart_rent/modules/search/views/search_screen.dart';
 import 'package:smart_rent/modules/splash/bindings/splash_binding.dart';
 import 'package:smart_rent/modules/splash/views/splash_screen.dart';
+import 'package:smart_rent/modules/success_page/success_binding.dart';
+import 'package:smart_rent/modules/success_page/success_page.dart';
 import 'package:smart_rent/modules/tenant_rent_request/tenant_rent_request_binding.dart';
 import 'package:smart_rent/modules/tenant_rent_request/tenant_rent_request_page.dart';
 import 'package:smart_rent/modules/tenant_rent_request_success/tenant_rent_request_success_binding.dart';
@@ -430,6 +432,11 @@ abstract class AppPages {
       name: AppRoutes.chat,
       page: () => ChatScreen(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.successPage,
+      page: () => SuccessPage(),
+      binding: SuccessBinding(),
     ),
   ];
 }

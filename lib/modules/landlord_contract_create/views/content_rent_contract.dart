@@ -95,9 +95,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập giá sẽ cho thuê';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0.replaceAll('.', '')) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               hintText: 'Nhập giá sẽ cho thuê',
@@ -126,9 +126,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập giá điện';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               textLabel: 'TIỀN ĐIỆN',
@@ -144,9 +144,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập giá nước';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               textLabel: 'TIỀN NƯỚC',
@@ -162,9 +162,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập giá internet';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               textLabel: 'TIỀN INTERNET',
@@ -180,9 +180,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập phí gửi xe';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               textLabel: 'PHÍ GIỮ XE',
@@ -198,9 +198,9 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                 if (p0 == null || p0.isEmpty) {
                   return 'Vui lòng nhập số tiền đặt cọc';
                 }
-                if (HelpRegex.isNumber(p0) == false) {
-                  return 'Vui lòng nhập số';
-                }
+                // if (HelpRegex.isNumber(p0) == false) {
+                //   return 'Vui lòng nhập số';
+                // }
                 return null;
               },
               textLabel: 'ĐẶT CỌC',

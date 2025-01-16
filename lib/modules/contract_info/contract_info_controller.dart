@@ -50,4 +50,14 @@ class ContractInfoController extends GetxController {
       'contract_type': contractType,
     });
   }
+
+  onNavPayment() {
+    Get.toNamed(
+      AppRoutes.paymentDeposit,
+      arguments: {
+        'type': 'contract',
+        'id': contract.id,
+      },
+    );
+  }
 }

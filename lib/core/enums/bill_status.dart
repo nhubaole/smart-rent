@@ -18,7 +18,7 @@ extension BillStatusExtension on BillStatus {
   String get value {
     switch (this) {
       case BillStatus.not_yet_created:
-        return 'not yet created'.tr;
+        return 'Chưa tạo hóa đơn'.tr;
       case BillStatus.unpaid:
         return 'unpaid'.tr;
       case BillStatus.pending:
@@ -48,7 +48,7 @@ extension BillStatusExtension on BillStatus {
   Color get colorContent {
     switch (this) {
       case BillStatus.not_yet_created:
-        return AppColors.primary40;
+        return AppColors.red50;
       case BillStatus.unpaid:
         return AppColors.red70;
       case BillStatus.pending:

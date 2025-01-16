@@ -10,6 +10,18 @@ extension DatetimeExt on DateTime {
     return '$day/$month/$year';
   }
 
+  static DateTime? getParsedyyyyMMdd(DateTime time) {
+    try {
+      return DateTime.parse(DateFormat('yyyy-MM-dd').format(time));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static DateTime convertDateFormat(String dateStr) {
+    DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(dateStr);
+    return parsedDate;
+  }
   static DateTime? getParsedDate(String time) {
     try {
       return DateFormat('dd/MM/yyyy').parseStrict(time);
