@@ -81,7 +81,9 @@ class LandlordContractCreatePage
       height: 50.px,
       margin: EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
       padding: EdgeInsets.zero,
-      onTap: controller.onClickBottomNav,
+      onTap: () async {
+        await controller.onClickBottomNav();
+      },
       text: 'Tiếp tục',
       trailing: Icon(
         Icons.arrow_forward_ios_outlined,

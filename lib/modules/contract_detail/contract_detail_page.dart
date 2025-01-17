@@ -206,12 +206,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
   Container _buildSecondPage() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(
-        right: 8.px,
-        left: 8.px,
-        top: 8.px,
-        bottom: 16.px,
-      ),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8.px),
@@ -535,10 +530,10 @@ class ContractDetailPage extends GetView<ContractDetailController> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
-        right: 8.px,
-        left: 8.px,
-        top: 8.px,
-        bottom: 32.px,
+        right: 20.px,
+        left: 20.px,
+        top: 20.px,
+        bottom: 20.px,
       ),
       decoration: BoxDecoration(
         color: AppColors.white,

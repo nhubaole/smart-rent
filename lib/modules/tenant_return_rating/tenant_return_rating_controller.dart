@@ -5,7 +5,10 @@ import 'package:smart_rent/core/enums/rating_level.dart';
 import 'package:smart_rent/core/helper/helper.dart';
 import 'package:smart_rent/core/model/rating/rating_landlord_create_model.dart';
 import 'package:smart_rent/core/model/rating/rating_room_create_model.dart';
+import 'package:smart_rent/core/model/return_request/return_request_by_id_model.dart';
+import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/rating/rating_repo_impl.dart';
+import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
@@ -19,6 +22,8 @@ class TenantReturnRatingController extends GetxController
   final commentTextEditController = TextEditingController();
   final authController = Get.find<AuthController>();
   final images = RxnString();
+  Rx<ReturnRequestByIdModel> request = ReturnRequestByIdModel().obs;
+  Rx<UserModel> landlord = UserModel().obs;
 
   RatingLandlordCreateModel? ratingLandlordCreateModel;
   RatingRoomCreateModel? ratingRoomCreateModel;
@@ -43,9 +48,14 @@ class TenantReturnRatingController extends GetxController
   }.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     tabController = TabController(length: 2, vsync: this);
     _initScrollController();
+    final args = Get.arguments;
+    request.value = args['request'];
+    var user = await UserRepoIml().getUserById(id: request.value.room?.owner);
+    landlord.value = user.data ?? UserModel();
+
     super.onInit();
   }
 

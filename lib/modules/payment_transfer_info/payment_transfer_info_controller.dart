@@ -140,12 +140,11 @@ class PaymentTransferInfoController extends GetxController {
     final compressedImage =
         await Helper.compressImage(imageFile: XFile(proofImage.value!));
     final data = PaymentCreateModel(
-      billId: type == 'bill' ? id : billByIdModel!.id!,
+      billId: type == 'bill' ? billByIdModel!.id! : null,
       contractId: type == 'contract' ? id : null,
       returnRequestId: type == 'return' ? id : null,
       amount: paymentDetailInfoModel?.amount!,
       tranferContent: paymentDetailInfoModel?.tranferContent!,
-      // evidenceImage: compressedImage.path,
       evidenceImage: proofImage.value,
     );
     print(data);

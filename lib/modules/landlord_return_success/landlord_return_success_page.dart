@@ -47,16 +47,14 @@ class LandlordReturnSuccessPage
                           text: 'Để sau',
                         ),
                       ),
-                      if (controller.allowReview == true)
-                        SizedBox(width: 16.px),
-                      if (controller.allowReview == true)
-                        Expanded(
-                          flex: 3,
-                          child: SolidButtonWidget(
-                            text: 'Đánh giá'.tr,
-                            onTap: controller.onNavRating,
-                          ),
+                      SizedBox(width: 16.px),
+                      Expanded(
+                        flex: 3,
+                        child: SolidButtonWidget(
+                          text: 'Đánh giá'.tr,
+                          onTap: controller.onNavRating,
                         ),
+                      ),
                     ],
                   ),
                 )

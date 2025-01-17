@@ -236,13 +236,14 @@ class PostRoomController extends GetxController
           message: 'Đăng bài thành công',
           isError: false,
         );
-        Get.offNamedUntil(
-          AppRoutes.detail,
-          arguments: {
-          'id': rq.data,
-          },
-          (route) => route.settings.name == AppRoutes.root,
-        );
+        // Get.offNamedUntil(
+        //   AppRoutes.detail,
+        //   arguments: {
+        //   'id': rq.data,
+        //   },
+        //   (route) => route.settings.name == AppRoutes.root,
+        // );
+        Get.back();
       } else {
         OverlayLoading.hide();
         AlertSnackbar.show(

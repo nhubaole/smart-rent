@@ -10,6 +10,7 @@ import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
 import 'package:smart_rent/core/model/contract/contract_create_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_by_id_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
+import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/modules/landlord_contract_create/widgets/payment_method_sheet.dart';
@@ -21,6 +22,9 @@ class LandlordContractCreateController extends GetxController
   late RentalRequestByIdModel rentalRequestById;
   final methodSelected = PaymentMethod.cash.obs;
   final createContractModel = Rxn<ContractCreateModel>();
+
+  Rx<UserModel?> partyA = UserModel().obs;
+  Rx<UserModel?> partyB = UserModel().obs;
 
   final tabs = Rx<List<Map<String, dynamic>>>(List.generate(
     3,
@@ -78,13 +82,11 @@ class LandlordContractCreateController extends GetxController
     addressController = TextEditingController(
         text: rentalRequestById.room!.address ??
             rentalRequestById.room!.addresses?.join(', '));
-    roomNumberController =
-        TextEditingController(
+    roomNumberController = TextEditingController(
         text: rentalRequestById.room!.roomNumber.toString());
 
     // Rental Price
-    retalPriceController = TextEditingController(
-       );
+    retalPriceController = TextEditingController();
     retalPriceController
         .addListener(() => HelpRegex.formatCurrency(retalPriceController));
     retalPriceController.text =
@@ -127,15 +129,13 @@ class LandlordContractCreateController extends GetxController
     depositPriceController
         .addListener(() => HelpRegex.formatCurrency(depositPriceController));
     depositPriceController.text =
-        rentalRequestById.room!.deposit?.toInt().toString() ?? '0';  
+        rentalRequestById.room!.deposit?.toInt().toString() ?? '0';
 
     formDatePaidPerMonthController =
         TextEditingController(text: DateTime.now().day.toString());
     responsiblePartyAController = TextEditingController();
     responsiblePartyBController = TextEditingController();
     responsiblejointCommonController = TextEditingController();
-
-    
   }
 
   onTapChoseDatePaidPerMonth(BuildContext context) async {
@@ -189,7 +189,7 @@ class LandlordContractCreateController extends GetxController
     }
   }
 
-  onClickBottomNav() {
+  onClickBottomNav() async {
     switch (selectedTab.value) {
       case 0:
         if (formKeyPageOne.currentState!.validate()) {
@@ -220,6 +220,36 @@ class LandlordContractCreateController extends GetxController
         if (formKeyPageTwo.currentState!.validate()) {
           formKeyPageTwo.currentState!.save();
           changeTab(2);
+          createContractModel.value = ContractCreateModel(
+            address: rentalRequestById.room?.addresses,
+            partyA: rentalRequestById.room?.owner,
+            partyB: rentalRequestById.sender?.id,
+            requestId: rentalRequestById.id,
+            roomId: rentalRequestById.room?.id,
+            actualPrice:
+                int.tryParse(retalPriceController.text.replaceAll('.', '')),
+            paymentMethod: methodSelected.value,
+            electricityCost:
+                int.tryParse(electricPriceController.text.replaceAll('.', '')),
+            waterCost:
+                int.tryParse(waterPriceController.text.replaceAll('.', '')),
+            internetCost:
+                int.tryParse(internetPriceController.text.replaceAll('.', '')),
+            parkingFee:
+                int.tryParse(parkingPriceController.text.replaceAll('.', '')),
+            deposit:
+                int.tryParse(depositPriceController.text.replaceAll('.', '')),
+            beginDate: DatetimeExt.convertDateFormat(formDateController.text),
+            endDate: DatetimeExt.convertDateFormat(toDateController.text),
+            responsibilityA: responsiblePartyAController.text,
+            responsibilityB: responsiblePartyBController.text,
+            generalResponsibility: responsiblejointCommonController.text,
+          );
+          var a = await UserRepoIml().getUserById(id: createContractModel.value?.partyA ?? 0);
+          partyA.value = a.data;
+
+          var b = await UserRepoIml().getUserById(id: createContractModel.value?.partyB ?? 0);
+          partyB.value = b.data;
         }
         break;
       case 2:

@@ -12,12 +12,11 @@ class ConversationController extends GetxController {
   final conversations = <ChatConversationModel>[].obs;
   final SocketService _socketService = Get.find();
 
-
   @override
   void onInit() {
     fetchConversations();
 
-     _socketService.messageStream.listen((data) {
+    _socketService.messageStream.listen((data) {
       fetchConversations();
     });
 
@@ -27,7 +26,8 @@ class ConversationController extends GetxController {
   fetchConversations() async {
     isLoadingData.value = LoadingType.LOADING;
 
-    final response = await ChatRepoImpl().getConversationsByUser(userID: 1);
+    final response = await ChatRepoImpl()
+        .getConversationsByUser(userID: AppManager().currentUser?.id ?? 1);
     if (response.isSuccess() && response.data != null) {
       conversations.value = response.data!;
       isLoadingData.value = LoadingType.LOADED;
