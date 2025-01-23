@@ -94,4 +94,7 @@ abstract class AppRoutes {
   static const userProfileDetail = '/user_profile_detail';
   static const recentlyRoom = '/recently_room';
   static const successPage = '/success_page';
+
+  static const mapLocation = '/map_location';
+  static const mapSearch = '/map_search';
 }

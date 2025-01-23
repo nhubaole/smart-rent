@@ -9,7 +9,7 @@ import '/modules/search/controllers/filter_controller.dart';
 // ignore: must_be_immutable
 class PriceFilterPage extends StatelessWidget {
   PriceFilterPage({super.key});
-  FilterController controller = Get.find();
+  FilterController controller = Get.find<FilterController>();
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
 
   @override

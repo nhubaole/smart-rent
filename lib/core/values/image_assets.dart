@@ -43,4 +43,10 @@ class ImageAssets {
   static const lottieBell = 'assets/lottie/bell.json';
   static const lottieLoading = 'assets/lottie/loading.json';
 
+
+  static const icBuilding = '$path/ic_building.png';
+  static const icHomeForRent = '$path/ic_home_for_rent.png';
+  static const icHomeStay = '$path/ic_homestay.png';
+  static const icRoomFullRent = '$path/ic_room_full_rent.png';
+
 }

@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
@@ -13,6 +14,7 @@ import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
 import 'package:smart_rent/modules/chat/socket_service.dart';
 import 'package:smart_rent/modules/home/widgets/confirm_upgrade_landlord_sheet.dart';
+import 'package:smart_rent/modules/map_location/map_location_controller.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_controller.dart';
 import '/core/resources/google_map_services.dart';
 
@@ -22,6 +24,7 @@ class HomeController extends GetxController {
 
   final isScrollingUp = false.obs;
   final currenLocation = ''.obs;
+  final currLatLon = Rxn<LatLng>();
   final currenPhone = ''.obs;
   Location? crLocation;
   final isLoading = true.obs;
@@ -70,6 +73,8 @@ class HomeController extends GetxController {
     final lat = locationData.latitude;
     final lon = locationData.longitude;
 
+    currLatLon.value = LatLng(lat!, lon!);
+    
     Map<String, dynamic> currentLocationMap =
         await GoogleMapServices().convertLatLngToAddress(
       lat!,
@@ -78,7 +83,9 @@ class HomeController extends GetxController {
     );
     currenLocation.value =
         currentLocationMap['results'][0]['formatted_address'];
-
+    if (Get.isRegistered<MapLocationController>()) {
+      Get.find<MapLocationController>().setLatlonLocation(lat, lon);
+    }
     List<String> areas = currentLocationMap['results'][0]['formatted_address']
         .toString()
         .split(',');

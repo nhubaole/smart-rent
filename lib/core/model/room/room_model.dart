@@ -1,8 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
+
 import 'package:smart_rent/core/enums/utilities.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 
@@ -12,6 +12,8 @@ class RoomModel {
   String? title;
   String? address;
   List<String>? addresses;
+  double? latitude;
+  double? longitude;
   dynamic price;
   double? avgRating;
   String? typeRating;
@@ -44,6 +46,8 @@ class RoomModel {
     required this.id,
     this.image,
     this.title,
+    this.latitude,
+    this.longitude,
     this.address,
     this.addresses,
     this.price,
@@ -78,6 +82,8 @@ class RoomModel {
   factory RoomModel.fromJson(Map<String, dynamic> json) {
     return RoomModel(
       id: json['id'] as int,
+      latitude: json['latitude'] as double?,
+      longitude: json['longitude'] as double?,
       image: json['image'] as String?,
       title: json['title'] as String?,
       address: json['address'] is String ? json['address'] as String : null,
@@ -129,9 +135,19 @@ class RoomModel {
     );
   }
 
-  factory RoomModel.fromMap(Map<String, dynamic> map) {
+  factory RoomModel.fromMap(Map<String, dynamic> map, {int? id}) {
     return RoomModel(
-      id: map['id'] as int,
+      id: id ?? map['id'] as int,
+      latitude: map['location']?['lat'] != null
+          ? double.tryParse(map['location']!['lat'].toString())
+          : map['latitude'] != null
+              ? double.tryParse(map['latitude'].toString())
+              : null,
+      longitude: map['location']?['lon'] != null
+          ? double.tryParse(map['location']['lon'].toString())
+          : map['longitude'] != null
+              ? double.tryParse(map['longitude'].toString())
+              : null,
       image: map['image'] != null ? map['image'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       address: map['address'] != null && map['address'] is String
@@ -227,6 +243,8 @@ class RoomModel {
 
   RoomModel copyWith({
     int? id,
+    double? latitude,
+    double? longitude,
     String? image,
     String? title,
     String? address,
@@ -260,6 +278,8 @@ class RoomModel {
   }) {
     return RoomModel(
       id: id ?? this.id,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       image: image ?? this.image,
       title: title ?? this.title,
       address: address ?? this.address,
@@ -296,6 +316,8 @@ class RoomModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
       'title': title,
       'address': address,
@@ -330,8 +352,9 @@ class RoomModel {
     };
   }
 
+
   @override
   String toString() {
-    return 'RoomModel(id: $id, image: $image, title: $title, address: $address, addresses: $addresses, price: $price, avgRating: $avgRating, typeRating: $typeRating, totalRating: $totalRating, status: $status, availableFrom: $availableFrom, roomNumber: $roomNumber, roomNumbers: $roomNumbers, roomType: $roomType, images: $images, utilities: $utilities, description: $description, owner: $owner, capacity: $capacity, gender: $gender, area: $area, totalPrice: $totalPrice, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, isParking: $isParking, parkingFee: $parkingFee, isRent: $isRent, createAt: $createAt, updateAt: $updateAt, isLike: $isLike)';
+    return 'RoomModel(id: $id, image: $image, title: $title, address: $address, addresses: $addresses, latitude: $latitude, longitude: $longitude, price: $price, avgRating: $avgRating, typeRating: $typeRating, totalRating: $totalRating, status: $status, availableFrom: $availableFrom, roomNumber: $roomNumber, roomNumbers: $roomNumbers, roomType: $roomType, images: $images, utilities: $utilities, description: $description, owner: $owner, capacity: $capacity, gender: $gender, area: $area, totalPrice: $totalPrice, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, isParking: $isParking, parkingFee: $parkingFee, isRent: $isRent, createAt: $createAt, updateAt: $updateAt, isLike: $isLike)';
   }
 }

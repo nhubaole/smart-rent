@@ -38,6 +38,10 @@ import 'package:smart_rent/modules/landlord_return_rating_success/landlord_retur
 import 'package:smart_rent/modules/landlord_return_rating_success/landlord_return_rating_success_binding.dart';
 import 'package:smart_rent/modules/landlord_return_success/landlord_return_success_binding.dart';
 import 'package:smart_rent/modules/landlord_return_success/landlord_return_success_page.dart';
+import 'package:smart_rent/modules/map_location/map_location_binding.dart';
+import 'package:smart_rent/modules/map_location/map_location_page.dart';
+import 'package:smart_rent/modules/map_location/map_search_binding.dart';
+import 'package:smart_rent/modules/map_location/map_search_page.dart';
 import 'package:smart_rent/modules/notification/notification_binding.dart';
 import 'package:smart_rent/modules/notification/notification_page.dart';
 import 'package:smart_rent/modules/onboarding/onboarding_screen.dart';
@@ -199,11 +203,11 @@ abstract class AppPages {
       page: () => const RequestRentV2Screen(),
       binding: RequestRentV2Binding(),
     ),
-    GetPage(
-      name: AppRoutes.map,
-      page: () => const SignUpPage(),
-      binding: SignUpBinding(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.map,
+    //   page: () => const SignUpPage(),
+    //   binding: SignUpBinding(),
+    // ),
     GetPage(
       name: AppRoutes.detailRequestRoomV2,
       page: () => const DetailRequestRentRoomV2(),
@@ -437,6 +441,16 @@ abstract class AppPages {
       name: AppRoutes.successPage,
       page: () => SuccessPage(),
       binding: SuccessBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.mapLocation,
+      page: () => MapLocationPage(),
+      binding: MapLocationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.mapSearch,
+      page: () => MapSearchPage(),
+      binding: MapSearchBinding(),
     ),
   ];
 }

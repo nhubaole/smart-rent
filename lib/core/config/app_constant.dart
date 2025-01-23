@@ -17,6 +17,7 @@ abstract class AppConstant {
   static const hiveBoxName = 'smart_rent';
   static const hiveSessionKey = 'session';
   static const hiveRecentSearchRoomKey = 'recent_search_room';
+  static const hiveRecentSearchMapKey = 'recent_search_map';
   static const hiveFirstTimeInstall = 'first_time_install';
   static const hiveAccessToken = 'access_token';
   static const hiveSession = 'session';
