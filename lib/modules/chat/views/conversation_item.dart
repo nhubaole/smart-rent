@@ -81,7 +81,7 @@ class ConversationItem extends StatelessWidget {
     return Opacity(
       opacity: 1,
       child: Text(
-        (isMine ? "Bạn: " : "") + message.content,
+        (isMine ? "Bạn: " : "") + (message.content ?? "Tin nhắn tự động"),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),

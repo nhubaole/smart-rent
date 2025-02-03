@@ -173,7 +173,7 @@ class ChatScreen extends GetView<ChatController> {
                   ),
                   Input(
                     isAttachmentUploading: false,
-                    onAttachmentPressed: () {},
+                    onAttachmentPressed: controller.handleAttachmentPressed,
                     onSendPressed: controller.handleSendPressed,
                   ),
                 ],
