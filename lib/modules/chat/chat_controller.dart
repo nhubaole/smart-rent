@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/model/chat/message_model.dart';
@@ -59,6 +64,30 @@ class ChatController extends GetxController {
 
   types.Message convertToMessage(Map<String, dynamic> data) {
     int senderId = data['sender_id'];
+    if (data['type'] == 1) {
+      return types.TextMessage(
+        author: types.User(
+            id: senderId.toString(),
+            imageUrl: senderId.toString() != currentUser.id
+                ? companionAvatarUrl
+                : ""),
+        createdAt: DateTime.parse(data['created_at']).millisecondsSinceEpoch,
+        id: data['id'].toString(),
+        text: data['content'],
+      );
+    } else if (data['type'] == 3) {
+      return types.ImageMessage(
+          author: types.User(
+              id: senderId.toString(),
+              imageUrl: senderId.toString() != currentUser.id
+                  ? companionAvatarUrl
+                  : ""),
+          createdAt: DateTime.parse(data['created_at']).millisecondsSinceEpoch,
+          id: data['id'].toString(),
+          uri: data['content'],
+          name: "name",
+          size: 10);
+    }
     return types.TextMessage(
       author: types.User(
           id: senderId.toString(),
@@ -95,6 +124,17 @@ class ChatController extends GetxController {
           metadata: rentInfo,
           createdAt: apiMessage.createdAt.millisecondsSinceEpoch,
         );
+      } else if (apiMessage.type == 3) {
+        return types.ImageMessage(
+            id: apiMessage.id.toString(),
+            author: types.User(
+                id: apiMessage.senderId.toString(),
+                imageUrl: apiMessage.senderId.toString() != currentUser.id
+                    ? companionAvatarUrl
+                    : ""),
+            name: "name",
+            size: 10,
+            uri: apiMessage.content ?? "");
       }
 
       return types.TextMessage(
@@ -110,8 +150,41 @@ class ChatController extends GetxController {
     }).toList();
   }
 
-  void handleAttachmentPressed() {
-    // Logic xử lý khi nhấn vào đính kèm
+  void handleAttachmentPressed() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      try {
+        final File selectedImage = File(image.path);
+        final List<int> imageBytes = await selectedImage.readAsBytes();
+
+        final String base64File = base64Encode(imageBytes);
+
+        final mimeType =
+            lookupMimeType(image.path) ?? 'application/octet-stream';
+        final fileExtension = image.path.split('.').last;
+
+        _socketService.sendMessage({
+          'sender_id': AppManager().currentUser?.id,
+          'receiver_id': companionId,
+          'conversation_id': conversationId,
+          'type': 3,
+          'file': {
+            'data': base64File,
+            'mimeType': mimeType,
+            'extension': '.$fileExtension',
+          },
+          'content': '',
+        });
+
+        print('Image sent successfully!');
+      } catch (e) {
+        print('Failed to send image: $e');
+      }
+    } else {
+      print('No image selected');
+    }
   }
 
   void handleMessageTap(BuildContext context, types.Message message) {
