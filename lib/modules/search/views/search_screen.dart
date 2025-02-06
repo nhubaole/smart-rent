@@ -105,6 +105,7 @@ class SearchPage extends GetView<SearchRoomController> {
                           BorderSide(color: AppColors.secondary80, width: 1))),
               child: InkWell(
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   controller.saveRecent(controller.searchResult[index]);
                   Get.toNamed(AppRoutes.filter, arguments: {
                     'location': controller.searchResult[index],
@@ -170,6 +171,7 @@ class SearchPage extends GetView<SearchRoomController> {
                     ),
                     onChanged: controller.onSearchTextChanged,
                     onSubmitted: (value) {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       controller.saveRecent(value);
                       Get.toNamed(AppRoutes.filter, arguments: {
                         'location': value,

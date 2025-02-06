@@ -101,14 +101,20 @@ class _RoomItemState extends State<RoomItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(
-            children: [
-              _buildImage(),
-              _buildButtonLike(),
-            ],
+          Expanded(
+            flex: 2,
+            child: Stack(
+              children: [
+                _buildImage(),
+                _buildButtonLike(),
+              ],
+            ),
           ),
-          SizedBox(height: 8.px),
-          _buildContent()
+          // SizedBox(height: 4.px),
+          Expanded(
+            flex: 3,
+            child: _buildContent(),
+          ),
         ],
       ),
     );
@@ -121,7 +127,7 @@ class _RoomItemState extends State<RoomItem> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildRatingComponent(),
-        SizedBox(height: 8.px),
+        // SizedBox(height: 8.px),
         _buildTitle(),
         _buildTotalPrice(),
         _buildAddress(),
@@ -158,7 +164,7 @@ class _RoomItemState extends State<RoomItem> {
           TextSpan(
             text: widget.room.totalPrice?.toStringTotalthis() ?? '',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primary40,
             ),
@@ -175,7 +181,7 @@ class _RoomItemState extends State<RoomItem> {
       overflow: TextOverflow.ellipsis,
       maxLines: 2,
       style: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.secondary20,
       ),

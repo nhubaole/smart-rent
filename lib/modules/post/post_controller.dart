@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
@@ -20,6 +21,7 @@ import 'package:smart_rent/core/model/location/ward.dart';
 import 'package:smart_rent/core/model/room/room_create_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
+import 'package:smart_rent/core/resources/google_map_services.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
@@ -188,7 +190,7 @@ class PostRoomController extends GetxController
       title: titleTextController.text,
       description: descriptionTextController.text,
       capacity: int.tryParse(capacityTextController.text) ?? 0,
-      roomNumber: int.tryParse(roomNumberTextController.text),
+      roomNumber: int.tryParse(roomNumberTextController.text) ?? 0,
       area: double.tryParse(areaTextController.text) ?? 0,
       totalPrice: double.tryParse(
               priceTextController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
@@ -225,7 +227,7 @@ class PostRoomController extends GetxController
 
   Future<void> postRoom() async {
     OverlayLoading.show(title: 'Đang đăng bài...');
-    _onSaveDataRoomCreate();
+    await _onSaveDataRoomCreate();
     log('[POSTROOM] : ${roomCreateModel.value}');
     try {
       final rq = await RoomRepoImpl().createRoom(roomCreateModel.value);
@@ -327,7 +329,8 @@ class PostRoomController extends GetxController
               );
               final compressedImage =
                   await Helper.compressImage(imageFile: image);
-              roomCreateModel.value.roomImages?.add(compressedImage.path);
+              roomCreateModel.value.roomImages ??= [];
+              roomCreateModel.value.roomImages!.add(compressedImage.path);
             }
             validImageTotal.value = true;
           },
@@ -457,8 +460,19 @@ class PostRoomController extends GetxController
     return true;
   }
 
-  _onSaveDataRoomCreate() {
+Future<void> _onSaveDataRoomCreate() async {
+    LatLng? latLng;
+    if (addressTextController.text.trim().isNotEmpty &&
+        streetTextController.text.trim().isNotEmpty) {
+      latLng = await GoogleMapServices().getLatLngFromAddress(
+        '${addressTextController.text}, ${streetTextController.text}, ${selectedWard.value?.name}, ${selectedDistrict.value?.name}, ${selectedCity.value?.name}',
+        'vi',
+      );
+    }
+
     roomCreateModel.value = roomCreateModel.value.copyWith(
+      latitude: latLng?.latitude,
+      longitude: latLng?.longitude,
       title: titleTextController.text,
       description: descriptionTextController.text,
       capacity: int.tryParse(capacityTextController.text) ?? 0,

@@ -55,8 +55,12 @@ class RoomCreateModel {
   double? parkingFee;
   int? status;
   bool? isRent;
+  double? latitude;
+  double? longitude;
 
   RoomCreateModel({
+    this.latitude,
+    this.longitude,
     this.title,
     this.addresses,
     this.roomNumber,
@@ -113,6 +117,7 @@ class RoomCreateModel {
       ..add(MapEntry('description', description ?? ''))
       ..add(MapEntry('room_type', roomType!.name))
       ..add(MapEntry('owner', owner.toString()))
+      ..add(MapEntry('room_number', roomNumber?.toString() ?? ''))
       ..add(MapEntry('capacity', capacity?.toString() ?? ''))
       ..add(MapEntry('gender', gender?.getNameGenderInt.toString() ?? ''))
       ..add(MapEntry('area', area?.toString() ?? ''))
@@ -124,7 +129,10 @@ class RoomCreateModel {
       ..add(MapEntry('is_parking', isParking!.toString()))
       ..add(MapEntry('parking_fee', parkingFee?.toString() ?? ''))
       ..add(MapEntry('status', status?.toString() ?? ''))
+      ..add(MapEntry('latitude', latitude?.toString() ?? ''))
+      ..add(MapEntry('longitude', longitude?.toString() ?? ''))
       ..add(MapEntry('is_rent', isRent.toString()));
+
 
     return formData;
   }
@@ -151,6 +159,8 @@ class RoomCreateModel {
       parkingFee,
       status,
       isRent,
+      latitude,
+      longitude,
     ];
 
     return properties.any((property) => property != null);
@@ -177,8 +187,12 @@ class RoomCreateModel {
     double? parkingFee,
     int? status,
     bool? isRent,
+    double? latitude,
+    double? longitude,
   }) {
     return RoomCreateModel(
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       title: title ?? this.title,
       addresses: addresses ?? this.addresses,
       roomNumber: roomNumber ?? this.roomNumber,
@@ -204,6 +218,6 @@ class RoomCreateModel {
 
   @override
   String toString() {
-    return 'RoomCreateModel(title: $title, addresses: $addresses, roomNumber: $roomNumber, roomImages: $roomImages, utilities: $utilities, description: $description, roomType: $roomType, owner: $owner, capacity: $capacity, gender: $gender, area: $area, totalPrice: $totalPrice, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, isParking: $isParking, parkingFee: $parkingFee, status: $status, isRent: $isRent)';
+    return 'RoomCreateModel(title: $title, addresses: $addresses, roomNumber: $roomNumber, roomImages: $roomImages, utilities: $utilities, description: $description, roomType: $roomType, owner: $owner, capacity: $capacity, gender: $gender, area: $area, totalPrice: $totalPrice, deposit: $deposit, electricityCost: $electricityCost, waterCost: $waterCost, internetCost: $internetCost, isParking: $isParking, parkingFee: $parkingFee, status: $status, isRent: $isRent, latitude: $latitude, longitude: $longitude)';
   }
 }

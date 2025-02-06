@@ -35,6 +35,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
   final TextAlign textAlign;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
+  final EdgeInsetsGeometry? inSideContainerPadding;
 
   const OutlineTextFiledWidget({
     super.key,
@@ -68,6 +69,7 @@ class OutlineTextFiledWidget extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.maxLength,
     this.maxLengthEnforcement,
+    this.inSideContainerPadding,
   })  : assert((onValidate == null) != (onValidateString == null)),
         assert((readOnly != null && readOnly == true) != (onTap == null)),
         assert(
@@ -89,14 +91,17 @@ class OutlineTextFiledWidget extends StatelessWidget {
 
     if (inSideContainer!) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 8.px),
+          padding: inSideContainerPadding ??
+              EdgeInsets.symmetric(horizontal: 8.px, vertical: 8.px),
         decoration: BoxDecoration(
           color: AppColors.secondary90,
           borderRadius: BorderRadius.circular(8.px),
         ),
-        child: textLabel != null
+          child: Center(
+            child: textLabel != null
             ? _buildWithTextLabel(textFormFiled)
-            : textFormFiled,
+                : textFormFiled,
+          )
       );
     }
 

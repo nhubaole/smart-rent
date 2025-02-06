@@ -58,7 +58,8 @@ class FilterScreen extends GetView<FilterController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 24.px),
-                _buildSearchBar(context),
+                // _buildSearchBar(context),
+                _buildSearchBarField(context),
                 SizedBox(height: 16.px),
                 _buildSelectedFilter(),
               ],
@@ -84,6 +85,74 @@ class FilterScreen extends GetView<FilterController> {
           //     : _buildPageFilter()),
         ],
       ),
+    );
+  }
+
+  Row _buildSearchBarField(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+            width: MediaQuery.sizeOf(context).width - 80,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.primary60, width: 1),
+              borderRadius: BorderRadius.circular(4),
+              color: Colors.white,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/images/ic_location.svg'),
+                SizedBox(width: 4.px),
+                Expanded(
+                  child: TextField(
+                    // autofocus: true,
+                    style: const TextStyle(fontSize: 12),
+                    controller: controller.searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Tìm theo phường/xã, địa điểm,...',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: AppColors.secondary40,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    onChanged: controller.onSearchTextChanged,
+                    onSubmitted: (value) {
+                      controller.onSearchTextChanged(value);
+                    },
+                  ),
+                ),
+                SizedBox(width: 4.px),
+                InkWell(
+                  child: Icon(
+                    Icons.cancel,
+                    size: 16.px,
+                    color: AppColors.secondary40,
+                  ),
+                  onTap: () {
+                    controller.searchController.clear();
+                    controller.onSearchTextChanged('');
+                  },
+                )
+              ],
+            )),
+        SizedBox(width: 16.px),
+        InkWell(
+          onTap: () {
+            Get.until((route) => route.settings.name == AppRoutes.root);
+          },
+          child: const Text(
+            'Hủy',
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.primary60,
+                fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     );
   }
 

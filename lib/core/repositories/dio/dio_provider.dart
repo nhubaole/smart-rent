@@ -11,9 +11,12 @@ import 'package:smart_rent/core/widget/alert_snackbar.dart';
 class DioProvider {
   final Log logger = getIt<Log>();
   final Dio _dio = Dio();
-  final baseUrl = dotenv.get('base_url_prod');
+  String baseUrl = dotenv.get('base_url_prod');
 
-  DioProvider() {
+  DioProvider({String? baseUrl}) {
+    if (baseUrl != null) {
+      this.baseUrl = baseUrl;
+    }
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         // Log thông tin request
@@ -59,12 +62,14 @@ class DioProvider {
     String url, {
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
+    Object? data,
   }) async {
     logger.d('[DIOPROVIDER] GET: ', '$baseUrl$url');
     return await _dio.get(
       '$baseUrl$url',
       queryParameters: queryParameters,
       options: Options(headers: headers),
+      data: data,
     );
   }
 

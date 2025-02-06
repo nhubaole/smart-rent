@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/room/room_create_model.dart';
@@ -170,19 +174,6 @@ class RoomRepoImpl implements RoomRepo {
       return ResponseModel.failed(e);
     }
   }
-
-  _handleListRoomResponse(dynamic data) {
-    if (data['rooms'] == null ||
-        data['rooms'] is List && data['rooms'].isEmpty) {
-      return <RoomModel>[];
-    }
-    return List<RoomModel>.from(
-        (data['rooms'] as List).map((room) => RoomModel.fromMap(room)));
-  }
-
-  _handleRoomResponse(Map<String, dynamic> data) {
-    return RoomModel.fromMap(data);
-  }
   
   @override
   Future<ResponseModel<bool>> getLikedRoom(int roomID) async {
@@ -230,5 +221,108 @@ class RoomRepoImpl implements RoomRepo {
       log.e('getByOwner', e.toString());
       return ResponseModel.failed(e);
     }
+  }
+  
+  @override
+  Future<ResponseModel<List<RoomModel>>> getRoomsByAddressElasticSearch(
+      {required String address}) async {
+    const String url = '/rooms/_search';
+    final body = {
+      'query': {
+        'match': {
+          'address': {
+            'query': address,
+            'fuzziness': 'AUTO',
+          }
+        }
+      }
+    };
+    try {
+      final response =
+          await DioProvider(baseUrl: dotenv.get('base_elasticsearch')).get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+        data: json.encode(body),
+      );
+
+      return ResponseModel<List<RoomModel>>(
+        errCode: response.data['errCode'] ?? 200,
+        message: response.data['message'] ?? 'success',
+        data: _handleDataFromElastic(response.data),
+      );
+    } catch (e) {
+      log.e('getRoomsByAddressElasticSearch: Lỗi kết nối', e.toString());
+      return ResponseModel(errCode: -1, message: 'Lỗi kết nối');
+    }
+  }
+
+  @override
+  Future<ResponseModel<List<RoomModel>>>
+      getRoomsByAddressAndLocationElasticSearch(
+          {required double distance, required LatLng location}) async {
+    const String url = '/rooms/_search';
+    final body = {
+      'query': {
+        'bool': {
+          'filter': {
+            'geo_distance': {
+              'distance': '${distance}km',
+              'location': {
+                'lat': location.latitude,
+                'lon': location.longitude,
+              }
+            }
+          }
+        }
+      }
+    };
+    try {
+      final response =
+          await DioProvider(baseUrl: dotenv.get('base_elasticsearch')).get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+        data: json.encode(body),
+      );
+
+      return ResponseModel<List<RoomModel>>(
+        errCode: response.data['errCode'] ?? 200,
+        message: response.data['message'] ?? 'success',
+        data: _handleDataFromElastic(response.data),
+      );
+    } catch (e) {
+      log.e('getRoomsByAddressAndLocationElasticSearch: Lỗi kết nối',
+          e.toString());
+      return ResponseModel(errCode: -1, message: 'Lỗi kết nối');
+    }
+  }
+
+  _handleListRoomResponse(dynamic data) {
+    if (data['rooms'] == null ||
+        data['rooms'] is List && data['rooms'].isEmpty) {
+      return <RoomModel>[];
+    }
+    return List<RoomModel>.from(
+        (data['rooms'] as List).map((room) => RoomModel.fromMap(room)));
+  }
+
+  _handleRoomResponse(Map<String, dynamic> data) {
+    return RoomModel.fromMap(data);
+  }
+
+  _handleDataFromElastic(dynamic data) {
+    if (data['hits']['hits'] == null ||
+        (data['hits']['hits'] as List).isEmpty) {
+      return <RoomModel>[];
+    }
+
+    return List<RoomModel>.from((data['hits']['hits'] as List).map((room) =>
+        RoomModel.fromMap(room['_source'],
+            id: int.tryParse(room['_id']) ?? 0)));
   }
 }

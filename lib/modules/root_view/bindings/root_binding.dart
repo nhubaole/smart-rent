@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/modules/chat/conversation_controller.dart';
 import 'package:smart_rent/modules/home/controllers/home_controller.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
+import 'package:smart_rent/modules/map_location/map_location_controller.dart';
 import 'package:smart_rent/modules/root_view/controllers/root_screen_controller.dart';
 import 'package:smart_rent/modules/user_profile/user_profile_controller.dart';
 
@@ -13,5 +14,6 @@ class RootBinding extends Bindings {
     Get.put(ManageRoomController());
     Get.put(UserProfileController());
     Get.put(ConversationController());
+    // Get.put(MapLocationController());
   }
 }

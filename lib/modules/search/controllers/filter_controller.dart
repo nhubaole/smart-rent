@@ -30,6 +30,8 @@ class FilterController extends GetxController {
   String? locationNormal;
 
   final results = Rx<List<RoomModel>>([]);
+  final sourceResults = Rx<List<RoomModel>>([]);
+
   final filter = const Filter().obs;
   final filterStringList = RxList<Map<String, dynamic>>([]);
   final itemFilterCount = 0.obs;
@@ -187,6 +189,8 @@ class FilterController extends GetxController {
       });
     }
     itemFilterCount.value = filterStringList.length;
+
+    applyFilter();
   }
 
   void removeFilter(Map<String, dynamic> element) {
@@ -238,6 +242,11 @@ class FilterController extends GetxController {
     selectedFilter.value = null;
   }
 
+  onSearchTextChanged(String text) {
+    location = text;
+    queryRoomByLocation();
+  }
+
   Future<void> queryRoomByLocation() async {
     try {
       isLoadingType.value = LoadingType.LOADING;
@@ -245,9 +254,12 @@ class FilterController extends GetxController {
       if (location == null) {
         return;
       }
-      final rq = await RoomRepoImpl().getRoomsByAddress(address: location!);
+      final rq = await RoomRepoImpl()
+          .getRoomsByAddressElasticSearch(address: location!);
       if (rq.isSuccess()) {
-        results.value = rq.data ?? [];
+        sourceResults.value = rq.data ?? [];
+        results.value = sourceResults.value;
+        applyFilter();
         isLoadingType.value = LoadingType.LOADED;
       } else {
         if (kDebugMode) {
@@ -264,6 +276,7 @@ class FilterController extends GetxController {
   }
 
   void applyFilter() {
+    results.value = sourceResults.value;
     if (filter.value.priceFilter != null) {
       results.value = results.value
           .where((element) =>

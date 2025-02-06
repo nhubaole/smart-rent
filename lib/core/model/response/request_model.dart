@@ -22,7 +22,7 @@ class ResponseModel<T> {
     //   AppManager().forceLogOut();
     // }
     if (error is DioException) {
-      errCode = error.response?.data['errCode'];
+      errCode = error.response?.data['errCode'] as int;
       message = error.response?.data['message'];
       data = error.response?.data['data'];
     } else if (error is String) {
