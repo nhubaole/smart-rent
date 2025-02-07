@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
+import 'package:smart_rent/modules/contract_creation/contract_creation_controller.dart';
 
-class ContractCreationPartLandlord extends StatelessWidget {
+class ContractCreationPartLandlord extends GetView<ContractCreationController> {
   const ContractCreationPartLandlord({super.key});
 
   @override
@@ -31,10 +32,9 @@ class ContractCreationPartLandlord extends StatelessWidget {
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: TextEditingController(text: "Nguyễn Hoàng Khang"),
               onValidateString: 'Enter',
               textLabel: 'full_name'.tr,
-              hintText: 'Nguyen Van A',
             ),
             SizedBox(height: 16.px),
             Row(
@@ -42,10 +42,9 @@ class ContractCreationPartLandlord extends StatelessWidget {
                 Expanded(
                   child: OutlineTextFiledWidget(
                     maxlines: 1,
-                    textEditingController: TextEditingController(),
+                    textEditingController: TextEditingController(text: "12/10/2003"),
                     onValidateString: 'Enter',
                     textLabel: 'date_of_birth'.tr,
-                    hintText: 'Nguyen Van A',
                     suffixIcon: const Icon(Icons.calendar_month_outlined),
                     onTap: () {},
                     readOnly: true,
@@ -55,38 +54,26 @@ class ContractCreationPartLandlord extends StatelessWidget {
                 Expanded(
                   child: OutlineTextFiledWidget(
                     maxlines: 1,
-                    textEditingController: TextEditingController(),
+                    textEditingController: TextEditingController(text: "0823306992"),
                     onValidateString: 'Enter',
-                    textLabel: 'date_of_birth'.tr,
+                    textLabel: "Số điện thoại",
                     hintText: '...',
-                    textInputType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                      signed: true,
-                    ),
-                    prefixIcon: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.px),
-                        child: const Text('+84'),
-                      ),
-                    ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: TextEditingController(text: "97 đường số 11, phường Trường Thọ, quận Thủ Đức, TP HCM"),
               onValidateString: 'Enter',
               textLabel: 'registered_address'.tr,
-              hintText: 'Nguyen Van A',
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(),
+              textEditingController: TextEditingController(text: "079304032010"),
               onValidateString: 'Enter',
-              textLabel: 'issue_date'.tr,
-              hintText: 'Nguyen Van A',
+              textLabel: 'id_card_number'.tr,
+              hintText: '06/09/2022',
             ),
             SizedBox(height: 16.px),
             Row(
@@ -94,10 +81,10 @@ class ContractCreationPartLandlord extends StatelessWidget {
                 Expanded(
                   child: OutlineTextFiledWidget(
                     maxlines: 1,
-                    textEditingController: TextEditingController(),
+                    textEditingController: TextEditingController(text: "06/09/2022"),
                     onValidateString: 'Enter',
                     textLabel: 'issue_date'.tr,
-                    hintText: 'Nguyen Van A',
+                    hintText: '',
                     suffixIcon: const Icon(Icons.calendar_month_outlined),
                     onTap: () {},
                     readOnly: true,
@@ -107,21 +94,10 @@ class ContractCreationPartLandlord extends StatelessWidget {
                 Expanded(
                   child: OutlineTextFiledWidget(
                     maxlines: 1,
-                    textEditingController: TextEditingController(),
+                    textEditingController: TextEditingController(text: "Cục cảnh sát quản lý hành chính và trật tự xã hội"),
                     onValidateString: 'Enter',
                     textLabel: 'issue_place'.tr,
                     hintText: '...',
-                    textInputType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                      signed: true,
-                    ),
-                    prefixIcon: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.px),
-                        child: const Text('+84'),
-                      ),
-                    ),
                   ),
                 ),
               ],

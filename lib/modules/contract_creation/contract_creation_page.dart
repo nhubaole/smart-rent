@@ -47,7 +47,7 @@ class ContractCreationPage extends GetView<ContractCreationController> {
                     ContractCreationPartLandlord(),
                     ContractCreationPartRoomInfo(),
                     ContractCreationPartPolicy(),
-                    ContractCreationPartPreview(),
+                    // ContractCreationPartPreview(),
                   ],
                 ),
               ),
@@ -81,8 +81,8 @@ class ContractCreationPage extends GetView<ContractCreationController> {
                 SolidButtonWidget(
                   margin:
                       EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
-                  text: 'create_contract'.tr,
-                  onTap: () {},
+                  text: 'create_contract_template'.tr,
+                  onTap: controller.onSubmit,
                 ),
             ],
           ),
