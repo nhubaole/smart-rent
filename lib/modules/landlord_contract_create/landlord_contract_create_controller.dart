@@ -8,8 +8,12 @@ import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
 import 'package:smart_rent/core/model/contract/contract_create_model.dart';
+import 'package:smart_rent/core/model/contract/contract_template_create_model.dart';
+import 'package:smart_rent/core/model/contract/contract_template_request.dart';
+import 'package:smart_rent/core/model/contract/template_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_by_id_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
+import 'package:smart_rent/core/repositories/contract/contract_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/modules/landlord_contract_create/widgets/payment_method_sheet.dart';
@@ -19,6 +23,7 @@ class LandlordContractCreateController extends GetxController
   late TabController tabController;
   ContractByIdModel? contractByIdModel;
   late RentalRequestByIdModel rentalRequestById;
+  late TemplateModel template;
   final methodSelected = PaymentMethod.cash.obs;
   final createContractModel = Rxn<ContractCreateModel>();
 
@@ -58,7 +63,21 @@ class LandlordContractCreateController extends GetxController
     final args = Get.arguments;
     if (args != null) {
       rentalRequestById = args['rental_request_by_id'];
+      final templateData = args['contract_template'];
+
       initController();
+
+      if (templateData != null) {
+        template = templateData;
+        electricPriceController.text = template.electricityCost.toString();
+        waterPriceController.text = template.waterCost.toString();
+        internetPriceController.text = template.internetCost.toString();
+        parkingPriceController.text = template.parkingFee.toString();
+        responsiblePartyAController.text = template.responsibilityA.toString();
+        responsiblePartyBController.text = template.responsibilityB.toString();
+        responsiblejointCommonController.text = template.generalResponsibility.toString();
+      }
+
     } else {
       Get.back();
     }
@@ -78,13 +97,11 @@ class LandlordContractCreateController extends GetxController
     addressController = TextEditingController(
         text: rentalRequestById.room!.address ??
             rentalRequestById.room!.addresses?.join(', '));
-    roomNumberController =
-        TextEditingController(
+    roomNumberController = TextEditingController(
         text: rentalRequestById.room!.roomNumber.toString());
 
     // Rental Price
-    retalPriceController = TextEditingController(
-       );
+    retalPriceController = TextEditingController();
     retalPriceController
         .addListener(() => HelpRegex.formatCurrency(retalPriceController));
     retalPriceController.text =
@@ -127,15 +144,13 @@ class LandlordContractCreateController extends GetxController
     depositPriceController
         .addListener(() => HelpRegex.formatCurrency(depositPriceController));
     depositPriceController.text =
-        rentalRequestById.room!.deposit?.toInt().toString() ?? '0';  
+        rentalRequestById.room!.deposit?.toInt().toString() ?? '0';
 
     formDatePaidPerMonthController =
-        TextEditingController(text: DateTime.now().day.toString());
+        TextEditingController(text: "30");
     responsiblePartyAController = TextEditingController();
     responsiblePartyBController = TextEditingController();
     responsiblejointCommonController = TextEditingController();
-
-    
   }
 
   onTapChoseDatePaidPerMonth(BuildContext context) async {

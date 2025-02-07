@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/model/contract/template_model.dart';
 import 'package:smart_rent/core/widget/common_button.dart';
 
 class ContractSampleItem extends StatelessWidget {
   final Function()? onCreateContract;
   final Function() onTap;
+  final TemplateModel template;
   const ContractSampleItem({
     super.key,
     this.onCreateContract,
     required this.onTap,
+    required this.template,
   });
 
   @override
@@ -52,9 +55,9 @@ class ContractSampleItem extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 5,
-                          const TextSpan(
+                          TextSpan(
                               text:
-                                  'Số 9 Nguyễn Văn Huyên, Dịch Vọng, Cầu Giấy, Hà Nội'),
+                                  template.address.join(", ")),
                         ),
                       ),
                     ],
@@ -87,7 +90,7 @@ class ContractSampleItem extends StatelessWidget {
 
   Widget _needToCreateNewContract() {
     Widget widget;
-    if (onCreateContract != null) {
+    if (template.updatedAt == null) {
       widget = CommonButton(
         height: 42.px,
         textStyle: TextStyle(

@@ -30,31 +30,31 @@ class ContractPage extends GetView<ContractController> {
           return !controller.isLandlord
               ? []
               : [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  _buildSampleContract(),
-                  SizedBox(height: 8.px),
-                  Padding(
-                    padding: EdgeInsets.only(left: 16.px),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'your_contract'.tr,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.secondary20,
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        _buildSampleContract(),
+                        SizedBox(height: 8.px),
+                        Padding(
+                          padding: EdgeInsets.only(left: 16.px),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'your_contract'.tr,
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.secondary20,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.start,
-                      ),
+                        SizedBox(height: 16.px),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 16.px),
-                ],
-              ),
-            ),
-          ];
+                ];
         },
         scrollDirection: Axis.vertical,
         physics: const ClampingScrollPhysics(),
@@ -68,28 +68,28 @@ class ContractPage extends GetView<ContractController> {
           ),
         ),
       ),
-      bottomNavigationBar: controller.isLandlord
-          ? OutlineButtonWidget(
-              height: 50.px,
-              onTap: () {},
-              margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
-              padding: EdgeInsets.zero,
-              trailing: const Icon(
-                Icons.edit_note_outlined,
-                size: 20,
-                color: AppColors.primary60,
-              ),
-              borderRadius: BorderRadius.circular(100),
-              child: Text(
-                'draft_contract'.tr,
-                style: const TextStyle(
-                  color: AppColors.primary60,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            )
-          : null,
+      // bottomNavigationBar: controller.isLandlord
+      //     ? OutlineButtonWidget(
+      //         height: 50.px,
+      //         onTap: () {},
+      //         margin: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
+      //         padding: EdgeInsets.zero,
+      //         trailing: const Icon(
+      //           Icons.edit_note_outlined,
+      //           size: 20,
+      //           color: AppColors.primary60,
+      //         ),
+      //         borderRadius: BorderRadius.circular(100),
+      //         child: Text(
+      //           'draft_contract'.tr,
+      //           style: const TextStyle(
+      //             color: AppColors.primary60,
+      //             fontSize: 18,
+      //             fontWeight: FontWeight.w400,
+      //           ),
+      //         ),
+      //       )
+      //     : null,
     );
   }
 
@@ -126,20 +126,25 @@ class ContractPage extends GetView<ContractController> {
           wantKeepAlive: true,
           child: SizedBox(
             height: 150.px,
-            child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(width: 8.px),
-              shrinkWrap: true,
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.px),
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ContractSampleItem(
-                  onCreateContract: () =>
-                      Get.toNamed(AppRoutes.contractCreation),
-                  onTap: () {},
-                );
-              },
+            child: Obx(
+              () => ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(width: 8.px),
+                shrinkWrap: true,
+                itemCount: controller.contractTemplates.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16.px),
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return ContractSampleItem(
+                    onCreateContract: () =>
+                        Get.toNamed(AppRoutes.contractCreation, arguments: {
+                      "template": controller.contractTemplates[index]
+                    }),
+                    onTap: () {},
+                    template: controller.contractTemplates[index],
+                  );
+                },
+              ),
             ),
           ),
         ),
