@@ -234,7 +234,7 @@ class ContentRentContract extends GetView<LandlordContractCreateController> {
                   child: OutlineTextFiledWidget(
                     onTap: () => controller.onTapChoseFromDate(context),
                     readOnly: true,
-                    textEditingController: controller.formDateController,
+                    textEditingController: controller.fromDateController,
                     onValidate: (p0) {
                       return null;
                     },

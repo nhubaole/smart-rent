@@ -18,6 +18,7 @@ class LandlordContractCreateController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late TabController tabController;
   ContractByIdModel? contractByIdModel;
+  UserModel? owner;
   late RentalRequestByIdModel rentalRequestById;
   final methodSelected = PaymentMethod.cash.obs;
   final createContractModel = Rxn<ContractCreateModel>();
@@ -45,7 +46,7 @@ class LandlordContractCreateController extends GetxController
   late final TextEditingController responsiblePartyAController;
   late final TextEditingController responsiblePartyBController;
   late final TextEditingController responsiblejointCommonController;
-  final formDateController =
+  final fromDateController =
       TextEditingController(text: DateTime.now().ddMMyyyy);
   final toDateController = TextEditingController(text: DateTime.now().ddMMyyyy);
   final selectedTab = 0.obs;
@@ -172,7 +173,7 @@ class LandlordContractCreateController extends GetxController
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
     if (fromDataAt != null) {
-      formDateController.text = fromDataAt.ddMMyyyy;
+      fromDateController.text = fromDataAt.ddMMyyyy;
     }
   }
 
@@ -194,7 +195,7 @@ class LandlordContractCreateController extends GetxController
       case 0:
         if (formKeyPageOne.currentState!.validate()) {
           formKeyPageOne.currentState!.save();
-          final fromDate = DatetimeExt.getParsedDate(formDateController.text);
+          final fromDate = DatetimeExt.getParsedDate(fromDateController.text);
           final toDate = DatetimeExt.getParsedDate(toDateController.text);
           if (fromDate == null || toDate == null) {
             AlertSnackbar.show(
@@ -243,7 +244,7 @@ class LandlordContractCreateController extends GetxController
               int.tryParse(parkingPriceController.text.replaceAll('.', '')),
           deposit:
               int.tryParse(depositPriceController.text.replaceAll('.', '')),
-          beginDate: DatetimeExt.convertDateFormat(formDateController.text),
+          beginDate: DatetimeExt.convertDateFormat(fromDateController.text),
           endDate: DatetimeExt.convertDateFormat(toDateController.text),
           responsibilityA: responsiblePartyAController.text,
           responsibilityB: responsiblePartyBController.text,
