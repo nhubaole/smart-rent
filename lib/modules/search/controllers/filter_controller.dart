@@ -298,14 +298,15 @@ class FilterController extends GetxController {
     if (filter.value.roomTypeFilter != null) {
       results.value = results.value
           .where((element) =>
-              element.roomType == filter.value.roomTypeFilter!.roomType)
+              element.roomType == filter.value.roomTypeFilter!.roomType.value)
           .toList();
     }
     if (filter.value.capacityFilter != null) {
       results.value = results.value
           .where((element) =>
               element.capacity == filter.value.capacityFilter!.capacity &&
-              element.gender == filter.value.capacityFilter!.gender)
+              element.gender ==
+                  filter.value.capacityFilter!.gender.getNameGenderInt)
           .toList();
     }
     if (filter.value.sortFilter != null) {
@@ -343,6 +344,7 @@ class FilterController extends GetxController {
         onApply: () {},
         onReset: () {
           removeAllFilter();
+          results.value = sourceResults.value;
         },
       ),
     );

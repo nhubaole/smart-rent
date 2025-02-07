@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -114,7 +115,8 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
               borderRadius: BorderRadius.circular(10.px),
               child: CacheImageWidget(
                 imageUrl: widget.urls![index],
-                shouldExtendCache: false,
+                shouldExtendCache: true,
+                fit: BoxFit.cover,
               ),
             );
           },
@@ -162,6 +164,7 @@ class _ViewImageDialogState extends State<ViewImageDialog> {
           child: CacheImageWidget(
             imageUrl: widget.url!,
             shouldExtendCache: true,
+            fit: BoxFit.cover,
           ),
         ),
       ),
