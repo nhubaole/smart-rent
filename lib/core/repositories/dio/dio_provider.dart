@@ -11,7 +11,7 @@ import 'package:smart_rent/core/widget/alert_snackbar.dart';
 class DioProvider {
   final Log logger = getIt<Log>();
   final Dio _dio = Dio();
-  String baseUrl = dotenv.get('base_url_prod');
+  String baseUrl = dotenv.get('base_url_local');
 
   DioProvider({String? baseUrl}) {
     if (baseUrl != null) {
