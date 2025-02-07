@@ -6,6 +6,7 @@ import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/core/model/room/room_model.dart';
 import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 import 'package:smart_rent/core/resources/google_map_services.dart';
@@ -26,11 +27,10 @@ class MapLocationController extends GetxController
   final currentPosition = Rxn<LatLng>();
   final isShowDestination = false.obs;
   final isOpenRooms = true.obs;
-  final currentDistance = 10.0.obs;
+  final currentDistance = 0.0.obs;
   final maxDistance = 100.0.obs;
   final listRooms = <RoomModel>[].obs;
   final isFetching = false.obs;
-  final currentDistanceValue = 0.0.obs;
 
   final Set<Marker> markers = {};
   final listLatLon = <LatLng>[
@@ -107,15 +107,15 @@ class MapLocationController extends GetxController
     );
 
     final AssetMapBitmap iconHomeStay = await BitmapDescriptor.asset(
-        ImageConfiguration(size: Size(48.px, 48.px)), ImageAssets.icHomeStay);
+        ImageConfiguration(size: Size(48.px, 60.px)), ImageAssets.icHomeStay);
     final AssetMapBitmap iconHomeForRent = await BitmapDescriptor.asset(
-        ImageConfiguration(size: Size(48.px, 48.px)),
+        ImageConfiguration(size: Size(48.px, 60.px)),
         ImageAssets.icHomeForRent);
     final AssetMapBitmap iconRoomFullRent = await BitmapDescriptor.asset(
-        ImageConfiguration(size: Size(48.px, 48.px)),
+        ImageConfiguration(size: Size(48.px, 60.px)),
         ImageAssets.icRoomFullRent);
     final AssetMapBitmap icBuilding = await BitmapDescriptor.asset(
-        ImageConfiguration(size: Size(48.px, 48.px)), ImageAssets.icBuilding);
+        ImageConfiguration(size: Size(48.px, 60.px)), ImageAssets.icBuilding);
 
     for (int i = 0; i < listRooms.length; i++) {
       AssetMapBitmap cIcon = iconHomeStay;
@@ -142,7 +142,7 @@ class MapLocationController extends GetxController
           position: location,
           infoWindow: InfoWindow(
             title: room.title,
-            snippet: room.description,
+            snippet: 'Giá: ${room.totalPrice?.toStringTotalPrice}',
           ),
           icon: cIcon,
           onTap: () {
@@ -158,6 +158,9 @@ class MapLocationController extends GetxController
   }
 
   fetchRooms() async {
+    if (currentDistance.value == 0 || currentPosition.value == null) {
+      return;
+    }
     isFetching.value = true;
     markers.clear();
     debouncer(() async {
@@ -217,7 +220,11 @@ class MapLocationController extends GetxController
     fetchRooms();
   }
 
-  onSearch() async {}
+  onSearch() async {
+    if (currentDistance.value != 0.0 && departureController.text.isNotEmpty) {
+      fetchRooms();
+    }
+  }
 
   onNavSearch() async {
     final result = await Get.toNamed(AppRoutes.mapSearch,
@@ -239,7 +246,7 @@ class MapLocationController extends GetxController
     ).then((distance) {
       if (distance != null) {
         scopeRadiusController.text = 'Cách < $distance km';
-        currentDistanceValue.value = distance;
+        currentDistance.value = distance;
         fetchRooms();
       }
     });

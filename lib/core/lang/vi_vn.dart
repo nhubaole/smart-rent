@@ -92,12 +92,11 @@ final viVN = {
   'agreement_intro':
       'Sau khi bàn bạc trên tinh thần dân chủ, hai bên cùng có lợi, cùng thống nhất như sau:',
   'rental_agreement': 'Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ:',
-  'rent_price': 'Giá thuê: @price đồng/tháng',
+  'rent_price': 'Giá thuê: ',
   'payment_method': 'Hình thức thanh toán:',
-  'electricity_fee':
-      'Tiền điện: @price @unit được tính theo chỉ số công tơ, thanh toán vào cuối các tháng.',
-  'water_fee': 'Tiền nước: @price @unit người thanh toán vào đầu các tháng.',
-  'internet_fee': 'Tiền đặt cọc:',
+  'electricity_fee': 'TIỀN ĐIỆN',
+  'water_fee': 'TIỀN NƯỚC',
+  'internet_fee': 'TIỀN INTERNET',
   'contract_duration':
       'Hợp đồng có giá trị kể từ ngày @s_day tháng @s_month năm @s_year đến ngày @e_day tháng @e_month năm @e_year.',
   'responsibilities': 'TRÁCH NHIỆM CỦA CÁC BÊN',
