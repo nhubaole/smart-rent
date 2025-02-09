@@ -12,12 +12,11 @@ class ConversationController extends GetxController {
   final conversations = <ChatConversationModel>[].obs;
   final SocketService _socketService = Get.find();
 
-
   @override
   void onInit() {
     fetchConversations();
 
-     _socketService.messageStream.listen((data) {
+    _socketService.messageStream.listen((data) {
       fetchConversations();
     });
 

@@ -364,7 +364,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
           ),
         ),
         SizedBox(height: 16.px),
-        Padding(
+        Obx(() => Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.px),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -372,7 +372,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
               SizedBox(height: 16.px),
               ClipOval(
                 child: CacheImageWidget(
-                  imageUrl: ImageAssets.demo,
+                  imageUrl: controller.landlord.value.avatarUrl ?? "",
                   width: 14.h,
                   height: 14.h,
                 ),
@@ -381,7 +381,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'Nguyễn Xuân Phương'.tr,
+                  controller.landlord.value.fullName ?? "",
                   style: textStyleDefault.copyWith(fontSize: 16.sp),
                 ),
               ),
@@ -424,7 +424,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
               )
             ],
           ),
-        ),
+        ),)
       ],
     );
   }
@@ -532,7 +532,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
                     : EdgeInsets.only(right: 16.px),
                 child: Center(
                   child: Text(
-                    'CHDV Cao cấp chuyên nghiệp Nguyễn Văn Linh Quận 7',
+                    controller.request.value.room?.title ?? "",
                     style: textStyleDefault.copyWith(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
@@ -551,7 +551,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '320 Nguyễn Văn Linh, Phường Bình Thuận, Quận 7, Hồ Chí Minh',
+                        controller.request.value.room?.addresses?.join(", ") ?? "",
                         style: textStyleDefault.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
@@ -581,7 +581,7 @@ class TenantReturnRatingPage extends GetView<TenantReturnRatingController> {
             ),
             child: CacheImageWidget(
               overlay: AppColors.secondary20.withOpacity(0.3),
-              imageUrl: ImageAssets.demo,
+              imageUrl: controller.request.value.room?.images?.first ?? "",
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30.px),
                 bottomRight: Radius.circular(30.px),

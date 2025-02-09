@@ -72,20 +72,6 @@ class PaymentRepoImpl extends PaymentRepo {
   }) async {
     const String url = '/payments';
     try {
-      // final formData = FormData({
-      //   'files': [
-      //     await MultipartFile.fromFile(
-      //       filename: paymentCreateModel.evidenceImage,
-      //     ),
-      //   ],
-      //   'code': 'sample-code',
-      //   'sender_id': '1',
-      //   'contract_id': '16',
-      //   'amount': '100',
-      //   'status': '1',
-      //   'transfer_content': 'Payment for rent',
-      //   'paid_time': '2024-11-22T14:00:00Z'
-      // });
       final response = await dio.post(
         url,
         headers: {

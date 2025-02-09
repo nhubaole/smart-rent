@@ -352,7 +352,7 @@ class LandlordReturnRatingPage extends GetView<LandlordReturnRatingController> {
               SizedBox(height: 16.px),
               ClipOval(
                 child: CacheImageWidget(
-                  imageUrl: ImageAssets.demo,
+                  imageUrl: controller.tenant?.avatarUrl ?? "",
                   width: 14.h,
                   height: 14.h,
                 ),

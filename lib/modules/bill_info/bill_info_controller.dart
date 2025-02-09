@@ -43,6 +43,7 @@ class BillInfoController extends GetxController {
   onNavPaymentDeposit() {
     Get.toNamed(AppRoutes.paymentDeposit, arguments: {
       'bill': billInfo.value,
+      'type': 'bill'
     });
   }
 }

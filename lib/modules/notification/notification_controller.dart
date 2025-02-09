@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/enums/notification_type.dart';
 import 'package:smart_rent/core/model/notification_model.dart';
 import 'package:smart_rent/core/repositories/notification/notification_repo_impl.dart';
+import 'package:smart_rent/core/repositories/return_request/return_request_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/modules/contract_detail/contract_detail_controller.dart';
 import 'package:smart_rent/modules/landlord_detail_return_request/landlord_detail_return_request_controller.dart';
@@ -31,7 +33,7 @@ class NotificationController extends GetxController {
     }
   }
 
-  onTapNoti(NotificationModel noti) {
+  onTapNoti(NotificationModel noti) async {
     markAsRead(noti);
     switch (noti.type) {
       case NotificationType.CONTRACT:
@@ -48,10 +50,25 @@ class NotificationController extends GetxController {
         break;
       case NotificationType.RETURN_REQUEST:
         final returnRequestID = noti.referenceId!;
-        Get.toNamed(
-          AppRoutes.landlordDetailReturnRequest,
-          arguments: NavNotiReturnRequest(returnRequestID: returnRequestID),
-        );
+
+        if (noti.title == "Bạn đã hoàn tất trả phòng!") {
+          var returnRequest = await ReturnRequestRepoImpl()
+              .getReturnRequestById(returnRequestID);
+          if (AppManager().currentUser?.role == 1) {
+            Get.toNamed(AppRoutes.landlordReturnSuccess, arguments: {
+              'tenant': returnRequest.data?.createdUser,
+            });
+          } else {
+            Get.toNamed(AppRoutes.tenantReturnRating, arguments: {
+              'request': returnRequest.data,
+            });
+          }
+        } else {
+          Get.toNamed(
+            AppRoutes.landlordDetailReturnRequest,
+            arguments: NavNotiReturnRequest(returnRequestID: returnRequestID),
+          );
+        }
         break;
       case NotificationType.NULL:
         Get.toNamed(AppRoutes.billInfo, arguments: noti.referenceId);
@@ -80,5 +97,4 @@ class NotificationController extends GetxController {
     }).toList();
     update();
   }
-
 }
