@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/model/contract/contract_by_status_model.dart';
+import 'package:smart_rent/core/model/contract/template_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
 import 'package:smart_rent/core/repositories/contract/contract_repo_impl.dart';
 
@@ -24,10 +25,10 @@ class ContractController extends GetxController
   final pendingContracts = <ContractByStatusModel>[].obs;
   final activeContracts = <ContractByStatusModel>[].obs;
   final expiredContracts = <ContractByStatusModel>[].obs;
+  final contractTemplates = <TemplateModel>[].obs;
 
   UserModel get currentUser => AppManager().currentUser!;
   bool get isLandlord => currentUser.role == 1;
-
 
   @override
   void onInit() {
@@ -50,7 +51,19 @@ class ContractController extends GetxController
       fetchPendingContracts(),
       fetchActiveContracts(),
       fetchExpiredContracts(),
+      fetchContractTemplates()
     ]);
+  }
+
+  Future<void> fetchContractTemplates() async {
+    try {
+      final rq = await ContractRepoImpl().getTemplatesByOwner();
+      if (rq.isSuccess()) {
+        contractTemplates.value = rq.data!;
+      } else {
+      }
+    } catch (e) {
+    }
   }
 
   Future<void> fetchPendingContracts() async {
@@ -98,4 +111,3 @@ class ContractController extends GetxController
     }
   }
 }
-

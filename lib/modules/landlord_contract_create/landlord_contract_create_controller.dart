@@ -8,9 +8,12 @@ import 'package:smart_rent/core/extension/datetime_extension.dart';
 import 'package:smart_rent/core/helper/help_regex.dart';
 import 'package:smart_rent/core/model/contract/contract_by_id_model.dart';
 import 'package:smart_rent/core/model/contract/contract_create_model.dart';
+import 'package:smart_rent/core/model/contract/contract_template_create_model.dart';
+import 'package:smart_rent/core/model/contract/contract_template_request.dart';
+import 'package:smart_rent/core/model/contract/template_model.dart';
 import 'package:smart_rent/core/model/rental_request/rental_request_by_id_model.dart';
 import 'package:smart_rent/core/model/user/user_model.dart';
-import 'package:smart_rent/core/repositories/user/user_repo_iml.dart';
+import 'package:smart_rent/core/repositories/contract/contract_repo_impl.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/modules/landlord_contract_create/widgets/payment_method_sheet.dart';
@@ -19,12 +22,11 @@ class LandlordContractCreateController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late TabController tabController;
   ContractByIdModel? contractByIdModel;
+  UserModel? owner;
   late RentalRequestByIdModel rentalRequestById;
+  late TemplateModel template;
   final methodSelected = PaymentMethod.cash.obs;
   final createContractModel = Rxn<ContractCreateModel>();
-
-  Rx<UserModel?> partyA = UserModel().obs;
-  Rx<UserModel?> partyB = UserModel().obs;
 
   final tabs = Rx<List<Map<String, dynamic>>>(List.generate(
     3,
@@ -49,7 +51,7 @@ class LandlordContractCreateController extends GetxController
   late final TextEditingController responsiblePartyAController;
   late final TextEditingController responsiblePartyBController;
   late final TextEditingController responsiblejointCommonController;
-  final formDateController =
+  final fromDateController =
       TextEditingController(text: DateTime.now().ddMMyyyy);
   final toDateController = TextEditingController(text: DateTime.now().ddMMyyyy);
   final selectedTab = 0.obs;
@@ -62,7 +64,21 @@ class LandlordContractCreateController extends GetxController
     final args = Get.arguments;
     if (args != null) {
       rentalRequestById = args['rental_request_by_id'];
+      final templateData = args['contract_template'];
+
       initController();
+
+      if (templateData != null) {
+        template = templateData;
+        electricPriceController.text = template.electricityCost.toString();
+        waterPriceController.text = template.waterCost.toString();
+        internetPriceController.text = template.internetCost.toString();
+        parkingPriceController.text = template.parkingFee.toString();
+        responsiblePartyAController.text = template.responsibilityA.toString();
+        responsiblePartyBController.text = template.responsibilityB.toString();
+        responsiblejointCommonController.text = template.generalResponsibility.toString();
+      }
+
     } else {
       Get.back();
     }
@@ -132,7 +148,7 @@ class LandlordContractCreateController extends GetxController
         rentalRequestById.room!.deposit?.toInt().toString() ?? '0';
 
     formDatePaidPerMonthController =
-        TextEditingController(text: DateTime.now().day.toString());
+        TextEditingController(text: "30");
     responsiblePartyAController = TextEditingController();
     responsiblePartyBController = TextEditingController();
     responsiblejointCommonController = TextEditingController();
@@ -172,7 +188,7 @@ class LandlordContractCreateController extends GetxController
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
     if (fromDataAt != null) {
-      formDateController.text = fromDataAt.ddMMyyyy;
+      fromDateController.text = fromDataAt.ddMMyyyy;
     }
   }
 
@@ -189,12 +205,12 @@ class LandlordContractCreateController extends GetxController
     }
   }
 
-  onClickBottomNav() async {
+  onClickBottomNav() {
     switch (selectedTab.value) {
       case 0:
         if (formKeyPageOne.currentState!.validate()) {
           formKeyPageOne.currentState!.save();
-          final fromDate = DatetimeExt.getParsedDate(formDateController.text);
+          final fromDate = DatetimeExt.getParsedDate(fromDateController.text);
           final toDate = DatetimeExt.getParsedDate(toDateController.text);
           if (fromDate == null || toDate == null) {
             AlertSnackbar.show(
@@ -220,36 +236,6 @@ class LandlordContractCreateController extends GetxController
         if (formKeyPageTwo.currentState!.validate()) {
           formKeyPageTwo.currentState!.save();
           changeTab(2);
-          createContractModel.value = ContractCreateModel(
-            address: rentalRequestById.room?.addresses,
-            partyA: rentalRequestById.room?.owner,
-            partyB: rentalRequestById.sender?.id,
-            requestId: rentalRequestById.id,
-            roomId: rentalRequestById.room?.id,
-            actualPrice:
-                int.tryParse(retalPriceController.text.replaceAll('.', '')),
-            paymentMethod: methodSelected.value,
-            electricityCost:
-                int.tryParse(electricPriceController.text.replaceAll('.', '')),
-            waterCost:
-                int.tryParse(waterPriceController.text.replaceAll('.', '')),
-            internetCost:
-                int.tryParse(internetPriceController.text.replaceAll('.', '')),
-            parkingFee:
-                int.tryParse(parkingPriceController.text.replaceAll('.', '')),
-            deposit:
-                int.tryParse(depositPriceController.text.replaceAll('.', '')),
-            beginDate: DatetimeExt.convertDateFormat(formDateController.text),
-            endDate: DatetimeExt.convertDateFormat(toDateController.text),
-            responsibilityA: responsiblePartyAController.text,
-            responsibilityB: responsiblePartyBController.text,
-            generalResponsibility: responsiblejointCommonController.text,
-          );
-          var a = await UserRepoIml().getUserById(id: createContractModel.value?.partyA ?? 0);
-          partyA.value = a.data;
-
-          var b = await UserRepoIml().getUserById(id: createContractModel.value?.partyB ?? 0);
-          partyB.value = b.data;
         }
         break;
       case 2:
@@ -273,7 +259,7 @@ class LandlordContractCreateController extends GetxController
               int.tryParse(parkingPriceController.text.replaceAll('.', '')),
           deposit:
               int.tryParse(depositPriceController.text.replaceAll('.', '')),
-          beginDate: DatetimeExt.convertDateFormat(formDateController.text),
+          beginDate: DatetimeExt.convertDateFormat(fromDateController.text),
           endDate: DatetimeExt.convertDateFormat(toDateController.text),
           responsibilityA: responsiblePartyAController.text,
           responsibilityB: responsiblePartyBController.text,

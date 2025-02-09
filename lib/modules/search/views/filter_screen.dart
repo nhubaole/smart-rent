@@ -58,7 +58,8 @@ class FilterScreen extends GetView<FilterController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 24.px),
-                _buildSearchBar(context),
+                // _buildSearchBar(context),
+                _buildSearchBarField(context),
                 SizedBox(height: 16.px),
                 _buildSelectedFilter(),
               ],
@@ -84,6 +85,60 @@ class FilterScreen extends GetView<FilterController> {
           //     : _buildPageFilter()),
         ],
       ),
+    );
+  }
+
+  Row _buildSearchBarField(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: Get.width - 80,
+          child: Container(
+            width: double.minPositive,
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.primary60),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 4.px, left: 4.px),
+                  padding: EdgeInsets.only(right: 2.px, left: 2.px),
+                  child: SvgPicture.asset(
+                    'assets/images/ic_location.svg',
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    controller.locationNormal ?? "",
+                    style: TextStyle(
+                      color: AppColors.primary60,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(width: 16.px),
+        InkWell(
+          onTap: () {
+            Get.back();
+          },
+          child: const Text(
+            'Hủy',
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.primary60,
+                fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     );
   }
 

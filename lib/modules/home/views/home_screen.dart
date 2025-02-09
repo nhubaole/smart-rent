@@ -12,6 +12,7 @@ import 'package:smart_rent/core/widget/room_item_skeleton.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/home/controllers/home_controller.dart';
 import 'package:smart_rent/modules/map/views/map_screen.dart';
+import 'package:smart_rent/modules/map_location/map_location_controller.dart';
 
 import 'package:transparent_image/transparent_image.dart';
 
@@ -96,20 +97,15 @@ class HomePage extends GetView<HomeController> {
         children: [
           GestureDetector(
             onTap: () async {
-              if (controller.isLoadingMap.value == false) {
-                Get.to(
-                  () => MapScreen(
-                    fromDetailRoom: false,
-                    roomInArea: controller.listRoomInArea.value,
-                  ),
-                );
+              // if (Get.isRegistered<MapLocationController>()) {
+              //   await Get.find<MapLocationController>().fetchRooms();
+              //   Get.toNamed(AppRoutes.mapLocation);
+              // }
+              if (controller.currLatLon.value != null) {
+                Get.toNamed(AppRoutes.mapLocation);
               } else {
-                Get.snackbar(
-                  'Thông báo',
-                  'Hệ thống đang tải dữ liệu',
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                );
+                await controller.getCurrentLocation();
+                Get.toNamed(AppRoutes.mapLocation);
               }
             },
             child: Container(

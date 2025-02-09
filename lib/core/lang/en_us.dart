@@ -90,11 +90,11 @@ final enUS = {
       'After democratic discussion, both parties agree for mutual benefit as follows:',
   'rental_agreement':
       'Party A agrees to rent a room to Party B at the address:',
-  'rent_price': 'Rent Price: _______ VND/month',
+  'rent_price': 'Rent Price: ',
   'payment_method': 'Payment Method:',
   'electricity_fee':
-      'Electricity Fee: _______ calculated based on meter reading, payable at the end of each month.',
-  'water_fee': 'Water Fee: _______ payable at the beginning of each month.',
+      'Electricity Fee:',
+  'water_fee': 'Water Fee:',
   'internet_fee': 'Deposit:',
   'contract_duration':
       'The contract is valid from ___ day ___ month, 20__ to ___ day ___ month, 20__.',

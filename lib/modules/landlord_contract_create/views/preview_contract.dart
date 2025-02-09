@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
-import 'package:smart_rent/core/enums/payment_method.dart';
-import 'package:smart_rent/core/widget/custom_app_bar.dart';
-import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
 import 'package:smart_rent/modules/landlord_contract_create/landlord_contract_create_controller.dart';
 
 class PreviewContract extends GetView<LandlordContractCreateController> {
@@ -20,291 +17,281 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWidget(
-      backgroundColor: AppColors.white,
-      body: Obx(() => _buildContractDetail()),
-    );
-  }
-
-SingleChildScrollView _buildContractDetail() {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      padding: EdgeInsets.only(
+          right: 16.px,
+          left: 16.px,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10.px),
       child: Column(
         children: [
-          _buildFirstPage(),
-          SizedBox(height: 32.px),
-          _buildSecondPage(),
-          SizedBox(height: 32.px),
+          _buildHeader(),
+          SizedBox(height: 8.px),
+          _buildPreviewContract(),
         ],
       ),
     );
   }
 
-  Container _buildFirstPage() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        right: 20.px,
-        left: 20.px,
-        top: 20.px,
-        bottom: 20.px,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(8.px),
-        border: Border.all(width: 1, color: AppColors.secondary80),
-      ),
+  Widget _buildPreviewContract() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildNationalTitle(),
           SizedBox(height: 8.px),
-          _buildMotto(),
-          SizedBox(height: 16.px),
-          _builtTitleContract(),
-          SizedBox(height: 16.px),
-          _buildDateLocation(),
-          SizedBox(height: 8.px),
-          _buildWeAreIncluding(),
-          SizedBox(height: 8.px),
-          _buildPartyLandlord(),
-          SizedBox(height: 8.px),
-          _buildNameLandlord(),
-          SizedBox(height: 8.px),
-          _buildAddressLandLord(),
-          SizedBox(height: 8.px),
-          _buildLandlordDetailInfo(),
-          SizedBox(height: 8.px),
-          _buildPhoneLandlord(),
-          SizedBox(height: 8.px),
-          _buildPartyTenant(),
-          SizedBox(height: 8.px),
-          _buildTenantInfo(),
-          SizedBox(height: 8.px),
-          _buildAddressTenant(),
-          SizedBox(height: 8.px),
-          _buildTenantDetailInfo(),
-          SizedBox(height: 8.px),
-          _buildPhoneTenant(),
-          SizedBox(height: 8.px),
-          _buildAgreementIntro(),
-          SizedBox(height: 8.px),
-          _buildRentalAgreement(),
-        ],
-      ),
-    );
-  }
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+              right: 8.px,
+              left: 8.px,
+              top: 32.px,
+              bottom: 32.px,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8.px),
+              border: Border.all(width: 1, color: AppColors.secondary80),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNationalTitle(),
+                SizedBox(height: 8.px),
+                _buildMotto(),
+                SizedBox(height: 8.px),
+                _builtTitleContract(),
+                SizedBox(height: 8.px),
+                _buildText(
+                    text:
+                        'Hôm nay, ngày ${controller.contractByIdModel?.dateCreated?.ddMMyyyy ?? DateTime.now().ddMMyyyy}, tại ${controller.contractByIdModel?.addressCreated ?? '...'}'),
+                SizedBox(height: 8.px),
+                _buildText(
+                    textStyle:
+                        childTextStyle.copyWith(fontWeight: FontWeight.bold),
+                    text: 'Chúng tôi gồm:'),
+                _buildText(
+                  text: '1.Đại diện bên cho thuê phòng trọ (Bên A):',
+                  textStyle: childTextStyle,
+                ),
+                _buildText(
+                    text:
+                        'Ông/bà: ${controller.contractByIdModel?.partyA?.name ?? controller.user.fullName ?? '..'}, Năm sinh: ${controller.contractByIdModel?.partyA?.dob?.ddMMyyyy ?? controller.user.dob?.ddMMyyyy ?? '...'}'),
+                _buildText(text: 'Nơi đăng ký HK: ${controller.user.address}'),
+                _buildText(
+                    text:
+                        'CMND/CCCD số: ${controller.contractByIdModel?.partyA?.cccd ?? '...'}, Cấp ngày: ${controller.contractByIdModel?.partyA?.issueDate?.ddMMyyyy ?? '...'}, Nơi cấp: ${controller.contractByIdModel?.partyA?.registeredPlace ?? '...'}'),
+                _buildText(text: 'Điện thoại: ${controller.user.phoneNumber}'),
+                _buildText(
+                  text: '2. Bên thuê phòng trọ (Bên B):',
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                _buildText(
+                    text:
+                        'Ông/bà: ${controller.contractByIdModel?.partyB?.name ?? controller.rentalRequestById.sender?.fullName ?? '...'}, Sinh ngày: ${controller.contractByIdModel?.partyB?.dob?.ddMMyyyy ?? controller.rentalRequestById.sender?.dob?.ddMMyyyy ?? '...'}'),
+                _buildText(
+                    text:
+                        'Nơi đăng ký HK thường trú: ${controller.rentalRequestById.sender?.address ?? '...'}'),
+                _buildText(
+                    text:
+                        'CMND số: ${controller.contractByIdModel?.partyB?.cccd ?? '...'}, Cấp ngày: ${controller.contractByIdModel?.partyB?.issueDate?.ddMMyyyy ?? '...'}, Nơi cấp: ${controller.contractByIdModel?.partyB?.registeredPlace ?? '...'}'),
+                _buildText(
+                    text:
+                        'Điện thoại: ${controller.rentalRequestById.sender?.phoneNumber ?? '...'}, Fax:....'),
+                _buildText(
+                    textStyle:
+                        childTextStyle.copyWith(fontWeight: FontWeight.bold),
+                    text:
+                        'Sau khi bàn bạc trên tinh thần dân chủ, hai bên cùng có lợi, cùng thống nhất như sau:'),
+                _buildText(
+                    text:
+                        'Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ: ${controller.contractByIdModel?.roomAddress?.join(', ') ?? controller.rentalRequestById.room?.addresses?.join(', ') ?? '...'}'),
+                _buildText(
+                    text:
+                        'Giá thuê: ${controller.contractByIdModel?.roomPrice?.toStringTotalPrice ?? controller.rentalRequestById.room?.totalPrice?.toStringTotalPrice ?? '...'} đồng/tháng'),
+                _buildText(
+                    text:
+                        'Hình thức thanh toán: ${controller.contractByIdModel?.method?.name ?? controller.paymentMethodController.text}'),
+                _buildText(
+                    text:
+                        'Tiền điện: ${controller.contractByIdModel?.electricCost?.toStringTotalPrice ?? controller.electricPriceController.text} đ/kwh tính theo chỉ số công tơ, thanh toán vào cuối các tháng.'),
+                _buildText(
+                    text:
+                        'Tiền nước: ${controller.contractByIdModel?.waterCost?.toStringTotalPrice ?? controller.waterPriceController.text} đ/người/tháng'),
+                _buildText(
+                    text:
+                        'Tièn đặt cọc: ${controller.contractByIdModel?.deposit?.toStringTotalPrice ?? controller.depositPriceController.text} đồng'),
+                _buildText(
+                    text:
+                        'Hợp đồng này có giá trị từ ngày ${controller.contractByIdModel?.startDate?.ddMMyyyy ?? controller.fromDateController.text} đến hết ngày ${controller.contractByIdModel?.endDate?.ddMMyyyy ?? controller.toDateController.text}'),
+                SizedBox(height: 16.px),
+                _buildText(
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    ),
+                    text:
+                        'TRÁCH NHIỆM CỦA CÁC BÊN'),
+                _buildText(
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    ),
+                    text:
+                        '* Trách nhiệm của bên A:'),
+                ...controller.responsiblePartyAController.text
+                    .split('\n')
+                    .map((e) => _buildText(text: e)),
+                SizedBox(height: 8.px),
+                _buildText(
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    ),
+                    text:
+                        '* Trách nhiệm của bên B:'),
+                ...controller.responsiblePartyBController.text
+                    .split('\n')
+                    .map((e) => _buildText(text: e)),
+                SizedBox(height: 8.px),
+                _buildText(
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    ),
+                    text:
+                        '* Trách nhiệm của chung:'),
+                ...controller.responsiblejointCommonController.text
+                    .split('\n')
+                    .map((e) => _buildText(text: e)),
+                _buildText(
+                    text:
+                        'Hợp đồng được lập thành 2 bản, mỗi bên giữ một bản và có giá trị như nhau.'),
+                SizedBox(height: 8.px),
+                // OLD VERSION
+                // _buildText(
+                //     text:
+                //         '1. Gia hạn thời gian thuê: từ ngày ${controller.formDateController.text} đến hết ngày ${controller.toDateController.text}. Sau thời hạn gia hạn này, nếu Bên B tiếp tục thuê thì phảo thông báo cho Bên A chậm nhất là @@ trước khi chấm dứt hợp động thuê. Nếu Bên A đồng ý thì các bên sẽ thỏa thuận tiếp tục gia hạn bằng phụ lục hợp đồng khác hoặc ký một hợp đồng mới theo thỏa thuận được hai bên thống nhất.'),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //     text:
+                //         '2. Giá cho thuê trong thời hạn từ ngày ${controller.formDateController.text} đến ${controller.toDateController.text} là @@'),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //     text:
+                //         '3. Các điều khoản trong Hợp đòng thuê nhà số ${controller.contractByIdModel?.id} đã ký ngày ${controller.contractByIdModel?.dateCreated?.ddMMyyyy} và các phụ lục số @@ không thay đổi'),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //   text: 'ĐIỀU 2: ĐIỀU KHOẢN THI HÀNH',
+                //   textStyle: childTextStyle.copyWith(
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //     text:
+                //         '- Phụ lục hợp đồng này là một bộ phận không tách rời của Hợp đồng thuê nhà số ${controller.contractByIdModel?.id}, đã ký ngày ${controller.contractByIdModel?.dateCreated?.ddMMyyyy}'),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //     text:
+                //         '- Phụ lục hợp đồng này có hiệu lực từ ngày ${controller.formDateController.text}.'),
+                // SizedBox(height: 8.px),
+                // _buildText(
+                //     text:
+                //         '- Phụ lục hợp đồng này được thành lập @@ bản, mỗi bên giữ 1 bản và có giá trị pháp lý như nhau'),
 
-  Text _buildRentalAgreement() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'rental_agreement'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-            text: ' ${controller.createContractModel.value?.address?.join(", ") ?? '--'}',
-            style: childTextStyle,
+                SizedBox(height: 16.px),
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1.px,
+                              color: AppColors.secondary20,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              _buildText(
+                                text: 'Đại diện bên A',
+                                textStyle: childTextStyle.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                alignment: Alignment.center,
+                              ),
+                              SizedBox(height: 4.px),
+                              _buildText(
+                                text: '(Ký ghi rõ họ tên)',
+                                alignment: Alignment.center,
+                              ),
+                              SizedBox(
+                                height: 80.px,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1.px,
+                              color: AppColors.secondary20,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              _buildText(
+                                text: 'Đại diện bên B',
+                                textStyle: childTextStyle.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                alignment: Alignment.center,
+                              ),
+                              SizedBox(height: 4.px),
+                              _buildText(
+                                text: '(Ký ghi rõ họ tên)',
+                                alignment: Alignment.center,
+                              ),
+                              SizedBox(
+                                height: 80.px,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Text _buildAgreementIntro() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'agreement_intro'.tr,
-          style: childTextStyle.copyWith(fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildPhoneTenant() {
-    return Obx(() => Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'phone_renter'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-            text: ' ${controller.partyA.value?.phoneNumber ?? '--'}',
-            style: childTextStyle,
-          ),
-        ],
+  Widget _buildText({
+    required String text,
+    AlignmentGeometry? alignment,
+    TextStyle? textStyle,
+  }) {
+    return Align(
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text.rich(
+        style: textStyle ?? childTextStyle,
+        TextSpan(text: text),
       ),
-    ));
-  }
-
-  Text _buildTenantDetailInfo() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'id_renter'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(text: '079303041940', style: childTextStyle),
-          TextSpan(
-              text: 'issued_date_renter'.tr.trParams({
-                'day': '06',
-                'month': '09',
-                'year': '2022',
-              }),
-              style: childTextStyle),
-          TextSpan(text: ' '),
-          TextSpan(text: 'issued_place_renter'.tr, style: childTextStyle),
-          TextSpan(
-              text: 'Cục Cảnh sát Quản lý hành chính và trật tự xã hội', style: childTextStyle),
-        ],
-      ),
-    );
-  }
-
-  Text _buildAddressTenant() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: '${'address_renter'.tr} ${controller.partyB.value?.address}',
-          style: childTextStyle),
-    );
-  }
-
-  Text _buildTenantInfo() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'name_renter'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-              text: ' ${controller.partyB.value?.fullName ?? '--'} ',
-              style: childTextStyle),
-          TextSpan(text: 'birth_renter'.tr, style: childTextStyle),
-          TextSpan(
-              text: ' ${controller.partyB.value?.dob ?? '--'}',
-              style: childTextStyle),
-        ],
-      ),
-    );
-  }
-
-  Text _buildPartyTenant() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(text: 'renter_info'.tr, style: childTextStyle),
-    );
-  }
-
-  Text _buildPhoneLandlord() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'phone_landlord'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-            text: ' ${controller.partyA.value?.phoneNumber ?? '--'}',
-            style: childTextStyle,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Text _buildLandlordDetailInfo() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'id_landlord'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(text: ' ${083019245821} ', style: childTextStyle),
-          TextSpan(
-              text: 'issued_date_landlord'.tr.trParams({
-                'day': '10',
-                'month': '12',
-                'year': '2021',
-              }),
-              style: childTextStyle),
-          TextSpan(text: ' '),
-          TextSpan(text: 'issued_place_landlord'.tr, style: childTextStyle),
-          TextSpan(
-              text: 'Cục Cảnh sát Quản lý hành chính và trật tự xã hội ',
-              style: childTextStyle),
-        ],
-      ),
-    );
-  }
-
-  Text _buildAddressLandLord() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text:
-              '${'address_landlord'.tr} ${controller.partyA.value?.address}',
-          style: childTextStyle),
-    );
-  }
-
-  Text _buildNameLandlord() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'name_landlord'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-              text: ' ${controller.partyA.value?.fullName ?? '--'} ',
-              style: childTextStyle),
-          TextSpan(text: 'birth_landlord'.tr, style: childTextStyle),
-          TextSpan(
-              text: ' ${controller.partyA.value?.dob ?? ''} ',
-              style: childTextStyle),
-        ],
-      ),
-    );
-  }
-
-  Text _buildPartyLandlord() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(text: 'landlord_info'.tr, style: childTextStyle),
-    );
-  }
-
-  Text _buildWeAreIncluding() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'parties_involved'.tr,
-        style: childTextStyle.copyWith(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Text _buildDateLocation() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'date_location'.trParams({
-            'day':
-                DateTime.now().day.toString(),
-            'month':
-                DateTime.now().month.toString(),
-            'year':
-                DateTime.now().year.toString(),
-            'address': 'Thành phố Hồ Chí Minh',
-          }),
-          style: childTextStyle),
     );
   }
 
   Center _builtTitleContract() {
     return Center(
       child: Text.rich(
-        TextSpan(text: 'title'.tr.toUpperCase(), style: childTextStyle),
+        TextSpan(
+            text: 'Phụ lục hợp đồng thuê trọ'.tr.toUpperCase(),
+            style: childTextStyle.copyWith(fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -332,300 +319,6 @@ SingleChildScrollView _buildContractDetail() {
       ),
     );
   }
-
-  Container _buildSecondPage() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(8.px),
-        border: Border.all(width: 1, color: AppColors.secondary80),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildRentPrice(),
-          SizedBox(height: 8.px),
-          _buildPaymentMethod(),
-          SizedBox(height: 8.px),
-          _buildElectrictyFee(),
-          SizedBox(height: 8.px),
-          _buildWaterFee(),
-          SizedBox(height: 8.px),
-          _buildInternetFee(),
-          SizedBox(height: 8.px),
-          _buildContractDuration(),
-          SizedBox(height: 32.px),
-          _buildResponsilities(),
-          SizedBox(height: 8.px),
-          _buildLandlordResponsibilities(),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'landlord_duty_1'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'landlord_duty_2'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(
-                text: '- ${controller.createContractModel.value?.responsibilityA}',
-                style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(
-              text: 'tenant_responsibilities'.tr,
-              style: childTextStyle.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'tenant_duty_1'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'tenant_duty_2'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'tenant_duty_3'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(text: 'tenant_duty_4'.tr, style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Text.rich(
-            textAlign: TextAlign.start,
-            TextSpan(
-                text: '- ${controller.createContractModel.value?.responsibilityB}',
-                style: childTextStyle),
-          ),
-          SizedBox(height: 8.px),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1.px,
-                      color: AppColors.secondary20,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildText(
-                        text: 'Đại diện bên A',
-                        textStyle: childTextStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(height: 4.px),
-                      _buildText(
-                        text: '(Ký ghi rõ họ tên)',
-                        
-                        alignment: Alignment.center,
-                      ),
-                      if (controller
-                              .createContractModel.value?.signatureA?.isNotEmpty ==
-                          true)
-                      SizedBox(
-                        height: 80.px,
-                        child: Column(
-                          children: [
-                            Image.memory(
-                              fit: BoxFit.contain,
-                              base64Decode(
-                                    controller.createContractModel.value?.signatureA! ??
-                                      ''),
-                              width: 60.px,
-                              height: 60.px,
-                            ),
-                            _buildText(
-                              text:
-                                  controller.createContractModel.value?.partyA.toString() ??
-                                      '',
-                              alignment: Alignment.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (controller
-                              .createContractModel.value?.signatureA?.isNotEmpty ==
-                          false)
-                        SizedBox(height: 80.px),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1.px,
-                      color: AppColors.secondary20,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildText(
-                        text: 'Đại diện bên B',
-                        textStyle: childTextStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(height: 4.px),
-                      _buildText(
-                        text: '(Ký ghi rõ họ tên)',
-                        alignment: Alignment.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildText({
-    required String text,
-    AlignmentGeometry? alignment,
-    TextStyle? textStyle,
-  }) {
-    return Align(
-      alignment: alignment ?? Alignment.centerLeft,
-      child: Text.rich(
-        style: textStyle ?? childTextStyle,
-        TextSpan(text: text),
-      ),
-    );
-  }
-
-  Text _buildLandlordResponsibilities() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'landlord_responsibilities'.tr,
-        style: childTextStyle.copyWith(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Text _buildResponsilities() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'responsibilities'.tr,
-        style: childTextStyle.copyWith(fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Text _buildContractDuration() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'contract_duration'.trParams({
-            's_day': '${controller.createContractModel.value?.beginDate?.day}',
-            's_month': '${controller.createContractModel.value?.beginDate?.month}',
-            's_year': '${controller.createContractModel.value?.beginDate?.year}',
-            'e_day': '${controller.createContractModel.value?.endDate?.day}',
-            'e_month': '${controller.createContractModel.value?.endDate?.month}',
-            'e_year': '${controller.createContractModel.value?.endDate?.year}',
-          }),
-          style: childTextStyle),
-    );
-  }
-
-  Text _buildInternetFee() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'internet_fee'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-              text:
-                  '${controller.createContractModel.value?.electricityCost?.toString() ?? '--'} VND/ ${'month'.tr}',
-              style: childTextStyle)
-        ],
-      ),
-    );
-  }
-
-  Text _buildWaterFee() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'water_fee'.trParams({
-            'price':
-                controller.createContractModel.value?.waterCost?.toString() ??
-                    '--',
-            'unit': 'VND'
-          }),
-          style: childTextStyle),
-    );
-  }
-
-  Text _buildElectrictyFee() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'electricity_fee'.trParams({
-            'price':
-                controller.createContractModel.value?.electricityCost.toString() ??
-                    '--',
-            'unit': 'VND'
-          }),
-          style: childTextStyle),
-    );
-  }
-
-  Text _buildPaymentMethod() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-        text: 'payment_method'.tr,
-        style: childTextStyle,
-        children: [
-          TextSpan(
-              text:
-                  ' ${controller.createContractModel.value?.paymentMethod?.name ?? PaymentMethod.cash.name} ',
-              style: childTextStyle)
-        ],
-      ),
-    );
-  }
-
-  Text _buildRentPrice() {
-    return Text.rich(
-      textAlign: TextAlign.start,
-      TextSpan(
-          text: 'rent_price'.trParams({
-            'price':
-                controller.createContractModel.value?.actualPrice?.toString() ??
-                    '--'
-          }),
-          style: childTextStyle),
-    );
-  }
-
 
   Align _buildHeader() {
     return Align(

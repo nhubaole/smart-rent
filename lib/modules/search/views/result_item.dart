@@ -168,7 +168,7 @@ class ResultItem extends StatelessWidget {
 
   Text _buildAddress() {
     return Text(
-      room.addresses?.join(", ") ?? "Chưa cập nhật",
+      room.addresses?.join(", ") ?? room.address ?? "Chưa cập nhật",
       overflow: TextOverflow.ellipsis,
       style: const TextStyle(fontSize: 10, color: AppColors.secondary20),
       maxLines: 2,

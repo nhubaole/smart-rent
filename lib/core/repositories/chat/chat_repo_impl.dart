@@ -97,4 +97,27 @@ class ChatRepoImpl extends ChatRepo {
       return ResponseModel.failed(e);
     }
   }
+
+  Future<ResponseModel<int>> createConversation(int userB) async {
+    final String url = '/conversations';
+    try {
+      final response = await dio.post(
+        url,
+        data: {
+          "user_b": userB,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppManager().accessToken}',
+        },
+      );
+      return ResponseModel<int>(
+        errCode: response.data['errCode'],
+        message: response.data['message'],
+        data: response.data['data'] as int,
+      );
+    } catch (e) {
+      throw Exception('Error creating conversation: $e');
+    }
+  }
 }

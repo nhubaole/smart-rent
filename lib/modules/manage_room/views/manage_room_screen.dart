@@ -6,7 +6,6 @@ import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/services/sr_method_channel.dart';
 import 'package:smart_rent/core/widget/error_widget.dart';
-import 'package:smart_rent/core/widget/form_contract_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
@@ -216,7 +215,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                   //     },
                   //   ),
                   // ),
-                  // const Expanded(child: SizedBox()),
+                  const Expanded(child: SizedBox()),
                 ],
               ),
             ],

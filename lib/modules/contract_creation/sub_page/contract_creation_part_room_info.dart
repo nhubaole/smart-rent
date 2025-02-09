@@ -5,8 +5,9 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/helper/number_formatter.dart';
 import 'package:smart_rent/core/widget/outline_text_filed_widget.dart';
+import 'package:smart_rent/modules/contract_creation/contract_creation_controller.dart';
 
-class ContractCreationPartRoomInfo extends StatelessWidget {
+class ContractCreationPartRoomInfo extends GetView<ContractCreationController> {
   const ContractCreationPartRoomInfo({super.key});
 
   @override
@@ -22,47 +23,46 @@ class ContractCreationPartRoomInfo extends StatelessWidget {
           _buildHeader(),
           SizedBox(height: 16.px),
           OutlineTextFiledWidget(
-            textEditingController: TextEditingController(),
+            textEditingController: controller.rentalAddressController,
             onValidateString: 'Enter',
             textLabel: 'rental_address'.tr,
-            hintText: 'Nguyen Van A',
           ),
           SizedBox(height: 16.px),
           OutlineTextFiledWidget(
-            textEditingController: TextEditingController(),
+            textEditingController: controller.electricityFeeController,
             onValidateString: 'Enter',
             textLabel: 'electricity_fee'.tr,
-            hintText: 'Nguyen Van A',
-            suffixUnit: '| ₫/kwh',
+            hintText: 'Nhập tiền điện',
+            suffixUnit: '| ${controller.electricityMethod.value}',
             textInputType: TextInputType.number,
             inputFormatters: [NumberFormatter()],
           ),
           SizedBox(height: 16.px),
           OutlineTextFiledWidget(
-            textEditingController: TextEditingController(),
+            textEditingController: controller.waterFeeController,
             onValidateString: 'Enter',
             textLabel: 'water_fee'.tr,
-            hintText: 'Nguyen Van A',
-            suffixUnit: '| ₫/người',
+            hintText: 'Nhập tiền nước',
+            suffixUnit: '| ${controller.waterMethod.value}',
             inputFormatters: [NumberFormatter()],
             textInputType: TextInputType.number,
           ),
           SizedBox(height: 16.px),
           OutlineTextFiledWidget(
-            textEditingController: TextEditingController(),
+            textEditingController: controller.internetFeeController,
             onValidateString: 'Enter',
             textLabel: 'internet_fee'.tr,
-            hintText: 'Nguyen Van A',
+            hintText: 'Nhập tiền internet',
             suffixUnit: '| ₫',
             inputFormatters: [NumberFormatter()],
             textInputType: TextInputType.number,
           ),
           SizedBox(height: 16.px),
           OutlineTextFiledWidget(
-            textEditingController: TextEditingController(),
+            textEditingController: controller.parkingFeeController,
             onValidateString: 'Enter',
-            textLabel: 'parking_fee'.tr,
-            hintText: 'Nguyen Van A',
+            textLabel: 'PHÍ GIỮ XE',
+            hintText: 'Nhập phí giữ xe',
             suffixUnit: '| ₫',
             inputFormatters: [NumberFormatter()],
             textInputType: TextInputType.number,
@@ -72,7 +72,7 @@ class ContractCreationPartRoomInfo extends StatelessWidget {
             textEditingController: TextEditingController(),
             onValidateString: 'Enter',
             textLabel: 'monthly_payment_date'.tr,
-            hintText: 'Nguyen Van A',
+            hintText: 'Nhập ngày thanh toán hàng tháng',
             textInputType: TextInputType.number,
           ),
         ],

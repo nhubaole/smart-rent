@@ -1,3 +1,4 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_rent/core/model/room/room_create_model.dart';
 import 'package:smart_rent/core/model/room/room_model.dart';
 
@@ -11,6 +12,14 @@ abstract class RoomRepo {
   Future<bool> deleteRoom();
   Future<ResponseModel<List<RoomModel>>> getRoomsByAddress({
     required String address,
+  });
+  Future<ResponseModel<List<RoomModel>>> getRoomsByAddressElasticSearch({
+    required String address,
+  });
+  Future<ResponseModel<List<RoomModel>>>
+      getRoomsByAddressAndLocationElasticSearch({
+    required double distance,
+    required LatLng location,
   });
   Future<ResponseModel<List<RoomModel>>> getRoomsLikedByOwner();
   Future<ResponseModel<List<RoomModel>>> getRoomsByStatus(int status);

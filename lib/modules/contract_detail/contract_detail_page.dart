@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/app/app_manager.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
@@ -98,10 +97,191 @@ class ContractDetailPage extends GetView<ContractDetailController> {
       padding: EdgeInsets.symmetric(horizontal: 16.px),
       child: Column(
         children: [
-          _buildFirstPage(),
-          SizedBox(height: 32.px),
-          _buildSecondPage(),
-          SizedBox(height: 32.px),
+          // _buildFirstPage(),
+          // SizedBox(height: 32.px),
+          // _buildSecondPage(),
+          // SizedBox(height: 32.px),
+          // NEW VERSION
+          _buildNationalTitle(),
+          SizedBox(height: 8.px),
+          _buildMotto(),
+          SizedBox(height: 8.px),
+          _builtTitleContract(),
+          SizedBox(height: 8.px),
+          _buildText(
+              text:
+                  'Hôm nay, ngày ${controller.contractByIdModel?.dateCreated?.ddMMyyyy ?? DateTime.now().ddMMyyyy}, tại ${controller.contractByIdModel?.addressCreated ?? '...'}'),
+          SizedBox(height: 8.px),
+          _buildText(
+              textStyle: childTextStyle.copyWith(fontWeight: FontWeight.bold),
+              text: 'Chúng tôi gồm:'),
+          _buildText(
+            text: '1.Đại diện bên cho thuê phòng trọ (Bên A):',
+            textStyle: childTextStyle,
+          ),
+          _buildText(
+              text:
+                  'Ông/bà: ${controller.contractByIdModel?.partyA?.name ?? '..'}, Năm sinh: ${controller.contractByIdModel?.partyA?.dob?.ddMMyyyy ?? '...'}'),
+          _buildText(
+              text:
+                  'Nơi đăng ký HK: ${controller.contractByIdModel?.partyA?.registeredPlace ?? '...'}'),
+          _buildText(
+              text:
+                  'CMND/CCCD số: ${controller.contractByIdModel?.partyA?.cccd ?? '...'}, Cấp ngày: ${controller.contractByIdModel?.partyA?.issueDate?.ddMMyyyy ?? '...'}, Nơi cấp: ${controller.contractByIdModel?.partyA?.registeredPlace ?? '...'}'),
+          _buildText(
+              text:
+                  'Điện thoại: ${controller.contractByIdModel?.partyA?.phone}'),
+          _buildText(
+            text: '2. Bên thuê phòng trọ (Bên B):',
+            textStyle: childTextStyle.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          _buildText(
+              text:
+                  'Ông/bà: ${controller.contractByIdModel?.partyB?.name ?? '...'}, Sinh ngày: ${controller.contractByIdModel?.partyB?.dob?.ddMMyyyy ?? '...'}'),
+          _buildText(
+              text:
+                  'Nơi đăng ký HK thường trú: ${controller.contractByIdModel?.partyB?.registeredPlace ?? '...'}'),
+          _buildText(
+              text:
+                  'CMND số: ${controller.contractByIdModel?.partyB?.cccd ?? '...'}, Cấp ngày: ${controller.contractByIdModel?.partyB?.issueDate?.ddMMyyyy ?? '...'}, Nơi cấp: ${controller.contractByIdModel?.partyB?.registeredPlace ?? '...'}'),
+          _buildText(
+              text:
+                  'Điện thoại: ${controller.contractByIdModel?.partyB?.phone ?? '...'}, Fax:....'),
+          _buildText(
+              textStyle: childTextStyle.copyWith(fontWeight: FontWeight.bold),
+              text:
+                  'Sau khi bàn bạc trên tinh thần dân chủ, hai bên cùng có lợi, cùng thống nhất như sau:'),
+          _buildText(
+              text:
+                  'Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ: ${controller.contractByIdModel?.roomAddress?.join(', ') ?? '...'}'),
+          _buildText(
+              text:
+                  'Giá thuê: ${controller.contractByIdModel?.roomPrice?.toStringTotalPrice ?? '...'} đồng/tháng'),
+          _buildText(
+              text:
+                  'Hình thức thanh toán: ${controller.contractByIdModel?.method?.name ?? '...'}'),
+          _buildText(
+              text:
+                  'Tiền điện: ${controller.contractByIdModel?.electricCost?.toStringTotalPrice ?? '...'}  đ/kwh tính theo chỉ số công tơ, thanh toán vào cuối các tháng.'),
+          _buildText(
+              text:
+                  'Tiền nước: ${controller.contractByIdModel?.waterCost?.toStringTotalPrice ?? '...'} đ/người/tháng'),
+          _buildText(
+              text:
+                  'Tièn đặt cọc: ${controller.contractByIdModel?.deposit?.toStringTotalPrice ?? '...'} đồng'),
+          _buildText(
+              text:
+                  'Hợp đồng này có giá trị từ ngày ${controller.contractByIdModel?.startDate?.ddMMyyyy ?? '...'} đến hết ngày ${controller.contractByIdModel?.endDate?.ddMMyyyy ?? '...'}'),
+          SizedBox(height: 16.px),
+          _buildText(
+              textStyle: childTextStyle.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              text:
+                        'TRÁCH NHIỆM CỦA CÁC BÊN'),
+          _buildText(
+              textStyle: childTextStyle.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              text:
+                        '* Trách nhiệm của bên A:'),
+          ...controller.contractByIdModel?.responsibilityA
+                  ?.split('\n')
+                  .map((e) => _buildText(text: e)) ??
+              [],
+          SizedBox(height: 8.px),
+          _buildText(
+              textStyle: childTextStyle.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              text:
+                        '* Trách nhiệm của bên B:'),
+          ...controller.contractByIdModel?.responsibilityB
+                  ?.split('\n')
+                  .map((e) => _buildText(text: e)) ??
+              [],
+          SizedBox(height: 8.px),
+          // _buildText(
+          //     textStyle: childTextStyle.copyWith(
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //     text:
+          //               '* Trách nhiệm của chung:'),
+          // ...controller.responsiblejointCommonController.text
+          //     .split('\n')
+          //     .map((e) => _buildText(text: e)),
+          _buildText(
+              text:
+                  'Hợp đồng được lập thành 2 bản, mỗi bên giữ một bản và có giá trị như nhau.'),
+          SizedBox(height: 8.px),
+          SizedBox(height: 8.px),
+          SizedBox(height: 16.px),
+          Container(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1.px,
+                        color: AppColors.secondary20,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildText(
+                          text: 'Đại diện bên A',
+                          textStyle: childTextStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          alignment: Alignment.center,
+                        ),
+                        SizedBox(height: 4.px),
+                        _buildText(
+                          text: '(Ký ghi rõ họ tên)',
+                          alignment: Alignment.center,
+                        ),
+                        SizedBox(
+                          height: 80.px,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1.px,
+                        color: AppColors.secondary20,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildText(
+                          text: 'Đại diện bên B',
+                          textStyle: childTextStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          alignment: Alignment.center,
+                        ),
+                        SizedBox(height: 4.px),
+                        _buildText(
+                          text: '(Ký ghi rõ họ tên)',
+                          alignment: Alignment.center,
+                        ),
+                        SizedBox(
+                          height: 80.px,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

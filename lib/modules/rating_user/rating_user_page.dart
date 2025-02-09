@@ -354,12 +354,12 @@ class RoomItemUserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(2.px),
+      padding: EdgeInsets.all(4.px),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12.px),
         border: Border.all(
-          color: AppColors.secondary80.withOpacity(0.5),
+          color: AppColors.secondary80.withOpacity(0.2),
           width: 1.px,
         ),
       ),
@@ -368,119 +368,150 @@ class RoomItemUserPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.px),
-            child: CacheImageWidget(
-              width: double.infinity,
-              height: 100.px,
-              imageUrl: item.images![0],
-            ),
+          Expanded(
+            flex: 2,
+            child: _buildImage(),
           ),
           SizedBox(height: 8.px),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildRating(),
+                SizedBox(height: 2.px),
+                _buildTitle(),
+                SizedBox(height: 2.px),
+                _buildPrice(),
+                SizedBox(height: 2.px),
+                _buildAddress()
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Text _buildAddress() {
+    return Text(
+      item.address ?? item.addresses?.join(', ') ?? '--',
+      textAlign: TextAlign.start,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+      style: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColors.secondary40,
+      ),
+    );
+  }
+
+  RichText _buildPrice() {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: 'Giá chỉ từ: ',
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.primary40,
+            ),
+          ),
+          TextSpan(
+            text: item.totalPrice?.toStringTotalthis() ?? '',
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary40,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Text _buildTitle() {
+    return Text(
+      item.title!,
+      textAlign: TextAlign.start,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+      style: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.secondary20,
+      ),
+    );
+  }
+
+  Row _buildRating() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 4.px, vertical: 2.px),
+          decoration: BoxDecoration(
+            color: AppColors.primary40,
+            borderRadius: BorderRadius.circular(4.px),
+          ),
+          child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.px, vertical: 2.px),
-                decoration: BoxDecoration(
-                  color: AppColors.primary40,
-                  borderRadius: BorderRadius.circular(4.px),
-                ),
-                child: Row(
-                  children: [
-                    Text(item.avgRating?.toString() ?? '0.0',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13.sp,
-                        )),
-                    SizedBox(width: 2.px),
-                    Icon(
-                      Icons.star_sharp,
-                      color: AppColors.rating,
-                      size: 16.px,
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                  item.avgRating != null
-                      ? item.avgRating!.toInt().toStringRatingType
-                      : '',
+              Text(item.avgRating?.toString() ?? '0.0',
                   style: TextStyle(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 13.sp,
                   )),
               SizedBox(width: 2.px),
-              Text.rich(
-                TextSpan(children: [
-                  TextSpan(
-                      text: item.totalRating?.toString() ?? '0',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.secondary40,
-                          fontWeight: FontWeight.w600)),
-                  TextSpan(text: ' '),
-                  TextSpan(
-                    text: 'đánh giá',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.secondary40,
-                        fontWeight: FontWeight.w600),
-                  )
-                ]),
+              Icon(
+                Icons.star_sharp,
+                color: AppColors.rating,
+                size: 16.px,
               ),
             ],
           ),
-          SizedBox(height: 2.px),
-          Text(
-            item.title!,
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
+        ),
+        Text(
+            item.avgRating != null
+                ? item.avgRating!.toInt().toStringRatingType
+                : '',
             style: TextStyle(
-              fontSize: 14.sp,
+              color: AppColors.white,
               fontWeight: FontWeight.bold,
-              color: AppColors.secondary20,
-            ),
-          ),
-          SizedBox(height: 2.px),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Giá chỉ từ: ',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.primary40,
-                  ),
-                ),
-                TextSpan(
-                  text: item.totalPrice?.toStringTotalthis() ?? '',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary40,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 2.px),
-          Text(
-            item.address ?? item.addresses?.join(', ') ?? '--',
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColors.secondary40,
-            ),
-          )
-        ],
+              fontSize: 13.sp,
+            )),
+        SizedBox(width: 2.px),
+        Text.rich(
+          TextSpan(children: [
+            TextSpan(
+                text: item.totalRating?.toString() ?? '0',
+                style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.secondary40,
+                    fontWeight: FontWeight.w600)),
+            TextSpan(text: ' '),
+            TextSpan(
+              text: 'đánh giá',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.secondary40,
+                  fontWeight: FontWeight.w600),
+            )
+          ]),
+        ),
+      ],
+    );
+  }
+
+  ClipRRect _buildImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.px),
+      child: CacheImageWidget(
+        width: double.infinity,
+        height: 100.px,
+        imageUrl: item.images![0],
       ),
     );
   }

@@ -27,6 +27,10 @@ class HelpRegex {
     return RegExp(r"^[0-9]+$").hasMatch(number);
   }
 
+  static bool isDistance(String number) {
+    return RegExp(r"^[0-9]+(\.[0-9]+)?$").hasMatch(number);
+  }
+
   // Kiểm tra tiếng Việt không dấu
   static bool isVietnameseNoDiacritics(String text) {
     return RegExp(r"^[a-zA-Z0-9 ]+$").hasMatch(text);

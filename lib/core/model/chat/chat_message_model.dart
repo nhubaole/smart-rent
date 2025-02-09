@@ -2,7 +2,7 @@ class ChatMessageModel {
   final int id;
   final int conversationID;
   final int senderID;
-  final String content;
+  final String? content;
   final String? rentAutoContent;
   final DateTime createdAt;
 
