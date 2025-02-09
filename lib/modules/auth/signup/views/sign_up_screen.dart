@@ -55,14 +55,14 @@ class SignUpPage extends GetView<SignUpController> {
                   text: 'Bằng việc nhấn nút đăng ký, bạn đã đồng ý với các',
                   style: TextStyle(
                     color: AppColors.secondary20,
-                    fontSize: 16.sp,
+                    fontSize: 15.sp,
                   ),
                 ),
                 TextSpan(
                   text: ' Điều khoản dịch vụ và chính sách bảo mật',
                   style: TextStyle(
                     color: AppColors.primary60,
-                    fontSize: 16.sp,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -70,35 +70,6 @@ class SignUpPage extends GetView<SignUpController> {
             ),
           ),
           SizedBox(height: 30.px),
-          // controller.isVerifying.value
-          //     ? const Center(
-          //         child: CircularProgressIndicator(
-          //           backgroundColor: AppColors.primary40,
-          //           color: AppColors.primary95,
-          //         ),
-          //       )
-          //     : CommonButton(
-          //         title: 'Đăng ký ngay',
-          //         onClick: () async {
-          //           if (controller.signUpFormKey.currentState!.validate()) {
-          //             controller.signUpFormKey.currentState!.save();
-          //             String? result = await controller.onRegister();
-          //             if (result != null) {
-          //               Get.dialog(
-          //                 barrierDismissible: false,
-          //                 transitionCurve: Curves.decelerate,
-          //                 transitionDuration: const Duration(milliseconds: 450),
-          //                 DialogOTP(
-          //                   phoneNumber: controller.phoneNumber.text.trim(),
-          //                   callBack: (otp) {
-          //                     print(otp);
-          //                   },
-          //                 ),
-          //               );
-          //             }
-          //           }
-          //         },
-          //       ),
           SolidButtonWidget(
             text: 'Đăng ký ngay',
             onTap: () async {
@@ -121,7 +92,7 @@ class SignUpPage extends GetView<SignUpController> {
                 'Bạn đã có tài khoản?',
                 style: TextStyle(
                   color: AppColors.secondary40,
-                  fontSize: 16.sp,
+                  fontSize: 15.sp,
                 ),
               ),
               TextButton(
@@ -226,8 +197,8 @@ class SignUpPage extends GetView<SignUpController> {
             OutlineTextFiledWidget(
               textEditingController: controller.password,
               onValidate: (value) {
-                if (value == null || value.isEmpty || value.length < 10) {
-                  return 'Vui lòng nhập mật khẩu';
+                if (value == null || value.isEmpty || value.length < 8) {
+                  return 'Vui lòng nhập mật khẩu, tối thiểu 8 ký tự';
                 }
                 return null;
               },
@@ -249,7 +220,7 @@ class SignUpPage extends GetView<SignUpController> {
                 ),
               ),
               obscureText: controller.obscureText.value,
-              textInputType: TextInputType.phone,
+              textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),

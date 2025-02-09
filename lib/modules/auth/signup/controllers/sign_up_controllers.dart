@@ -5,6 +5,9 @@ import 'package:smart_rent/core/di/getit_config.dart';
 import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
 import 'package:smart_rent/core/repositories/auth/auth_repo_impl.dart';
 import 'package:smart_rent/core/repositories/log/log.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/alert_snackbar.dart';
+import 'package:smart_rent/core/widget/overlay_loading.dart';
 
 class SignUpController extends GetxController {
   final isShowPassword = false.obs;
@@ -42,23 +45,46 @@ class SignUpController extends GetxController {
     super.onClose();
   }
 
-  Future<String?> onRegister() async {
+  Future<void> onRegister() async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (!signUpFormKey.currentState!.validate()) {
-      return 'Vui lòng kiểm tra lại thông tin';
+      AlertSnackbar.show(
+        title: 'Thông báo',
+        message: 'Vui lòng kiểm tra lại thông tin',
+        isError: true,
+      );
+      return;
     }
     signUpFormKey.currentState!.save();
+    OverlayLoading.show(title: 'Đang xác thực...', canPop: true);
     final result = await AuthRepoImpl().register(
       phoneNumber: phoneNumber.text.trim(),
       fullName: fullName.text.trim(),
       address: address.text.trim(),
       password: password.text.trim(),
     );
-
+    OverlayLoading.hide();
     if (!result.isSuccess()) {
-      return 'Xảy ra lỗi';
+      if (result.errCode == 409) {
+        AlertSnackbar.show(
+          title: 'Thông báo',
+          message: 'Số điện thoại đã tồn tại',
+          isError: true,
+        );
+      } else {
+        AlertSnackbar.show(
+          title: 'Thông báo',
+          message: 'Đăng ký thất bại',
+          isError: true,
+        );
+      }
     } else {
-      return result.message;
+      AlertSnackbar.show(
+        title: 'Thông báo',
+        message: 'Đăng ký thành công, vui lòng đăng nhập',
+        isError: false,
+      );
+      Get.offAllNamed(AppRoutes.login);
     }
   }
 

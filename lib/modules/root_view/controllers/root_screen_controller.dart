@@ -13,9 +13,6 @@ class RootScreenController extends GetxController {
   final screens = [
     const HomePage(),
     const ManageRoomScreen(),
-    // const Scaffold(),
-    // const Scaffold(),
-    // const Scaffold(),
     ConversationScreen(),
     UserProfilePage(),
   ];

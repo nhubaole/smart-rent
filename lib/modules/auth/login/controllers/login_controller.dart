@@ -51,13 +51,14 @@ class LoginController extends GetxController {
         phoneNumber: phoneNo.text.trim(),
         password: password.text.trim(),
       );
+      OverlayLoading.hide();
+
       
       // final result = await AuthRepoImpl().login(
       //   phoneNumber: '0916290520',
       //   password: 'Test1234',
       // );
       if (!result.isSuccess()) {
-        OverlayLoading.hide();
         AlertSnackbar.show(
           title: 'Thông báo',
           message: result.message ?? '',
@@ -91,7 +92,6 @@ class LoginController extends GetxController {
           print('accessToken: ${appManager.accessToken}');
           print('refreshToken: ${appManager.refreshToken}');
         } else {
-          OverlayLoading.hide();
           AlertSnackbar.show(
             title: 'Thông báo',
             message: result.message ?? '',
@@ -107,9 +107,7 @@ class LoginController extends GetxController {
       // TODO: Testing
       // await Future.delayed(const Duration(seconds: 2));
       // isLoading.value = false;
-      // OverlayLoading.hide();
     } catch (error) {
-      OverlayLoading.hide();
       isLoading.value = false;
       AlertSnackbar.show(
         title: 'Thông báo',

@@ -3,11 +3,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
-import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/loading_widget.dart';
 import 'package:smart_rent/modules/chat/conversation_controller.dart';
-import '/modules/chat/views/chat_screen.dart';
 import '/modules/chat/views/conversation_item.dart';
 
 class ConversationScreen extends GetView<ConversationController> {
