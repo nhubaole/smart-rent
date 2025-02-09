@@ -32,7 +32,7 @@ class ContractCreationPartLandlord extends GetView<ContractCreationController> {
             ),
             SizedBox(height: 16.px),
             OutlineTextFiledWidget(
-              textEditingController: TextEditingController(text: "Nguyễn Hoàng Khang"),
+              textEditingController: TextEditingController(text: "Lê Bảo Như"),
               onValidateString: 'Enter',
               textLabel: 'full_name'.tr,
             ),

@@ -92,57 +92,43 @@ class FilterScreen extends GetView<FilterController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-            width: MediaQuery.sizeOf(context).width - 80,
+        SizedBox(
+          width: Get.width - 80,
+          child: Container(
+            width: double.minPositive,
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.primary60, width: 1),
+              border: Border.all(color: AppColors.primary60),
               borderRadius: BorderRadius.circular(4),
-              color: Colors.white,
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SvgPicture.asset('assets/images/ic_location.svg'),
-                SizedBox(width: 4.px),
-                Expanded(
-                  child: TextField(
-                    // autofocus: true,
-                    style: const TextStyle(fontSize: 12),
-                    controller: controller.searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Tìm theo phường/xã, địa điểm,...',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: AppColors.secondary40,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    onChanged: controller.onSearchTextChanged,
-                    onSubmitted: (value) {
-                      controller.onSearchTextChanged(value);
-                    },
+                Container(
+                  margin: EdgeInsets.only(right: 4.px, left: 4.px),
+                  padding: EdgeInsets.only(right: 2.px, left: 2.px),
+                  child: SvgPicture.asset(
+                    'assets/images/ic_location.svg',
                   ),
                 ),
-                SizedBox(width: 4.px),
-                InkWell(
-                  child: Icon(
-                    Icons.cancel,
-                    size: 16.px,
-                    color: AppColors.secondary40,
+                Expanded(
+                  child: Text(
+                    controller.locationNormal ?? "",
+                    style: TextStyle(
+                      color: AppColors.primary60,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  onTap: () {
-                    controller.searchController.clear();
-                    controller.onSearchTextChanged('');
-                  },
-                )
+                ),
               ],
-            )),
+            ),
+          ),
+        ),
         SizedBox(width: 16.px),
         InkWell(
           onTap: () {
-            Get.until((route) => route.settings.name == AppRoutes.root);
+            Get.back();
           },
           child: const Text(
             'Hủy',

@@ -150,15 +150,13 @@ class MapSearchPage extends GetView<MapSearchController> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SvgPicture.asset('assets/images/ic_location.svg'),
-                SizedBox(width: 4.px),
                 Expanded(
                   child: TextField(
                     autofocus: true,
                     style: const TextStyle(fontSize: 12),
                     controller: controller.textController,
                     decoration: InputDecoration(
-                      hintText: 'Tìm theo phường/xã, địa điểm,...',
+                      hintText: 'Tìm phòng trọ gần nơi học tập, làm việc,...',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         color: AppColors.secondary40,
