@@ -161,7 +161,7 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                   'Giá thuê: ${controller.contractByIdModel?.roomPrice?.toStringTotalPrice ?? '...'} đồng/tháng'),
           _buildText(
               text:
-                  'Hình thức thanh toán: ${controller.contractByIdModel?.method?.name ?? '...'}'),
+                  'Hình thức thanh toán: Chuyển khoản'),
           _buildText(
               text:
                   'Tiền điện: ${controller.contractByIdModel?.electricCost?.toStringTotalPrice ?? '...'}  đ/kwh tính theo chỉ số công tơ, thanh toán vào cuối các tháng.'),
@@ -218,70 +218,71 @@ class ContractDetailPage extends GetView<ContractDetailController> {
           SizedBox(height: 8.px),
           SizedBox(height: 8.px),
           SizedBox(height: 16.px),
-          Container(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1.px,
-                        color: AppColors.secondary20,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        _buildText(
-                          text: 'Đại diện bên A',
-                          textStyle: childTextStyle.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          alignment: Alignment.center,
-                        ),
-                        SizedBox(height: 4.px),
-                        _buildText(
-                          text: '(Ký ghi rõ họ tên)',
-                          alignment: Alignment.center,
-                        ),
-                        SizedBox(
-                          height: 80.px,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1.px,
-                        color: AppColors.secondary20,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        _buildText(
-                          text: 'Đại diện bên B',
-                          textStyle: childTextStyle.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          alignment: Alignment.center,
-                        ),
-                        SizedBox(height: 4.px),
-                        _buildText(
-                          text: '(Ký ghi rõ họ tên)',
-                          alignment: Alignment.center,
-                        ),
-                        SizedBox(
-                          height: 80.px,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Container(
+          //           decoration: BoxDecoration(
+          //             border: Border.all(
+          //               width: 1.px,
+          //               color: AppColors.secondary20,
+          //             ),
+          //           ),
+          //           child: Column(
+          //             children: [
+          //               _buildText(
+          //                 text: 'Đại diện bên A',
+          //                 textStyle: childTextStyle.copyWith(
+          //                   fontWeight: FontWeight.bold,
+          //                 ),
+          //                 alignment: Alignment.center,
+          //               ),
+          //               SizedBox(height: 4.px),
+          //               _buildText(
+          //                 text: '(Ký ghi rõ họ tên)',
+          //                 alignment: Alignment.center,
+          //               ),
+          //               SizedBox(
+          //                 height: 80.px,
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //       Expanded(
+          //         child: Container(
+          //           decoration: BoxDecoration(
+          //             border: Border.all(
+          //               width: 1.px,
+          //               color: AppColors.secondary20,
+          //             ),
+          //           ),
+          //           child: Column(
+          //             children: [
+          //               _buildText(
+          //                 text: 'Đại diện bên B',
+          //                 textStyle: childTextStyle.copyWith(
+          //                   fontWeight: FontWeight.bold,
+          //                 ),
+          //                 alignment: Alignment.center,
+          //               ),
+          //               SizedBox(height: 4.px),
+          //               _buildText(
+          //                 text: '(Ký ghi rõ họ tên)',
+          //                 alignment: Alignment.center,
+          //               ),
+          //               SizedBox(
+          //                 height: 80.px,
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          _buildSignParty(),
         ],
       ),
     );
@@ -463,123 +464,118 @@ class ContractDetailPage extends GetView<ContractDetailController> {
                 style: childTextStyle),
           ),
           SizedBox(height: 8.px),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1.px,
-                      color: AppColors.secondary20,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildText(
-                        text: 'Đại diện bên A',
-                        textStyle: childTextStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(height: 4.px),
-                      _buildText(
-                        text: '(Ký ghi rõ họ tên)',
-                        
-                        alignment: Alignment.center,
-                      ),
-                      if (controller
-                              .contractByIdModel!.signatureA?.isNotEmpty ==
-                          true)
-                      SizedBox(
-                        height: 80.px,
-                        child: Column(
-                          children: [
-                            Image.memory(
-                              fit: BoxFit.contain,
-                              base64Decode(
-                                    controller.contractByIdModel?.signatureA! ??
-                                      ''),
-                              width: 60.px,
-                              height: 60.px,
-                            ),
-                            _buildText(
-                              text:
-                                  controller.contractByIdModel?.partyA?.name ??
-                                      '',
-                              alignment: Alignment.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (controller
-                              .contractByIdModel!.signatureA?.isNotEmpty ==
-                          false)
-                        SizedBox(height: 80.px),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1.px,
-                      color: AppColors.secondary20,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildText(
-                        text: 'Đại diện bên B',
-                        textStyle: childTextStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(height: 4.px),
-                      _buildText(
-                        text: '(Ký ghi rõ họ tên)',
-                        alignment: Alignment.center,
-                      ),
-                      if (controller
-                              .contractByIdModel!.signatureB?.isNotEmpty ==
-                          true)
-                        SizedBox(
-                          height: 80.px,
-                          child: Column(
-                            children: [
-                              Image.memory(
-                                fit: BoxFit.contain,
-                                base64Decode(
-                                    controller.contractByIdModel?.signatureB ??
-                                        ''),
-                                width: 60.px,
-                                height: 60.px,
-                              ),
-                              _buildText(
-                                text: controller
-                                        .contractByIdModel?.partyB?.name ??
-                                    '',
-                                alignment: Alignment.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (controller
-                              .contractByIdModel!.signatureB?.isNotEmpty ==
-                          false)
-                        SizedBox(
-                          height: 80.px,
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+          _buildSignParty(),
         ],
       ),
+    );
+  }
+
+  Row _buildSignParty() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.px,
+                color: AppColors.secondary20,
+              ),
+            ),
+            child: Column(
+              children: [
+                _buildText(
+                  text: 'Đại diện bên A',
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  alignment: Alignment.center,
+                ),
+                SizedBox(height: 4.px),
+                _buildText(
+                  text: '(Ký ghi rõ họ tên)',
+                  alignment: Alignment.center,
+                ),
+                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                    true)
+                  SizedBox(
+                    height: 80.px,
+                    child: Column(
+                      children: [
+                        Image.memory(
+                          fit: BoxFit.contain,
+                          base64Decode(
+                              controller.contractByIdModel?.signatureA! ?? ''),
+                          width: 60.px,
+                          height: 60.px,
+                        ),
+                        _buildText(
+                          text:
+                              controller.contractByIdModel?.partyA?.name ?? '',
+                          alignment: Alignment.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                    false)
+                  SizedBox(height: 80.px),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.px,
+                color: AppColors.secondary20,
+              ),
+            ),
+            child: Column(
+              children: [
+                _buildText(
+                  text: 'Đại diện bên B',
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  alignment: Alignment.center,
+                ),
+                SizedBox(height: 4.px),
+                _buildText(
+                  text: '(Ký ghi rõ họ tên)',
+                  alignment: Alignment.center,
+                ),
+                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                    true)
+                  SizedBox(
+                    height: 80.px,
+                    child: Column(
+                      children: [
+                        Image.memory(
+                          fit: BoxFit.contain,
+                          base64Decode(
+                              controller.contractByIdModel?.signatureB ?? ''),
+                          width: 60.px,
+                          height: 60.px,
+                        ),
+                        _buildText(
+                          text:
+                              controller.contractByIdModel?.partyB?.name ?? '',
+                          alignment: Alignment.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                    false)
+                  SizedBox(
+                    height: 80.px,
+                  )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -30,7 +30,7 @@ class UserProfileController extends GetxController {
   late final TextEditingController dobController;
   late final TextEditingController numberCreditCardController;
   late final TextEditingController nameCreditCardController;
-  late final TextEditingController bandNameController;
+  late final TextEditingController bankNameController;
 
   final formKey = GlobalKey<FormState>();
 
@@ -60,7 +60,8 @@ class UserProfileController extends GetxController {
     dobController = TextEditingController(text: user.dob?.ddMMyyyy);
     numberCreditCardController = TextEditingController(text: '');
     nameCreditCardController = TextEditingController(text: '');
-    bandNameController = TextEditingController(text: 'Chọn ngân hàng');
+    bankNameController = TextEditingController(
+        text: user.bankInfo?.bankName ?? 'Chọn ngân hàng');
   }
 
   _disposeController() {
@@ -71,7 +72,7 @@ class UserProfileController extends GetxController {
     dobController.dispose();
     numberCreditCardController.dispose();
     nameCreditCardController.dispose();
-    bandNameController.dispose();
+    bankNameController.dispose();
   }
 
   onTapChoseFromDate(BuildContext context) async {
@@ -99,6 +100,7 @@ class UserProfileController extends GetxController {
       );
       numberCreditCardController.text = bankInfo?.accountNumber ?? '';
       nameCreditCardController.text = bankInfo?.accountName ?? '';
+      bankNameController.text = bankInfo?.bankName ?? 'Chọn ngân hàng';
     }
   }
 
@@ -134,7 +136,7 @@ class UserProfileController extends GetxController {
       ListBankBottomSheet(
         onSelected: (bank) {
           FocusManager.instance.primaryFocus?.unfocus();
-          bandNameController.text = bank.bankName!;
+          bankNameController.text = bank.bankName!;
           selectedBank.value = bank;
         },
         banks: banks!,

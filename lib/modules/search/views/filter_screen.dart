@@ -92,8 +92,7 @@ class FilterScreen extends GetView<FilterController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: Get.width - 80,
+        Expanded(
           child: Container(
             width: double.minPositive,
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
@@ -125,9 +124,8 @@ class FilterScreen extends GetView<FilterController> {
             ),
           ),
         ),
-        SizedBox(width: 16.px),
-        InkWell(
-          onTap: () {
+        TextButton(
+          onPressed: () {
             Get.back();
           },
           child: const Text(

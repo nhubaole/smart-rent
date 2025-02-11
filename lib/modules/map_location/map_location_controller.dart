@@ -174,9 +174,11 @@ class MapLocationController extends GetxController
         listRooms.assignAll(response.data!);
         addMarkers();
         showRooms();
+        isLoadingData.value = LoadingType.LOADED;
+      } else {
+        isLoadingData.value = LoadingType.ERROR;
       }
       isFetching.value = false;
-      isLoadingData.value = LoadingType.LOADED;
     });
   }
 

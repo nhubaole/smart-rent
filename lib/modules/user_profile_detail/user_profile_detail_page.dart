@@ -99,6 +99,8 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         ),
         SizedBox(height: 16.px),
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Số tài khoản',
           textEditingController: controller.numberCreditCardController,
@@ -109,6 +111,8 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         ),
         SizedBox(height: 16.px),
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Tên tài khoản (Tiếng Việt không dấu, viết hoa)',
           textEditingController: controller.nameCreditCardController,
@@ -126,9 +130,11 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         ),
         SizedBox(height: 16.px),
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Ngân hàng',
-          textEditingController: controller.bandNameController,
+          textEditingController: controller.bankNameController,
           onTap: controller.onChoseBank,
           readOnly: true,
           onValidate: (p0) {
@@ -150,6 +156,8 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
     return Column(
       children: [
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Họ và tên',
           textEditingController: controller.fullNameController,
@@ -160,6 +168,8 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         ),
         SizedBox(height: 16.px),
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Số điện thoại',
           textEditingController: controller.phoneController,
@@ -170,6 +180,8 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         ),
         SizedBox(height: 16.px),
         OutlineTextFiledWidget(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
           inSideContainer: true,
           textLabel: 'Địa chỉ',
           textEditingController: controller.fullNameController,
@@ -181,20 +193,24 @@ class UserProfileDetailPage extends GetView<UserProfileController> {
         SizedBox(height: 16.px),
         Row(
           children: [
+            // Expanded(
+            //   child: OutlineTextFiledWidget(
+            //     border: InputBorder.none,
+            //     enabledBorder: InputBorder.none,
+            //     inSideContainer: true,
+            //     textLabel: 'Giới tính',
+            //     textEditingController: controller.genderController,
+            //     onValidate: (p0) {
+            //       return null;
+            //     },
+            //     textStyleInput: textStyleInput,
+            //   ),
+            // ),
+            // SizedBox(width: 16.px),
             Expanded(
               child: OutlineTextFiledWidget(
-                inSideContainer: true,
-                textLabel: 'Giới tính',
-                textEditingController: controller.genderController,
-                onValidate: (p0) {
-                  return null;
-                },
-                textStyleInput: textStyleInput,
-              ),
-            ),
-            SizedBox(width: 16.px),
-            Expanded(
-              child: OutlineTextFiledWidget(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
                 inSideContainer: true,
                 textLabel: 'Năm sinh',
                 textEditingController: controller.dobController,
