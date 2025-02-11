@@ -9,7 +9,6 @@ import 'package:smart_rent/core/widget/custom_app_bar.dart';
 import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/loading_widget.dart';
-import 'package:smart_rent/core/widget/outline_button_widget.dart';
 import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/contract/contract_controller.dart';
 import 'package:smart_rent/modules/contract/widget/contract_item.dart';
@@ -112,7 +111,7 @@ class ContractPage extends GetView<ContractController> {
               ),
               SizedBox(width: 8.px),
               IconButton(
-                onPressed: () {},
+                onPressed: controller.refreshTemplateContracts,
                 icon: Icon(
                   Icons.refresh,
                   size: 22.px,

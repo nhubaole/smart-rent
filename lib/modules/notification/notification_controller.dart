@@ -54,6 +54,7 @@ class NotificationController extends GetxController {
         if (noti.title == "Bạn đã hoàn tất trả phòng!") {
           var returnRequest = await ReturnRequestRepoImpl()
               .getReturnRequestById(returnRequestID);
+          if (!returnRequest.isSuccess()) return;
           if (AppManager().currentUser?.role == 1) {
             Get.toNamed(AppRoutes.landlordReturnSuccess, arguments: {
               'tenant': returnRequest.data?.createdUser,

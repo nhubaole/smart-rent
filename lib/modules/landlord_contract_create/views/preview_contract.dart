@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -200,75 +202,185 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
                 //         '- Phụ lục hợp đồng này được thành lập @@ bản, mỗi bên giữ 1 bản và có giá trị pháp lý như nhau'),
 
                 SizedBox(height: 16.px),
-                Container(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1.px,
-                              color: AppColors.secondary20,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              _buildText(
-                                text: 'Đại diện bên A',
-                                textStyle: childTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                alignment: Alignment.center,
-                              ),
-                              SizedBox(height: 4.px),
-                              _buildText(
-                                text: '(Ký ghi rõ họ tên)',
-                                alignment: Alignment.center,
-                              ),
-                              SizedBox(
-                                height: 80.px,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1.px,
-                              color: AppColors.secondary20,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              _buildText(
-                                text: 'Đại diện bên B',
-                                textStyle: childTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                alignment: Alignment.center,
-                              ),
-                              SizedBox(height: 4.px),
-                              _buildText(
-                                text: '(Ký ghi rõ họ tên)',
-                                alignment: Alignment.center,
-                              ),
-                              SizedBox(
-                                height: 80.px,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   child: Row(
+                //     children: [
+                //       Expanded(
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //             border: Border.all(
+                //               width: 1.px,
+                //               color: AppColors.secondary20,
+                //             ),
+                //           ),
+                //           child: Column(
+                //             children: [
+                //               _buildText(
+                //                 text: 'Đại diện bên A',
+                //                 textStyle: childTextStyle.copyWith(
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //                 alignment: Alignment.center,
+                //               ),
+                //               SizedBox(height: 4.px),
+                //               _buildText(
+                //                 text: '(Ký ghi rõ họ tên)',
+                //                 alignment: Alignment.center,
+                //               ),
+                //               SizedBox(
+                //                 height: 80.px,
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //             border: Border.all(
+                //               width: 1.px,
+                //               color: AppColors.secondary20,
+                //             ),
+                //           ),
+                //           child: Column(
+                //             children: [
+                //               _buildText(
+                //                 text: 'Đại diện bên B',
+                //                 textStyle: childTextStyle.copyWith(
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //                 alignment: Alignment.center,
+                //               ),
+                //               SizedBox(height: 4.px),
+                //               _buildText(
+                //                 text: '(Ký ghi rõ họ tên)',
+                //                 alignment: Alignment.center,
+                //               ),
+                //               SizedBox(
+                //                 height: 80.px,
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                _buildSignParty(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Row _buildSignParty() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.px,
+                color: AppColors.secondary20,
+              ),
+            ),
+            child: Column(
+              children: [
+                _buildText(
+                  text: 'Đại diện bên A',
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  alignment: Alignment.center,
+                ),
+                SizedBox(height: 4.px),
+                _buildText(
+                  text: '(Ký ghi rõ họ tên)',
+                  alignment: Alignment.center,
+                ),
+                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                    true)
+                  SizedBox(
+                    height: 80.px,
+                    child: Column(
+                      children: [
+                        Image.memory(
+                          fit: BoxFit.contain,
+                          base64Decode(
+                              controller.contractByIdModel?.signatureA! ?? ''),
+                          width: 60.px,
+                          height: 60.px,
+                        ),
+                        _buildText(
+                          text:
+                              controller.contractByIdModel?.partyA?.name ?? '',
+                          alignment: Alignment.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                    false)
+                  SizedBox(height: 80.px),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.px,
+                color: AppColors.secondary20,
+              ),
+            ),
+            child: Column(
+              children: [
+                _buildText(
+                  text: 'Đại diện bên B',
+                  textStyle: childTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  alignment: Alignment.center,
+                ),
+                SizedBox(height: 4.px),
+                _buildText(
+                  text: '(Ký ghi rõ họ tên)',
+                  alignment: Alignment.center,
+                ),
+                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                    true)
+                  SizedBox(
+                    height: 80.px,
+                    child: Column(
+                      children: [
+                        Image.memory(
+                          fit: BoxFit.contain,
+                          base64Decode(
+                              controller.contractByIdModel?.signatureB ?? ''),
+                          width: 60.px,
+                          height: 60.px,
+                        ),
+                        _buildText(
+                          text:
+                              controller.contractByIdModel?.partyB?.name ?? '',
+                          alignment: Alignment.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                    false)
+                  SizedBox(
+                    height: 80.px,
+                  )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

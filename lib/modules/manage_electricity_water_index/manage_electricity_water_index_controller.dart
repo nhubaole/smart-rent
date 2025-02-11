@@ -15,7 +15,7 @@ class ManageElectricityWaterIndexController extends GetxController
 
   final tabs = [
     'rented'.tr,
-    'available_empty'.tr,
+    // 'available_empty'.tr,
   ];
 
   final selectedTab = 0.obs;

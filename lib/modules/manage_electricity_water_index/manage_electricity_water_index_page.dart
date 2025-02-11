@@ -67,7 +67,7 @@ class ManageElectricityWaterIndexPage
       physics: const NeverScrollableScrollPhysics(),
       children: [
         _buildTableForRent(context),
-        Container(),
+        // Container(),
       ],
     );
   }

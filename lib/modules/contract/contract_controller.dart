@@ -37,6 +37,10 @@ class ContractController extends GetxController
     super.onInit();
   }
 
+  refreshTemplateContracts() async {
+    fetchContractTemplates();
+  }
+
   _initController() {
     tabController = TabController(length: tabs.length, vsync: this);
     tabController.addListener(() {

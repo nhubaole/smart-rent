@@ -4,7 +4,6 @@ import 'package:sizer/sizer.dart';
 import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
-import 'package:smart_rent/core/services/sr_method_channel.dart';
 import 'package:smart_rent/core/widget/error_widget.dart';
 import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
 import 'package:smart_rent/core/widget/loading_widget.dart';
@@ -131,7 +130,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                   ),
                   Expanded(
                     child: ButtonManageResource(
-                      counter: 1,
+                      // counter: 1,
                       title: 'rental_request'.tr,
                       icon: ImageAssets.icRequestRent,
                       onTap: () {
@@ -179,30 +178,34 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                   ),
                   Expanded(
                     child: ButtonManageResource(
+                      isCommingSoon: true,
                       title: 'tenant'.tr,
                       icon: ImageAssets.icCustomer,
-                      onTap: () => Get.toNamed(AppRoutes.tenantReturnRating),
+                      onTap: () {
+                        // Get.toNamed(AppRoutes.tenantReturnRating);
+                      },
                     ),
                   ),
                   Expanded(
                     child: ButtonManageResource(
                       title: 'room_view_schedule'.tr,
                       icon: ImageAssets.icScheduleReview,
+                      isCommingSoon: true,
                       onTap: () {
                         // TODO: Test
-                        final now = DateTime.now();
-                        final startTime =
-                            now.add(Duration(hours: 1)); // 1 hour from now
-                        final endTime = startTime
-                            .add(Duration(hours: 2)); // 2 hours duration
+                        // final now = DateTime.now();
+                        // final startTime =
+                        //     now.add(Duration(hours: 1)); // 1 hour from now
+                        // final endTime = startTime
+                        //     .add(Duration(hours: 2)); // 2 hours duration
 
-                        SRMethodChannel.createReminder(
-                          title: 'Meeting with Client',
-                          description: 'Discuss project requirements',
-                          location: 'Conference Room A',
-                          startTime: startTime,
-                          endTime: endTime,
-                        );
+                        // SRMethodChannel.createReminder(
+                        //   title: 'Meeting with Client',
+                        //   description: 'Discuss project requirements',
+                        //   location: 'Conference Room A',
+                        //   startTime: startTime,
+                        //   endTime: endTime,
+                        // );
                       },
                     ),
                   ),
@@ -340,6 +343,7 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
                 ),
                 Expanded(
                   child: ButtonCategoryRoom(
+                    isCommingSoon: true,
                     onTap: () {},
                     title: 'archive_storage'.tr,
                     icon: ImageAssets.icBox,

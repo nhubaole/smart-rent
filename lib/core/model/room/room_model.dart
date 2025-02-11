@@ -138,16 +138,12 @@ class RoomModel {
   factory RoomModel.fromMap(Map<String, dynamic> map, {int? id}) {
     return RoomModel(
       id: id ?? map['id'] as int,
-      latitude: map['location']?['lat'] != null
-          ? double.tryParse(map['location']!['lat'].toString())
-          : map['latitude'] != null
-              ? double.tryParse(map['latitude'].toString())
-              : null,
-      longitude: map['location']?['lon'] != null
-          ? double.tryParse(map['location']['lon'].toString())
-          : map['longitude'] != null
-              ? double.tryParse(map['longitude'].toString())
-              : null,
+      latitude: map['latitude'] != null
+          ? double.tryParse(map['latitude'].toString())
+          : null,
+      longitude: map['longitude'] != null
+          ? double.tryParse(map['longitude'].toString())
+          : null,
       image: map['image'] != null ? map['image'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       address: map['address'] != null && map['address'] is String
@@ -191,7 +187,11 @@ class RoomModel {
       totalPrice: map['total_price'] != null
           ? map['total_price'] * 1.0 as double
           : null,
-      deposit: map['deposit'] != null ? map['deposit'] as int : null,
+      deposit: map['deposit'] != null
+          ? int.tryParse(map['deposit'].toString()) ??
+              int.tryParse(
+                  double.tryParse(map['deposit'].toString()).toString())
+          : null,
       electricityCost: map['electricity_cost']?.toDouble(),
       waterCost: map['water_cost']?.toDouble(),
       internetCost: map['internet_cost']?.toDouble(),

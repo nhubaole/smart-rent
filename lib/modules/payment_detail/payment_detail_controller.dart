@@ -120,7 +120,7 @@ class PaymentDetailController extends GetxController {
     //   ),
     // );
     await ViewImageDialog.show(
-      url: paymentAllModel!.evidenceImage ?? ImageAssets.demo,
+      url: paymentAllModel?.evidenceImage ?? ImageAssets.demo,
     );
   }
 

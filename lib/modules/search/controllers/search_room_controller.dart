@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:smart_rent/core/app/app_hive.dart';
 import 'package:smart_rent/core/config/app_constant.dart';
 import 'package:smart_rent/core/model/location/ward.dart';
-import 'package:tiengviet/tiengviet.dart';
+import 'package:smart_rent/modules/map_location/services/goong_services.dart';
 
 class SearchRoomController extends GetxController {
   final RxList<String> searchResult = <String>[].obs;
@@ -41,21 +41,24 @@ class SearchRoomController extends GetxController {
     super.onClose();
   }
 
-  onSearchTextChanged(String text) {
+  onSearchTextChanged(String text) async {
     label.value = text;
     searchResult.clear();
     getRecent();
-    if (text.isEmpty) {
-      return;
-    }
+    // if (text.isEmpty) {
+    //   return;
+    // }
 
-    List<String> res = [];
-    for (var address in address) {
-      if (TiengViet.parse(address)
-          .toLowerCase()
-          .contains(TiengViet.parse(text.toLowerCase()))) res.add(address);
+    // List<String> res = [];
+    // for (var address in address) {
+    //   if (TiengViet.parse(address)
+    //       .toLowerCase()
+    //       .contains(TiengViet.parse(text.toLowerCase()))) res.add(address);
+    // }
+    final res = await GoongServices().getAutoComplete(text);
+    if (res.isSuccess()) {
+      searchResult.addAll(res.data!);
     }
-    searchResult.addAll(res);
     print("======= ${searchResult.length}");
   }
 

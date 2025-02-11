@@ -142,60 +142,61 @@ class SearchPage extends GetView<SearchRoomController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-            width: MediaQuery.sizeOf(context).width - 80,
-            decoration: BoxDecoration(
+        Expanded(
+          child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+              width: MediaQuery.sizeOf(context).width - 80,
+              decoration: BoxDecoration(
                 border: Border.all(color: AppColors.primary60, width: 1),
                 borderRadius: BorderRadius.circular(4),
-              color: Colors.white,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/images/ic_location.svg'),
-                SizedBox(width: 4.px),
-                Expanded(
-                  child: TextField(
-                    autofocus: true,
-                    style: const TextStyle(fontSize: 12),
-                    controller: controller.textController,
-                    decoration: InputDecoration(
-                      hintText: 'Tìm theo phường/xã, địa điểm,...',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: AppColors.secondary40,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/images/ic_location.svg'),
+                  SizedBox(width: 4.px),
+                  Expanded(
+                    child: TextField(
+                      autofocus: true,
+                      style: const TextStyle(fontSize: 12),
+                      controller: controller.textController,
+                      decoration: InputDecoration(
+                        hintText: 'Tìm theo phường/xã, địa điểm,...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.secondary40,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
+                      onChanged: controller.onSearchTextChanged,
+                      onSubmitted: (value) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        controller.saveRecent(value);
+                        Get.toNamed(AppRoutes.filter, arguments: {
+                          'location': value,
+                        });
+                      },
                     ),
-                    onChanged: controller.onSearchTextChanged,
-                    onSubmitted: (value) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      controller.saveRecent(value);
-                      Get.toNamed(AppRoutes.filter, arguments: {
-                        'location': value,
-                      });
+                  ),
+                  SizedBox(width: 4.px),
+                  InkWell(
+                    child: Icon(
+                      Icons.cancel,
+                      size: 16.px,
+                      color: AppColors.secondary40,
+                    ),
+                    onTap: () {
+                      controller.textController.clear();
+                      controller.onSearchTextChanged('');
                     },
-                  ),
-                ),
-                SizedBox(width: 4.px),
-                InkWell(
-                  child: Icon(
-                    Icons.cancel,
-                    size: 16.px,
-                    color: AppColors.secondary40,
-                  ),
-                  onTap: () {
-                    controller.textController.clear();
-                    controller.onSearchTextChanged('');
-                  },
-                )
-              ],
-            )),
-        SizedBox(width: 16.px),
-        InkWell(
-          onTap: () {
+                  )
+                ],
+              )),
+        ),
+        TextButton(
+          onPressed: () {
             Get.back();
           },
           child: const Text(

@@ -226,7 +226,7 @@ class RoomRepoImpl implements RoomRepo {
   @override
   Future<ResponseModel<List<RoomModel>>> getRoomsByAddressElasticSearch(
       {required String address}) async {
-    const String url = '/rooms/_search';
+    const String url = '/rental.public.rooms/_search';
     final body = {
       'query': {
         'match': {
@@ -321,8 +321,7 @@ class RoomRepoImpl implements RoomRepo {
       return <RoomModel>[];
     }
 
-    return List<RoomModel>.from((data['hits']['hits'] as List).map((room) =>
-        RoomModel.fromMap(room['_source'],
-            id: int.tryParse(room['_id']) ?? 0)));
+    return List<RoomModel>.from((data['hits']['hits'] as List)
+        .map((room) => RoomModel.fromMap(room['_source'])));
   }
 }
