@@ -263,16 +263,16 @@ class RoomRepoImpl implements RoomRepo {
   Future<ResponseModel<List<RoomModel>>>
       getRoomsByAddressAndLocationElasticSearch(
           {required double distance, required LatLng location}) async {
-    const String url = '/rooms/_search';
+    const String url = '/rental.public.rooms/_search';
     final body = {
       'query': {
         'bool': {
           'filter': {
             'geo_distance': {
               'distance': '${distance}km',
-              'location': {
-                'lat': location.latitude,
+              'geo_location': {
                 'lon': location.longitude,
+                'lat': location.latitude,
               }
             }
           }
