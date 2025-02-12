@@ -30,20 +30,23 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  SingleChildScrollView _buildContent() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // top widget
-          _buildTopComponent(),
-          // pho bien
-          _buildRoomByAreasComponent(),
-          //list room
-          _buildPopularRoom(),
-        ],
+  Widget _buildContent() {
+    return RefreshIndicator(
+      onRefresh: () async => controller.getListRoom(false),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // top widget
+            _buildTopComponent(),
+            // pho bien
+            _buildRoomByAreasComponent(),
+            //list room
+            _buildPopularRoom(),
+          ],
+        ),
       ),
     );
   }

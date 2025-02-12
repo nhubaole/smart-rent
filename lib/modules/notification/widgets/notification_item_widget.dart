@@ -77,15 +77,22 @@ class NotificationItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 70.px,
+                  height:
+                      data.type?.icon.contains('.png') ?? false ? 50.px : 70.px,
                   width: 70.px,
-                  child: Lottie.asset(
-                    data.type?.icon ?? ImageAssets.lottieEmpty,
-                    repeat: true,
-                    reverse: true,
-                    height: Get.height * 0.2,
-                    width: double.infinity,
-                  ),
+                  child: (data.type?.icon.contains('.png') ?? false)
+                      ? Image.asset(
+                          data.type!.icon,
+                          height: Get.height * 0.2,
+                          width: double.infinity,
+                        )
+                      : Lottie.asset(
+                          data.type?.icon ?? ImageAssets.lottieEmpty,
+                          repeat: true,
+                          reverse: true,
+                          height: Get.height * 0.2,
+                          width: double.infinity,
+                        ),
                 ),
                 Expanded(
                   child: Column(

@@ -115,7 +115,7 @@ class RoomCreateModel {
     formData.fields
       ..add(MapEntry('title', title ?? ''))
       ..add(MapEntry('description', description ?? ''))
-      ..add(MapEntry('room_type', roomType!.name))
+      ..add(MapEntry('room_type', roomType!.value))
       ..add(MapEntry('owner', owner.toString()))
       ..add(MapEntry('room_number', roomNumber?.toString() ?? ''))
       ..add(MapEntry('capacity', capacity?.toString() ?? ''))

@@ -52,6 +52,7 @@ class RoomTypeFilterPage extends StatelessWidget {
               ? null
               : controller.filter.value.roomTypeFilter?.roomType,
           onChanged: (RoomType? value) {
+            print(value);
             controller.setRoomType(value!);
           },
         ));

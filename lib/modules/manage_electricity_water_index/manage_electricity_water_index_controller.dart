@@ -142,6 +142,16 @@ class ManageElectricityWaterIndexController extends GetxController
       // }).toList();
       billingIndexs[indexInfoPosition].indexInfo![indexInBill].newIndex =
           response.electricityIndex ?? response.waterIndex;
+      if (billingIndexs[indexInfoPosition].indexInfo![indexInBill].newIndex !=
+              null &&
+          billingIndexs[indexInfoPosition].indexInfo![indexInBill].oldIndex !=
+              null) {
+        billingIndexs[indexInfoPosition].indexInfo![indexInBill].used =
+            billingIndexs[indexInfoPosition].indexInfo![indexInBill].newIndex! -
+                billingIndexs[indexInfoPosition]
+                    .indexInfo![indexInBill]
+                    .oldIndex!;
+      }
       billingIndexs.refresh();
 
     } else {

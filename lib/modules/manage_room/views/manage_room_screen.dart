@@ -23,11 +23,16 @@ class ManageRoomScreen extends GetView<ManageRoomController> {
     return KeepAliveWrapper(
       wantKeepAlive: true,
       child: ScaffoldWidget(
-        body: Stack(
-          children: [
-            _buildTopComponent(context),
-            _buildTrackingComponent(),
-          ],
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: Get.height,
+            child: Stack(
+              children: [
+                _buildTopComponent(context),
+                _buildTrackingComponent(),
+              ],
+            ),
+          ),
         ),
       ),
     );

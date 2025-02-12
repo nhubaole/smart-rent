@@ -11,7 +11,7 @@ class SocketService {
 
   void initializeSocket({required String userId}) {
     socket = IO.io(
-      'http://10.0.2.2:3000',
+      'http://54.151.243.111:3000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()

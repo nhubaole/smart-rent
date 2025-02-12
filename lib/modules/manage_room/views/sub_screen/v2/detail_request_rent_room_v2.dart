@@ -540,6 +540,10 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
         Row(
           children: [
             controller.rentalRequestById!.suggestedPrice != null &&
+                    controller.rentalRequestById!.suggestedPrice! ==
+                        controller.rentalRequestById!.room!.totalPrice!
+                ? SizedBox.shrink()
+                : controller.rentalRequestById!.suggestedPrice != null &&
                     controller.rentalRequestById!.suggestedPrice! >
                         controller.rentalRequestById!.room!.totalPrice!
                 ? const Icon(
@@ -552,6 +556,10 @@ class DetailRequestRentRoomV2 extends GetView<DetailRequestController> {
                   ),
             SizedBox(width: 3.px),
             controller.rentalRequestById!.suggestedPrice != null &&
+                    controller.rentalRequestById!.suggestedPrice! ==
+                        controller.rentalRequestById!.room!.totalPrice!
+                ? SizedBox.shrink()
+                : controller.rentalRequestById!.suggestedPrice != null &&
                     controller.rentalRequestById!.suggestedPrice! >
                         controller.rentalRequestById!.room!.totalPrice!
                 ? Text.rich(

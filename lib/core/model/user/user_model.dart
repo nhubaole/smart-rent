@@ -229,6 +229,7 @@ class RatingInfo {
   String? comment;
   String? happy;
   String? unHappy;
+  String? raterAvatar;
   RatingInfo({
     this.ratingName,
     this.createAt,
@@ -236,6 +237,7 @@ class RatingInfo {
     this.comment,
     this.happy,
     this.unHappy,
+    this.raterAvatar,
   });
 
   RatingInfo copyWith({
@@ -245,6 +247,7 @@ class RatingInfo {
     String? comment,
     String? happy,
     String? unHappy,
+    String? raterAvatar,
   }) {
     return RatingInfo(
       ratingName: ratingName ?? this.ratingName,
@@ -253,6 +256,7 @@ class RatingInfo {
       comment: comment ?? this.comment,
       happy: happy ?? this.happy,
       unHappy: unHappy ?? this.unHappy,
+      raterAvatar: raterAvatar ?? this.raterAvatar,
     );
   }
 
@@ -264,6 +268,7 @@ class RatingInfo {
       'comment': comment,
       'happy': happy,
       'unHappy': unHappy,
+      'raterAvatar': raterAvatar,
     };
   }
 
@@ -278,6 +283,8 @@ class RatingInfo {
       comment: map['comment'] != null ? map['comment'] as String : null,
       happy: map['happy'] != null ? map['happy'] as String : null,
       unHappy: map['unHappy'] != null ? map['unHappy'] as String : null,
+      raterAvatar:
+          map['rater_avatar'] != null ? map['rater_avatar'] as String : null,
     );
   }
 

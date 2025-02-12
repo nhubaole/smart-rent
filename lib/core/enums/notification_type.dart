@@ -60,7 +60,7 @@ extension NotificationTypeExtension on NotificationType {
   String get icon {
     switch (this) {
       case NotificationType.RENTAL_REQUEST:
-        return ImageAssets.lottieHamster;
+        return ImageAssets.icRequestRentNoti;
       case NotificationType.CONTRACT:
         return ImageAssets.lottiePayment;
       case NotificationType.RETURN_REQUEST:

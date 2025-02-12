@@ -212,8 +212,7 @@ class RatingUserPage extends GetView<RatingUserController> {
                   itemBuilder: (context, index) {
                     final item = controller.userModel.value.ratingInfos![index];
                     return RatingItemWithoutImgWidget(
-                      avatarUser: controller.userModel.value.avatarUrl ??
-                          ImageAssets.demo,
+                      avatarUser: item.raterAvatar ?? ImageAssets.demo,
                       ratingInfo: item,
                     );
                   },

@@ -300,7 +300,7 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
                   text: '(Ký ghi rõ họ tên)',
                   alignment: Alignment.center,
                 ),
-                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                if (controller.contractByIdModel?.signatureA?.isNotEmpty ==
                     true)
                   SizedBox(
                     height: 80.px,
@@ -321,7 +321,7 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
                       ],
                     ),
                   ),
-                if (controller.contractByIdModel!.signatureA?.isNotEmpty ==
+                if (controller.contractByIdModel?.signatureA?.isNotEmpty ==
                     false)
                   SizedBox(height: 80.px),
               ],
@@ -350,7 +350,7 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
                   text: '(Ký ghi rõ họ tên)',
                   alignment: Alignment.center,
                 ),
-                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                if (controller.contractByIdModel?.signatureB?.isNotEmpty ==
                     true)
                   SizedBox(
                     height: 80.px,
@@ -371,7 +371,7 @@ class PreviewContract extends GetView<LandlordContractCreateController> {
                       ],
                     ),
                   ),
-                if (controller.contractByIdModel!.signatureB?.isNotEmpty ==
+                if (controller.contractByIdModel?.signatureB?.isNotEmpty ==
                     false)
                   SizedBox(
                     height: 80.px,

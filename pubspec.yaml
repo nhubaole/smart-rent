@@ -184,6 +184,7 @@ flutter:
     - assets/images/invoice_deposit.png
     - assets/images/request_return.png
     - assets/images/payment.png
+    - assets/images/ic_request_rent.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

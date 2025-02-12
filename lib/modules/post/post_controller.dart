@@ -25,6 +25,7 @@ import 'package:smart_rent/core/resources/google_map_services.dart';
 import 'package:smart_rent/core/routes/app_routes.dart';
 import 'package:smart_rent/core/widget/alert_snackbar.dart';
 import 'package:smart_rent/core/widget/overlay_loading.dart';
+import 'package:smart_rent/modules/home/controllers/home_controller.dart';
 import 'package:smart_rent/modules/post/views/choose_image_bottom_sheet.dart';
 import 'package:smart_rent/modules/post/views/confirm_page.dart';
 import 'package:smart_rent/modules/post/views/info_page.dart';
@@ -226,7 +227,7 @@ class PostRoomController extends GetxController
   }
 
   Future<void> postRoom() async {
-    OverlayLoading.show(title: 'Đang đăng bài...');
+    // OverlayLoading.show(title: 'Đang đăng bài...');
     await _onSaveDataRoomCreate();
     log('[POSTROOM] : ${roomCreateModel.value}');
     try {
@@ -238,13 +239,13 @@ class PostRoomController extends GetxController
           message: 'Đăng bài thành công',
           isError: false,
         );
-        // Get.offNamedUntil(
-        //   AppRoutes.detail,
-        //   arguments: {
-        //   'id': rq.data,
-        //   },
-        //   (route) => route.settings.name == AppRoutes.root,
-        // );
+        Get.offNamedUntil(
+          AppRoutes.detail,
+          arguments: {
+            'id': rq.data,
+          },
+          (route) => route.settings.name == AppRoutes.root,
+        );
         Get.back();
       } else {
         OverlayLoading.hide();
