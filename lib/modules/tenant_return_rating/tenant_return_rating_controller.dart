@@ -109,7 +109,7 @@ class TenantReturnRatingController extends GetxController
 
   _saveRoomRatingModel() {
     ratingRoomCreateModel = RatingRoomCreateModel(
-      roomId: 1,
+      roomId: request.value.room?.id ?? 0,
       amenitiesRating:
           questionsRatingRoomMap['amenities_question'.tr]!.index + 1,
       locationRating:
@@ -125,7 +125,7 @@ class TenantReturnRatingController extends GetxController
 
   _saveLandlordRatingModel() {
     ratingLandlordCreateModel = RatingLandlordCreateModel(
-      landlordId: 1,
+      landlordId: (request.value.room?.owner as UserModel).id ?? 1,
       friendlinessRating:
           questionsRatingLandlordMap['landlord_friendliness_question'.tr]!
                   .index +

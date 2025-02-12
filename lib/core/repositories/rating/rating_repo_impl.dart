@@ -114,7 +114,7 @@ class RatingRepoImpl extends RatingRepo {
         data: response.data['data'] as bool,
       );
     } catch (e) {
-      log.e('createRatingLandlord', e.toString());
+      log.e('createRatingRoom', e.toString());
       return ResponseModel.failed(e);
     }
   }
