@@ -1,44 +1,19 @@
 //splash page
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/modules/login/views/login_screen.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
-import 'package:smart_rent/modules/splash/controllers/splash_controller.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import '/modules/splash/controllers/splash_controller.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends GetView<SplashController> {
   const SplashScreen({
     super.key,
   });
 
   @override
-  State<SplashScreen> createState() {
-    return _SplashScreenState();
-  }
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  final SplashController controller = Get.put(SplashController());
-
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       body: Container(
         alignment: Alignment.center,
         child: Container(

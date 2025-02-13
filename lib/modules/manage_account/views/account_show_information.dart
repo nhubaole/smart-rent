@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
 
 class AccountShowInformation extends StatelessWidget {
   AccountShowInformation({super.key});
@@ -17,7 +18,7 @@ class AccountShowInformation extends StatelessWidget {
       child: Obx(
         () => mainController.isLoading.value
             ? const LinearProgressIndicator(
-                color: primary95,
+                color: AppColors.primary95,
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +27,7 @@ class AccountShowInformation extends StatelessWidget {
                   Obx(
                     () => mainController.isLoading.value
                         ? const LinearProgressIndicator(
-                            color: primary95,
+                            color: AppColors.primary95,
                           )
                         : const Padding(
                             padding: EdgeInsets.only(top: 0),
@@ -78,7 +79,7 @@ class AccountShowInformation extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: primary40,
+                        color: AppColors.primary40,
                       ),
                     ),
                   ),
@@ -91,7 +92,7 @@ class AccountShowInformation extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: secondary40,
+                        color: AppColors.secondary40,
                       ),
                     ),
                   ),
@@ -106,7 +107,7 @@ class AccountShowInformation extends StatelessWidget {
                                   MediaQuery.of(context).size.width * 0.35,
                             ),
                             elevation: 0,
-                            color: primary98,
+                            color: AppColors.primary98,
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Row(

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import '/core/model/account/Account.dart';
+import '/core/values/KEY_VALUE.dart';
 
 class AuthMethods extends GetxController {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

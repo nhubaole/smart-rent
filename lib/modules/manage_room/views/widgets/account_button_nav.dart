@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+
+import '../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
 
 class AccountButtonNav extends StatelessWidget {
   final String nameButton;
@@ -15,8 +17,8 @@ class AccountButtonNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 4),
-        padding: EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
@@ -25,7 +27,7 @@ class AccountButtonNav extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,
               blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
+              offset: const Offset(0, 2), // changes position of shadow
             ),
           ],
         ),
@@ -41,14 +43,14 @@ class AccountButtonNav extends StatelessWidget {
                     width: 40,
                     height: 40,
                   ),
-                  Expanded(child: SizedBox()),
+                  const Expanded(child: SizedBox()),
                   nameButton == "Hóa đơn hàng tháng"
                       ? Container(
-                          padding: EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                              color: primary40,
+                              color: AppColors.primary40,
                               borderRadius: BorderRadius.circular(100)),
-                          child: Text(
+                          child: const Text(
                             "Sắp ra mắt",
                             style: TextStyle(
                                 color: Colors.white,
@@ -57,16 +59,16 @@ class AccountButtonNav extends StatelessWidget {
                             textAlign: TextAlign.end,
                           ),
                         )
-                      : SizedBox()
+                      : const SizedBox()
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Text(
                 nameButton,
-                style: TextStyle(
-                    color: secondary20,
+                style: const TextStyle(
+                    color: AppColors.secondary20,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               )

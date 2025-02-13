@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import '/core/values/KEY_VALUE.dart';
 
 class NotifySettingController extends GetxController {
   late SharedPreferences prefs;

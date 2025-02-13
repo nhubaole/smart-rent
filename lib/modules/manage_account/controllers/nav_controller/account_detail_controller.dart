@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/values/enum/sex.dart';
-import 'package:smart_rent/core/model/values/listProvinceVietNam.dart';
-import 'package:smart_rent/core/model/values/utils.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/storage_methobs.dart';
-import 'package:smart_rent/core/values/key_value.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+
+import '../../../../core/config/app_colors.dart';
+import '/core/model/account/Account.dart';
+import '/core/model/values/enum/sex.dart';
+import '/core/model/values/listProvinceVietNam.dart';
+import '/core/model/values/utils.dart';
+import '/core/resources/auth_methods.dart';
+import '/core/resources/storage_methobs.dart';
+import '/core/values/key_value.dart';
 
 class AccountDetailController extends GetxController {
   var profileOwner = Rx<Account?>(null);
@@ -136,7 +137,7 @@ class AccountDetailController extends GetxController {
                     const Text(
                       'Chọn ảnh',
                       style: TextStyle(
-                          color: primary40,
+                          color: AppColors.primary40,
                           fontSize: 20,
                           fontWeight: FontWeight.w700),
                     ),
@@ -144,7 +145,7 @@ class AccountDetailController extends GetxController {
                         onTap: () => Get.back(),
                         child: const Icon(
                           Icons.close,
-                          color: secondary40,
+                          color: AppColors.secondary40,
                         )),
                   ],
                 ),
@@ -154,7 +155,7 @@ class AccountDetailController extends GetxController {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: primary98),
+                      color: AppColors.primary98),
                   child: InkWell(
                     onTap: () async {
                       _image = await pickImage(ImageSource.camera);
@@ -188,13 +189,13 @@ class AccountDetailController extends GetxController {
                         children: [
                           Icon(
                             Icons.image_outlined,
-                            color: primary60,
+                            color: AppColors.primary60,
                           ),
                           SizedBox(width: 8),
                           Text(
                             'Chụp ảnh',
                             style: TextStyle(
-                                color: primary60,
+                                color: AppColors.primary60,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -209,7 +210,7 @@ class AccountDetailController extends GetxController {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: primary98),
+                      color: AppColors.primary98),
                   child: InkWell(
                     onTap: () async {
                       _image = await pickImage(ImageSource.gallery);
@@ -243,13 +244,13 @@ class AccountDetailController extends GetxController {
                         children: [
                           Icon(
                             Icons.photo_camera_outlined,
-                            color: primary60,
+                            color: AppColors.primary60,
                           ),
                           SizedBox(width: 8),
                           Text(
                             'Chọn từ thư viện',
                             style: TextStyle(
-                                color: primary60,
+                                color: AppColors.primary60,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -365,7 +366,7 @@ class AccountDetailController extends GetxController {
     formKey.currentState!.save();
     String res = 'Some error occurred';
     String currentName = nameTextInputController.text.trim();
-    if (currentName == null || currentName.isEmpty || currentName.length < 6) {
+    if (currentName.isEmpty || currentName.length < 6) {
       return 'Vui lòng nhập đúng định dạng họ tên';
     }
     try {

@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+
+import '../../../core/config/app_colors.dart';
 
 class ChooseImageBottomSheet extends StatelessWidget {
   const ChooseImageBottomSheet({
@@ -38,7 +37,7 @@ class ChooseImageBottomSheet extends StatelessWidget {
                 const Text(
                   'Chọn ảnh',
                   style: TextStyle(
-                      color: primary40,
+                      color: AppColors.primary40,
                       fontSize: 20,
                       fontWeight: FontWeight.w700),
                 ),
@@ -46,7 +45,7 @@ class ChooseImageBottomSheet extends StatelessWidget {
                     onTap: () => Get.back(),
                     child: const Icon(
                       Icons.close,
-                      color: secondary40,
+                      color: AppColors.secondary40,
                     )),
               ],
             ),
@@ -55,7 +54,8 @@ class ChooseImageBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: primary98),
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.primary98),
               child: InkWell(
                 onTap: () async {
                   await onGallarySelected();
@@ -67,13 +67,13 @@ class ChooseImageBottomSheet extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.image_outlined,
-                        color: primary60,
+                        color: AppColors.primary60,
                       ),
                       SizedBox(width: 8),
                       Text(
                         'Chọn từ thư viện',
                         style: TextStyle(
-                            color: primary60,
+                            color: AppColors.primary60,
                             fontSize: 16,
                             fontWeight: FontWeight.w500),
                       ),
@@ -87,7 +87,8 @@ class ChooseImageBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: primary98),
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.primary98),
               child: InkWell(
                 onTap: () async {
                   await onCameraSelected();
@@ -99,13 +100,13 @@ class ChooseImageBottomSheet extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.photo_camera_outlined,
-                        color: primary60,
+                        color: AppColors.primary60,
                       ),
                       SizedBox(width: 8),
                       Text(
                         'Chụp ảnh',
                         style: TextStyle(
-                            color: primary60,
+                            color: AppColors.primary60,
                             fontSize: 16,
                             fontWeight: FontWeight.w500),
                       ),

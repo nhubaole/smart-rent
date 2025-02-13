@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/blank.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/payment/controllers/detail_transaction_controller.dart';
-import 'package:smart_rent/modules/payment/controllers/reivew_room_controller.dart';
-import 'package:smart_rent/modules/payment/views/widgets/status_widget.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/blank.dart';
+import '/core/model/invoice/invoice.dart';
+import '/core/values/app_colors.dart';
+import '/modules/payment/controllers/detail_transaction_controller.dart';
+import '/modules/payment/controllers/reivew_room_controller.dart';
+import '/modules/payment/views/widgets/status_widget.dart';
+import '/modules/root_view/views/root_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
@@ -33,7 +35,7 @@ class DetailTransactionScreen extends StatelessWidget {
         title: const Text(
           'Chi tiết giao dịch',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontWeight: FontWeight.w700,
             fontSize: 22,
           ),
@@ -86,7 +88,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Trạng thái',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -110,7 +112,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Mã giao dịch',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -159,7 +161,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Thời gian',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -183,7 +185,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Người giao dịch',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -209,7 +211,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Tổng thanh toán',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -238,7 +240,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     const Text(
                                       'Nội dung giao dịch',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -273,7 +275,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     Text(
                                       'Phương thức thanh toán',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -326,7 +328,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                       detailTransactionController
                                           .errorMessage.value,
                                       style: const TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -341,7 +343,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                       child: const Text(
                                         'Kiểm tra danh sách đơn thanh toán tại đây',
                                         style: TextStyle(
-                                          color: secondary40,
+                                          color: AppColors.secondary40,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           decoration: TextDecoration.underline,
@@ -373,7 +375,7 @@ class DetailTransactionScreen extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(100),
-                                        color: primary60),
+                                        color: AppColors.primary60),
                                     child: const Padding(
                                       padding: EdgeInsets.all(16.0),
                                       child: Text(

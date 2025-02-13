@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+
+import '../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
 
 class TextFieldInput extends StatefulWidget {
   const TextFieldInput({
@@ -57,7 +59,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
           TextFormField(
             enabled: widget.isEnable,
             style: const TextStyle(
-              color: primary40,
+              color: AppColors.primary40,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
@@ -67,7 +69,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
             validator: widget.onValidate,
             controller: widget.textEditingController,
             decoration: InputDecoration(
-              labelStyle: const TextStyle(color: secondary40),
+              labelStyle: const TextStyle(color: AppColors.secondary40),
               counterText: '',
               focusColor: widget.borderColor,
               fillColor: widget.borderColor,

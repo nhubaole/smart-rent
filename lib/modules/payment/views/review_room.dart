@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/payment/controllers/reivew_room_controller.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/model/invoice/invoice.dart';
+import '/modules/payment/controllers/reivew_room_controller.dart';
+import '/modules/root_view/views/root_screen.dart';
 
 class ReviewRoom extends StatelessWidget {
   const ReviewRoom({
@@ -25,7 +26,7 @@ class ReviewRoom extends StatelessWidget {
         title: const Text(
           'Đánh giá phòng đã thuê',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontWeight: FontWeight.w700,
             fontSize: 22,
           ),
@@ -40,7 +41,7 @@ class ReviewRoom extends StatelessWidget {
                       CircleAvatar(
                         radius: 64,
                         backgroundImage: CachedNetworkImageProvider(
-                          reviewController.room.value!.images[0],
+                          reviewController.room.value!.images![0],
                         ),
                       ),
                       const SizedBox(
@@ -50,9 +51,9 @@ class ReviewRoom extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                              reviewController.room.value!.title,
+                              reviewController.room.value!.title!,
                               style: const TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                               ),
@@ -63,9 +64,9 @@ class ReviewRoom extends StatelessWidget {
                           ),
                           Obx(
                             () => Text(
-                              '${currencyFormat.format(reviewController.room.value!.price)}đ/ tháng',
+                              '${currencyFormat.format(reviewController.room.value!.totalPrice)}đ/ tháng',
                               style: const TextStyle(
-                                color: primary40,
+                                color: AppColors.primary40,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                               ),
@@ -81,9 +82,9 @@ class ReviewRoom extends StatelessWidget {
                             ),
                             child: Obx(
                               () => Text(
-                                reviewController.room.value!.location,
+                                reviewController.room.value!.address![0],
                                 style: const TextStyle(
-                                  color: secondary20,
+                                  color: AppColors.secondary20,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 textAlign: TextAlign.center,
@@ -127,7 +128,7 @@ class ReviewRoom extends StatelessWidget {
                           decoration: InputDecoration(
                             hintText: 'Nhận xét về phòng trọ này',
                             filled: true,
-                            fillColor: secondary90,
+                            fillColor: AppColors.secondary90,
                             border: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(10),
@@ -140,14 +141,14 @@ class ReviewRoom extends StatelessWidget {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: const BorderSide(
-                                color: primary95,
+                                color: AppColors.primary95,
                                 width: 2,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: const BorderSide(
-                                color: primary95,
+                                color: AppColors.primary95,
                                 width: 2,
                               ),
                             ),
@@ -166,12 +167,12 @@ class ReviewRoom extends StatelessWidget {
                             },
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(
-                                  color: primary60, width: 1.5),
+                                  color: AppColors.primary60, width: 1.5),
                             ),
                             child: const Text(
                               'Để sau',
                               style: TextStyle(
-                                color: primary60,
+                                color: AppColors.primary60,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -181,11 +182,9 @@ class ReviewRoom extends StatelessWidget {
                             width: 20,
                           ),
                           FilledButton(
-                            onPressed: () {
-                              reviewController.submitReview();
-                            },
+                            onPressed: () {},
                             style: FilledButton.styleFrom(
-                              backgroundColor: primary60,
+                              backgroundColor: AppColors.primary60,
                             ),
                             child: const Text(
                               'Đánh giá',

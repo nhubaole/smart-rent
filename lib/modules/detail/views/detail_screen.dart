@@ -1,1307 +1,1251 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
+import 'package:collection/collection.dart';
 import 'package:expandable_text/expandable_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/config/app_images.dart';
+import 'package:smart_rent/core/enums/gender.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
 import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/chat_screen.dart';
-import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/views/list_request_rent_room_screen.dart';
-import 'package:smart_rent/modules/handle_rent_room_tenant/views/send_request_rent_room.dart';
-import 'package:smart_rent/modules/handle_return_room_landlord/views/detail_request_return_room_screen.dart';
-import 'package:smart_rent/modules/handle_return_room_tenant/views/send_request_return_room.dart';
-import 'package:smart_rent/modules/map/views/map_screen.dart';
-import 'package:smart_rent/modules/post_review/views/post_review_screen.dart';
-import 'package:smart_rent/modules/profile_owner/views/profile_ower.dart';
-import '../../../core/model/room/room.dart';
+import 'package:smart_rent/core/extension/boolean_extension.dart';
+import 'package:smart_rent/core/extension/datetime_extension.dart';
+import 'package:smart_rent/core/extension/double_extension.dart';
+import 'package:smart_rent/core/extension/int_extension.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/cache_image_widget.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import 'package:smart_rent/core/widget/view_image_dialog.dart';
+import 'package:smart_rent/modules/detail/widgets/button_action_navbar.dart';
+import '/modules/detail/controllers/detail_controller.dart';
 
-// ignore: must_be_immutable
-class DetailScreen extends StatelessWidget {
-  DetailScreen({
-    super.key,
-    required this.room,
-    required this.isRequestRented,
-    required this.isRequestReturnRent,
-    required this.isHandleRequestReturnRoom,
-    required this.isHandleRentRoom,
-    this.notificationId,
-    required this.isRenting,
-  });
-  final Room room;
-  final bool isRequestRented;
-  final bool isRequestReturnRent;
-  final bool isHandleRequestReturnRoom;
-  final bool isHandleRentRoom;
-  final bool isRenting;
-  String? notificationId;
-  final DetailController controller = Get.put(DetailController());
-  late double deviceHeight;
-  late double deviceWidth;
+class DetailPage extends GetView<DetailController> {
+  const DetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    deviceHeight = MediaQuery.sizeOf(context).height;
-    deviceWidth = MediaQuery.sizeOf(context).width;
-    controller.room = room;
-    controller.getOwner();
-    controller.setRoomRecently();
-
-    var date = DateTime.fromMillisecondsSinceEpoch(room.dateTime * 1000);
-    String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButton: Stack(
-          children: [
-            Positioned(
-              bottom: deviceHeight * 0.1,
-              right: deviceWidth * 0.001,
-              child: isRenting
-                  ? FloatingActionButton.extended(
-                      backgroundColor: Colors.white,
-                      heroTag: UniqueKey(),
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 2,
-                          color: primary60,
-                        ),
-                        borderRadius: BorderRadius.circular(deviceHeight * 0.1),
-                      ),
-                      label: const Row(
-                        children: [
-                          Text(
-                            'Yêu cầu trả phòng',
-                            style: TextStyle(color: primary60),
-                          ),
-                          SizedBox(
-                            width: 1,
-                          ),
-                          Icon(
-                            Icons.wifi_protected_setup_rounded,
-                            color: primary60,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        Get.to(
-                          () => SendRequestReturnRoom(
-                            room: room,
-                          ),
-                        );
-                      },
-                    )
-                  : isRequestReturnRent || isRequestRented
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            FloatingActionButton.extended(
-                              backgroundColor: Colors.white,
-                              heroTag: UniqueKey(),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 1,
-                                  color: primary40,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              label: const Row(
-                                children: [
-                                  Text(
-                                    'Sửa yêu cầu ',
-                                    style: TextStyle(color: primary40),
-                                  ),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Icon(
-                                    CupertinoIcons.location_fill,
-                                    color: primary40,
-                                  ),
-                                ],
-                              ),
-                              onPressed: () async {
-                                if (isRequestReturnRent) {
-                                  Map<String, dynamic> result =
-                                      await FireStoreMethods()
-                                          .getTicketRequestReturnRent(
-                                    room.createdByUid,
-                                    room.id,
-                                    'PENDING',
-                                  );
-                                  if (result.isNotEmpty) {
-                                    Get.to(
-                                      () => SendRequestReturnRoom(
-                                        result: result,
-                                        room: room,
-                                      ),
-                                    );
-                                  } else {
-                                    Get.snackbar(
-                                      'Thông báo',
-                                      'Bạn chưa có yêu cầu trả phòng nào',
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white,
-                                    );
-                                  }
-                                } else if (isRequestRented) {
-                                  Map<String, dynamic> result =
-                                      await FireStoreMethods()
-                                          .getTicketRequestRent(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    room.id,
-                                    'PENDING',
-                                  );
-                                  if (result.isNotEmpty) {
-                                    Get.to(
-                                      () => SendRequestRentRoom(
-                                        room: room,
-                                        result: result,
-                                      ),
-                                    );
-                                  } else {
-                                    Get.snackbar(
-                                      'Thông báo',
-                                      'Bạn chưa có yêu cầu trả phòng nào',
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white,
-                                    );
-                                  }
-                                }
-                              },
-                            ),
-                            SizedBox(
-                              height: deviceHeight * 0.01,
-                            ),
-                            FloatingActionButton.extended(
-                              backgroundColor: Colors.white,
-                              heroTag: UniqueKey(),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 1,
-                                  color: Colors.red,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              label: const Row(
-                                children: [
-                                  Text(
-                                    'Xóa yêu cầu',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                ],
-                              ),
-                              onPressed: () async {
-                                if (isRequestReturnRent) {
-                                  Map<String, dynamic> result =
-                                      await FireStoreMethods()
-                                          .getTicketRequestReturnRent(
-                                    room.createdByUid,
-                                    room.id,
-                                    'PENDING',
-                                  );
-
-                                  Get.defaultDialog(
-                                    title: 'Thông báo',
-                                    middleText:
-                                        'Bạn có chắc chắn muốn xóa yêu cầu trả phòng này?',
-                                    textConfirm: 'Xóa',
-                                    textCancel: 'Hủy',
-                                    confirmTextColor: Colors.white,
-                                    onConfirm: () async {
-                                      await FireStoreMethods()
-                                          .updateStatusTicketRequestReturnRent(
-                                        result['id'],
-                                        'NOTWORKING',
-                                      );
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                      // Get.off(() => RootScreen());
-                                    },
-                                  );
-                                } else if (isRequestRented) {
-                                  Map<String, dynamic> result =
-                                      await FireStoreMethods()
-                                          .getTicketRequestRent(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    room.id,
-                                    'PENDING',
-                                  );
-
-                                  Get.defaultDialog(
-                                    title: 'Thông báo',
-                                    middleText:
-                                        'Bạn có chắc chắn muốn xóa yêu cầu trả phòng này?',
-                                    textConfirm: 'Xóa',
-                                    textCancel: 'Hủy',
-                                    confirmTextColor: Colors.white,
-                                    onConfirm: () async {
-                                      await FireStoreMethods()
-                                          .updateStausTicketRequestRent(
-                                        result['id'],
-                                        'NOTWORKING',
-                                      );
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                      // Get.off(() => RootScreen());
-                                    },
-                                  );
-                                }
-                              },
-                            ),
-                          ],
-                        )
-                      : FirebaseAuth.instance.currentUser!.uid !=
-                              room.createdByUid
-                          ? FloatingActionButton.extended(
-                              backgroundColor: Colors.white,
-                              heroTag: UniqueKey(),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 1,
-                                  color: primary40,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              label: const Row(
-                                children: [
-                                  Text(
-                                    'Yêu cầu thuê phòng ',
-                                    style: TextStyle(color: primary40),
-                                  ),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Icon(
-                                    CupertinoIcons.location_fill,
-                                    color: primary40,
-                                  ),
-                                ],
-                              ),
-                              onPressed: () async {
-                                bool isAPPROVED = await FireStoreMethods()
-                                    .checkStatusRoom(room.id, 'APPROVED');
-                                if (isAPPROVED) {
-                                  Get.to(
-                                    () => SendRequestRentRoom(
-                                      room: room,
-                                    ),
-                                  );
-                                } else {
-                                  Get.snackbar(
-                                    'Thông báo',
-                                    'Phòng này đã được người khác thuê trước bạn đã chậm chân rồi',
-                                    backgroundColor: Colors.red,
-                                    colorText: Colors.white,
-                                  );
-                                }
-                              },
-                            )
-                          : const SizedBox(),
-            ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: ScaffoldWidget(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: primary40,
-          foregroundColor: Colors.white,
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              )),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  FireStoreMethods().likePost(
-                    room.id,
-                    FirebaseAuth.instance.currentUser!.uid,
-                    room.listLikes,
-                  );
-                },
-                icon: const Icon(
-                  Icons.favorite_outline,
-                  color: Colors.white,
-                ))
-          ],
-          title: const Text(
-            "Chi tiết phòng",
-            style: TextStyle(fontWeight: FontWeight.bold),
+        appBar: _buildAppBar(),
+        body: Obx(
+          () => _buildWidgetState(),
+        ),
+        bottomNavigationBar: Obx(
+          () => Visibility(
+            visible: controller.isLoadingData.value == LoadingType.LOADED,
+            child: _buildBottomNavigationBar(),
           ),
         ),
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    if (controller.room != null) {
+      return _buildActionContact();
+    }
+    return const SizedBox();
+  }
+
+  Widget _buildWidgetState() {
+    switch (controller.isLoadingData.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildBody();
+      case LoadingType.ERROR:
+        return RefreshIndicator(
+          onRefresh: () async {
+            await controller.reselectRoom(controller.room!.id);
+          },
+          child: const ErrorCustomWidget(
+            expandToCanPullToRefresh: true,
+          ),
+        );
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildImageCollection(),
+          _buildContentRoom(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionContact() {
+    return Container(
+      padding:
+          EdgeInsets.only(left: 16.px, right: 16.px, bottom: 12.px, top: 12.px),
+      width: Get.width,
+      decoration: BoxDecoration(
+        color: AppColors.primary40,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20.px),
+          topLeft: Radius.circular(20.px),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text.rich(
+              style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              TextSpan(
                 children: [
-                  imageCollection(context),
-                  Padding(
-                    //padding: const EdgeInsets.fromLTRB(20, 20, 20, 90),
-                    padding: EdgeInsets.fromLTRB(
-                      deviceHeight * 0.02,
-                      deviceHeight * 0.02,
-                      deviceHeight * 0.02,
-                      deviceHeight * 0.1,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FirebaseAuth.instance.currentUser!.uid ==
-                                    room.createdByUid &&
-                                (isRequestRented ||
-                                    isRequestReturnRent ||
-                                    isHandleRequestReturnRoom ||
-                                    isHandleRentRoom ||
-                                    isRenting)
-                            ? TextButton(
-                                onPressed: () {
-                                  if (isHandleRentRoom) {
-                                    Get.to(
-                                      () => ListRequestRentRoomScreen(
-                                        room: room,
-                                      ),
-                                    );
-                                  } else if (isHandleRequestReturnRoom) {
-                                    Get.to(
-                                      () => DetailRequestReturnRoomScreen(
-                                        roomId: room.id,
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: Text(
-                                  'Yêu cầu ${isHandleRentRoom ? 'thuê' : isHandleRequestReturnRoom ? 'trả' : ''} phòng',
-                                  style: const TextStyle(
-                                    color: primary40,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Text(
-                              controller.room!.roomType.getNameRoomType(),
-                              style: const TextStyle(color: secondary40),
-                            )),
-                            Text(controller.getCapacity(),
-                                style: const TextStyle(color: secondary40))
-                          ],
-                        ),
-                        SizedBox(
-                          height: deviceHeight * 0.008,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: primary98),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: deviceWidth * 0.01,
-                            vertical: deviceHeight * 0.01,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Text(
-                                    'CÒN PHÒNG',
-                                    style: TextStyle(color: secondary20),
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    controller.getStatus(),
-                                    style: const TextStyle(
-                                        color: primary40,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Text(
-                                    'DIỆN TÍCH',
-                                    style: TextStyle(color: secondary20),
-                                  ),
-                                  SizedBox(
-                                    height: deviceHeight * 0.008,
-                                  ),
-                                  Text(
-                                    '${controller.room!.area} m2',
-                                    style: const TextStyle(
-                                        color: primary40,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Text(
-                                    'ĐẶT CỌC',
-                                    style: TextStyle(color: secondary20),
-                                  ),
-                                  SizedBox(
-                                    height: deviceHeight * 0.008,
-                                  ),
-                                  Text(
-                                    controller.priceFormatter(
-                                        controller.room!.deposit),
-                                    style: const TextStyle(
-                                        color: primary40,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ))
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: deviceHeight * 0.018,
-                        ),
-                        Text(
-                          controller.room!.title,
-                          style: const TextStyle(
-                              color: secondary20,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: deviceHeight * 0.018,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            LatLng rs = await controller.getLatLng();
-                            Get.to(
-                              () => MapScreen(
-                                fromDetailRoom: true,
-                                lat: rs.latitude,
-                                lon: rs.longitude,
-                              ),
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on_outlined,
-                                color: secondary40,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Flexible(
-                                  child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: controller.room!.location,
-                                    style: const TextStyle(color: secondary40),
-                                  ),
-                                  TextSpan(
-                                      text: " Chỉ đường",
-                                      style: const TextStyle(
-                                          color: primary40,
-                                          fontWeight: FontWeight.bold),
-                                      recognizer: TapGestureRecognizer()),
-                                ]),
-                              ))
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.phone_outlined,
-                              color: secondary40,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Obx(
-                              () => Text(
-                                "Số điện thoại: ${controller.owner.value!.phoneNumber}",
-                                style: const TextStyle(color: secondary40),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: primary60, width: 1)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.emoji_objects_outlined,
-                                    size: 24,
-                                    color: primary60,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    controller.priceFormatter(
-                                        controller.room!.electricityCost),
-                                    style: const TextStyle(
-                                      color: primary60,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.water_drop_outlined,
-                                    size: 24,
-                                    color: primary60,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    controller.priceFormatter(
-                                        controller.room!.waterCost),
-                                    style: const TextStyle(
-                                      color: primary60,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.two_wheeler_outlined,
-                                    size: 24,
-                                    color: primary60,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    controller.priceFormatter(
-                                        controller.room!.parkingFee),
-                                    style: const TextStyle(
-                                      color: primary60,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                              Expanded(
-                                  child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.wifi,
-                                    size: 24,
-                                    color: primary60,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    controller.priceFormatter(
-                                        controller.room!.internetCost),
-                                    style: const TextStyle(
-                                      color: primary60,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Mô tả',
-                          style: TextStyle(
-                              color: secondary20,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        ExpandableText(
-                          controller.room!.description,
-                          expandText: 'Xem thêm',
-                          collapseText: 'Rút gọn',
-                          maxLines: 2,
-                          linkColor: primary40,
-                          linkStyle:
-                              const TextStyle(fontWeight: FontWeight.bold),
-                          style: const TextStyle(color: secondary40),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Ngày đăng',
-                          style: TextStyle(
-                              color: secondary20,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_month_outlined,
-                              color: secondary40,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              formattedDate,
-                              style: const TextStyle(color: secondary40),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Tiện ích',
-                          style: TextStyle(
-                              color: secondary20,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        GridView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 3,
-                            mainAxisSpacing: 8.0,
-                            crossAxisSpacing: 8.0,
-                          ),
-                          itemCount: controller.room!.utilities.length,
-                          itemBuilder: (context, index) {
-                            return FilledButton.icon(
-                              style: FilledButton.styleFrom(
-                                padding: const EdgeInsets.all(0),
-                                backgroundColor: secondary90,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                              onPressed: () {},
-                              icon: Icon(
-                                controller.room!.utilities[index].getIconUtil(),
-                                size: 20,
-                                color: secondary40,
-                              ),
-                              label: Text(
-                                controller.room!.utilities[index].getNameUtil(),
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: secondary40,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Nội quy',
-                          style: TextStyle(
-                              color: secondary20,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: secondary60, width: 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: ExpandableText(
-                            controller.room!.regulations,
-                            expandText: 'Xem thêm',
-                            collapseText: 'Rút gọn',
-                            maxLines: 3,
-                            linkColor: primary40,
-                            linkStyle:
-                                const TextStyle(fontWeight: FontWeight.bold),
-                            style: const TextStyle(color: secondary40),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Đánh giá',
-                          style: TextStyle(
-                              color: secondary20,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: primary40,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    room.listComments.isNotEmpty
-                                        ? '${room.sumRating / room.listComments.length}'
-                                        : '0',
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: Color(0xFFFFD21D),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    room.sumRating / room.listComments.length <
-                                            2.5
-                                        ? 'Tệ'
-                                        : room.sumRating /
-                                                    room.listComments.length <
-                                                4
-                                            ? 'Có tiềm năng'
-                                            : 'Tốt',
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        color: primary40,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    '${room.listComments.length} đánh giá',
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: secondary40,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.to(
-                                  () => PostReviewScreen(
-                                    roomId: room.id,
-                                    room: room,
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Xem mọi bài đánh giá',
-                                style: TextStyle(
-                                    color: primary40,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Obx(
-                          () => InkWell(
-                            onTap: () {
-                              Get.to(
-                                () => ProfileOwnerScreen(
-                                  uidOwner: controller.owner.value!.uid,
-                                ),
-                              );
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: primary98),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 16),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 24,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(
-                                              controller.owner.value!.photoUrl),
-                                    ),
-                                    const SizedBox(
-                                      width: 16,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            controller.owner.value!.username,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: secondary20,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            '${controller.owner.value!.listRoomForRent.length} phòng',
-                                            style: const TextStyle(
-                                              color: primary60,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 18,
-                                      color: secondary20,
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Đề xuất',
-                          style: TextStyle(
-                            color: secondary20,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 80,
-                        ),
-                      ],
+                  TextSpan(
+                    text: controller.room!.totalPrice
+                        ?.toStringTotalthis(symbol: 'đ'),
+                  ),
+                  TextSpan(
+                    text: '/phòng',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                height: 72,
-                width: MediaQuery.sizeOf(context).width,
-                decoration: const BoxDecoration(
-                  color: primary40,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30.0),
-                    topLeft: Radius.circular(30.0),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          ),
+          controller.isOwner
+              ? Row(
                   children: [
-                    Text(
-                      controller.priceFormatterFull(),
-                      style: const TextStyle(fontSize: 20, color: Colors.white),
+                    ButtonActionNavbar(
+                      title: 'Xóa',
+                      onTap: controller.onDeleteRoom,
+                      backgroundColor: AppColors.red90,
+                      textColor: AppColors.red50,
+                      padding: EdgeInsets.symmetric(horizontal: 8.px),
+                      leading: Icon(
+                        Icons.delete_sharp,
+                        color: AppColors.red50,
+                        size: 16.px,
+                      ),
                     ),
-                    const Text(
-                      '/phòng',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    SizedBox(width: 2.w),
+                    ButtonActionNavbar(
+                      title: 'Sửa',
+                      onTap: controller.onEditRoom,
+                      backgroundColor: AppColors.secondary90,
+                      textColor: AppColors.secondary40,
+                      padding: EdgeInsets.symmetric(horizontal: 8.px),
+                      leading: Icon(
+                        Icons.edit,
+                        color: AppColors.secondary40,
+                        size: 16.px,
+                      ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    FirebaseAuth.instance.currentUser!.uid != room.createdByUid
-                        ? Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(primary98),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(primary40),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.zero),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)))),
-                              onPressed: () async {
-                                var prefs =
-                                    await SharedPreferences.getInstance();
-                                String userId = prefs.getString(
-                                        KeyValue.KEY_ACCOUNT_PHONENUMBER) ??
-                                    '';
-                                Get.to(ChatScreen(
-                                  conversationID:
-                                      controller.owner.value!.phoneNumber,
-                                  conversationName:
-                                      controller.owner.value!.username,
-                                  userId: userId,
-                                ));
-                              },
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('Chat'),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.sms_outlined,
-                                    size: 24.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(red90),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(red50),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.zero),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)))),
-                              onPressed: () async {
-                                Get.defaultDialog(
-                                  title: 'Thông báo',
-                                  middleText:
-                                      'Bạn có chắc chắn muốn xóa phòng trọ này?',
-                                  textConfirm: 'Xóa',
-                                  textCancel: 'Hủy',
-                                  confirmTextColor: Colors.white,
-                                  buttonColor: primary40,
-                                  backgroundColor: primary98,
-                                  cancelTextColor: primary40,
-                                  onConfirm: () async {
-                                    FireStoreMethods()
-                                        .updateStatusRoom(room.id, 'DELETED');
-                                    Get.back();
-                                    Get.back();
-                                  },
-                                );
-                              },
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    size: 24.0,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text('Xóa'),
-                                ],
-                              ),
-                            ),
-                          ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    FirebaseAuth.instance.currentUser!.uid != room.createdByUid
-                        ? Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(secondary90),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(secondary40),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.zero),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)))),
-                              onPressed: () {},
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('Gọi'),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.phone_outlined,
-                                    size: 24.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(secondary90),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(secondary40),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.zero),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)))),
-                              onPressed: () {},
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.edit,
-                                    size: 24.0,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text('Sửa'),
-                                ],
-                              ),
-                            ),
-                          ),
+                  ],
+                )
+              : controller.canRent
+                  ? ButtonActionNavbar(
+                      title: 'Thuê phòng trọ ngay',
+                      onTap: controller.onRentNow,
+                      backgroundColor: AppColors.primary98,
+                      textColor: AppColors.primary40,
+                    )
+                  : SizedBox()
+          // ElevatedButton(
+          //   style: ButtonStyle(
+          //     backgroundColor: WidgetStateProperty.all(AppColors.primary98),
+          //     foregroundColor: WidgetStateProperty.all(AppColors.primary40),
+          //     padding: WidgetStateProperty.all(
+          //       EdgeInsets.symmetric(
+          //         horizontal: 16.px,
+          //         vertical: 12.px,
+          //       ),
+          //     ),
+          //     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          //       RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(
+          //           10.0,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          //   onPressed: () async {},
+          //   child: const Text('Thuê phòng trọ ngay'),
+          // ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContentRoom() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRoomTypeAndCapacity(),
+          SizedBox(height: 0.8.h),
+          _buildAvailableAndArea(),
+          SizedBox(height: 1.8.h),
+          _buildTitle(),
+          SizedBox(height: 1.8.h),
+          _buildListRoomNumer(),
+          SizedBox(height: 1.8.h),
+          _buildAvailableToRent(),
+          SizedBox(height: 1.8.h),
+          _buildAddress(),
+          SizedBox(height: 1.8.h),
+          _buildPhone(),
+          SizedBox(height: 1.8.h),
+          _buildPriceUtilities(),
+          SizedBox(height: 1.8.h),
+          _buildDescription(),
+          SizedBox(height: 1.8.h),
+          _buildCreatedDate(),
+          SizedBox(height: 1.8.h),
+          _buildUtilities(),
+          SizedBox(height: 1.8.h),
+          _buildRating(),
+          SizedBox(height: 1.8.h),
+          _buildOwner(),
+          SizedBox(height: 1.8.h),
+          _buildSuggestRoom(),
+          SizedBox(height: 5.h),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAvailableToRent() {
+    if (controller.room!.availableFrom == null) {
+      return const SizedBox();
+    }
+    return Row(
+      children: [
+        Icon(
+          FontAwesomeIcons.thumbsUp,
+          color: AppColors.secondary40,
+          size: 24.px,
+        ),
+        SizedBox(width: 2.w),
+        const Text.rich(
+          TextSpan(
+            style: TextStyle(
+              color: AppColors.secondary40,
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+            ),
+            children: [
+              TextSpan(text: 'Có thể dọn vào '),
+              TextSpan(
+                text: 'NGAY',
+                style: TextStyle(
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildListRoomNumer() {
+    return SizedBox(
+      width: double.infinity,
+      height: 35.px,
+      child: ListView.separated(
+        itemCount: controller.room!.roomNumbers!.keys.length,
+        separatorBuilder: (context, index) => SizedBox(width: 8.px),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final key = controller.room!.roomNumbers!.keys.elementAt(index);
+          final roomID = controller.room!.roomNumbers![key];
+          return InkWell(
+            onTap: () async {
+              await controller.reselectRoom(roomID);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.px),
+                color: controller.room!.id == roomID
+                    ? AppColors.primary98
+                    : AppColors.secondary90,
+              ),
+              child: Text.rich(
+                TextSpan(
+                  style: TextStyle(
+                    color: controller.room!.id == roomID
+                        ? AppColors.primary40
+                        : AppColors.secondary40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(text: '${'room'.tr} '),
+                    TextSpan(text: key.toString()),
                   ],
                 ),
               ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSuggestRoom() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
+          'Đề xuất',
+          style: TextStyle(
+            color: AppColors.secondary20,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 1.8.h),
+        _buildSuggestRoomStatus(),
+      ],
+    );
+  }
+
+  Widget _buildSuggestRoomStatus() {
+    switch (controller.isLoadingSuggestRoom.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return const LoadingWidget();
+      case LoadingType.LOADED:
+        if (controller.suggestRooms == null ||
+            controller.suggestRooms!.isEmpty) {
+          return const SizedBox();
+        }
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            runAlignment: WrapAlignment.spaceEvenly,
+            runSpacing: 1.h,
+            spacing: 4.px,
+            children: controller.suggestRooms!.map<Widget>(
+              (room) {
+                return RoomItem(
+                  minHeight: 20.h,
+                  width: double.infinity,
+                  room: room,
+                  onTap: () async {
+                    await controller.reselectRoom(room.id);
+                  },
+                );
+              },
+            ).toList(),
+          ),
+        );
+      // return SingleChildScrollView(
+      //   physics: const BouncingScrollPhysics(),
+      //   scrollDirection: Axis.horizontal,
+      //   child: SizedBox(
+      //     height: double,
+      //     child: ListView.separated(
+      //       shrinkWrap: true,
+      //       physics: const NeverScrollableScrollPhysics(),
+      //       scrollDirection: Axis.horizontal,
+      //       itemCount: controller.suggestRooms!.length,
+      //       separatorBuilder: (context, index) => SizedBox(
+      //         width: 2.w,
+      //       ),
+      //       itemBuilder: (context, index) {
+      //         final room = controller.suggestRooms![index];
+      //         return RoomItem(room: room, isLiked: false);
+      //       },
+      //     ),
+      //   ),
+      // );
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget();
+      default:
+        return const SizedBox();
+    }
+  }
+
+  InkWell _buildOwner() {
+    return InkWell(
+      onTap: () {
+        // Get.to(
+        //   () => ProfileOwnerScreen(
+        //     uidOwner: controller.owner.value!.uid,
+        //   ),
+        // );
+        Get.toNamed(AppRoutes.ratingUser, arguments: {
+          'user_id': controller.room!.owner!.id,
+        });
+      },
+      child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: AppColors.primary98),
+          padding: EdgeInsets.symmetric(
+            horizontal: 4.w,
+            vertical: 2.h,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundImage:
+                              CachedNetworkImageProvider(
+                            controller.owner.avatarUrl ?? AppImages.demo,
+                          ),
+                        ),
+                        SizedBox(height: 1.h),
+                        Row(
+                          children: List.generate(
+                            controller.owner.totalRating ?? 0,
+                            (index) => Icon(
+                              Icons.star,
+                              color: AppColors.rating,
+                              size: 16.px,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 2.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            controller.userModel.fullName!,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: AppColors.secondary20,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            '${controller.room!.roomNumbers?.length ?? '--'} phòng trọ',
+                            style: const TextStyle(
+                              color: AppColors.primary60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: controller.onChatOwner,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 2.w,
+                            vertical: 1.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary40,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Chat',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(width: 2.w),
+                              Icon(
+                                Icons.message_outlined,
+                                color: Colors.white,
+                                size: 14.px,
+                              ),
+                            ],
+                          )),
+                    ),
+                    SizedBox(width: 2.w),
+                    InkWell(
+                      onTap: controller.onCallOwner,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 2.w,
+                            vertical: 1.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary90,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppColors.secondary80,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Gọi',
+                                style: TextStyle(
+                                  color: AppColors.secondary60,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(width: 2.w),
+                              Icon(
+                                Icons.phone_outlined,
+                                color: AppColors.secondary60,
+                                size: 14.px,
+                              ),
+                            ],
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildRating() {
+    // if (controller.rating == null) {
+    //   return const SizedBox();
+    // }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text(
+          'Đánh giá',
+          style: TextStyle(
+              color: AppColors.secondary20,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        SizedBox(height: 4.px),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: BoxConstraints(minWidth: 10.w),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: AppColors.primary40,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Row(
+                children: [
+                  Text(
+                    '${controller.rating?.totalRating?.toInt() ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                  SizedBox(width: 2.w),
+                  const Icon(
+                    Icons.star,
+                    color: Color(0xFFFFD21D),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(width: 16.px),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ignore: prefer_const_constructors
+                  Text(
+                    controller.ratingOveview,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: AppColors.primary40,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 0.5.h),
+                  const Text(
+                    'đánh giá',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.secondary40,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+            if (controller.rating != null)
+            InkWell(
+              onTap: () {
+
+                Get.toNamed(AppRoutes.rating, arguments: {
+                  'rating': controller.rating,
+                });
+              },
+              child: const Text(
+                'Xem mọi bài đánh giá',
+                style: TextStyle(
+                    color: AppColors.primary40,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline),
+              ),
             )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _buildPolicy() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Nội quy',
+          style: TextStyle(
+              color: AppColors.secondary20,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              border: Border.all(color: AppColors.secondary60, width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          child: ExpandableText(
+            controller.room!.description!,
+            expandText: 'Xem thêm',
+            collapseText: 'Rút gọn',
+            maxLines: 3,
+            linkColor: AppColors.primary40,
+            linkStyle: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.secondary40),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUtilities() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Tiện ích',
+          style: TextStyle(
+              color: AppColors.secondary20,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        SizedBox(height: 4.px),
+        GridView.builder(
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 3,
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 8.0,
+          ),
+          itemCount: controller.room!.utilities!.length,
+          itemBuilder: (context, index) {
+            final item = controller.room!.utilities![index];
+            return FilledButton.icon(
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: AppColors.secondary90,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              onPressed: () {
+                print(item);
+                print(controller.room);
+              },
+              icon: Icon(
+                item.getIconUtil,
+                size: 20,
+                color: AppColors.secondary40,
+              ),
+              label: Text(
+                item.getNameUtil,
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.secondary40,
+                    fontWeight: FontWeight.w500),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _buildCreatedDate() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Ngày đăng',
+          style: TextStyle(
+              color: AppColors.secondary20,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            const Icon(
+              Icons.calendar_month_outlined,
+              color: AppColors.secondary40,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              controller.room!.createAt?.ddMMyyyy ?? '--',
+              style: const TextStyle(color: AppColors.secondary40),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _buildDescription() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Mô tả',
+          style: TextStyle(
+              color: AppColors.secondary20,
+              fontWeight: FontWeight.bold,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        ExpandableText(
+          controller.room!.description!,
+          expandText: 'Xem thêm',
+          collapseText: 'Rút gọn',
+          maxLines: 2,
+          linkColor: AppColors.primary40,
+          linkStyle: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(color: AppColors.secondary40),
+        ),
+      ],
+    );
+  }
+
+  Container _buildPriceUtilities() {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.primary60, width: 1)),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+              child: Column(
+            children: [
+              const Icon(
+                Icons.emoji_objects_outlined,
+                size: 24,
+                color: AppColors.primary60,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                controller.priceFormatter(
+                  controller.room!.electricityCost!.toInt(),
+                ),
+                style: const TextStyle(
+                  color: AppColors.primary60,
+                ),
+              ),
+            ],
+          )),
+          Expanded(
+            child: Column(
+              children: [
+                const Icon(
+                  Icons.water_drop_outlined,
+                  size: 24,
+                  color: AppColors.primary60,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  controller.room!.waterCost!.toFormattedPrice,
+                  style: const TextStyle(
+                    color: AppColors.primary60,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              child: Column(
+            children: [
+              const Icon(
+                Icons.two_wheeler_outlined,
+                size: 24,
+                color: AppColors.primary60,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                controller.priceFormatter(controller.room!.parkingFee!.toInt()),
+                style: const TextStyle(
+                  color: AppColors.primary60,
+                ),
+              ),
+            ],
+          )),
+          Expanded(
+              child: Column(
+            children: [
+              const Icon(
+                Icons.wifi,
+                size: 24,
+                color: AppColors.primary60,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                controller
+                    .priceFormatter(controller.room!.internetCost!.toInt()),
+                style: const TextStyle(
+                  color: AppColors.primary60,
+                ),
+              ),
+            ],
+          )),
+        ],
+      ),
+    );
+  }
+
+  Row _buildPhone() {
+    return Row(
+      children: [
+        const Icon(
+          Icons.phone_outlined,
+          color: AppColors.secondary40,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          "Số điện thoại: ${controller.room!.owner?.phoneNumber ?? '--'}",
+          style: const TextStyle(color: AppColors.secondary40),
+        )
+      ],
+    );
+  }
+
+  Text _buildTitle() {
+    return Text(
+      controller.room!.title!,
+      style: const TextStyle(
+          color: AppColors.secondary20,
+          fontSize: 20,
+          fontWeight: FontWeight.w600),
+    );
+  }
+
+  GestureDetector _buildAddress() {
+    return GestureDetector(
+      onTap: controller.onOpenMap,
+      child: Row(
+        children: [
+          const Icon(
+            Icons.location_on_outlined,
+            color: AppColors.secondary40,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Flexible(
+              child: RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: controller.room!.addresses?.join(', '),
+                style: const TextStyle(color: AppColors.secondary40),
+              ),
+              TextSpan(
+                  text: " Chỉ đường",
+                  style: const TextStyle(
+                      color: AppColors.primary40, fontWeight: FontWeight.bold),
+                  recognizer: TapGestureRecognizer()),
+            ]),
+          ))
+        ],
+      ),
+    );
+  }
+
+  Container _buildAvailableAndArea() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 1.h,
+        vertical: 1.h,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColors.primary98,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+              child: Column(
+            children: [
+              Text(
+                'available_room'.tr.toUpperCase(),
+                style: const TextStyle(
+                  color: AppColors.secondary20,
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(
+                height: 0.8.h,
+              ),
+              Text(
+                "Còn phòng",
+                style: const TextStyle(
+                    color: AppColors.primary40,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          )),
+          Expanded(
+              child: Column(
+            children: [
+              Text(
+                'acreage'.tr.toUpperCase(),
+                style: const TextStyle(
+                  color: AppColors.secondary20,
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(height: 0.8.h),
+              Text(
+                '${controller.room!.area?.getAcreage ?? 0} m2',
+                style: const TextStyle(
+                  color: AppColors.primary40,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          )),
+          Expanded(
+              child: Column(
+            children: [
+              Text(
+                'deposit'.tr.toUpperCase(),
+                style: const TextStyle(
+                  color: AppColors.secondary20,
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(height: 0.8.h),
+              Text(
+                controller.room!.deposit!.toFormattedPrice,
+                style: const TextStyle(
+                  color: AppColors.primary40,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+
+  Row _buildRoomTypeAndCapacity() {
+    return Row(
+      children: [
+        Expanded(
+            child: Text(
+          controller.room!.roomType ?? '--',
+          style: const TextStyle(
+            color: AppColors.secondary40,
+            fontSize: 12,
+          ),
+        )),
+        Text(
+          '${controller.room!.capacity!} ${InfoGender.fromInt(controller.room!.gender!).getNameGender}',
+          style: const TextStyle(
+            color: AppColors.secondary40,
+            fontSize: 12,
+          ),
+        )
+      ],
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: AppColors.primary40,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          )),
+      actions: [
+        Obx(
+          () => IconButton(
+            onPressed: controller.onLikeAction,
+            icon: Icon(
+              controller.isLiked.value
+                  ? Icons.favorite_sharp
+                  : Icons.favorite_outline,
+              color:
+                  controller.isLiked.value ? AppColors.red60 : AppColors.white,
+            ),
+          ),
+        )
+      ],
+      title: const Text(
+        "Chi tiết phòng",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildImageCollection() {
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(40.px),
+        bottomRight: Radius.circular(40.px),
+      ),
+      child: Stack(
+        children: [
+          _buildPrimaryImage(),
+          _buildOnPreviousImage(),
+          _buildOnNextImage(),
+          _buildPreviewImageInList(),
+        ],
+      ),
+    );
+  }
+
+  Positioned _buildPreviewImageInList() {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        height: 90,
+        width: Get.width,
+        padding: const EdgeInsets.only(top: 2),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            width: 1,
+            color: AppColors.transparent,
+          ),
+        ),
+        child: Row(
+          children: [
+            ...controller.room!.images!.mapIndexed<Widget>(
+              (index, imgUrl) {
+                return index == controller.room!.images!.length - 1
+                    ? Expanded(
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: CacheImageWidget(
+                                imageUrl: controller.room!.images!.last,
+                                fit: BoxFit.cover,
+                                height: 90,
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.4),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${controller.room!.images!.length - controller.maximumPreivewList}+',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : index < controller.maximumPreivewList
+                        ? Expanded(
+                            child: InkWell(
+                              onTap: () => controller.setActiveImageIdx(index),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      color: AppColors.secondary20,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: Center(
+                                          child: CacheImageWidget(
+                                            imageUrl: imgUrl,
+                                            fit: BoxFit.cover,
+                                            height: 90,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned.fill(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: controller
+                                                      .activeImageIdx.value ==
+                                                  index
+                                              ? Colors.black.withOpacity(0.2)
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox();
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget imageCollection(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
-      child: Stack(
-        children: [
-          Obx(
-            () => InkWell(
-              onTap: () {
-                MultiImageProvider multiImageProvider = MultiImageProvider(
-                    controller.room!.images
-                        .map((url) => NetworkImage(url))
-                        .toList(),
-                    initialIndex: controller.activeImageIdx.value);
-                showImageViewerPager(context, multiImageProvider,
-                    onPageChanged: (page) {
-                  print("page changed to $page");
-                }, onViewerDismissed: (page) {
-                  print("dismissed while on page $page");
-                });
-              },
-              child: CachedNetworkImage(
-                imageUrl:
-                    controller.room!.images[controller.activeImageIdx.value],
-                height: MediaQuery.sizeOf(context).width + 50,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
+  InkWell _buildPrimaryImage() {
+    return InkWell(
+      onTap: () {
+        ViewImageDialog.show(
+          urls: controller.room!.images!,
+        );
+      },
+      child: Obx(
+        () => CachedNetworkImage(
+          imageUrl: controller.room!.images![controller.activeImageIdx.value],
+          height: Get.width + 50,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildOnNextImage() {
+    return Positioned(
+      right: 1.w,
+      top: Get.width / 2,
+      child: IconButton.filled(
+        onPressed: () {
+          if (controller.activeImageIdx < controller.room!.images!.length - 1) {
+            controller.activeImageIdx.value += 1;
+          }
+        },
+        icon: const Icon(
+          Icons.arrow_forward_ios_outlined,
+          color: Colors.black,
+        ),
+        style: IconButton.styleFrom(
+          backgroundColor: Colors.white,
+          elevation: 5,
+          overlayColor: AppColors.grey40,
+          side: const BorderSide(
+            color: AppColors.grey40,
+            width: 0.1,
           ),
-          Positioned(
-            left: -10,
-            top: MediaQuery.sizeOf(context).width / 2,
-            child: MaterialButton(
-              onPressed: () {
-                if (controller.activeImageIdx > 0) {
-                  controller.activeImageIdx.value -= 1;
-                }
-              },
-              color: Colors.white,
-              textColor: secondary20,
-              padding: const EdgeInsets.all(8),
-              shape: const CircleBorder(),
-              child: const Icon(
-                Icons.arrow_back_ios,
-                size: 20,
-              ),
-            ),
+          shadowColor: AppColors.grey20,
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildOnPreviousImage() {
+    return Positioned(
+      left: 1.w,
+      top: Get.width / 2,
+      child: IconButton.filled(
+        onPressed: () {
+          if (controller.activeImageIdx > 0) {
+            controller.activeImageIdx.value -= 1;
+          }
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios_new,
+          color: Colors.black,
+        ),
+        style: IconButton.styleFrom(
+          backgroundColor: Colors.white,
+          elevation: 5,
+          overlayColor: AppColors.grey40,
+          side: const BorderSide(
+            color: AppColors.grey40,
+            width: 0.1,
           ),
-          Positioned(
-            right: -10,
-            top: MediaQuery.sizeOf(context).width / 2,
-            child: MaterialButton(
-              onPressed: () {
-                if (controller.activeImageIdx <
-                    controller.room!.images.length - 1) {
-                  controller.activeImageIdx.value += 1;
-                }
-              },
-              color: Colors.white,
-              textColor: secondary20,
-              padding: const EdgeInsets.all(8),
-              shape: const CircleBorder(),
-              child: const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.only(top: 2),
-              color: Colors.white,
-              height: 90,
-              width: MediaQuery.sizeOf(context).width,
-              child: Obx(
-                () => Row(
-                  children: [
-                    Expanded(
-                      child: CachedNetworkImage(
-                          imageUrl: controller.room!.images[0],
-                          fit: BoxFit.cover,
-                          height: 90,
-                          color: controller.activeImageIdx.value == 0
-                              ? null
-                              : const Color.fromRGBO(0, 0, 0, 0.7),
-                          colorBlendMode: BlendMode.multiply),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: CachedNetworkImage(
-                          imageUrl: controller.room!.images[1],
-                          fit: BoxFit.cover,
-                          height: 90,
-                          color: controller.activeImageIdx.value == 1
-                              ? null
-                              : const Color.fromRGBO(0, 0, 0, 0.7),
-                          colorBlendMode: BlendMode.multiply),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: CachedNetworkImage(
-                          imageUrl: controller.room!.images[2],
-                          fit: BoxFit.cover,
-                          height: 90,
-                          color: controller.activeImageIdx.value == 2
-                              ? null
-                              : const Color.fromRGBO(0, 0, 0, 0.7),
-                          colorBlendMode: BlendMode.multiply),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Expanded(
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          CachedNetworkImage(
-                              imageUrl: controller.room!.images[3],
-                              fit: BoxFit.cover,
-                              height: 90,
-                              color: controller.activeImageIdx >= 3
-                                  ? null
-                                  : const Color.fromRGBO(0, 0, 0, 0.7),
-                              colorBlendMode: BlendMode.multiply),
-                          controller.room!.images.length > 4
-                              ? Positioned.fill(
-                                  child: Center(
-                                    child: Text(
-                                      "+${controller.room!.images.length - 4}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox()
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+          shadowColor: AppColors.grey20,
+        ),
       ),
     );
   }

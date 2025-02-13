@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/enums/room_type.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
 import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
@@ -35,7 +35,7 @@ class RoomTypeFilterPage extends StatelessWidget {
 
   Widget radioTypeItem(RoomType type) {
     return Obx(() => RadioListTile<RoomType>(
-          activeColor: primary40,
+          activeColor: AppColors.primary40,
           visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
@@ -43,8 +43,8 @@ class RoomTypeFilterPage extends StatelessWidget {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           contentPadding: const EdgeInsets.all(0),
           title: Text(
-            type.getNameRoomType(),
-            style: const TextStyle(color: secondary20, fontSize: 16),
+            type.value,
+            style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
           ),
           value: type,
           // ignore: prefer_null_aware_operators
@@ -52,6 +52,7 @@ class RoomTypeFilterPage extends StatelessWidget {
               ? null
               : controller.filter.value.roomTypeFilter?.roomType,
           onChanged: (RoomType? value) {
+            print(value);
             controller.setRoomType(value!);
           },
         ));

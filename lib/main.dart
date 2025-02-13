@@ -1,51 +1,22 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/resources/firebase_fcm.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/firebase_options.dart';
-import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
-import 'package:smart_rent/modules/splash/views/splash_screen.dart';
-import 'core/resources/auth_methods.dart';
+import 'package:smart_rent/core/app/app_init.dart';
+import 'package:smart_rent/core/app_binding.dart';
+import 'package:smart_rent/core/routes/app_pages.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'core/config/app_colors.dart';
+import 'core/config/app_constant.dart';
+import 'package:sizer/sizer.dart';
+import 'core/lang/translate_service.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FirebaseFCM().initNotifications();
-  Get.lazyPut(() => DetailController());
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).then(
-    (value) => Get.put(AuthMethods()),
-  );
-  AwesomeNotifications().initialize(
-    null,
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-        defaultColor: Colors.teal,
-        ledColor: Colors.teal,
-        playSound: true,
-        enableVibration: true,
-      )
-    ],
-    debug: true,
-  );
-  await dotenv.load(fileName: ".env");
+  await AppInit.init();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(const MyApp()));
-
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -54,14 +25,38 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Smart Rent House',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primary98),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
+    return Sizer(
+      builder: (buildContext, orientation, screenType) {
+        return GetMaterialApp(
+          title: AppConstant.app_name,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary98),
+            primaryColor: AppColors.primary40,
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: AppColors.primary40,
+              selectionColor: AppColors.primary95,
+              selectionHandleColor: AppColors.primary40,
+            ),
+            useMaterial3: true,
+          ),
+          locale: TranslationService.locale,
+          fallbackLocale: TranslationService.fallbackLocale,
+          translations: TranslationService(),
+          supportedLocales: AppConstant.appSupportLocale,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate
+          ],
+          
+          initialRoute: AppRoutes.splash,
+          defaultTransition: Transition.fade,
+          transitionDuration: const Duration(milliseconds: 200),
+          initialBinding: AppBinding(),
+          getPages: AppPages.routes,
+        );
+      },
     );
   }
 }

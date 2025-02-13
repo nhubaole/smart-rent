@@ -5,17 +5,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/resources/google_map_services.dart';
-import 'package:smart_rent/modules/detail/views/detail_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/modules/detail/controllers/detail_controller.dart';
+import '/core/resources/google_map_services.dart';
 
 class MapScreenController extends GetxController {
   final bool fromDetailRoom;
   double? lat;
   double? lon;
-  List<Room>? roomInArea;
+  List<RoomModel>? roomInArea;
   MapScreenController({
     required this.fromDetailRoom,
     this.lat,
@@ -45,11 +46,6 @@ class MapScreenController extends GetxController {
     }
     isLoading.value = false;
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   Future<void> getCurrentLocation() async {
@@ -112,13 +108,15 @@ class MapScreenController extends GetxController {
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      dotenv.env['google_map_api']!,
-      PointLatLng(
-        currentPosition.value!.latitude,
-        currentPosition.value!.longitude,
+      googleApiKey: dotenv.env['google_map_api']!,
+      request: PolylineRequest(
+        origin: PointLatLng(
+          currentPosition.value!.latitude,
+          currentPosition.value!.longitude,
+        ),
+        destination: PointLatLng(lat!, lon!),
+        mode: TravelMode.driving,
       ),
-      PointLatLng(lat!, lon!),
-      //PointLatLng(21.036061770676426, 105.83355592370253),
     );
     listMarkers.value.add(
       Marker(
@@ -147,13 +145,15 @@ class MapScreenController extends GetxController {
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      dotenv.env['google_map_api']!,
-      PointLatLng(
-        currentPosition.value!.latitude,
-        currentPosition.value!.longitude,
+      googleApiKey: dotenv.env['google_map_api']!,
+      request: PolylineRequest(
+        origin: PointLatLng(
+          currentPosition.value!.latitude,
+          currentPosition.value!.longitude,
+        ),
+        destination: PointLatLng(lat!, lon!),
+        mode: TravelMode.driving,
       ),
-      PointLatLng(latLng.latitude, latLng.longitude),
-      //PointLatLng(21.036061770676426, 105.83355592370253),
     );
 
     if (result.points.isNotEmpty) {
@@ -195,12 +195,12 @@ class MapScreenController extends GetxController {
     //await cameraToRoute();
   }
 
-  Future<void> getListMarkers(List<Room> listRoomInArea) async {
+  Future<void> getListMarkers(List<RoomModel> listRoomInArea) async {
     if (listRoomInArea.isNotEmpty) {
       for (var i = 0; i < listRoomInArea.length; i++) {
         isLoading.value = true;
         LatLng latLng = await GoogleMapServices().getLatLngFromAddress(
-          listRoomInArea[i].location,
+          listRoomInArea[i].addresses![0],
           'vi',
         );
         await getPolylinePointsInArea(latLng);
@@ -208,15 +208,16 @@ class MapScreenController extends GetxController {
 
         listMarkers.value.add(
           Marker(
-              markerId: MarkerId(listRoomInArea[i].title),
+              markerId: MarkerId(listRoomInArea[i].title!),
               position: latLng,
               infoWindow: InfoWindow(
-                title: listRoomInArea[i].location,
+                title: listRoomInArea[i].addresses![0],
                 snippet:
-                    '${listRoomInArea[i].title} Giá: ${listRoomInArea[i].price}',
+                    '${listRoomInArea[i].title} Giá: ${listRoomInArea[i].totalPrice}',
                 onTap: () {
-                  Get.off(
-                    () => DetailScreen(
+                  Get.toNamed(
+                    AppRoutes.detail,
+                    arguments: DetailAgrument(
                       room: listRoomInArea[i],
                       isRequestRented: false,
                       isRequestReturnRent: false,

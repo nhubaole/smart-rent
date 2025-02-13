@@ -15,6 +15,7 @@ class DateInputField extends StatefulWidget {
   String? Function(String?) onValidate;
 
   DateInputField({
+    super.key,
     required this.textEditingController,
     required this.labelText,
     required this.hintText,

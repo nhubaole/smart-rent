@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/room_item.dart';
-import 'package:smart_rent/modules/profile_owner/controllers/profile_owner_controller.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/core/widget/room_item.dart';
+import '/modules/profile_owner/controllers/profile_owner_controller.dart';
 
 class ProfileOwnerScreen extends StatelessWidget {
   final String uidOwner;
@@ -19,11 +21,11 @@ class ProfileOwnerScreen extends StatelessWidget {
         Get.put(ProfileOwnerController(uidOwner: uidOwner));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary98,
+        backgroundColor: AppColors.primary98,
         title: const Text(
           'Thông tin chủ nhà',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontWeight: FontWeight.w700,
             fontSize: 22,
           ),
@@ -45,7 +47,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
                             side: const BorderSide(
-                              color: primary40,
+                              color: AppColors.primary40,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -63,7 +65,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                                         profileOwnerController
                                             .profileOwner.value!.username,
                                         style: const TextStyle(
-                                          color: primary40,
+                                          color: AppColors.primary40,
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -77,13 +79,13 @@ class ProfileOwnerScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
-                                            color: primary60,
+                                            color: AppColors.primary60,
                                           ),
                                         ),
                                         onPressed: () {},
                                         icon: const Icon(
                                           Icons.call_outlined,
-                                          color: primary60,
+                                          color: AppColors.primary60,
                                         ),
                                       ),
                                     ),
@@ -115,7 +117,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                               child: Text(
                                 'Bài đã đăng',
                                 style: TextStyle(
-                                  color: secondary20,
+                                  color: AppColors.secondary20,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -131,7 +133,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                             if (profileOwnerController.isLoading.value) {
                               return const Center(
                                 child: CircularProgressIndicator(
-                                  color: primary60,
+                                  color: AppColors.primary60,
                                 ),
                               );
                             } else if (profileOwnerController
@@ -152,7 +154,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                                     Text(
                                       '${profileOwnerController.profileOwner.value!.username}\nchưa đăng phòng!!!',
                                       style: const TextStyle(
-                                        color: secondary20,
+                                        color: AppColors.secondary20,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w200,
                                       ),
@@ -181,16 +183,9 @@ class ProfileOwnerScreen extends StatelessWidget {
                                       profileOwnerController.listRoom.length,
                                   itemBuilder: (context, index) {
                                     return RoomItem(
-                                      isRenting: false,
-                                      isHandleRentRoom: false,
-                                      isHandleRequestReturnRoom: false,
-                                      isRequestReturnRent: false,
-                                      isRequestRented: false,
+                                    
                                       room: profileOwnerController
                                           .listRoom[index],
-                                      isLiked: profileOwnerController
-                                          .listRoom[index].listLikes
-                                          .contains(uidOwner),
                                     );
                                   },
                                 ),
@@ -201,7 +196,7 @@ class ProfileOwnerScreen extends StatelessWidget {
                       ],
                     )
                   : const CircularProgressIndicator(
-                      color: primary60,
+                      color: AppColors.primary60,
                     ),
             ),
           ),

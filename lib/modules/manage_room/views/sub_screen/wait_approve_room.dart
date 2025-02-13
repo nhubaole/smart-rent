@@ -1,190 +1,195 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/room_item.dart';
-import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/wait_approve_room_controller.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import '/core/widget/room_item.dart';
+import '/modules/manage_room/controllers/sub_screen_controller/wait_approve_room_controller.dart';
 
-class WaitApproveRoomScreen extends StatelessWidget {
+class WaitApproveRoomScreen extends GetView<WaitApproveRoomController> {
   const WaitApproveRoomScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final WaitApproveRoomController waitApproveRoomController =
-        Get.put(WaitApproveRoomController());
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng đang chờ duyêt',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return waitApproveRoomController.getListRoom(false);
-        },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
+      body: Obx(() => _buildBodyByStatus()),
+    );
+  }
+
+  Widget _buildBodyByStatus() {
+    switch (controller.statusLoading.value) {
+      case LoadingType.INIT:
+        return const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.primary60,
+          ),
+        );
+      case LoadingType.LOADING:
+        return const Center(
+          child: LoadingWidget(),
+        );
+      case LoadingType.LOADED:
+        return _buildWaitApproveRooms();
+      case LoadingType.ERROR:
+        return const ErrorCustomWidget();
+      default:
+        return const SizedBox();
+    }
+  }
+
+  RefreshIndicator _buildWaitApproveRooms() {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await controller.getListRoom();
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: controller.listRoom.value.isEmpty
+              ? _buildEmptyList()
+              : _buildGridList(),
+        ),
+      ),
+    );
+  }
+
+  Column _buildGridList() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        GridView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: Get.width / 2,
+            crossAxisSpacing: 5.px,
+            mainAxisSpacing: 10.px,
+            mainAxisExtent: 300.px,
+          ),
+          itemCount: controller.listRoom.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            // if (index < controller.listRoom.value.length) {
+            //   return RoomItem(
+            //     room: controller.listRoom.value[index],
+            //   );
+            // } else {
+            //   return Obx(
+            //     () => controller.isLoadMore.value
+            //         ? const Center(
+            //             child: CircularProgressIndicator(
+            //               color: AppColors.primary95,
+            //               backgroundColor: Colors.white,
+            //             ),
+            //           )
+            //         : Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: Center(
+            //               child: OutlinedButton(
+            //                 onPressed: () {
+            //                   controller
+            //                                         .getListRoom();
+            //                 },
+            //                 style: ButtonStyle(
+            //                   side: WidgetStateProperty.all(
+            //                     const BorderSide(
+            //                       color: AppColors.primary40,
+            //                     ),
+            //                   ),
+            //                   shape: WidgetStateProperty.all(
+            //                     RoundedRectangleBorder(
+            //                       borderRadius:
+            //                                     BorderRadius.circular(10),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 child: const Text(
+            //                   'Xem thêm',
+            //                   style: TextStyle(
+            //                     color: AppColors.primary40,
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //   );
+            // }
+            return RoomItem(
+              room: controller.listRoom.value[index],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Center _buildEmptyList() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            'assets/lottie/empty.json',
+            repeat: true,
+            reverse: true,
+            height: 300,
+            width: double.infinity,
+          ),
+          Text(
+            '${controller.useName}\nchưa đăng phòng!!!',
+            style: const TextStyle(
+              color: AppColors.secondary20,
+              fontSize: 18,
+              fontWeight: FontWeight.w200,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: Obx(
-                () => waitApproveRoomController.isLoading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primary60,
-                        ),
-                      )
-                    : waitApproveRoomController.listRoom.value.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Lottie.asset(
-                                  'assets/lottie/empty.json',
-                                  repeat: true,
-                                  reverse: true,
-                                  height: 300,
-                                  width: double.infinity,
-                                ),
-                                Text(
-                                  '${waitApproveRoomController.profileOwner.value!.username}\nchưa đăng phòng!!!',
-                                  style: const TextStyle(
-                                    color: secondary20,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w200,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        waitApproveRoomController
-                                            .getListRoom(false);
-                                      },
-                                      style: ButtonStyle(
-                                        side: MaterialStateProperty.all(
-                                          const BorderSide(
-                                            color: primary40,
-                                          ),
-                                        ),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Tải lại',
-                                        style: TextStyle(
-                                          color: primary40,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.71,
-                                  crossAxisSpacing: 5,
-                                  // mainAxisSpacing: 20,
-                                ),
-                                itemCount: waitApproveRoomController
-                                        .listRoom.value.length +
-                                    1,
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (index <
-                                      waitApproveRoomController
-                                          .listRoom.value.length) {
-                                    return RoomItem(
-                                      isRenting: false,
-                                      isHandleRentRoom: false,
-                                      isHandleRequestReturnRoom: false,
-                                      isRequestReturnRent: false,
-                                      isRequestRented: false,
-                                      room: waitApproveRoomController
-                                          .listRoom.value[index],
-                                      isLiked: waitApproveRoomController
-                                          .listRoom.value[index].listLikes
-                                          .contains(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                      ),
-                                    );
-                                  } else {
-                                    return Obx(
-                                      () => waitApproveRoomController
-                                              .isLoadMore.value
-                                          ? const Center(
-                                              child: CircularProgressIndicator(
-                                                color: primary95,
-                                                backgroundColor: Colors.white,
-                                              ),
-                                            )
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                child: OutlinedButton(
-                                                  onPressed: () {
-                                                    waitApproveRoomController
-                                                        .getListRoom(true);
-                                                  },
-                                                  style: ButtonStyle(
-                                                    side: MaterialStateProperty
-                                                        .all(
-                                                      const BorderSide(
-                                                        color: primary40,
-                                                      ),
-                                                    ),
-                                                    shape: MaterialStateProperty
-                                                        .all(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'Xem thêm',
-                                                    style: TextStyle(
-                                                      color: primary40,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
+              child: OutlinedButton(
+                onPressed: () {
+                  controller.getListRoom();
+                },
+                style: ButtonStyle(
+                  side: WidgetStateProperty.all(
+                    const BorderSide(
+                      color: AppColors.primary40,
+                    ),
+                  ),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                child: const Text(
+                  'Tải lại',
+                  style: TextStyle(
+                    color: AppColors.primary40,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

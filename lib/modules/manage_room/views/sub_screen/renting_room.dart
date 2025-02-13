@@ -1,41 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/rented_room_controller.dart';
 
-class RentingRoomScreen extends StatefulWidget {
+class RentingRoomScreen extends GetView<RentedRoomController> {
   const RentingRoomScreen({super.key});
 
   @override
-  State<RentingRoomScreen> createState() => _RentingRoomScreenState();
-}
-
-class _RentingRoomScreenState extends State<RentingRoomScreen>
-    with SingleTickerProviderStateMixin {
-  final rentedRoomController = Get.put(RentedRoomController());
-  late double deviceHeight;
-  late double deviceWidth;
-
-  @override
-  void initState() {
-    rentedRoomController.getListRentingRoom(false);
-    super.initState();
-  }
-
-  @override
-  @override
   Widget build(BuildContext context) {
-    deviceHeight = MediaQuery.of(context).size.height;
-    deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng đang thuê',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -50,21 +31,21 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
   Widget listRentingRoom() {
     return RefreshIndicator(
       onRefresh: () {
-        return rentedRoomController.getListRentingRoom(false);
+        return controller.getListRentingRoom(false);
       },
       child: Center(
         child: Obx(
-          () => rentedRoomController.isLoading.value
+          () => controller.isLoading.value
               ? SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: Get.height,
                   child: const Center(
                     child: CircularProgressIndicator(
-                      color: primary60,
-                      backgroundColor: primary40,
+                      color: AppColors.primary60,
+                      backgroundColor: AppColors.primary40,
                     ),
                   ),
                 )
-              : rentedRoomController.listRentingRoom.value.isEmpty
+              : controller.listRentingRoom.value.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -79,9 +60,9 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                             width: double.infinity,
                           ),
                           Text(
-                            '${rentedRoomController.profileOwner.value!.username}\nchưa thuê phòng nào cạ!!!',
+                            '${controller.profileOwner.value!.username}\nchưa thuê phòng nào cạ!!!',
                             style: const TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w200,
                             ),
@@ -92,16 +73,15 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                             child: Center(
                               child: OutlinedButton(
                                 onPressed: () {
-                                  rentedRoomController
-                                      .getListRentingRoom(false);
+                                  controller.getListRentingRoom(false);
                                 },
                                 style: ButtonStyle(
-                                  side: MaterialStateProperty.all(
+                                  side: WidgetStateProperty.all(
                                     const BorderSide(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                     ),
                                   ),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -110,7 +90,7 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                                 child: const Text(
                                   'Tải lại',
                                   style: TextStyle(
-                                    color: primary40,
+                                    color: AppColors.primary40,
                                   ),
                                 ),
                               ),
@@ -134,33 +114,20 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                             crossAxisSpacing: 5,
                             // mainAxisSpacing: 20,
                           ),
-                          itemCount: rentedRoomController
-                                  .listRentingRoom.value.length +
-                              1,
+                          itemCount:
+                              controller.listRentingRoom.value.length + 1,
                           itemBuilder: (context, index) {
                             if (index <
-                                rentedRoomController
-                                    .listRentingRoom.value.length) {
-                              return RoomItem(
-                                isRenting: true,
-                                isHandleRentRoom: false,
-                                isHandleRequestReturnRoom: false,
-                                isRequestReturnRent: false,
-                                isRequestRented: false,
-                                room: rentedRoomController
-                                    .listRentingRoom.value[index],
-                                isLiked: rentedRoomController
-                                    .listRentingRoom.value[index].listLikes
-                                    .contains(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                ),
+                                controller.listRentingRoom.value.length) {
+                              return RoomItem(                               
+                                room: controller.listRentingRoom.value[index],
                               );
                             } else {
                               return Obx(
-                                () => rentedRoomController.isLoadMore.value
+                                () => controller.isLoadMore.value
                                     ? const Center(
                                         child: CircularProgressIndicator(
-                                          color: primary95,
+                                          color: AppColors.primary95,
                                           backgroundColor: Colors.white,
                                         ),
                                       )
@@ -169,16 +136,16 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                                         child: Center(
                                           child: OutlinedButton(
                                             onPressed: () {
-                                              rentedRoomController
+                                              controller
                                                   .getListRentingRoom(true);
                                             },
                                             style: ButtonStyle(
-                                              side: MaterialStateProperty.all(
+                                              side: WidgetStateProperty.all(
                                                 const BorderSide(
-                                                  color: primary40,
+                                                  color: AppColors.primary40,
                                                 ),
                                               ),
-                                              shape: MaterialStateProperty.all(
+                                              shape: WidgetStateProperty.all(
                                                 RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
@@ -188,7 +155,7 @@ class _RentingRoomScreenState extends State<RentingRoomScreen>
                                             child: const Text(
                                               'Xem thêm',
                                               style: TextStyle(
-                                                color: primary40,
+                                                color: AppColors.primary40,
                                               ),
                                             ),
                                           ),

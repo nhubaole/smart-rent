@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rating_summary/rating_summary.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/post_review/controllers/post_review_screen_controller.dart';
-import 'package:smart_rent/modules/post_review/views/widgets/card_review_widget.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/modules/post_review/controllers/post_review_screen_controller.dart';
+import '/modules/post_review/views/widgets/card_review_widget.dart';
 
 // ignore: must_be_immutable
 class PostReviewScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class PostReviewScreen extends StatelessWidget {
     required this.room,
   });
   final String roomId;
-  final Room room;
+  final RoomModel room;
   late double deviceHeight;
   late double deviceWidth;
 
@@ -27,12 +28,12 @@ class PostReviewScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary98,
+        backgroundColor: AppColors.primary98,
         title: Obx(
           () => Text(
             'Bài đánh giá (${postReviewController.counter})',
             style: const TextStyle(
-              color: primary40,
+              color: AppColors.primary40,
               fontWeight: FontWeight.w700,
               fontSize: 22,
             ),
@@ -49,7 +50,7 @@ class PostReviewScreen extends StatelessWidget {
             child: Obx(
               () => postReviewController.isLoading.value
                   ? const CircularProgressIndicator(
-                      color: primary60,
+                      color: AppColors.primary60,
                     )
                   : postReviewController.listReview.value.isNotEmpty
                       ? Column(
@@ -58,9 +59,7 @@ class PostReviewScreen extends StatelessWidget {
                           children: [
                             RatingSummary(
                               counter: postReviewController.counter.value,
-                              average: room.listComments.isNotEmpty
-                                  ? room.sumRating / room.listComments.length
-                                  : 0,
+                              average: 0,
                               showAverage: true,
                               counterFiveStars:
                                   postReviewController.counterFiveStars.value,
@@ -80,7 +79,7 @@ class PostReviewScreen extends StatelessWidget {
                               () => postReviewController.isLoading.value
                                   ? const Center(
                                       child: CircularProgressIndicator(
-                                        color: primary60,
+                                        color: AppColors.primary60,
                                       ),
                                     )
                                   : postReviewController
@@ -103,7 +102,7 @@ class PostReviewScreen extends StatelessWidget {
                                               const Text(
                                                 '\nchưa có bài đánh giá nào hết!!!',
                                                 style: TextStyle(
-                                                  color: secondary20,
+                                                  color: AppColors.secondary20,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w200,
                                                 ),
@@ -134,7 +133,8 @@ class PostReviewScreen extends StatelessWidget {
                                                     ? const Center(
                                                         child:
                                                             CircularProgressIndicator(
-                                                          color: primary95,
+                                                          color: AppColors
+                                                              .primary95,
                                                           backgroundColor:
                                                               Colors.white,
                                                         ),
@@ -145,22 +145,18 @@ class PostReviewScreen extends StatelessWidget {
                                                                 .all(8.0),
                                                         child: Center(
                                                           child: OutlinedButton(
-                                                            onPressed: () {
-                                                              postReviewController
-                                                                  .getListReviews(
-                                                                      true);
-                                                            },
+                                                            onPressed: () {},
                                                             style: ButtonStyle(
                                                               side:
-                                                                  MaterialStateProperty
+                                                                  WidgetStateProperty
                                                                       .all(
                                                                 const BorderSide(
-                                                                  color:
-                                                                      primary40,
+                                                                  color: AppColors
+                                                                      .primary40,
                                                                 ),
                                                               ),
                                                               shape:
-                                                                  MaterialStateProperty
+                                                                  WidgetStateProperty
                                                                       .all(
                                                                 RoundedRectangleBorder(
                                                                   borderRadius:
@@ -174,8 +170,8 @@ class PostReviewScreen extends StatelessWidget {
                                                             child: const Text(
                                                               'Xem thêm',
                                                               style: TextStyle(
-                                                                color:
-                                                                    primary40,
+                                                                color: AppColors
+                                                                    .primary40,
                                                               ),
                                                             ),
                                                           ),
@@ -203,7 +199,7 @@ class PostReviewScreen extends StatelessWidget {
                             const Text(
                               '\nchưa có bài đánh giá nào hết!!!',
                               style: TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w200,
                               ),

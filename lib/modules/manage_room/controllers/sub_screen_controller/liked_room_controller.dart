@@ -1,49 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
+import 'package:smart_rent/core/app/app_manager.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
 
 class LikedRoomController extends GetxController {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final isLoadMore = false.obs;
+  final listRoom = Rx<List<RoomModel>>([]);
 
-  var isLoading = false.obs;
-  var isLoadMore = false.obs;
-  var listRoom = Rx<List<Room>>([]);
-  var profileOwner = Rx<Account?>(null);
-  var page = Rx<int>(10);
+  final statusLoading = LoadingType.INIT.obs;
+
+  String get useName => AppManager.instance.fullName ?? '--';
 
   @override
   void onInit() {
-    getListRoom(false);
-    getProfile(FirebaseAuth.instance.currentUser!.uid);
+    _initData();
     super.onInit();
   }
 
-  Future<void> getProfile(String uid) async {
-    isLoading.value = true;
-    profileOwner.value = await AuthMethods.getUserDetails(uid);
-    isLoading.value = false;
+  _initData() async {
+    await getListRoom();
   }
 
-  Future<void> getListRoom(bool isPagination) async {
-    if (isPagination) {
-      isLoadMore.value = true;
-      listRoom.value = await FireStoreMethods().getLikedRoom(
-        FirebaseAuth.instance.currentUser!.uid,
-        page.value += 10,
-      );
-      isLoadMore.value = false;
+  Future<void> getListRoom() async {
+    statusLoading.value = LoadingType.LOADING;
+    final rq = await RoomRepoImpl().getRoomsLikedByOwner();
+    if (rq.isSuccess()) {
+      listRoom.value = rq.data!;
+      statusLoading.value = LoadingType.LOADED;
     } else {
-      isLoading.value = true;
-      listRoom.value.clear();
-      listRoom.value = await FireStoreMethods().getLikedRoom(
-        FirebaseAuth.instance.currentUser!.uid,
-        page.value,
-      );
-      isLoading.value = false;
+      statusLoading.value = LoadingType.ERROR;
     }
   }
 }

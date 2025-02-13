@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice/detail_invoice_controller.dart';
+import '../../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_room/controllers/sub_screen_controller/invoice/detail_invoice_controller.dart';
 
 // ignore: must_be_immutable
 class DetailInvoiceScreen extends StatelessWidget {
@@ -14,15 +15,14 @@ class DetailInvoiceScreen extends StatelessWidget {
   late double deviceWidth;
   @override
   Widget build(BuildContext context) {
-    final detailInvoiceController =
-        Get.put(DetailInvoiceController(invoiceId: invoiceId));
+    Get.put(DetailInvoiceController(invoiceId: invoiceId));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary98,
+        backgroundColor: AppColors.primary98,
         title: const Text(
           'Gửi yêu cầu trả phòng',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),

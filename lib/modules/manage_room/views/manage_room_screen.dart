@@ -1,255 +1,364 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:sizer/sizer.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import 'package:smart_rent/core/widget/error_widget.dart';
+import 'package:smart_rent/core/widget/keep_alive_wrapper.dart';
+import 'package:smart_rent/core/widget/loading_widget.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice/invoice_manage.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/invoice_water_electricity_manager/invoice_we_manager.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/liked_room.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/posted_room.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/rented_room.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/renting_room.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/request_rent.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/return_rent.dart';
-import 'package:smart_rent/modules/manage_room/views/sub_screen/wait_approve_room.dart';
-import 'package:smart_rent/modules/manage_room/views/widgets/account_button_nav.dart';
+import '/core/values/image_assets.dart';
+import '/modules/manage_room/views/widgets/button_category_room.dart';
+import '/modules/manage_room/views/widgets/tracking_room.dart';
+import 'widgets/button_manage_resource.dart';
 
 // ignore: must_be_immutable
-class ManageRoomScreen extends StatelessWidget {
-  ManageRoomScreen({super.key});
-  late double deviceHeight;
-  late double deviceWidth;
+class ManageRoomScreen extends GetView<ManageRoomController> {
+  const ManageRoomScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final manageRoomController = Get.find<ManageRoomController>();
-    deviceHeight = MediaQuery.of(context).size.height;
-    deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: MediaQuery.sizeOf(context).height,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  primary40,
-                  primary95,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment(0.0, -0.5),
+    return KeepAliveWrapper(
+      wantKeepAlive: true,
+      child: ScaffoldWidget(
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: Get.height,
+            child: Stack(
+              children: [
+                _buildTopComponent(context),
+                _buildTrackingComponent(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrackingComponent() {
+    return Positioned(
+      right: 0,
+      left: 0,
+      bottom: 0,
+      top: 200,
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 20.px,
+          // right: 16.px,
+          // left: 16.px,
+          bottom: 8.px,
+        ),
+        height: 70.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.w),
+            topRight: Radius.circular(8.w),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => SizedBox(
+                height: 200.px,
+                child: _buildWidgetStatus(),
               ),
             ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: deviceHeight * 0.06,
-                left: deviceWidth * 0.05,
-                right: deviceWidth * 0.08,
+            SizedBox(
+              height: 32.px,
+            ),
+            Expanded(
+              child: _buildManageResource(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWidgetStatus() {
+    switch (controller.isFetchingProcessTracking.value) {
+      case LoadingType.INIT:
+      case LoadingType.LOADING:
+        return LoadingWidget();
+      case LoadingType.LOADED:
+        return _buildTrackingList();
+      case LoadingType.ERROR:
+        return RefreshIndicator(
+          onRefresh: () async => controller.fetchProcessTracking(),
+          child: ErrorCustomWidget(
+            expandToCanPullToRefresh: true,
+          ),
+        );
+    }
+  }
+
+  Column _buildManageResource() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.symmetric(horizontal: 16.px),
+          child: Text(
+            'resource_management'.tr,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.start,
+          ),
+        ),
+        SizedBox(
+          height: 16.px,
+        ),
+        Padding(
+          padding: EdgeInsets.all(16.px),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'rental_contract'.tr,
+                      icon: ImageAssets.icContract,
+                      onTap: () => Get.toNamed(AppRoutes.contract),
+                    ),
+                  ),
+                  Expanded(
+                    child: ButtonManageResource(
+                      // counter: 1,
+                      title: 'rental_request'.tr,
+                      icon: ImageAssets.icRequestRent,
+                      onTap: () {
+                        Get.toNamed(AppRoutes.requestRentV2);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'transaction_history'.tr,
+                      icon: ImageAssets.icHistoryTransaction,
+                      onTap: () {
+                        Get.toNamed(AppRoutes.transactionHistory);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'billing_invoice'.tr,
+                      icon: ImageAssets.icInvoice,
+                      onTap: () {
+                        // Get.toNamed(AppRoutes.billCollection);
+                        if (controller.user.role == 0) {
+                          Get.toNamed(AppRoutes.billCollection);
+                        } else {
+                          Get.toNamed(AppRoutes.landlordBillCollection);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
-              child: const Text(
-                'Phòng của bạn',
-                style: TextStyle(
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'utility_meter_reading'.tr,
+                      icon: ImageAssets.icElectric,
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.manageElectricityWaterIndex),
+                    ),
+                  ),
+                  Expanded(
+                    child: ButtonManageResource(
+                      isCommingSoon: true,
+                      title: 'tenant'.tr,
+                      icon: ImageAssets.icCustomer,
+                      onTap: () {
+                        // Get.toNamed(AppRoutes.tenantReturnRating);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ButtonManageResource(
+                      title: 'room_view_schedule'.tr,
+                      icon: ImageAssets.icScheduleReview,
+                      isCommingSoon: true,
+                      onTap: () {
+                        // TODO: Test
+                        // final now = DateTime.now();
+                        // final startTime =
+                        //     now.add(Duration(hours: 1)); // 1 hour from now
+                        // final endTime = startTime
+                        //     .add(Duration(hours: 2)); // 2 hours duration
+
+                        // SRMethodChannel.createReminder(
+                        //   title: 'Meeting with Client',
+                        //   description: 'Discuss project requirements',
+                        //   location: 'Conference Room A',
+                        //   startTime: startTime,
+                        //   endTime: endTime,
+                        // );
+                      },
+                    ),
+                  ),
+                  // Expanded(
+                  //   child: ButtonManageResource(
+                  //     title: 'Test Button'.tr,
+                  //     icon: ImageAssets.icCustomer,
+                  //     onTap: () {
+                  //       Get.to(FormContractWidget());
+                  //     },
+                  //   ),
+                  // ),
+                  const Expanded(child: SizedBox()),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _buildTrackingList() {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.symmetric(horizontal: 16.px),
+          child: Text(
+            'lease_tracking'.tr,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.start,
+          ),
+        ),
+        SizedBox(
+          height: 15.px,
+        ),
+        SizedBox(
+          height: 160.px,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: controller.processTracking.length,
+            padding: EdgeInsets.symmetric(horizontal: 16.px),
+            itemBuilder: (context, index) {
+              final item = controller.processTracking[index];
+              return TrackingRoom(
+                model: item,
+                onDetail: () => controller.onDetailProcess(item),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _buildTopComponent(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: Get.height,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            AppColors.primary40,
+            AppColors.primary80,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 6.h,
+          left: 5.w,
+          right: 8.w,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'your_room'.tr,
+                style: const TextStyle(
                   fontSize: 22,
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: deviceHeight * 0.12,
-            left: 0,
-            child: Container(
-              height: MediaQuery.sizeOf(context).height - deviceHeight * 0.2,
-              width: MediaQuery.sizeOf(context).width,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(deviceWidth * 0.08),
-                  topRight: Radius.circular(deviceWidth * 0.08),
-                ),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Phòng của bạn",
-                      style: TextStyle(
-                          color: primary40,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng đã đăng',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const PostedRoomScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/posted.png',
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng yêu thích',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const LikedRoomScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/favorite.png',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Yêu cầu của bạn",
-                      style: TextStyle(
-                          color: primary40,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng yêu cầu thuê',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const RequestRentScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/request_rent.png',
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng yêu cầu trả',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const ReturnRentScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/request_return.png',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Lịch sử thuê phòng",
-                      style: TextStyle(
-                          color: primary40,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng đang thuê',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const RentingRoomScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/rent.png',
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Phòng đã thuê',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const RentedRoomScreen(),
-                              );
-                            },
-                            firstIcon: 'assets/images/history.png',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Hóa đơn của bạn",
-                      style: TextStyle(
-                          color: primary40,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Hóa đơn tiền cọc',
-                            onPressed: () {
-                              manageRoomController.goToScreen(
-                                const InvoiceManage(),
-                              );
-                            },
-                            firstIcon: 'assets/images/invoice_deposit.png',
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: AccountButtonNav(
-                            nameButton: 'Hóa đơn hàng tháng',
-                            onPressed: () {},
-                            firstIcon: 'assets/images/monthly_invoice.png',
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                  ],
-                ),
-              ),
+            SizedBox(
+              height: 8,
             ),
-          ),
-        ],
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: ButtonCategoryRoom(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.likedRoom);
+                    },
+                    title: 'favorite_room'.tr,
+                    icon: ImageAssets.icFavourite,
+                    height: 120.px,
+                  ),
+                ),
+                Expanded(
+                  child: ButtonCategoryRoom(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.postedRoom);
+                    },
+                    title: 'posted_room'.tr,
+                    icon: ImageAssets.icVerified,
+                    height: 120.px,
+                  ),
+                ),
+                Expanded(
+                  child: ButtonCategoryRoom(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.waitApprove);
+                    },
+                    title: 'pending_room'.tr,
+                    icon: ImageAssets.icTimer,
+                    height: 120.px,
+                  ),
+                ),
+                Expanded(
+                  child: ButtonCategoryRoom(
+                    isCommingSoon: true,
+                    onTap: () {},
+                    title: 'archive_storage'.tr,
+                    icon: ImageAssets.icBox,
+                    height: 120.px,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

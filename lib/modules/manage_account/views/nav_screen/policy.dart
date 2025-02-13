@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+
+import '../../../../core/config/app_colors.dart';
 
 class PolicyScreen extends StatefulWidget {
   const PolicyScreen({super.key});
@@ -25,7 +24,7 @@ class _PolicyScreenState extends State<PolicyScreen> {
         title: const Text(
           'Điều khoản và chính sách',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),

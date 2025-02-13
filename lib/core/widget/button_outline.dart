@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 
 class ButtonOutline extends StatelessWidget {
   const ButtonOutline({
@@ -26,7 +26,7 @@ class ButtonOutline extends StatelessWidget {
       icon: icon,
       label: text,
       style: OutlinedButton.styleFrom(
-        foregroundColor: primary60,
+        foregroundColor: AppColors.primary60,
         side: BorderSide(
             color: borderColor, width: borderWidth), // Màu viền và độ dày viền
         shape: RoundedRectangleBorder(

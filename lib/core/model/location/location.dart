@@ -1,8 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:smart_rent/core/model/location/city.dart';
-import 'package:smart_rent/core/model/location/district.dart';
-import 'package:smart_rent/core/model/location/ward.dart';
+import '/core/model/location/city.dart';
+import '/core/model/location/district.dart';
+import '/core/model/location/ward.dart';
 
 part 'location.freezed.dart';
 part 'location.g.dart';
@@ -21,15 +20,8 @@ class Location with _$Location {
   factory Location.fromJson(Map<String, dynamic> json) =>
       _$LocationFromJson(json);
 
+  @override
   String toString() {
-    return address +
-        ", " +
-        street +
-        ", " +
-        ward.name_with_type.toString() +
-        ", " +
-        district.name_with_type.toString() +
-        ", " +
-        city.name_with_type.toString();
+    return "$address, $street, ${ward.name_with_type}, ${district.name_with_type}, ${city.name_with_type}";
   }
 }

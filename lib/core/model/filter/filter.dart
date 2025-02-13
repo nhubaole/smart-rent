@@ -1,10 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:smart_rent/core/model/filter/capacity_filter.dart';
-import 'package:smart_rent/core/model/filter/price_filter.dart';
-import 'package:smart_rent/core/model/filter/room_type_filter.dart';
-import 'package:smart_rent/core/model/filter/sort_filter.dart';
-import 'package:smart_rent/core/model/filter/util_filter.dart';
+import '/core/model/filter/capacity_filter.dart';
+import '/core/model/filter/price_filter.dart';
+import '/core/model/filter/room_type_filter.dart';
+import '/core/model/filter/sort_filter.dart';
+import '/core/model/filter/util_filter.dart';
 
 part 'filter.freezed.dart';
 part 'filter.g.dart';

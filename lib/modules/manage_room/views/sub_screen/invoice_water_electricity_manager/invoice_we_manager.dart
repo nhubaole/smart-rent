@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice_water_electricity/invoice_we_manager_controller.dart';
+import '../../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_room/controllers/sub_screen_controller/invoice_water_electricity/invoice_we_manager_controller.dart';
 
 // ignore: must_be_immutable
 class InvoiceWEManager extends StatelessWidget {
@@ -19,7 +20,7 @@ class InvoiceWEManager extends StatelessWidget {
         title: const Text(
           'Quản lý hóa đơn điện nước',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -34,8 +35,8 @@ class InvoiceWEManager extends StatelessWidget {
             () => invoiceWEManagerController.isLoading.value
                 ? const Center(
                     child: CircularProgressIndicator(
-                      color: primary95,
-                      backgroundColor: primary40,
+                      color: AppColors.primary95,
+                      backgroundColor: AppColors.primary40,
                     ),
                   )
                 : invoiceWEManagerController.listTenant.value.isNotEmpty
@@ -58,7 +59,7 @@ class InvoiceWEManager extends StatelessWidget {
                             Text(
                               '${invoiceWEManagerController.profileOwner.value!.username}\nchưa cho thuê phòng nào cạ!!!',
                               style: const TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w200,
                               ),
@@ -73,12 +74,12 @@ class InvoiceWEManager extends StatelessWidget {
                                         .getListTenant(false);
                                   },
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.all(
+                                    side: WidgetStateProperty.all(
                                       const BorderSide(
-                                        color: primary40,
+                                        color: AppColors.primary40,
                                       ),
                                     ),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -87,7 +88,7 @@ class InvoiceWEManager extends StatelessWidget {
                                   child: const Text(
                                     'Tải lại',
                                     style: TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                     ),
                                   ),
                                 ),

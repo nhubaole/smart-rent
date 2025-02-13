@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/payment/controllers/payment_info_controller.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/model/invoice/invoice.dart';
+import '/modules/payment/controllers/payment_info_controller.dart';
 
 class PaymentInforScreen extends StatelessWidget {
   final Invoice invoice;
@@ -25,7 +25,7 @@ class PaymentInforScreen extends StatelessWidget {
         title: const Text(
           'Thông tin giao dịch',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontWeight: FontWeight.w700,
             fontSize: 22,
           ),
@@ -45,7 +45,7 @@ class PaymentInforScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Card(
-                          color: primary98,
+                          color: AppColors.primary98,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
@@ -72,7 +72,7 @@ class PaymentInforScreen extends StatelessWidget {
                                   child: Text(
                                     invoice.addressRoom,
                                     style: const TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                       fontWeight: FontWeight.w700,
                                     ),
                                     maxLines: 3,
@@ -86,7 +86,7 @@ class PaymentInforScreen extends StatelessWidget {
                                           text: 'Sổ tiền: ',
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: secondary20,
+                                            color: AppColors.secondary20,
                                           )),
                                       TextSpan(
                                         text:
@@ -94,7 +94,7 @@ class PaymentInforScreen extends StatelessWidget {
                                         style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: secondary20,
+                                          color: AppColors.secondary20,
                                         ),
                                       ),
                                     ],
@@ -111,7 +111,7 @@ class PaymentInforScreen extends StatelessWidget {
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
                             side: const BorderSide(
-                              color: secondary80,
+                              color: AppColors.secondary80,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -125,7 +125,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     const Text(
                                       'Người nhận',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -134,7 +134,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     Text(
                                       invoice.recieverName,
                                       style: const TextStyle(
-                                        color: secondary20,
+                                        color: AppColors.secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -143,7 +143,7 @@ class PaymentInforScreen extends StatelessWidget {
                                 ),
                               ),
                               const Divider(
-                                color: secondary80,
+                                color: AppColors.secondary80,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -152,7 +152,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     const Text(
                                       'Số điện thoại',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -161,7 +161,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     Text(
                                       invoice.recieverPhoneNumber,
                                       style: const TextStyle(
-                                        color: secondary20,
+                                        color: AppColors.secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -170,7 +170,7 @@ class PaymentInforScreen extends StatelessWidget {
                                 ),
                               ),
                               const Divider(
-                                color: secondary80,
+                                color: AppColors.secondary80,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -179,7 +179,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     Text(
                                       'Số tháng ${isReturn ? 'trả' : 'đặt'} cọc',
                                       style: const TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -188,7 +188,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     const Text(
                                       '1',
                                       style: TextStyle(
-                                        color: secondary20,
+                                        color: AppColors.secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -197,7 +197,7 @@ class PaymentInforScreen extends StatelessWidget {
                                 ),
                               ),
                               const Divider(
-                                color: secondary80,
+                                color: AppColors.secondary80,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -206,7 +206,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     const Text(
                                       'Số tiền thanh toán',
                                       style: TextStyle(
-                                        color: secondary40,
+                                        color: AppColors.secondary40,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -215,7 +215,7 @@ class PaymentInforScreen extends StatelessWidget {
                                     Text(
                                       '${paymentController.currencyFormat.format(invoice.amountRoom)} VNĐ',
                                       style: const TextStyle(
-                                        color: secondary20,
+                                        color: AppColors.secondary20,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -247,7 +247,7 @@ class PaymentInforScreen extends StatelessWidget {
                                 Text(
                                   'Chọn phương thức thanh toán',
                                   style: TextStyle(
-                                    color: primary40,
+                                    color: AppColors.primary40,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -271,7 +271,7 @@ class PaymentInforScreen extends StatelessWidget {
                               onChanged: (value) {
                                 paymentController.selectedMethod.value = value!;
                               },
-                              activeColor: primary60,
+                              activeColor: AppColors.primary60,
                             ),
                             // RadioListTile(
                             //   value: 2,
@@ -282,7 +282,7 @@ class PaymentInforScreen extends StatelessWidget {
                             //   onChanged: (value) {
                             //     paymentController.selectedMethod.value = value!;
                             //   },
-                            //   activeColor: primary60,
+                            //   activeColor: AppColors.primary60,
                             // ),
                             // RadioListTile(
                             //   value: 3,
@@ -293,7 +293,7 @@ class PaymentInforScreen extends StatelessWidget {
                             //   onChanged: (value) {
                             //     paymentController.selectedMethod.value = value!;
                             //   },
-                            //   activeColor: primary60,
+                            //   activeColor: AppColors.primary60,
                             // ),
                             const SizedBox(
                               height: 18,
@@ -315,7 +315,7 @@ class PaymentInforScreen extends StatelessWidget {
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
-                                color: primary60),
+                                color: AppColors.primary60),
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
                               child: Text(

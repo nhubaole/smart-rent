@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
+import '/modules/root_view/views/root_screen.dart';
+import 'core/config/app_colors.dart';
 
 class Blank extends StatelessWidget {
   const Blank({
@@ -26,14 +26,14 @@ class Blank extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const CircularProgressIndicator(
-                    color: primary60,
+                    color: AppColors.primary60,
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   Text(
                     message,
-                    style: const TextStyle(color: primary60),
+                    style: const TextStyle(color: AppColors.primary60),
                   ),
                 ],
               ),

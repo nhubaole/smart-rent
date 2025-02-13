@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/chat_screen.dart';
-import 'package:smart_rent/modules/handle_return_room_landlord/controllers/detail_request_return_room_controller.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/chat/views/chat_screen.dart';
+import '/modules/handle_return_room_landlord/controllers/detail_request_return_room_controller.dart';
 
 // ignore: must_be_immutable
 class DetailRequestReturnRoomScreen extends StatelessWidget {
@@ -21,7 +24,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary40,
+        backgroundColor: AppColors.primary40,
         foregroundColor: Colors.white,
         title: const Text(
           'Chi tiết yêu cầu',
@@ -39,7 +42,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
               () => detailRequestController.isLoading.value
                   ? const Center(
                       child: CircularProgressIndicator(
-                        color: primary60,
+                        color: AppColors.primary60,
                       ),
                     )
                   : Column(
@@ -53,7 +56,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                             children: [
                               const Icon(
                                 Icons.timelapse_rounded,
-                                color: secondary40,
+                                color: AppColors.secondary40,
                               ),
                               SizedBox(
                                 width: deviceWidth * 0.02,
@@ -62,7 +65,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                 detailRequestController
                                     .detailTicket.value['returnDate'],
                                 style: const TextStyle(
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -77,10 +80,10 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                         ),
                         Card(
                           elevation: 0,
-                          color: primary40,
+                          color: AppColors.primary40,
                           shape: RoundedRectangleBorder(
                             side: const BorderSide(
-                              color: primary40,
+                              color: AppColors.primary40,
                             ),
                             borderRadius:
                                 BorderRadius.circular(deviceWidth * 0.02),
@@ -137,14 +140,14 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                         ElevatedButton(
                                           style: ButtonStyle(
                                             backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    primary98),
+                                                WidgetStateProperty.all(
+                                                    AppColors.primary98),
                                             foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    primary40),
-                                            padding: MaterialStateProperty.all(
+                                                WidgetStateProperty.all(
+                                                    AppColors.primary40),
+                                            padding: WidgetStateProperty.all(
                                                 EdgeInsets.zero),
-                                            shape: MaterialStateProperty.all<
+                                            shape: WidgetStateProperty.all<
                                                 RoundedRectangleBorder>(
                                               RoundedRectangleBorder(
                                                 borderRadius:
@@ -153,24 +156,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                             ),
                                           ),
                                           onPressed: () async {
-                                            Get.to(
-                                              () => ChatScreen(
-                                                conversationID:
-                                                    detailRequestController
-                                                        .profileOwner
-                                                        .value!
-                                                        .phoneNumber,
-                                                conversationName:
-                                                    detailRequestController
-                                                        .profileOwner
-                                                        .value!
-                                                        .username,
-                                                userId: detailRequestController
-                                                    .profileOwner
-                                                    .value!
-                                                    .phoneNumber,
-                                              ),
-                                            );
+                                            Get.toNamed(AppRoutes.chat);
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
@@ -198,14 +184,14 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                         ElevatedButton(
                                           style: ButtonStyle(
                                             backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    secondary90),
+                                                WidgetStateProperty.all(
+                                                    AppColors.secondary90),
                                             foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    secondary40),
-                                            padding: MaterialStateProperty.all(
+                                                WidgetStateProperty.all(
+                                                    AppColors.secondary40),
+                                            padding: WidgetStateProperty.all(
                                                 EdgeInsets.zero),
-                                            shape: MaterialStateProperty.all<
+                                            shape: WidgetStateProperty.all<
                                                 RoundedRectangleBorder>(
                                               RoundedRectangleBorder(
                                                 borderRadius:
@@ -271,7 +257,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                             children: [
                               const Icon(
                                 Icons.calendar_month_outlined,
-                                color: secondary40,
+                                color: AppColors.secondary40,
                               ),
                               SizedBox(
                                 width: deviceWidth * 0.03,
@@ -279,7 +265,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                               const Text(
                                 'Dài hạn',
                                 style: TextStyle(
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -309,7 +295,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                                 detailRequestController
                                     .detailTicket.value['reason'],
                                 style: const TextStyle(
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -366,7 +352,7 @@ class DetailRequestReturnRoomScreen extends StatelessWidget {
                           child: const Text(
                             'Bất cứ khi nào người thuê đã hoàn tất trả phòng, bạn có thể xác nhận để cập nhật tình trạng phòng.\n\nNếu quá thời hạn trả phòng mà không được xác nhận, yêu cầu trả phòng sẽ bị hủy bỏ.',
                             style: TextStyle(
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontSize: 14,
                             ),
                           ),

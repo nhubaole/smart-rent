@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
+import '/core/model/invoice/invoice.dart';
 
 class PaymentOSService {
   String getSignature(Invoice invoice) {

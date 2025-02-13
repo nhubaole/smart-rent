@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_account/controllers/nav_controller/notity_setting_controller.dart';
+import '../../../../core/config/app_colors.dart';
+import '/core/values/KEY_VALUE.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_account/controllers/nav_controller/notity_setting_controller.dart';
 
 class NotifySettingScreen extends StatefulWidget {
   const NotifySettingScreen({super.key});
@@ -32,7 +33,7 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
         title: const Text(
           'Thông báo',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -51,20 +52,24 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 },
                 title: Text(
                   'Phòng trọ mới',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 subtitle: Text(
                   'Thông báo khi có phòng trọ mới',
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 activeColor: Colors.white,
                 contentPadding: const EdgeInsets.only(
                   left: 34,
                   right: 22,
                 ),
-                activeTrackColor: primary60,
+                activeTrackColor: AppColors.primary60,
               ),
             ),
             Obx(
@@ -77,20 +82,24 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 },
                 title: Text(
                   'Tin nhắn mới',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 subtitle: Text(
                   'Thông báo khi có tin nhắn mới',
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 activeColor: Colors.white,
                 contentPadding: const EdgeInsets.only(
                   left: 34,
                   right: 22,
                 ),
-                activeTrackColor: primary60,
+                activeTrackColor: AppColors.primary60,
               ),
             ),
             Obx(
@@ -103,20 +112,24 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 },
                 title: Text(
                   'Lượt thích mới',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 subtitle: Text(
                   'Thông báo khi có lượt thích mới',
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 activeColor: Colors.white,
                 contentPadding: const EdgeInsets.only(
                   left: 34,
                   right: 22,
                 ),
-                activeTrackColor: primary60,
+                activeTrackColor: AppColors.primary60,
               ),
             ),
             Obx(
@@ -129,20 +142,24 @@ class _NotifySettingScreenState extends State<NotifySettingScreen> {
                 },
                 title: Text(
                   'Lịch hẹn mới',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 subtitle: Text(
                   'Thông báo khi có lịch hẹn mới',
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 activeColor: Colors.white,
                 contentPadding: const EdgeInsets.only(
                   left: 34,
                   right: 22,
                 ),
-                activeTrackColor: primary60,
+                activeTrackColor: AppColors.primary60,
               ),
             ),
           ],

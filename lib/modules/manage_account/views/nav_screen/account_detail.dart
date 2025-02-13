@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
-import 'package:smart_rent/modules/manage_account/views/widget/TextFormFieldAccount.dart';
+import '../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
+import '/modules/manage_account/views/widget/TextFormFieldAccount.dart';
 
 class AccountDetailScreen extends StatefulWidget {
   const AccountDetailScreen({super.key});
@@ -22,7 +23,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         title: const Text(
           'Thông tin cá nhân',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -43,7 +44,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                 Obx(
                   () => detailController.isUpdate.value
                       ? const LinearProgressIndicator(
-                          color: primary60,
+                          color: AppColors.primary60,
                         )
                       : const SizedBox(),
                 ),
@@ -101,7 +102,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                   MediaQuery.of(context).size.width * 0.35,
                             ),
                             elevation: 0,
-                            color: primary98,
+                            color: AppColors.primary98,
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Row(
@@ -186,7 +187,9 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                           onSaved: (p0) {
                             detailController.nameTextInputController.text = p0!;
                           },
-                          onValidate: (p0) {},
+                          onValidate: (p0) {
+                            return null;
+                          },
                           autoCorrect: false,
                           textCapitalization: TextCapitalization.none,
                         ),
@@ -214,7 +217,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                 'Số điện thoại',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -226,7 +229,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                   detailController
                                       .profileOwner.value!.phoneNumber,
                                   style: const TextStyle(
-                                    color: primary40,
+                                    color: AppColors.primary40,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -264,7 +267,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                   'Địa chỉ',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: secondary40,
+                                    color: AppColors.secondary40,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -276,7 +279,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                     detailController
                                         .profileOwner.value!.address,
                                     style: const TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -318,7 +321,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                         'Giới tính',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: secondary40,
+                                          color: AppColors.secondary40,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -332,7 +335,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                               ? 'Nam'
                                               : 'Nữ',
                                           style: const TextStyle(
-                                            color: primary40,
+                                            color: AppColors.primary40,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -373,7 +376,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                         'Năm sinh',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: secondary40,
+                                          color: AppColors.secondary40,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -386,7 +389,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                               .profileOwner.value!.dateOfBirth
                                               .toString(),
                                           style: const TextStyle(
-                                            color: primary40,
+                                            color: AppColors.primary40,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -405,7 +408,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                         Obx(
                           () => detailController.isUpdate.value
                               ? const CircularProgressIndicator(
-                                  color: primary60,
+                                  color: AppColors.primary60,
                                 )
                               : GestureDetector(
                                   onTap: () async {
@@ -419,7 +422,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(100),
-                                        color: primary60),
+                                        color: AppColors.primary60),
                                     child: const Padding(
                                       padding: EdgeInsets.all(16.0),
                                       child: Text(
@@ -483,7 +486,9 @@ class FormAccountDetail extends StatelessWidget {
                 onSaved: (p0) {
                   detailController.nameTextInputController.text = p0!;
                 },
-                onValidate: (p0) {},
+                onValidate: (p0) {
+                  return null;
+                },
                 autoCorrect: false,
                 textCapitalization: TextCapitalization.none,
               ),
@@ -512,7 +517,7 @@ class FormAccountDetail extends StatelessWidget {
                     'Số điện thoại',
                     style: TextStyle(
                       fontSize: 12,
-                      color: secondary40,
+                      color: AppColors.secondary40,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -523,7 +528,7 @@ class FormAccountDetail extends StatelessWidget {
                     () => Text(
                       detailController.profileOwner.value!.phoneNumber,
                       style: const TextStyle(
-                        color: primary40,
+                        color: AppColors.primary40,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
@@ -560,7 +565,7 @@ class FormAccountDetail extends StatelessWidget {
                       'Địa chỉ',
                       style: TextStyle(
                         fontSize: 12,
-                        color: secondary40,
+                        color: AppColors.secondary40,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -571,7 +576,7 @@ class FormAccountDetail extends StatelessWidget {
                       () => Text(
                         detailController.profileOwner.value!.address,
                         style: const TextStyle(
-                          color: primary40,
+                          color: AppColors.primary40,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
@@ -612,7 +617,7 @@ class FormAccountDetail extends StatelessWidget {
                             'Giới tính',
                             style: TextStyle(
                               fontSize: 12,
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -625,7 +630,7 @@ class FormAccountDetail extends StatelessWidget {
                                   ? 'Name'
                                   : 'Nữ',
                               style: const TextStyle(
-                                color: primary40,
+                                color: AppColors.primary40,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -665,7 +670,7 @@ class FormAccountDetail extends StatelessWidget {
                             'Năm sinh',
                             style: TextStyle(
                               fontSize: 12,
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -677,7 +682,7 @@ class FormAccountDetail extends StatelessWidget {
                               detailController.profileOwner.value!.dateOfBirth
                                   .toString(),
                               style: const TextStyle(
-                                color: primary40,
+                                color: AppColors.primary40,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -702,7 +707,8 @@ class FormAccountDetail extends StatelessWidget {
                 alignment: Alignment.center,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100), color: primary60),
+                    borderRadius: BorderRadius.circular(100),
+                    color: AppColors.primary60),
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(

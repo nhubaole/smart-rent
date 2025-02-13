@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
+import '/core/model/account/Account.dart';
+import '/core/resources/auth_methods.dart';
 
 class PostReviewController extends GetxController {
   final String roomId;
@@ -28,7 +27,6 @@ class PostReviewController extends GetxController {
 
   @override
   void onInit() {
-    getListReviews(false);
     getProfile(FirebaseAuth.instance.currentUser!.uid);
     super.onInit();
   }
@@ -37,38 +35,5 @@ class PostReviewController extends GetxController {
     isLoading.value = true;
     profileOwner.value = await AuthMethods.getUserDetails(uid);
     isLoading.value = false;
-  }
-
-  Future<void> getListReviews(bool isPagination) async {
-    if (isPagination) {
-      isLoadMore.value = true;
-      listReview.value.clear();
-      response.value =
-          await FireStoreMethods().getListReviews(roomId, page.value += 10);
-      listReview.value = response.value['list'];
-      counter.value = listReview.value.length;
-      sumRating.value = response.value['sumRating'];
-      everage.value = sumRating.value / counter.value * 1.0;
-      counterFiveStars.value = response.value['counterFiveStars'];
-      counterFourStars.value = response.value['counterFourStars'];
-      counterThreeStars.value = response.value['counterThreeStars'];
-      counterTwoStars.value = response.value['counterTwoStars'];
-      counterOneStars.value = response.value['counterOneStars'];
-      isLoadMore.value = false;
-    } else {
-      isLoading.value = true;
-      listReview.value.clear();
-      response.value = await FireStoreMethods().getListReviews(roomId, 10);
-      listReview.value = response.value['list'];
-      counter.value = listReview.value.length;
-      sumRating.value = response.value['sumRating'];
-      everage.value = sumRating.value / counter.value * 1.0;
-      counterFiveStars.value = response.value['counterFiveStars'];
-      counterFourStars.value = response.value['counterFourStars'];
-      counterThreeStars.value = response.value['counterThreeStars'];
-      counterTwoStars.value = response.value['counterTwoStars'];
-      counterOneStars.value = response.value['counterOneStars'];
-      isLoading.value = false;
-    }
   }
 }

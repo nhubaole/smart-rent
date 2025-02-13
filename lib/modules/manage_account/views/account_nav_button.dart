@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/login/views/login_screen.dart';
-import 'package:smart_rent/modules/manage_account/controllers/account_nav_button_controller.dart';
-import 'package:smart_rent/modules/manage_account/views/nav_screen/account_detail.dart';
-import 'package:smart_rent/modules/manage_account/views/nav_screen/notify_setting.dart';
-import 'package:smart_rent/modules/manage_account/views/nav_screen/policy.dart';
+import '../../../core/config/app_colors.dart';
+import '../../auth/login/views/login_screen.dart';
+import '/core/resources/auth_methods.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_account/controllers/account_nav_button_controller.dart';
+import '/modules/manage_account/views/nav_screen/account_detail.dart';
+import '/modules/manage_account/views/nav_screen/notify_setting.dart';
+import '/modules/manage_account/views/nav_screen/policy.dart';
 
 class AccountNavButton extends StatelessWidget {
   const AccountNavButton({super.key});
@@ -37,7 +38,7 @@ class AccountNavButton extends StatelessWidget {
             AccountButtonNav(
               nameButton: 'Điều khoản và chính sách',
               onPressed: () {
-                Get.to(PolicyScreen());
+                Get.to(const PolicyScreen());
               },
               firstIcon: Icons.verified_user,
             ),
@@ -73,7 +74,8 @@ class AccountNavButton extends StatelessWidget {
                 alignment: Alignment.center,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100), color: primary60),
+                    borderRadius: BorderRadius.circular(100),
+                    color: AppColors.primary60),
                 child: const Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Row(
@@ -118,7 +120,7 @@ class AccountButtonNav extends StatelessWidget {
     return ElevatedButton.icon(
       icon: Icon(
         firstIcon,
-        color: primary40,
+        color: AppColors.primary40,
       ),
       label: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,24 +131,24 @@ class AccountButtonNav extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: primary40,
+              color: AppColors.primary40,
             ),
           ),
           const Icon(
             Icons.arrow_forward_ios,
-            color: primary40,
+            color: AppColors.primary40,
           )
         ],
       ),
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
-        shadowColor: secondary80,
+        shadowColor: AppColors.secondary80,
         //foregroundColor: Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           // side: const BorderSide(
-          //   color: secondary80,
+          //   color: AppColors.secondary80,
           // ),
         ),
         fixedSize: const Size(

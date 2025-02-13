@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/invoice/invoice_manage_controller.dart';
+import '../../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/manage_room/controllers/sub_screen_controller/invoice/invoice_manage_controller.dart';
 
 class InvoiceManage extends StatefulWidget {
   const InvoiceManage({super.key});
@@ -48,16 +48,16 @@ class _InvoiceManageState extends State<InvoiceManage>
           title: const Text(
             'Hóa đơn tiền cọc',
             style: TextStyle(
-              color: primary40,
+              color: AppColors.primary40,
               fontSize: 22,
               fontWeight: FontWeight.w700,
             ),
           ),
           bottom: TabBar(
             controller: invoiceManageController.tabController,
-            labelColor: primary40,
+            labelColor: AppColors.primary40,
             indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: primary40,
+            indicatorColor: AppColors.primary40,
             tabs: [
               Obx(
                 () => Tab(
@@ -94,12 +94,12 @@ class _InvoiceManageState extends State<InvoiceManage>
         return invoiceManageController.getInvoiceUnPaid(true);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
         child: Center(
           child: Obx(
             () => invoiceManageController.isLoading.value
                 ? const CircularProgressIndicator(
-                    color: primary95,
+                    color: AppColors.primary95,
                     backgroundColor: Colors.white,
                   )
                 : invoiceManageController.listInvoiceUnPaid.value.isEmpty
@@ -119,7 +119,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                             const Text(
                               'Bạn chưa có hóa đơn phải thanh toán',
                               style: TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w200,
                               ),
@@ -134,12 +134,12 @@ class _InvoiceManageState extends State<InvoiceManage>
                                         .getInvoiceUnPaid(false);
                                   },
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.all(
+                                    side: WidgetStateProperty.all(
                                       const BorderSide(
-                                        color: primary40,
+                                        color: AppColors.primary40,
                                       ),
                                     ),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -148,7 +148,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                                   child: const Text(
                                     'Tải lại',
                                     style: TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                     ),
                                   ),
                                 ),
@@ -179,7 +179,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                               () => invoiceManageController.isLoadMore.value
                                   ? const Center(
                                       child: CircularProgressIndicator(
-                                        color: primary95,
+                                        color: AppColors.primary95,
                                         backgroundColor: Colors.white,
                                       ),
                                     )
@@ -192,12 +192,12 @@ class _InvoiceManageState extends State<InvoiceManage>
                                                 .getInvoiceUnPaid(true);
                                           },
                                           style: ButtonStyle(
-                                            side: MaterialStateProperty.all(
+                                            side: WidgetStateProperty.all(
                                               const BorderSide(
-                                                color: primary40,
+                                                color: AppColors.primary40,
                                               ),
                                             ),
-                                            shape: MaterialStateProperty.all(
+                                            shape: WidgetStateProperty.all(
                                               RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -207,7 +207,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                                           child: const Text(
                                             'Xem thêm',
                                             style: TextStyle(
-                                              color: primary40,
+                                              color: AppColors.primary40,
                                             ),
                                           ),
                                         ),
@@ -229,12 +229,12 @@ class _InvoiceManageState extends State<InvoiceManage>
         return invoiceManageController.getInvoicePaid(true);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
         child: Center(
           child: Obx(
             () => invoiceManageController.isLoading.value
                 ? const CircularProgressIndicator(
-                    color: primary95,
+                    color: AppColors.primary95,
                     backgroundColor: Colors.white,
                   )
                 : invoiceManageController.listInvoicePaid.value.isEmpty
@@ -254,7 +254,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                             const Text(
                               'Bạn chưa có hóa đơn đã thanh toán',
                               style: TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w200,
                               ),
@@ -269,12 +269,12 @@ class _InvoiceManageState extends State<InvoiceManage>
                                         .getInvoicePaid(false);
                                   },
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.all(
+                                    side: WidgetStateProperty.all(
                                       const BorderSide(
-                                        color: primary40,
+                                        color: AppColors.primary40,
                                       ),
                                     ),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -283,7 +283,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                                   child: const Text(
                                     'Tải lại',
                                     style: TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                     ),
                                   ),
                                 ),
@@ -314,7 +314,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                               () => invoiceManageController.isLoadMore.value
                                   ? const Center(
                                       child: CircularProgressIndicator(
-                                        color: primary95,
+                                        color: AppColors.primary95,
                                         backgroundColor: Colors.white,
                                       ),
                                     )
@@ -327,12 +327,12 @@ class _InvoiceManageState extends State<InvoiceManage>
                                                 .getInvoicePaid(true);
                                           },
                                           style: ButtonStyle(
-                                            side: MaterialStateProperty.all(
+                                            side: WidgetStateProperty.all(
                                               const BorderSide(
-                                                color: primary40,
+                                                color: AppColors.primary40,
                                               ),
                                             ),
-                                            shape: MaterialStateProperty.all(
+                                            shape: WidgetStateProperty.all(
                                               RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -342,7 +342,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                                           child: const Text(
                                             'Xem thêm',
                                             style: TextStyle(
-                                              color: primary40,
+                                              color: AppColors.primary40,
                                             ),
                                           ),
                                         ),
@@ -365,7 +365,7 @@ class _InvoiceManageState extends State<InvoiceManage>
     String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     return Container(
       decoration: BoxDecoration(
-          color: primary98, borderRadius: BorderRadius.circular(10)),
+          color: AppColors.primary98, borderRadius: BorderRadius.circular(10)),
       padding: EdgeInsets.symmetric(
         horizontal: deviceWidth * 0.05,
       ),
@@ -376,7 +376,7 @@ class _InvoiceManageState extends State<InvoiceManage>
             height: deviceHeight * 0.12,
             width: deviceWidth * 0.12,
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           Expanded(
@@ -390,7 +390,7 @@ class _InvoiceManageState extends State<InvoiceManage>
                       ? 'Nhận tiền từ ${transaction['invoice']['recieverName']}'
                       : 'Chuyển tiền đến ${transaction['invoice']['recieverName']}',
                   style: const TextStyle(
-                    color: secondary20,
+                    color: AppColors.secondary20,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -399,8 +399,8 @@ class _InvoiceManageState extends State<InvoiceManage>
                 ),
                 Text(
                   formattedDate,
-                  style: TextStyle(
-                    color: secondary40,
+                  style: const TextStyle(
+                    color: AppColors.secondary40,
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                   ),
@@ -417,8 +417,8 @@ class _InvoiceManageState extends State<InvoiceManage>
                         //width: deviceWidth * 0.5,
                         child: Text(
                           'Nội dung: ${transaction['invoice']['description']}',
-                          style: TextStyle(
-                            color: secondary40,
+                          style: const TextStyle(
+                            color: AppColors.secondary40,
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),

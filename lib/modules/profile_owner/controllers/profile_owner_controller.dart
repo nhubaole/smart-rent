@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import '/core/model/account/Account.dart';
+import '/core/resources/auth_methods.dart';
+import '/core/values/KEY_VALUE.dart';
 
 class ProfileOwnerController extends GetxController {
   final String uidOwner;
@@ -13,7 +12,7 @@ class ProfileOwnerController extends GetxController {
   var isLoading = false.obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  RxList<Room> listRoom = <Room>[].obs;
+  RxList<RoomModel> listRoom = <RoomModel>[].obs;
 
   @override
   void onInit() {
@@ -29,24 +28,6 @@ class ProfileOwnerController extends GetxController {
   }
 
   Future<void> getListRoom() async {
-    isLoading.value = true;
-    update();
-    try {
-      final querySnapshot = await firestore
-          .collection(KeyValue.KEY_COLLECTION_ROOM)
-          .where('createdByUid', isEqualTo: uidOwner)
-          .get();
-      listRoom.value = querySnapshot.docs
-          .map(
-            (e) => Room.fromJson(
-              e.data(),
-            ),
-          )
-          .toList();
-      update();
-      isLoading.value = false;
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    }
+    
   }
 }

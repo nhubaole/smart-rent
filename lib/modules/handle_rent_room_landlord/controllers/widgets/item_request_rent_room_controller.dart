@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
+import '/core/model/account/Account.dart';
+import '/core/resources/auth_methods.dart';
 
 class ItemRequestRentRoomController extends GetxController {
   final Map<String, dynamic> data;

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
-import 'package:smart_rent/modules/payment/views/detail_transaction_screen.dart';
+import '/core/model/invoice/invoice.dart';
+import '/modules/payment/views/detail_transaction_screen.dart';
 
 class PaymentInfoController extends GetxController {
   final Invoice invoice;
@@ -20,8 +19,6 @@ class PaymentInfoController extends GetxController {
   void onInit() async {
     isLoading.value = true;
 
-    orderCode = await FireStoreMethods().getNewestOrderCode() + 1;
-    print(orderCode);
     super.onInit();
 
     isLoading.value = false;
@@ -39,41 +36,7 @@ class PaymentInfoController extends GetxController {
     return 'Credit Card';
   }
 
-  Future<int> getOrderCode() async {
-    return await FireStoreMethods().getNewestOrderCode();
-  }
-
-  // Invoice orderInvoice() {
-  //   return Invoice(
-  //     orderCode: orderCode,
-  //     recieverId: 'x47CBjhEVvVD4sBVWMDkYHYgfcg1',
-  //     recieverName: 'Le Bao Nhu',
-  //     recieverPhoneNumber: '+84823306992',
-  //     recieverNumberBank: 'recieverNumberBank',
-  //     recieverBank: 'recieverBank',
-  //     addressRoom: 'addressRoom',
-  //     amountRoom: 5000,
-  //     description: 'test coc phong tro',
-  //     buyerId: FirebaseAuth.instance.currentUser!.uid,
-  //     buyerName: 'Pham Quoc Danh',
-  //     buyerEmail: 'quocdanhmyker@gmail.com',
-  //     buyerPhone: '+84373855259',
-  //     buyerAddress: 'buyerAddress',
-  //     items: [
-  //       {
-  //         'name': 'Phong tro',
-  //         'quantity': 1,
-  //         'price': 5000,
-  //         'description': 'Phong tro',
-  //       }
-  //     ],
-  //     roomId: '7DogDiAfgjQqfItXyG6a',
-  //   );
-  // }
-
   Invoice orderInvoice() {
-    print(orderCode);
-    print(invoice.items);
     return Invoice(
       orderCode: orderCode,
       recieverId: invoice.recieverId,

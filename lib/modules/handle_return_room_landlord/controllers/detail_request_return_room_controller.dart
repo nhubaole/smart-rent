@@ -1,13 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/payment/views/payment_info_screen.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/model/account/Account.dart';
+import '/core/model/invoice/invoice.dart';
+import '/core/resources/auth_methods.dart';
+import '/core/values/app_colors.dart';
+import '/modules/payment/views/payment_info_screen.dart';
 
 class DetailRequestReturnRoomScreenController extends GetxController {
   final String roomId;
@@ -33,56 +31,11 @@ class DetailRequestReturnRoomScreenController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> getInvoiceMap() async {
-    invoiceMap = await FireStoreMethods().getpOneNewestInvoice(
-      roomId,
-      profileOwner.value!.uid,
-      true,
-    );
-  }
-
   Future<void> getDetailTicket(String roomId) async {
     isLoading.value = true;
-    detailTicket.value = await FireStoreMethods().getTicketRequestReturnRent(
-      FirebaseAuth.instance.currentUser!.uid,
-      roomId,
-      'PENDING',
-    );
+
     await getProfile(detailTicket.value['uidTenant']);
-    await getInvoiceMap();
     isLoading.value = false;
-  }
-
-  Future<Invoice> createInvoice() async {
-    Room room = await FireStoreMethods().getRoomById(roomId);
-    Account accountSender = await AuthMethods.getUserDetails(
-        FirebaseAuth.instance.currentUser!.uid);
-
-    return Invoice(
-      orderCode: 0,
-      recieverId: profileOwner.value!.uid,
-      recieverName: profileOwner.value!.username,
-      recieverPhoneNumber: profileOwner.value!.phoneNumber,
-      recieverNumberBank: 'recieverNumberBank',
-      recieverBank: 'recieverBank',
-      roomId: room.id,
-      addressRoom: room.location,
-      amountRoom: invoiceMap['invoice']['amountRoom'],
-      description: 'Tra tien coc',
-      buyerId: accountSender.uid,
-      buyerName: accountSender.username,
-      buyerEmail: accountSender.email,
-      buyerPhone: accountSender.phoneNumber,
-      buyerAddress: accountSender.address,
-      items: [
-        {
-          'name': 'Tra tien phong tro',
-          'quantity': 1,
-          'price': invoiceMap['invoice']['amountRoom'],
-          'description': 'tra tien hoc cho nguoi thue',
-        }
-      ],
-    );
   }
 
   Future<void> showDialogLoading() async {
@@ -98,14 +51,14 @@ class DetailRequestReturnRoomScreenController extends GetxController {
               mainAxisSize: MainAxisSize.max,
               children: [
                 CircularProgressIndicator(
-                  color: primary60,
+                  color: AppColors.primary60,
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
                   'Đang xử lý dữ liệu thanh toán...',
-                  style: TextStyle(color: primary60),
+                  style: TextStyle(color: AppColors.primary60),
                 ),
               ],
             ),
@@ -114,7 +67,6 @@ class DetailRequestReturnRoomScreenController extends GetxController {
       ),
       barrierDismissible: false,
     );
-    invoice = await createInvoice();
     await Future.delayed(
       const Duration(seconds: 1),
     );

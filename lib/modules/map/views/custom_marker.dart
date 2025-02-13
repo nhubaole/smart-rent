@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-
+import 'package:smart_rent/core/model/room/room_model.dart';
 // ignore: must_be_immutable
 class CustomMarker extends StatelessWidget {
   const CustomMarker({
+    super.key,
     required this.room,
   });
 
-  final Room room;
+  final RoomModel room;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,13 @@ class CustomMarker extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  room.title,
+                  room.title!,
                   style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  'Giá: ${room.price.toString()}',
+                  'Giá: ${room.totalPrice.toString()}',
                   style: const TextStyle(
                     color: Colors.white,
                   ),

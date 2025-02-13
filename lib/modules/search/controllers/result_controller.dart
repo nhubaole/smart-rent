@@ -1,7 +1,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:get/get.dart';
-// import 'package:smart_rent/core/model/room/room.dart';
-// import 'package:smart_rent/core/values/KEY_VALUE.dart';
+// import '/core/model/room/room.dart';
+// import '/core/values/KEY_VALUE.dart';
 // import 'package:tiengviet/tiengviet.dart';
 
 // class ResultController extends GetxController {

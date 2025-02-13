@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/enums/utilities.dart';
+import '/modules/search/controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
 class UtilFilterPage extends StatelessWidget {
@@ -25,8 +26,8 @@ class UtilFilterPage extends StatelessWidget {
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.all(0),
                 backgroundColor: controller.utilList[index].isChecked
-                    ? primary98
-                    : secondary90,
+                    ? AppColors.primary98
+                    : AppColors.secondary90,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -37,19 +38,19 @@ class UtilFilterPage extends StatelessWidget {
                 controller.setUtil();
               },
               icon: Icon(
-                controller.utilList[index].utility.getIconUtil(),
+                controller.utilList[index].utility.getIconUtil,
                 size: 20,
                 color: controller.utilList[index].isChecked
-                    ? primary40
-                    : secondary40,
+                    ? AppColors.primary40
+                    : AppColors.secondary40,
               ),
               label: Text(
-                controller.utilList[index].utility.getNameUtil(),
+                controller.utilList[index].utility.getNameUtil,
                 style: TextStyle(
                     fontSize: 12,
                     color: controller.utilList[index].isChecked
-                        ? primary40
-                        : secondary40,
+                        ? AppColors.primary40
+                        : AppColors.secondary40,
                     fontWeight: FontWeight.w500),
               ),
             );

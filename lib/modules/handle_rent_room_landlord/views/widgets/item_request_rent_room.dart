@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/controllers/widgets/item_request_rent_room_controller.dart';
+
+import '../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/handle_rent_room_landlord/controllers/widgets/item_request_rent_room_controller.dart';
 
 // ignore: must_be_immutable
 class ItemRequestRentRoom extends StatelessWidget {
@@ -31,7 +33,7 @@ class ItemRequestRentRoom extends StatelessWidget {
       ),
       child: Card(
         elevation: 0,
-        color: primary98,
+        color: AppColors.primary98,
         shape: RoundedRectangleBorder(
           side: const BorderSide(
             color: Colors.transparent,
@@ -56,7 +58,7 @@ class ItemRequestRentRoom extends StatelessWidget {
                   Text(
                     '#...${data['id'].substring(data['id'].length - 5)}',
                     style: const TextStyle(
-                      color: secondary60,
+                      color: AppColors.secondary60,
                       fontSize: 18,
                     ),
                     maxLines: 1,
@@ -109,14 +111,14 @@ class ItemRequestRentRoom extends StatelessWidget {
                   Text(
                     'Khách hàng',
                     style: TextStyle(
-                      color: secondary40,
+                      color: AppColors.secondary40,
                       fontSize: 14,
                     ),
                   ),
                   Text(
                     'Giá đề xuất',
                     style: TextStyle(
-                      color: secondary40,
+                      color: AppColors.secondary40,
                       fontSize: 14,
                     ),
                   ),
@@ -193,7 +195,7 @@ class ItemRequestRentRoom extends StatelessWidget {
                       Text(
                         '${oCcy.format(data['price'])}đ',
                         style: const TextStyle(
-                          color: primary40,
+                          color: AppColors.primary40,
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
@@ -204,7 +206,7 @@ class ItemRequestRentRoom extends StatelessWidget {
                       Text(
                         formattedDate,
                         style: const TextStyle(
-                          color: secondary60,
+                          color: AppColors.secondary60,
                           fontSize: 16,
                         ),
                       ),

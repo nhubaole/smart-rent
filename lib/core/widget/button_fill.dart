@@ -23,8 +23,8 @@ class ButtonFill extends StatelessWidget {
       icon: icon,
       label: text,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: borderRadius,
           ),

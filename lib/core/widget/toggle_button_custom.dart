@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 
 class ToggleButtonsCustom extends StatefulWidget {
   const ToggleButtonsCustom({
@@ -28,10 +28,10 @@ class _ToggleButtonsCustomState extends State<ToggleButtonsCustom> {
   @override
   Widget build(BuildContext context) {
     return ToggleButtons(
-      fillColor: primary95.withOpacity(0.2),
+      fillColor: AppColors.primary95.withOpacity(0.2),
       selectedBorderColor: Colors.blue,
       color: Colors.black,
-      selectedColor: primary40,
+      selectedColor: AppColors.primary40,
       isSelected: _selections,
       onPressed: (int index) {
         setState(
@@ -50,7 +50,7 @@ class _ToggleButtonsCustomState extends State<ToggleButtonsCustom> {
               children: [
                 Icon(
                   item.value.icon,
-                  color: primary60,
+                  color: AppColors.primary60,
                 ),
                 Text(item.key),
               ],

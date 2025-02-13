@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import '../config/app_colors.dart';
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? file = await imagePicker.pickImage(source: source);
 
-  if (_file != null) {
-    return await _file.readAsBytes();
+  if (file != null) {
+    return await file.readAsBytes();
   }
 
   print('No image selected');
@@ -31,7 +31,7 @@ final defaultPinTheme = PinTheme(
       fontWeight: FontWeight.w600),
   decoration: BoxDecoration(
     border: Border.all(
-      color: primary40,
+      color: AppColors.primary40,
       width: 2,
     ),
     borderRadius: BorderRadius.circular(20),

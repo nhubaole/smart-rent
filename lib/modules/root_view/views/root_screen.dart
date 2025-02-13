@@ -1,69 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/sockets/src/socket_notifier.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/conversation_screen.dart';
-import 'package:smart_rent/modules/home/controllers/home_screen_controller.dart';
-import 'package:smart_rent/modules/home/views/home_screen.dart';
-import 'package:smart_rent/modules/manage_account/controllers/nav_controller/account_detail_controller.dart';
-import 'package:smart_rent/modules/manage_account/views/manage_account_screen.dart';
-import 'package:smart_rent/modules/manage_room/controllers/manage_room_controller.dart';
-import 'package:smart_rent/modules/manage_room/views/manage_room_screen.dart';
-import 'package:smart_rent/modules/root_view/controllers/root_screen_controller.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
+import '/modules/root_view/controllers/root_screen_controller.dart';
 
-class RootScreen extends StatefulWidget {
+class RootScreen extends GetView<RootScreenController> {
   const RootScreen({super.key});
 
   @override
-  State<RootScreen> createState() => _RootScreenState();
-}
-
-class _RootScreenState extends State<RootScreen> {
-  final rootController = Get.put(RootScreenController(), permanent: true);
-  final home = Get.lazyPut(
-    () => HomeScreenController(),
-    fenix: true,
-  );
-  final mgRoom = Get.lazyPut(
-    () => ManageRoomController(),
-    fenix: true,
-  );
-  final mgAccount = Get.lazyPut(
-    () => ManageRoomController(),
-    fenix: true,
-  );
-  final detailAccount = Get.lazyPut(
-    () => AccountDetailController(),
-    fenix: true,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    //rootController.setIsOnline(false);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final screens = [
-      HomeScreen(),
-      ManageRoomScreen(),
-      ConversationScreen(),
-      ManageAccountScreen(),
-    ];
-
-    return Scaffold(
+    return ScaffoldWidget(
       body: PageView(
-        onPageChanged: rootController.animateToTab,
-        controller: rootController.pageController,
+        onPageChanged: controller.animateToTab,
+        controller: controller.pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: screens,
+        children: controller.screens,
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(
@@ -76,7 +28,7 @@ class _RootScreenState extends State<RootScreen> {
             vertical: 2,
           ),
           child: GNav(
-            tabActiveBorder: Border.all(color: primary60, width: 1),
+            tabActiveBorder: Border.all(color: AppColors.primary60, width: 1),
             haptic: true,
             //curve: Curves.easeOut,
             //duration: const Duration(milliseconds: 200),
@@ -87,12 +39,12 @@ class _RootScreenState extends State<RootScreen> {
               vertical: 10,
               horizontal: 5,
             ),
-            activeColor: primary40,
-            rippleColor: primary95,
-            hoverColor: primary98,
-            tabBackgroundColor: primary98,
+            activeColor: AppColors.primary40,
+            rippleColor: AppColors.primary95,
+            hoverColor: AppColors.primary98,
+            tabBackgroundColor: AppColors.primary98,
             onTabChange: (index) {
-              rootController.changeScreen(index);
+              controller.changeScreen(index);
             },
             tabs: const [
               GButton(icon: Icons.home_outlined, text: 'Trang Chủ'),

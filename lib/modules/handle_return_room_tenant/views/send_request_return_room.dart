@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/core/widget/date_input_form_field.dart';
-import 'package:smart_rent/core/widget/text_form_field_input.dart';
-import 'package:smart_rent/modules/handle_return_room_tenant/controllers/send_request_return_room_controller.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/widget/date_input_form_field.dart';
+import '/core/widget/text_form_field_input.dart';
+import '/modules/handle_return_room_tenant/controllers/send_request_return_room_controller.dart';
 
 // ignore: must_be_immutable
 class SendRequestReturnRoom extends StatelessWidget {
@@ -15,7 +16,7 @@ class SendRequestReturnRoom extends StatelessWidget {
     this.result,
   });
   Map<String, dynamic>? result;
-  final Room room;
+  final RoomModel room;
   late double deviceHeight;
   late double deviceWidth;
 
@@ -23,7 +24,7 @@ class SendRequestReturnRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
-    var date = DateTime.fromMillisecondsSinceEpoch(room.dateTime * 1000);
+    var date = DateTime.fromMillisecondsSinceEpoch(1 * 1000);
     String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     final sendRequestController = Get.put(
       SendRequestReturnRoomController(
@@ -34,11 +35,11 @@ class SendRequestReturnRoom extends StatelessWidget {
     final oCcy = NumberFormat("#,##0", "vi_VN");
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary98,
+        backgroundColor: AppColors.primary98,
         title: const Text(
           'Gửi yêu cầu trả phòng',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -66,7 +67,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                       const Text(
                         'Thông tin xác nhận',
                         style: TextStyle(
-                          color: primary40,
+                          color: AppColors.primary40,
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
@@ -86,9 +87,9 @@ class SendRequestReturnRoom extends StatelessWidget {
                         height: deviceHeight * 0.005,
                       ),
                       Text(
-                        room.title,
+                        room.title!,
                         style: const TextStyle(
-                          color: secondary40,
+                          color: AppColors.secondary40,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),
@@ -110,9 +111,9 @@ class SendRequestReturnRoom extends StatelessWidget {
                         height: deviceHeight * 0.005,
                       ),
                       Text(
-                        room.location,
+                        room.address![0],
                         style: const TextStyle(
-                          color: secondary40,
+                          color: AppColors.secondary40,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),
@@ -134,9 +135,9 @@ class SendRequestReturnRoom extends StatelessWidget {
                         height: deviceHeight * 0.005,
                       ),
                       Text(
-                        '${oCcy.format(room.price)}đ',
+                        '${oCcy.format(room.totalPrice)}đ',
                         style: const TextStyle(
-                          color: secondary40,
+                          color: AppColors.secondary40,
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
                         ),
@@ -161,7 +162,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.calendar_today_rounded,
-                            color: secondary40,
+                            color: AppColors.secondary40,
                           ),
                           SizedBox(
                             width: deviceWidth * 0.03,
@@ -169,7 +170,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                           Text(
                             formattedDate,
                             style: const TextStyle(
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                             ),
@@ -188,7 +189,7 @@ class SendRequestReturnRoom extends StatelessWidget {
               const Text(
                 'Yêu cầu trả phòng',
                 style: TextStyle(
-                  color: primary40,
+                  color: AppColors.primary40,
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -199,7 +200,7 @@ class SendRequestReturnRoom extends StatelessWidget {
               const Text(
                 'Ngày trả phòng',
                 style: TextStyle(
-                  color: secondary40,
+                  color: AppColors.secondary40,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
@@ -208,7 +209,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                 () => SwitchListTile(
                   value: sendRequestController.isReturnNow.value,
                   activeColor: Colors.white,
-                  activeTrackColor: primary60,
+                  activeTrackColor: AppColors.primary60,
                   controlAffinity: ListTileControlAffinity.leading,
                   contentPadding: const EdgeInsets.only(
                     left: 0,
@@ -219,7 +220,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                   title: const Text(
                     'Muốn trả phòng ngay',
                     style: TextStyle(
-                      color: primary40,
+                      color: AppColors.primary40,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -243,7 +244,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                               lastDate: DateTime.now().year + 1,
                               borderRadius: BorderRadius.circular(8),
                               borderWidth: 2,
-                              borderColor: primary60,
+                              borderColor: AppColors.primary60,
                               textEditingController:
                                   sendRequestController.textFormReturnDate,
                               labelText: 'Ngày trả phòng',
@@ -269,7 +270,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                     const Text(
                       'Lí do',
                       style: TextStyle(
-                        color: secondary40,
+                        color: AppColors.secondary40,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -283,7 +284,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                       textInputType: TextInputType.text,
                       borderRadius: BorderRadius.circular(8),
                       borderWidth: 2,
-                      borderColor: primary60,
+                      borderColor: AppColors.primary60,
                       icon: const Icon(
                         Icons.text_decrease,
                       ),
@@ -306,7 +307,7 @@ class SendRequestReturnRoom extends StatelessWidget {
               const Text(
                 'Bằng việc gửi yêu cầu trả phòng, bạn cam kết trả phòng đúng thời gian quy định ',
                 style: TextStyle(
-                  color: secondary40,
+                  color: AppColors.secondary40,
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
                   textBaseline: TextBaseline.alphabetic,
@@ -320,7 +321,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                   title: const Text(
                     'Tôi cam kết thực hiện đúng như hợp đồng',
                     style: TextStyle(
-                      color: secondary20,
+                      color: AppColors.secondary20,
                       fontSize: 14,
                     ),
                   ),
@@ -328,7 +329,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                   onChanged: (value) {
                     sendRequestController.isAgreePolicy.value = value!;
                   },
-                  activeColor: primary40,
+                  activeColor: AppColors.primary40,
                   contentPadding: const EdgeInsets.only(
                     left: 0,
                   ),
@@ -345,7 +346,7 @@ class SendRequestReturnRoom extends StatelessWidget {
                             child: const Text(
                               'Gửi yêu cầu',
                               style: TextStyle(
-                                color: primary40,
+                                color: AppColors.primary40,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),

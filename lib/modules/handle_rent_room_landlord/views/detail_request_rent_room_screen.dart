@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/chat/views/chat_screen.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/controllers/detail_request_rent_room_controller.dart';
+import 'package:smart_rent/core/routes/app_routes.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/chat/views/chat_screen.dart';
+import '/modules/handle_rent_room_landlord/controllers/detail_request_rent_room_controller.dart';
 
 // ignore: must_be_immutable
 class DetailRequestRentRoomScreen extends StatelessWidget {
@@ -24,7 +26,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
     final oCcy = NumberFormat("#,##0", "vi_VN");
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary40,
+        backgroundColor: AppColors.primary40,
         foregroundColor: Colors.white,
         title: const Text(
           'Chi tiết yêu cầu',
@@ -35,7 +37,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
           child: Obx(
         () => detailRequestController.isLoading.value
             ? const CircularProgressIndicator(
-                color: primary95,
+                color: AppColors.primary95,
                 backgroundColor: Colors.white,
               )
             : Padding(
@@ -55,7 +57,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           child: Text(
                             'Yêu cầu #...${data['id'].substring(data['id'].length - 8)}',
                             style: const TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                             ),
@@ -64,7 +66,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                         const Spacer(),
                         const Icon(
                           Icons.timelapse,
-                          color: secondary60,
+                          color: AppColors.secondary60,
                           size: 20,
                         ),
                         SizedBox(
@@ -73,7 +75,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                         Text(
                           formattedDate,
                           style: const TextStyle(
-                            color: secondary60,
+                            color: AppColors.secondary60,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -82,10 +84,10 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                     ),
                     Card(
                       elevation: 0,
-                      color: primary40,
+                      color: AppColors.primary40,
                       shape: RoundedRectangleBorder(
                         side: const BorderSide(
-                          color: primary40,
+                          color: AppColors.primary40,
                         ),
                         borderRadius: BorderRadius.circular(deviceWidth * 0.02),
                       ),
@@ -163,14 +165,14 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                     ElevatedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
-                                                primary98),
+                                            WidgetStateProperty.all(
+                                                AppColors.primary98),
                                         foregroundColor:
-                                            MaterialStateProperty.all(
-                                                primary40),
-                                        padding: MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
+                                                AppColors.primary40),
+                                        padding: WidgetStateProperty.all(
                                             EdgeInsets.zero),
-                                        shape: MaterialStateProperty.all<
+                                        shape: WidgetStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                             borderRadius:
@@ -178,25 +180,17 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () async {
-                                        Get.to(
-                                          () => ChatScreen(
-                                            conversationID:
-                                                detailRequestController
-                                                    .profileOwner
-                                                    .value!
-                                                    .phoneNumber,
-                                            conversationName:
-                                                detailRequestController
-                                                    .profileOwner
-                                                    .value!
-                                                    .username,
-                                            userId: detailRequestController
-                                                .profileOwner
-                                                .value!
-                                                .phoneNumber,
-                                          ),
-                                        );
+                                      onPressed: () {
+                                        Get.toNamed(AppRoutes.chat, arguments: {
+                                          'conversationId': 22,
+                                          'companionName':
+                                              detailRequestController
+                                        .profileOwner.value!.username,
+                                          'companionAvatarUrl':
+                                              detailRequestController
+                                        .profileOwner.value!.photoUrl,
+                                          'companionId': 76,
+                                        });
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
@@ -229,14 +223,14 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                     ElevatedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
-                                                secondary90),
+                                            WidgetStateProperty.all(
+                                                AppColors.secondary90),
                                         foregroundColor:
-                                            MaterialStateProperty.all(
-                                                secondary40),
-                                        padding: MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
+                                                AppColors.secondary40),
+                                        padding: WidgetStateProperty.all(
                                             EdgeInsets.zero),
-                                        shape: MaterialStateProperty.all<
+                                        shape: WidgetStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                             borderRadius:
@@ -299,7 +293,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           const Text(
                             'Giá đề xuất',
                             style: TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -310,7 +304,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           Text(
                             '${oCcy.format(data['price'])}đ',
                             style: const TextStyle(
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ),
@@ -320,7 +314,8 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => data['price'] >
-                                    detailRequestController.room.value!.price
+                                    detailRequestController
+                                        .room.value!.totalPrice
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -335,7 +330,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                         width: deviceWidth * 0.01,
                                       ),
                                       Text(
-                                        'Cao hơn giá niêm yết ${oCcy.format(data['price'] - detailRequestController.room.value!.price)} đ',
+                                        'Cao hơn giá niêm yết ${oCcy.format(data['price'] - detailRequestController.room.value!.totalPrice)} đ',
                                         style: const TextStyle(
                                           color: Colors.green,
                                           fontSize: 15,
@@ -345,7 +340,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                   )
                                 : data['price'] <
                                         detailRequestController
-                                            .room.value!.price
+                                            .room.value!.totalPrice
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -361,7 +356,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                             width: deviceWidth * 0.01,
                                           ),
                                           Text(
-                                            'Thấp hơn giá niêm yết ${oCcy.format(detailRequestController.room.value!.price - data['price'])} đ',
+                                            'Thấp hơn giá niêm yết ${oCcy.format(detailRequestController.room.value!.totalPrice! - data['price'])} đ',
                                             style: const TextStyle(
                                               color: Colors.red,
                                               fontSize: 15,
@@ -399,7 +394,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           const Text(
                             'Số lượng người dự định ở cùng',
                             style: TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -410,7 +405,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           Text(
                             '${data['quantityPeople']} người',
                             style: const TextStyle(
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
                             ),
@@ -472,7 +467,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           const Text(
                             'Ngày bắt đầu thuê',
                             style: TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -494,7 +489,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                     ? formattedDate
                                     : data['dateJoin'],
                                 style: const TextStyle(
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -507,7 +502,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           const Text(
                             'Ngày kết thúc thuê',
                             style: TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -529,7 +524,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                                     ? formattedDate
                                     : data['dateLeave'],
                                 style: const TextStyle(
-                                  color: secondary40,
+                                  color: AppColors.secondary40,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -542,7 +537,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           const Text(
                             'Yêu cầu đặc biệt',
                             style: TextStyle(
-                              color: secondary20,
+                              color: AppColors.secondary20,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -553,7 +548,7 @@ class DetailRequestRentRoomScreen extends StatelessWidget {
                           Text(
                             data['specialRequest'],
                             style: const TextStyle(
-                              color: secondary40,
+                              color: AppColors.secondary40,
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
                             ),

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'district.freezed.dart';
 part 'district.g.dart';
@@ -18,5 +17,6 @@ class District with _$District {
     required String parent_code,
   }) = _District;
 
-  factory District.fromJson(Map<String, dynamic> json) => _$DistrictFromJson(json);
+  factory District.fromJson(Map<String, dynamic> json) =>
+      _$DistrictFromJson(json);
 }

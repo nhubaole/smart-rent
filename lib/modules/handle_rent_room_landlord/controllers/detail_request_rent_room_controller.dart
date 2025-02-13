@@ -2,22 +2,20 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/blank.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/invoice/invoice.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/firebase_fcm.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/root_view/views/root_screen.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import '../../../core/config/app_colors.dart';
+import '/blank.dart';
+import '/core/model/account/Account.dart';
+import '/core/model/invoice/invoice.dart';
+import '/core/resources/auth_methods.dart';
+import '/modules/root_view/views/root_screen.dart';
 
 class DetailRequestRentRoomController extends GetxController {
   final Map<String, dynamic> data;
   DetailRequestRentRoomController({required this.data});
   var profileOwner = Rx<Account?>(null);
   var isLoading = Rx<bool>(false);
-  var room = Rx<Room?>(null);
+  var room = Rx<RoomModel?>(null);
 
   @override
   void onInit() {
@@ -46,27 +44,10 @@ class DetailRequestRentRoomController extends GetxController {
 
   Future<void> getRoom(String roomId) async {
     isLoading.value = true;
-    room.value = await FireStoreMethods().getRoomById(roomId);
     isLoading.value = false;
   }
 
   Future<void> declineRequestRentRoom(Map<String, dynamic> dataTicket) async {
-    await FireStoreMethods()
-        .updateStausTicketRequestRent(dataTicket['id'], 'NOTWORKING');
-    await FireStoreMethods().updateStatusRoom(dataTicket['roomId'], 'APPROVED');
-    await FirebaseFCM().sendNotificationHTTP(
-      dataTicket['uidLandlord'],
-      dataTicket['uidTenant'],
-      await FireStoreMethods().getTokenDevice(
-        dataTicket['uidTenant'],
-      ),
-      'Yêu cầu thuê phòng của bạn bị từ chối',
-      'Hãy liên hệ với chủ phòng để biết thêm chi tiết',
-      true,
-      'imgUrl',
-      'DECLINE_REQUEST_RENT',
-      {},
-    );
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
@@ -85,15 +66,6 @@ class DetailRequestRentRoomController extends GetxController {
   }
 
   Future<void> acceptRequestRentRoom(Map<String, dynamic> dataTicket) async {
-    await FireStoreMethods()
-        .updateStausTicketRequestRent(dataTicket['id'], 'DONE');
-    await FireStoreMethods().updateRentedRoom(
-      dataTicket['roomId'],
-      'RENTED',
-      true,
-      dataTicket['uidTenant'],
-    );
-    int orderCode = await FireStoreMethods().getNewestOrderCode() + 1;
     Account tenantProfile = await AuthMethods.getUserDetails(
       dataTicket['uidTenant'],
     );
@@ -101,7 +73,7 @@ class DetailRequestRentRoomController extends GetxController {
       dataTicket['uidLandlord'],
     );
     Invoice invoice = Invoice(
-      orderCode: orderCode,
+      orderCode: 1,
       recieverId: landlordProfile.uid,
       recieverName: landlordProfile.username,
       recieverPhoneNumber: tenantProfile.phoneNumber,
@@ -126,21 +98,6 @@ class DetailRequestRentRoomController extends GetxController {
       roomId: dataTicket['roomId'],
     );
 
-    await FirebaseFCM().sendNotificationHTTP(
-      dataTicket['uidLandlord'],
-      dataTicket['uidTenant'],
-      await FireStoreMethods().getTokenDevice(
-        dataTicket['uidTenant'],
-      ),
-      'Yêu cầu thuê phòng của bạn đã được chấp nhận',
-      'Hãy thanh toán khoản tiền cọc ngay',
-      true,
-      'imgUrl',
-      'ACCEPT_REQUEST_RENT',
-      {
-        'invoice': invoice.toJson(),
-      },
-    );
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
@@ -172,14 +129,14 @@ class DetailRequestRentRoomController extends GetxController {
               mainAxisSize: MainAxisSize.max,
               children: [
                 CircularProgressIndicator(
-                  color: primary60,
+                  color: AppColors.primary60,
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
                   'Đang xử lý dữ liệu thanh toán...',
-                  style: TextStyle(color: primary60),
+                  style: TextStyle(color: AppColors.primary60),
                 ),
               ],
             ),

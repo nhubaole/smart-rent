@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
+import '/core/model/account/Account.dart';
+import '/core/resources/auth_methods.dart';
 
 class InvoiceWEManagerController extends GetxController {
   var isLoading = Rx<bool>(false);
@@ -17,11 +16,6 @@ class InvoiceWEManagerController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> getProfile(String uid) async {
     isLoading.value = true;
     profileOwner.value = await AuthMethods.getUserDetails(uid);
@@ -31,13 +25,11 @@ class InvoiceWEManagerController extends GetxController {
   Future<void> getListTenant(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listTenant.value = await FireStoreMethods().getListTenant(
-          FirebaseAuth.instance.currentUser!.uid, page.value += 10);
+
       isLoadMore.value = false;
     } else {
       isLoading.value = true;
-      listTenant.value = await FireStoreMethods()
-          .getListTenant(FirebaseAuth.instance.currentUser!.uid, page.value);
+
       isLoading.value = false;
     }
   }

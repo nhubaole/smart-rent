@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import '../../config/app_colors.dart';
 
 pickImage(ImageSource source) async {
   final imagePicker = ImagePicker();
@@ -34,7 +34,7 @@ final defaultPinTheme = PinTheme(
       fontWeight: FontWeight.w600),
   decoration: BoxDecoration(
     border: Border.all(
-      color: primary40,
+      color: AppColors.primary40,
       width: 2,
     ),
     borderRadius: BorderRadius.circular(20),

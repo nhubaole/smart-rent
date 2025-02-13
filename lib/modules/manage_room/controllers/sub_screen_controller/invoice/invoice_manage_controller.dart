@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/resources/firestore_methods.dart';
 
 class InvoiceManageController extends GetxController {
   var listInvoiceUnPaid = Rx<List<Map<String, dynamic>>>([]);
@@ -23,18 +21,12 @@ class InvoiceManageController extends GetxController {
   Future<void> getInvoiceUnPaid(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listInvoiceUnPaid.value = await FireStoreMethods().getListInvoice(
-        FirebaseAuth.instance.currentUser!.uid,
-        true,
-        'PENDING',
-        page.value += 10,
-      );
+
       isLoadMore.value = false;
     } else {
       isLoading.value = true;
       listInvoiceUnPaid.value.clear();
-      listInvoiceUnPaid.value = await FireStoreMethods().getListInvoice(
-          FirebaseAuth.instance.currentUser!.uid, true, 'PENDING', page.value);
+
       isLoading.value = false;
     }
   }
@@ -42,18 +34,12 @@ class InvoiceManageController extends GetxController {
   Future<void> getInvoicePaid(bool isPagination) async {
     if (isPagination) {
       isLoadMore.value = true;
-      listInvoicePaid.value = await FireStoreMethods().getListInvoice(
-        FirebaseAuth.instance.currentUser!.uid,
-        true,
-        'SUCCESS',
-        page.value += 10,
-      );
+
       isLoadMore.value = false;
     } else {
       isLoading.value = true;
       listInvoicePaid.value.clear();
-      listInvoicePaid.value = await FireStoreMethods().getListInvoice(
-          FirebaseAuth.instance.currentUser!.uid, true, 'SUCCESS', page.value);
+
       isLoading.value = false;
     }
   }

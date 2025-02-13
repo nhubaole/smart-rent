@@ -1,24 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
 import 'package:smart_rent/core/widget/room_item.dart';
+import 'package:smart_rent/core/widget/scaffold_widget.dart';
 import 'package:smart_rent/modules/manage_room/controllers/sub_screen_controller/return_rent_controller.dart';
 
-class ReturnRentScreen extends StatelessWidget {
+class ReturnRentScreen extends GetView<ReturnRentController> {
   const ReturnRentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ReturnRentController returnRentController =
-        Get.put(ReturnRentController());
-    return Scaffold(
+    return ScaffoldWidget(
       appBar: AppBar(
         title: const Text(
           'Phòng yêu cầu trả',
           style: TextStyle(
-            color: primary40,
+            color: AppColors.primary40,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -29,17 +27,17 @@ class ReturnRentScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Center(
             child: Obx(
-              () => returnRentController.isLoading.value
+              () => controller.isLoading.value
                   ? SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: const Center(
                         child: CircularProgressIndicator(
-                          color: primary60,
-                          backgroundColor: primary40,
+                          color: AppColors.primary60,
+                          backgroundColor: AppColors.primary40,
                         ),
                       ),
                     )
-                  : returnRentController.listRoom.value.isEmpty
+                  : controller.listRoom.value.isEmpty
                       ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -54,9 +52,9 @@ class ReturnRentScreen extends StatelessWidget {
                                 width: double.infinity,
                               ),
                               Text(
-                                '${returnRentController.profileOwner.value!.username}\nchưa có yêu cầu trả phòng nào!!!',
+                                '${controller.profileOwner.value!.username}\nchưa có yêu cầu trả phòng nào!!!',
                                 style: const TextStyle(
-                                  color: secondary20,
+                                  color: AppColors.secondary20,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w200,
                                 ),
@@ -67,15 +65,15 @@ class ReturnRentScreen extends StatelessWidget {
                                 child: Center(
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      returnRentController.getListRoom(false);
+                                      controller.getListRoom(false);
                                     },
                                     style: ButtonStyle(
-                                      side: MaterialStateProperty.all(
+                                      side: WidgetStateProperty.all(
                                         const BorderSide(
-                                          color: primary40,
+                                          color: AppColors.primary40,
                                         ),
                                       ),
-                                      shape: MaterialStateProperty.all(
+                                      shape: WidgetStateProperty.all(
                                         RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -85,7 +83,7 @@ class ReturnRentScreen extends StatelessWidget {
                                     child: const Text(
                                       'Tải lại',
                                       style: TextStyle(
-                                        color: primary40,
+                                        color: AppColors.primary40,
                                       ),
                                     ),
                                   ),
@@ -109,33 +107,18 @@ class ReturnRentScreen extends StatelessWidget {
                                 crossAxisSpacing: 5,
                                 // mainAxisSpacing: 20,
                               ),
-                              itemCount:
-                                  returnRentController.listRoom.value.length +
-                                      1,
+                              itemCount: controller.listRoom.value.length + 1,
                               itemBuilder: (context, index) {
-                                if (index <
-                                    returnRentController
-                                        .listRoom.value.length) {
-                                  return RoomItem(
-                                    isRenting: false,
-                                    isHandleRentRoom: false,
-                                    isHandleRequestReturnRoom: false,
-                                    isRequestReturnRent: true,
-                                    isRequestRented: false,
-                                    room: returnRentController
-                                        .listRoom.value[index],
-                                    isLiked: returnRentController
-                                        .listRoom.value[index].listLikes
-                                        .contains(
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                    ),
+                                if (index < controller.listRoom.value.length) {
+                                  return RoomItem(                                    
+                                    room: controller.listRoom.value[index],
                                   );
                                 } else {
                                   return Obx(
-                                    () => returnRentController.isLoadMore.value
+                                    () => controller.isLoadMore.value
                                         ? const Center(
                                             child: CircularProgressIndicator(
-                                              color: primary95,
+                                              color: AppColors.primary95,
                                               backgroundColor: Colors.white,
                                             ),
                                           )
@@ -144,18 +127,17 @@ class ReturnRentScreen extends StatelessWidget {
                                             child: Center(
                                               child: OutlinedButton(
                                                 onPressed: () {
-                                                  returnRentController
-                                                      .getListRoom(true);
+                                                  controller.getListRoom(true);
                                                 },
                                                 style: ButtonStyle(
-                                                  side:
-                                                      MaterialStateProperty.all(
+                                                  side: WidgetStateProperty.all(
                                                     const BorderSide(
-                                                      color: primary40,
+                                                      color:
+                                                          AppColors.primary40,
                                                     ),
                                                   ),
                                                   shape:
-                                                      MaterialStateProperty.all(
+                                                      WidgetStateProperty.all(
                                                     RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -166,7 +148,7 @@ class ReturnRentScreen extends StatelessWidget {
                                                 child: const Text(
                                                   'Xem thêm',
                                                   style: TextStyle(
-                                                    color: primary40,
+                                                    color: AppColors.primary40,
                                                   ),
                                                 ),
                                               ),

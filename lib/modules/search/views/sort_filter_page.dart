@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_rent/core/enums/sort.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/search/controllers/filter_controller.dart';
+
+import '../../../core/config/app_colors.dart';
+import '/core/enums/sort.dart';
+import '/modules/search/controllers/filter_controller.dart';
 
 // ignore: must_be_immutable
 class SortFilterPage extends StatelessWidget {
@@ -33,7 +34,7 @@ class SortFilterPage extends StatelessWidget {
 
   Widget radioSortItem(Sort sort) {
     return Obx(() => RadioListTile<Sort>(
-          activeColor: primary40,
+          activeColor: AppColors.primary40,
           visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
@@ -42,7 +43,7 @@ class SortFilterPage extends StatelessWidget {
           contentPadding: const EdgeInsets.all(0),
           title: Text(
             sort.getNameSort(),
-            style: const TextStyle(color: secondary20, fontSize: 16),
+            style: const TextStyle(color: AppColors.secondary20, fontSize: 16),
           ),
           value: sort,
           // ignore: prefer_null_aware_operators

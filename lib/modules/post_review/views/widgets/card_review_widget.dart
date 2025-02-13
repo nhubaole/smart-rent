@@ -4,8 +4,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/post_review/controllers/widgets_controller/card_review_widget_controller.dart';
+import '../../../../core/config/app_colors.dart';
+import '/core/values/app_colors.dart';
+import '/modules/post_review/controllers/widgets_controller/card_review_widget_controller.dart';
 
 class CardReviewWidget extends StatelessWidget {
   final Map<String, dynamic> review;
@@ -23,7 +24,7 @@ class CardReviewWidget extends StatelessWidget {
     String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(date);
     return Card(
       elevation: 0,
-      color: primary98,
+      color: AppColors.primary98,
       shape: RoundedRectangleBorder(
         side: const BorderSide(
           color: Colors.transparent,
@@ -61,7 +62,7 @@ class CardReviewWidget extends StatelessWidget {
                       () => Text(
                         cardReviewWidgetController.profileOwner.value!.username,
                         style: const TextStyle(
-                          color: secondary20,
+                          color: AppColors.secondary20,
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
@@ -111,7 +112,7 @@ class CardReviewWidget extends StatelessWidget {
             Text(
               formattedDate,
               style: const TextStyle(
-                color: secondary60,
+                color: AppColors.secondary60,
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),

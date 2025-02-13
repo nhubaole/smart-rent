@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:smart_rent/core/enums/utilities.dart';
+import '/core/enums/utilities.dart';
 
 part 'util_filter.freezed.dart';
 part 'util_filter.g.dart';

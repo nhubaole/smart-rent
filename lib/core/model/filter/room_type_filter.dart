@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
+import '/core/enums/room_type.dart';
 
 part 'room_type_filter.freezed.dart';
 part 'room_type_filter.g.dart';

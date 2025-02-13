@@ -1,35 +1,46 @@
-import 'dart:ffi';
-
-import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_rent/core/enums/filter_type.dart';
-import 'package:smart_rent/core/enums/gender.dart';
-import 'package:smart_rent/core/enums/room_type.dart';
-import 'package:smart_rent/core/enums/sort.dart';
-import 'package:smart_rent/core/enums/utilities.dart';
-import 'package:smart_rent/core/model/filter/capacity_filter.dart';
-import 'package:smart_rent/core/model/filter/filter.dart';
-import 'package:smart_rent/core/model/filter/price_filter.dart';
-import 'package:smart_rent/core/model/filter/room_type_filter.dart';
-import 'package:smart_rent/core/model/filter/sort_filter.dart';
-import 'package:smart_rent/core/model/filter/util_filter.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/model/room/util_item.dart';
-import 'package:smart_rent/core/values/KEY_VALUE.dart';
-import 'package:tiengviet/tiengviet.dart';
+import 'package:smart_rent/core/enums/loading_type.dart';
+import 'package:smart_rent/core/model/filter_room_model.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import 'package:smart_rent/core/repositories/room/room_repo_impl.dart';
+import 'package:smart_rent/modules/search/views/capacity_filter_page.dart';
+import 'package:smart_rent/modules/search/views/price_filter_page.dart';
+import 'package:smart_rent/modules/search/views/room_type_filter_page.dart';
+import 'package:smart_rent/modules/search/views/sort_filter_page.dart';
+import 'package:smart_rent/modules/search/views/util_filter_page.dart';
+import 'package:smart_rent/modules/search/widgets/filter_sheet.dart';
+import '/core/enums/filter_type.dart';
+import '/core/enums/gender.dart';
+import '/core/enums/room_type.dart';
+import '/core/enums/sort.dart';
+import '/core/enums/utilities.dart';
+import '/core/model/filter/capacity_filter.dart';
+import '/core/model/filter/filter.dart';
+import '/core/model/filter/price_filter.dart';
+import '/core/model/filter/room_type_filter.dart';
+import '/core/model/filter/sort_filter.dart';
+import '/core/model/filter/util_filter.dart';
+import '/core/model/room/util_item.dart';
 
 class FilterController extends GetxController {
-  late String location;
-  var results = Rx<List<Room>>([]);
-  RxBool isLoaded = false.obs;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  var filter = const Filter().obs;
-  var filterStringList = RxList<Map<String, dynamic>>([]);
-  RxInt itemFilterCount = 0.obs;
-  var selectedFilter = Rx<FilterType?>(FilterType.PRICE);
+  String? location;
+  String? locationNormal;
+
+  final results = Rx<List<RoomModel>>([]);
+  final sourceResults = Rx<List<RoomModel>>([]);
+
+  final filter = const Filter().obs;
+  final filterStringList = RxList<Map<String, dynamic>>([]);
+  final itemFilterCount = 0.obs;
+  final selectedFilter = Rx<FilterType?>(FilterType.PRICE);
   final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+  final filterModel = Rxn<FilterRoomModel>();
+  final capacityController = TextEditingController(text: '1');
+  late TextEditingController searchController;
+
 
   RxList<UtilItem> utilList = const [
     UtilItem(utility: Utilities.WC, isChecked: false),
@@ -57,16 +68,31 @@ class FilterController extends GetxController {
     FilterType.SORT,
   ];
 
-  Rx<RangeValues> currentRangeValues = const RangeValues(0, 50000000).obs;
-  var fromPriceTextController = TextEditingController();
-  var toPriceTextController = TextEditingController();
-  var quantity = 0.obs;
-  var genderIdx = 0.obs;
+  final currentRangeValues = const RangeValues(0, 50000000).obs;
+  final fromPriceTextController = TextEditingController();
+  final toPriceTextController = TextEditingController();
+  final quantity = 1.obs;
+  final genderIdx = 0.obs;
+  final isLoadingType = LoadingType.INIT.obs;
+
+  @override
+  void onInit() {
+    final args = Get.arguments;
+    location = args['location'];
+    locationNormal = args['location'];
+    selectedFilter.value = null;
+    searchController = TextEditingController(text: location ?? '');
+    queryRoomByLocation();
+    super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+  }
 
   void setLocation(String location) {
     this.location = location;
-    selectedFilter.value = null;
-    queryRoomByLocation();
   }
 
   void setPrice(RangeValues values) {
@@ -98,6 +124,7 @@ class FilterController extends GetxController {
   }
 
   void setCapacity() {
+    capacityController.text = quantity.value.toString();
     Gender selectedGender;
     switch (genderIdx.value) {
       case 0:
@@ -133,14 +160,14 @@ class FilterController extends GetxController {
       });
     }
     if (filter.value.utilFilter != null) {
-      for (var item in filter.value.utilFilter!.listUtils) {
-        filterStringList.add({item.getNameUtil(): item});
+      for (final item in filter.value.utilFilter!.listUtils) {
+        filterStringList.add({item.getNameUtil: item});
       }
     }
     if (filter.value.roomTypeFilter != null) {
       filterStringList.add({
-        filter.value.roomTypeFilter!.roomType.getNameRoomType():
-            filter.value.roomTypeFilter
+        filter.value.roomTypeFilter!.roomType.value:
+            filter.value.roomTypeFilter?.roomType.value
       });
     }
     if (filter.value.capacityFilter != null) {
@@ -151,7 +178,7 @@ class FilterController extends GetxController {
         });
       } else {
         filterStringList.add({
-          "${filter.value.capacityFilter!.capacity} ${filter.value.capacityFilter!.gender.getNameGender()}":
+          "${filter.value.capacityFilter!.capacity} ${filter.value.capacityFilter!.gender.getNameGender}":
               filter.value.capacityFilter
         });
       }
@@ -162,15 +189,17 @@ class FilterController extends GetxController {
       });
     }
     itemFilterCount.value = filterStringList.length;
+
+    applyFilter();
   }
 
   void removeFilter(Map<String, dynamic> element) {
-    var type = element.values.first.runtimeType;
+    final type = element.values.first.runtimeType;
 
     if (type == filter.value.priceFilter.runtimeType) {
       filter.value = filter.value.copyWith(priceFilter: null);
 
-      currentRangeValues.value = RangeValues(0, 50000000);
+      currentRangeValues.value = const RangeValues(0, 50000000);
       int startValue = currentRangeValues.value.start.round();
       int endValue = currentRangeValues.value.end.round();
       fromPriceTextController.text = startValue.toString();
@@ -179,7 +208,7 @@ class FilterController extends GetxController {
         filter.value.utilFilter!.listUtils.isNotEmpty &&
         type == filter.value.utilFilter!.listUtils[0].runtimeType) {
       List<Utilities> list = [];
-      for (var i in filter.value.utilFilter!.listUtils) {
+      for (final i in filter.value.utilFilter!.listUtils) {
         list.add(i);
       }
       list.remove(element.values.first);
@@ -206,46 +235,59 @@ class FilterController extends GetxController {
   }
 
   void removeAllFilter() {
-    var copyList = filterStringList.toList();
-
-    for (var e in copyList) {
+    final copyList = filterStringList.toList();
+    for (final e in copyList) {
       removeFilter(e);
     }
+    selectedFilter.value = null;
+  }
+
+  onSearchTextChanged(String text) {
+    location = text;
+    queryRoomByLocation();
   }
 
   Future<void> queryRoomByLocation() async {
     try {
-      final querySnapshot =
-          await firestore.collection(KeyValue.KEY_COLLECTION_ROOM).get();
-      results.value = querySnapshot.docs
-          .map(
-            (e) => Room.fromJson(
-              e.data(),
-            ),
-          )
-          .where((element) => TiengViet.parse(element.location.toLowerCase())
-              .contains(TiengViet.parse(location.toLowerCase())))
-          .toList();
-      isLoaded.value = true;
-      applyFilter();
-      print(results.value.length);
+      isLoadingType.value = LoadingType.LOADING;
+      location = location?.toLowerCase();
+      if (location == null) {
+        return;
+      }
+      final rq = await RoomRepoImpl()
+          .getRoomsByAddressElasticSearch(address: location!);
+      if (rq.isSuccess()) {
+        sourceResults.value = rq.data ?? [];
+        results.value = sourceResults.value;
+        applyFilter();
+        isLoadingType.value = LoadingType.LOADED;
+      } else {
+        if (kDebugMode) {
+          Get.snackbar('Error', rq.message ?? 'Error');
+        }
+        isLoadingType.value = LoadingType.ERROR;
+      }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      if (kDebugMode) {
+        Get.snackbar('Error', e.toString());
+      }
+      isLoadingType.value = LoadingType.ERROR;
     }
   }
 
   void applyFilter() {
+    results.value = sourceResults.value;
     if (filter.value.priceFilter != null) {
       results.value = results.value
           .where((element) =>
-              element.price >= filter.value.priceFilter!.fromPrice &&
-              element.price <= filter.value.priceFilter!.toPrice)
+              element.totalPrice! >= filter.value.priceFilter!.fromPrice &&
+              element.totalPrice! <= filter.value.priceFilter!.toPrice)
           .toList();
     }
     if (filter.value.utilFilter != null) {
       results.value = results.value.where((element) {
-        for (var i in filter.value.utilFilter!.listUtils) {
-          if (element.utilities.any((filter) => filter == i)) {
+        for (final i in filter.value.utilFilter!.listUtils) {
+          if (element.utilities!.any((filter) => filter == i)) {
           } else {
             return false;
           }
@@ -256,14 +298,15 @@ class FilterController extends GetxController {
     if (filter.value.roomTypeFilter != null) {
       results.value = results.value
           .where((element) =>
-              element.roomType == filter.value.roomTypeFilter!.roomType)
+              element.roomType == filter.value.roomTypeFilter!.roomType.value)
           .toList();
     }
     if (filter.value.capacityFilter != null) {
       results.value = results.value
           .where((element) =>
               element.capacity == filter.value.capacityFilter!.capacity &&
-              element.gender == filter.value.capacityFilter!.gender)
+              element.gender ==
+                  filter.value.capacityFilter!.gender.getNameGenderInt)
           .toList();
     }
     if (filter.value.sortFilter != null) {
@@ -272,20 +315,55 @@ class FilterController extends GetxController {
           break;
         case Sort.LATEST:
           results.value.sort((a, b) {
-            DateTime aDate = DateTime.parse(a.dateTime.toString());
-            DateTime bDate = DateTime.parse(b.dateTime.toString());
+            DateTime aDate = DateTime.parse(a.createAt.toString());
+            DateTime bDate = DateTime.parse(b.createAt.toString());
             return aDate.compareTo(bDate);
           });
           break;
         case Sort.HIGHEST_TO_LOWEST:
-          results.value.sort((a, b) => b.price.compareTo(a.price));
+          results.value.sort((a, b) => b.totalPrice!.compareTo(a.totalPrice!));
           break;
         case Sort.LOWEST_TO_HIGHEST:
-          results.value.sort((a, b) => a.price.compareTo(b.price));
+          results.value.sort((a, b) => a.totalPrice!.compareTo(b.totalPrice!));
           break;
         default:
           break;
       }
+    }
+  }
+
+  onSelectedFilterItem(FilterType type) {
+    selectedFilter.value = type;
+    Get.bottomSheet(
+      FilterSheet(
+        filterType: type,
+        child: loadPageContent(type),
+        onClose: () {
+          selectedFilter.value = null;
+        },
+        onApply: () {},
+        onReset: () {
+          removeAllFilter();
+          results.value = sourceResults.value;
+        },
+      ),
+    );
+  }
+
+  Widget loadPageContent(FilterType? value) {
+    switch (value) {
+      case FilterType.PRICE:
+        return PriceFilterPage();
+      case FilterType.UTIL:
+        return UtilFilterPage();
+      case FilterType.ROOM_TYPE:
+        return RoomTypeFilterPage();
+      case FilterType.CAPACITY:
+        return CapacityFilterPage();
+      case FilterType.SORT:
+        return SortFilterPage();
+      default:
+        return const SizedBox();
     }
   }
 }

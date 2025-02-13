@@ -1,6 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
-
 
 part 'price_filter.freezed.dart';
 part 'price_filter.g.dart';

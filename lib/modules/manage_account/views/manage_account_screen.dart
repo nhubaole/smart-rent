@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/manage_account/views/account_nav_button.dart';
-import 'package:smart_rent/modules/manage_account/views/account_show_information.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import '/modules/manage_account/views/account_nav_button.dart';
+import '/modules/manage_account/views/account_show_information.dart';
 
 // ignore: must_be_immutable
 class ManageAccountScreen extends StatelessWidget {
@@ -22,8 +22,8 @@ class ManageAccountScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    primary40,
-                    primary95,
+                    AppColors.primary40,
+                    AppColors.primary95,
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment(0.0, -0.5),

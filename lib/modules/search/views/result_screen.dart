@@ -2,8 +2,8 @@
 // import 'package:flutter/services.dart';
 // import 'package:flutter_svg/svg.dart';
 // import 'package:get/get.dart';
-// import 'package:smart_rent/modules/search/views/filter_screen.dart';
-// import 'package:smart_rent/modules/search/views/result_item.dart';
+// import '/modules/search/views/filter_screen.dart';
+// import '/modules/search/views/result_item.dart';
 
 // import '../../../core/values/app_colors.dart';
 // import '../controllers/filter_controller.dart';
@@ -51,7 +51,7 @@
 //                               vertical: 10, horizontal: 10),
 //                           width: MediaQuery.sizeOf(context).width - 80,
 //                           decoration: BoxDecoration(
-//                               border: Border.all(color: primary60, width: 1),
+//                               border: Border.all(color: AppColors.primary60, width: 1),
 //                               borderRadius: BorderRadius.circular(4),
 //                               color: Colors.white),
 //                           child: Row(
@@ -67,7 +67,7 @@
 //                                   style: const TextStyle(
 //                                       fontSize: 12,
 //                                       fontWeight: FontWeight.w600,
-//                                       color: primary60),
+//                                       color: AppColors.primary60),
 //                                 ),
 //                               ),
 //                             ],
@@ -83,7 +83,7 @@
 //                           'Hủy',
 //                           style: TextStyle(
 //                               fontSize: 14,
-//                               color: primary60,
+//                               color: AppColors.primary60,
 //                               fontWeight: FontWeight.bold),
 //                         ),
 //                       )
@@ -100,7 +100,7 @@
 //                         return FilledButton.icon(
 //                           style: FilledButton.styleFrom(
 //                             padding: const EdgeInsets.symmetric(horizontal: 10),
-//                             backgroundColor: secondary90,
+//                             backgroundColor: AppColors.AppColors.secondary2090,
 //                             shape: RoundedRectangleBorder(
 //                               borderRadius: BorderRadius.circular(4),
 //                             ),
@@ -111,13 +111,13 @@
 //                           icon: const Icon(
 //                             Icons.keyboard_arrow_down,
 //                             size: 20,
-//                             color: secondary40,
+//                             color: AppColors.AppColors.secondary2040,
 //                           ),
 //                           label: Text(
 //                             filterList[index],
 //                             style: const TextStyle(
 //                                 fontSize: 12,
-//                                 color: secondary40,
+//                                 color: AppColors.AppColors.secondary2040,
 //                                 fontWeight: FontWeight.w500),
 //                           ),
 //                         );
@@ -134,7 +134,7 @@
 //             Obx(() => controller.filterStringList.isNotEmpty
 //                 ? Container(
 //                     height: 50,
-//                     color: secondary90,
+//                     color: AppColors.AppColors.secondary2090,
 //                     child: Row(
 //                       children: [
 //                         const SizedBox(
@@ -145,7 +145,7 @@
 //                           style: TextStyle(
 //                               fontWeight: FontWeight.bold,
 //                               fontSize: 16,
-//                               color: secondary20),
+//                               color: AppColors.AppColors.secondary2020),
 //                         ),
 //                         const SizedBox(
 //                           width: 10,
@@ -171,7 +171,7 @@
 //                                             style: const TextStyle(
 //                                                 fontWeight: FontWeight.bold,
 //                                                 fontSize: 12,
-//                                                 color: secondary40),
+//                                                 color: AppColors.AppColors.secondary2040),
 //                                           )),
 //                                       const SizedBox(
 //                                         width: 10,
@@ -183,7 +183,7 @@
 //                                         },
 //                                         child: Icon(
 //                                           Icons.cancel,
-//                                           color: secondary40,
+//                                           color: AppColors.AppColors.secondary2040,
 //                                           size: 16,
 //                                         ),
 //                                       )
@@ -211,7 +211,7 @@
 //                       ? "${controller.results.value.length} Kết quả"
 //                       : "",
 //                   style: const TextStyle(
-//                       color: secondary20,
+//                       color: AppColors.AppColors.secondary2020,
 //                       fontWeight: FontWeight.w600,
 //                       fontSize: 20),
 //                 ),
@@ -223,7 +223,7 @@
 //             Expanded(
 //                 child: Container(
 //                     width: double.infinity,
-//                     color: primary95,
+//                     color: AppColors.primary95,
 //                     padding: const EdgeInsets.symmetric(horizontal: 20),
 //                     child: Obx(() => ListView.builder(
 //                           itemCount: controller.results.value.length,

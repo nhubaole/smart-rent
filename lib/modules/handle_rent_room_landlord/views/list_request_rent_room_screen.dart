@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_rent/core/model/room/room.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/controllers/list_request_rent_room_controller.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/views/detail_request_rent_room_screen.dart';
-import 'package:smart_rent/modules/handle_rent_room_landlord/views/widgets/item_request_rent_room.dart';
+import 'package:smart_rent/core/config/app_colors.dart';
+import 'package:smart_rent/core/model/room/room_model.dart';
+import '/modules/handle_rent_room_landlord/controllers/list_request_rent_room_controller.dart';
+import '/modules/handle_rent_room_landlord/views/detail_request_rent_room_screen.dart';
+import '/modules/handle_rent_room_landlord/views/widgets/item_request_rent_room.dart';
 
 class ListRequestRentRoomScreen extends StatelessWidget {
   const ListRequestRentRoomScreen({super.key, required this.room});
-  final Room room;
+  final RoomModel room;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
     listRequestController.getListTicket(false);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary40,
+        backgroundColor: AppColors.primary40,
         foregroundColor: Colors.white,
         title: const Text(
           'Yêu cầu thuê phòng',
@@ -33,7 +33,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
           child: Obx(
             () => listRequestController.isLoading.value
                 ? const CircularProgressIndicator(
-                    color: primary95,
+                    color: AppColors.primary95,
                     backgroundColor: Colors.white,
                   )
                 : listRequestController.listTicket.value.isEmpty
@@ -53,7 +53,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                             const Text(
                               'Bạn chưa có ticket yêu cầu thuê',
                               style: TextStyle(
-                                color: secondary20,
+                                color: AppColors.secondary20,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w200,
                               ),
@@ -67,12 +67,12 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                                     listRequestController.getListTicket(false);
                                   },
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.all(
+                                    side: WidgetStateProperty.all(
                                       const BorderSide(
-                                        color: primary40,
+                                        color: AppColors.primary40,
                                       ),
                                     ),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -81,7 +81,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                                   child: const Text(
                                     'Tải lại',
                                     style: TextStyle(
-                                      color: primary40,
+                                      color: AppColors.primary40,
                                     ),
                                   ),
                                 ),
@@ -114,7 +114,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                               () => listRequestController.isLoadMore.value
                                   ? const Center(
                                       child: CircularProgressIndicator(
-                                        color: primary95,
+                                        color: AppColors.primary95,
                                         backgroundColor: Colors.white,
                                       ),
                                     )
@@ -127,12 +127,12 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                                                 .getListTicket(true);
                                           },
                                           style: ButtonStyle(
-                                            side: MaterialStateProperty.all(
+                                            side: WidgetStateProperty.all(
                                               const BorderSide(
-                                                color: primary40,
+                                                color: AppColors.primary40,
                                               ),
                                             ),
-                                            shape: MaterialStateProperty.all(
+                                            shape: WidgetStateProperty.all(
                                               RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -142,7 +142,7 @@ class ListRequestRentRoomScreen extends StatelessWidget {
                                           child: const Text(
                                             'Xem thêm',
                                             style: TextStyle(
-                                              color: primary40,
+                                              color: AppColors.primary40,
                                             ),
                                           ),
                                         ),

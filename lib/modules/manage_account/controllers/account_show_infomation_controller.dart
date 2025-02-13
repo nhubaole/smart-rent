@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_rent/core/model/account/Account.dart';
-import 'package:smart_rent/core/model/values/utils.dart';
-import 'package:smart_rent/core/resources/auth_methods.dart';
-import 'package:smart_rent/core/resources/storage_methobs.dart';
-import 'package:smart_rent/core/values/key_value.dart';
-import 'package:smart_rent/core/values/app_colors.dart';
+import '../../../core/config/app_colors.dart';
+import '/core/model/account/Account.dart';
+import '/core/model/values/utils.dart';
+import '/core/resources/auth_methods.dart';
+import '/core/resources/storage_methobs.dart';
+import '/core/values/key_value.dart';
+import '/core/values/app_colors.dart';
 
 class AccountShowInformationController extends GetxController {
   late SharedPreferences prefs;
@@ -57,7 +58,7 @@ class AccountShowInformationController extends GetxController {
                     const Text(
                       'Chọn ảnh',
                       style: TextStyle(
-                          color: primary40,
+                          color: AppColors.primary40,
                           fontSize: 20,
                           fontWeight: FontWeight.w700),
                     ),
@@ -65,7 +66,7 @@ class AccountShowInformationController extends GetxController {
                         onTap: () => Get.back(),
                         child: const Icon(
                           Icons.close,
-                          color: secondary40,
+                          color: AppColors.secondary40,
                         )),
                   ],
                 ),
@@ -75,7 +76,7 @@ class AccountShowInformationController extends GetxController {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: primary98),
+                      color: AppColors.primary98),
                   child: InkWell(
                     onTap: () async {
                       _image = await pickImage(ImageSource.camera);
@@ -112,13 +113,13 @@ class AccountShowInformationController extends GetxController {
                         children: [
                           Icon(
                             Icons.image_outlined,
-                            color: primary60,
+                            color: AppColors.primary60,
                           ),
                           SizedBox(width: 8),
                           Text(
                             'Chụp ảnh',
                             style: TextStyle(
-                                color: primary60,
+                                color: AppColors.primary60,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -133,7 +134,7 @@ class AccountShowInformationController extends GetxController {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: primary98),
+                      color: AppColors.primary98),
                   child: InkWell(
                     onTap: () async {
                       _image = await pickImage(ImageSource.gallery);
@@ -167,13 +168,13 @@ class AccountShowInformationController extends GetxController {
                         children: [
                           Icon(
                             Icons.photo_camera_outlined,
-                            color: primary60,
+                            color: AppColors.primary60,
                           ),
                           SizedBox(width: 8),
                           Text(
                             'Chọn từ thư viện',
                             style: TextStyle(
-                                color: primary60,
+                                color: AppColors.primary60,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
